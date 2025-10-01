@@ -1,0 +1,42 @@
+name: "Unit-tests"
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+    paths:
+      - "**.py"
+  pull_request:
+    branches:
+      - dev
+      - main
+    types:
+      - opened
+      - edited
+      - synchronize
+    paths:
+      - "**.py"
+  workflow_dispatch:
+    inputs:
+      PYTHON_VERSION:
+        required: false
+        default: 3.11
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  run-unit-test:
+    runs-on: ["ubuntu-latest"]
+    strategy:
+      matrix:
+        python-version: [3.11]
+    steps:
+      - uses: actions/checkout@v3
+      - name: "running unit-tests"
+        uses: "piotrlaczkowski/keras-data-processor/.github/templates/Python/unittests@main"
+        with:
+          pkg_folder: "kdp"
+          PYTHON_VERSION: ${{ matrix.python-version }}

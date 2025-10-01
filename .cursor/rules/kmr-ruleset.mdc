@@ -1,0 +1,197 @@
+---
+description: Implementing layers, models and unit-tests for this repository.
+globs: 
+---
+
+# Keras Model Registry (KMR) Implementation Guidelines
+
+This document outlines the key rules and patterns for implementing components in the Keras Model Registry project. These guidelines ensure consistency, maintainability, and compatibility across the codebase.
+
+## Core Principles
+
+1. **Keras 3 Only**: All implementations MUST use only Keras 3 operations. NO TensorFlow dependencies are allowed in layer or model implementations.
+2. **TensorFlow Usage**: TensorFlow can ONLY be used in test files for validation purposes.
+3. **Full Serialization**: All components must be fully serializable using Keras serialization mechanisms.
+4. **Type Safety**: Use proper type annotations throughout the codebase.
+5. **Documentation**: Provide comprehensive docstrings for all classes and methods.
+6. **Testing**: Write thorough unit tests for all functionality.
+7. **Static types annotations**: use python >= 3.12 static types annoatations.
+8. **Docstrings**: use Google style docstrings for all methods.
+
+## Layer Implementation Guidelines
+
+### Structure and Inheritance
+
+1. **BaseLayer Inheritance**: All layers must inherit from `kmr.layers._base_layer.BaseLayer`.
+2. **Keras Serialization**: Use the `@register_keras_serializable(package="kmr.layers")` decorator.
+3. **File Structure**: Each layer should be in its own file with a matching name.
+
+### Initialization Pattern
+
+1. **Attribute Order**: Follow this specific order in `__init__` methods:
+   - Set private attributes first (`self._param1 = param1`)
+   - Validate parameters
+   - Set public attributes (`self.param1 = self._param1`)
+   - Initialize any other instance variables
+   - Call `super().__init__(name=name, **kwargs)`
+
+2. **Parameter Validation**: Implement `_validate_params()` method to validate input parameters.
+
+### Implementation Requirements
+
+1. **Keras Operations**: Use only Keras operations (e.g., `keras.ops.sum` instead of `tf.reduce_sum`).
+2. **Logging**: Use loguru for logging important information.
+3. **Config Method**: Implement `get_config()` method to return all parameters.
+4. **Build Method**: Implement `build()` method to create weights and sublayers.
+5. **Call Method**: Implement `call()` method with proper typing for inputs and outputs.
+
+### Registration
+
+1. **Import Statement**: Add an import statement in `kmr/layers/__init__.py`.
+2. **Export List**: Add the layer name to the `__all__` list in the same file.
+
+## Model Implementation Guidelines
+
+### Structure and Inheritance
+
+1. **BaseModel Inheritance**: All models should inherit from `kmr.models._base.BaseModel`.
+2. **Keras Model Compatibility**: Ensure models are compatible with Keras Model API.
+
+### Implementation Requirements
+
+1. **Input Handling**: Implement proper input handling for dictionary inputs.
+2. **Serialization**: Ensure models can be serialized and deserialized.
+3. **Signature Inspection**: Support signature inspection for deployed models.
+
+## Testing Guidelines
+
+### Layer Tests
+
+1. **Test File Naming**: Use the pattern `test__LayerName.py` for test files.
+2. **Test Coverage**: Include tests for:
+   - Initialization with default and custom parameters
+   - Invalid parameter handling
+   - Build functionality
+   - Output shape verification
+   - Training vs. inference mode behavior
+   - Serialization and deserialization
+   - Functional tests for specific layer behavior
+   - Integration with simple models
+
+3. **TensorFlow Usage**: TensorFlow can be used in tests, but mark it clearly with comments.
+
+### Model Tests
+
+1. **Test Coverage**: Include tests for:
+   - Model creation with various configurations
+   - Compilation and fitting
+   - Prediction functionality
+   - Serialization and deserialization
+   - Saving and loading (both Keras and TensorFlow formats)
+   - Export and import
+
+2. **Base Test Class**: Extend from a base test class for common functionality.
+
+## Development Workflow
+
+1. **Package Management**: Use poetry to manage packages and dependencies.
+2. **Testing Command**: Run tests using `make unittests`.
+3. **Documentation**: Update documentation when adding new features.
+
+## Common Pitfalls to Avoid
+
+1. **TensorFlow Dependencies**: NEVER use TensorFlow operations in layer or model implementations.
+2. **Incorrect Attribute Initialization Order**: Always set public attributes BEFORE calling `super().__init__()`.
+3. **Missing Imports**: Ensure all necessary imports are included.
+4. **Incomplete Serialization**: Make sure all parameters are included in `get_config()`.
+5. **Missing Type Hints**: Always include proper type annotations.
+6. **Insufficient Documentation**: Always provide comprehensive docstrings.
+7. **Improper Validation**: Always validate input parameters.
+
+## Example Implementation Pattern
+
+```python
+"""
+Module docstring describing the layer's purpose and functionality.
+"""
+
+from typing import Any
+from loguru import logger
+from keras import layers, ops
+from keras import KerasTensor
+from keras.saving import register_keras_serializable
+from kmr.layers._base_layer import BaseLayer
+
+@register_keras_serializable(package="kmr.layers")
+class MyCustomLayer(BaseLayer):
+    """Detailed class docstring with description, parameters, and examples.
+
+    Args:
+        param1: Description of param1.
+        param2: Description of param2.
+        ...
+
+    Input shape:
+        Description of input shape.
+
+    Output shape:
+        Description of output shape.
+
+    Example:
+        ```python
+        import keras
+        # Usage example with Keras operations only
+        ```
+    """
+
+    def __init__(
+        self,
+        param1: type = default,
+        param2: type = default,
+        name: str | None = None,
+        **kwargs: Any
+    ) -> None:
+        # Set private attributes first
+        self._param1 = param1
+        self._param2 = param2
+
+        # Validate parameters
+        if not valid_condition:
+            raise ValueError("Error message")
+
+        # Set public attributes BEFORE calling parent's __init__
+        self.param1 = self._param1
+        self.param2 = self._param2
+        
+        # Initialize any other instance variables
+        self.some_variable = None
+
+        # Call parent's __init__ after setting public attributes
+        super().__init__(name=name, **kwargs)
+
+    def _validate_params(self) -> None:
+        """Validate layer parameters."""
+        if not valid_condition:
+            raise ValueError("Error message")
+
+    def build(self, input_shape: tuple[int, ...]) -> None:
+        """Builds the layer with the given input shape."""
+        # Create weights and sublayers
+        
+        logger.debug(f"Layer built with params: {self.param1}, {self.param2}")
+        super().build(input_shape)
+
+    def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
+        """Forward pass of the layer."""
+        # Implement forward pass using ONLY Keras operations
+        return output
+
+    def get_config(self) -> dict[str, Any]:
+        """Returns the config of the layer."""
+        config = super().get_config()
+        config.update({
+            "param1": self.param1,
+            "param2": self.param2,
+        })
+        return config
+```

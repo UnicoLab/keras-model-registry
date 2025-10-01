@@ -1,0 +1,83 @@
+[tool.poetry]
+name = "kmr"
+version = "0.1.0"
+documentation = "https://unicolab.github.io/keras-model-registry/"
+repository = "https://github.com/UnicoLab/keras-model-registry"
+description = "Reusable Model Architecture Bricks in Keras"
+authors = ["Piotr Laczkowski <piotr.laczkowski@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+include = ["docs/kmr_logo.png"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.13"
+loguru = "^0.7.2"
+keras = "^3.8.0"
+pytest = "^8.3.4"
+pandas = "^2.2.3"
+
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^3.6.0"
+ipython = "^8.8.0"
+pytest = "^8.0.0"
+pytest-cov = "^4.1.0"
+pytest-mock = "^3.12.0"
+ipykernel = "^6.29.3"
+pydot = "^2.0.0"
+tensorflow = "^2.18.0"
+pandas = "^2.2.3"
+numpy = "^1.26.0"
+coverage = "^7.4.0"
+
+[tool.poetry.group.doc.dependencies]
+mkdocs = "^1.5.3"
+mkdocs-material = "^9.5.3"
+mkdocs-material-extensions = ">=1.3.1"
+mkdocs-gen-files = "^0.5.0"
+mkdocstrings-python = "^1.7.5"
+mkdocstrings = {extras = ["python"], version = "^0.24.0"}
+mike = ">=2.0.0"
+
+[tool.pytest.ini_options]
+python_paths = "kmr"
+testpaths = "tests"
+
+[tool.coverage.run]
+branch = true
+source = ["kmr"]
+omit = [
+  "*/__init__.py",
+  "*/test_*.py",
+  "*/tests/*.py",
+  "*/conftest.py",
+  "*/venv/*",
+  "*/virtualenv/*",
+  "*/.venv/*",
+  "*/.virtualenv/*",
+  "*/env/*",
+  "*/.env/*",
+  "*/setup.py"
+]
+include = [
+  "kmr/utils/data_analyzer.py",
+  "kmr/utils/data_analyzer_cli.py"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == '__main__':",
+    "logger",
+    "try",
+    "except",
+    "^\\s*self\\.\\w+(:\\s*[^=]+)?\\s*=.*$",
+    "continue",
+]

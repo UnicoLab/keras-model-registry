@@ -1,0 +1,79 @@
+name: "Semantic Release"
+
+on:
+  workflow_dispatch:
+    inputs:
+      DRY_RUN:
+        required: false
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  SEMANTIC_RELEASE:
+    runs-on: ["ubuntu-latest"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Semantic Release"
+        id: semantic-release
+        uses: "piotrlaczkowski/keras-data-processor/.github/templates/github/semantic_release@main"
+        with:
+          PROJECT_NAME: KDP
+          PROJECT_DIRECTORY: .
+          BRANCHES: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DRY_RUN: ${{ inputs.DRY_RUN }}
+
+      - name: "testing TAG fetch"
+        shell: bash
+        run: |
+          echo "CURRENT TAG:"
+          echo ${{ steps.semantic-release.outputs.new_release_version }}
+          echo "CURRENT Notes:"
+          echo ${{ steps.semantic-release.outputs.new_release_notes }}
+
+      - name: Set up Python
+        if: steps.semantic-release.outcome == 'success'
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.11
+
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          # updating python
+          python -m pip install --upgrade pip
+
+          # installing poetry
+          pip install poetry
+
+          # disable venvs
+          poetry config virtualenvs.create false
+
+          # assuring we have all extras for testing as well
+          poetry install --all-extras --no-interaction
+
+      - name: Publishing to PyPI
+        shell: bash
+        run: |
+          # Configuring PyPi
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+
+          # Setting correct package version
+          poetry version ${{ steps.semantic-release.outputs.new_release_version }}
+
+          # Publishing to PyPi
+          poetry publish --build
+
+      - name: "Releasing new documentation with mike"
+        continue-on-error: true
+        shell: bash
+        run: |
+          echo "CURRENT TAG:"
+          echo "${{ steps.semantic-release.outputs.new_release_version }}"
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          mike deploy --push --update-aliases ${{ steps.semantic-release.outputs.new_release_version }} latest

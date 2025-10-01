@@ -20,10 +20,14 @@ class TestMovingAverageLayer(tf.test.TestCase):
             ([3], False, 0.0, False),
             ([3], True, -999.0, False),
             ([3], True, 0.0, True),
-        ]
+        ],
     )
     def test_moving_average_layer_config(
-        self, periods, drop_na, pad_value, keep_original
+        self,
+        periods,
+        drop_na,
+        pad_value,
+        keep_original,
     ):
         """Test the configuration options for MovingAverageLayer."""
         # Create the layer
@@ -69,7 +73,7 @@ class TestMovingAverageLayer(tf.test.TestCase):
                 (6.0 + 7.0 + 8.0) / 3,
                 (7.0 + 8.0 + 9.0) / 3,
                 (8.0 + 9.0 + 10.0) / 3,  # MA(3) for position 9
-            ]
+            ],
         )
 
         # Check that the output shape is as expected
@@ -120,7 +124,8 @@ class TestMovingAverageLayer(tf.test.TestCase):
 
         # Check that the output shape is as expected
         self.assertEqual(
-            output_np.shape, (len(input_data) - (max(periods) - 1), len(periods))
+            output_np.shape,
+            (len(input_data) - (max(periods) - 1), len(periods)),
         )
 
         # Check that the output contains the expected values
@@ -135,7 +140,10 @@ class TestMovingAverageLayer(tf.test.TestCase):
         # Create a layer with period=3 and drop_na=False
         period = 3
         layer = MovingAverageLayer(
-            periods=[period], drop_na=False, pad_value=0.0, keep_original=False
+            periods=[period],
+            drop_na=False,
+            pad_value=0.0,
+            keep_original=False,
         )
 
         # Apply the layer
@@ -154,7 +162,7 @@ class TestMovingAverageLayer(tf.test.TestCase):
                 (1.0 + 2.0 + 3.0) / 3,  # Position 2: full window average
                 (2.0 + 3.0 + 4.0) / 3,  # Position 3: full window average
                 (3.0 + 4.0 + 5.0) / 3,  # Position 4: full window average
-            ]
+            ],
         )
 
         # Check that the output shape is as expected
@@ -172,7 +180,10 @@ class TestMovingAverageLayer(tf.test.TestCase):
         # Create a layer with a custom pad_value and drop_na=False
         pad_value = -999.0
         layer = MovingAverageLayer(
-            periods=[2], drop_na=False, pad_value=pad_value, keep_original=False
+            periods=[2],
+            drop_na=False,
+            pad_value=pad_value,
+            keep_original=False,
         )
 
         # Apply the layer
@@ -207,7 +218,7 @@ class TestMovingAverageLayer(tf.test.TestCase):
                 [3.0, 2.0],  # Original value and MA(3) of [1,2,3]
                 [4.0, 3.0],  # Original value and MA(3) of [2,3,4]
                 [5.0, 4.0],  # Original value and MA(3) of [3,4,5]
-            ]
+            ],
         )
 
         # Check that the output shape is as expected

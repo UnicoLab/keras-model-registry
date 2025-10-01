@@ -45,11 +45,11 @@ class SeasonalDecompositionLayer(Layer):
         # Validate parameters
         if self.method not in ["additive", "multiplicative"]:
             raise ValueError(
-                f"Method must be 'additive' or 'multiplicative', got {method}"
+                f"Method must be 'additive' or 'multiplicative', got {method}",
             )
         if self.extrapolate_trend not in ["nearest", "linear"]:
             raise ValueError(
-                f"Extrapolate_trend must be 'nearest' or 'linear', got {extrapolate_trend}"
+                f"Extrapolate_trend must be 'nearest' or 'linear', got {extrapolate_trend}",
             )
 
     def call(self, inputs):
@@ -97,7 +97,9 @@ class SeasonalDecompositionLayer(Layer):
             detrended = inputs / safe_trend
             # Replace NaNs and Infs
             detrended = tf.where(
-                tf.math.is_finite(detrended), detrended, tf.zeros_like(detrended)
+                tf.math.is_finite(detrended),
+                detrended,
+                tf.zeros_like(detrended),
             )
 
         # Calculate seasonal component
@@ -115,7 +117,9 @@ class SeasonalDecompositionLayer(Layer):
             residual = inputs / (safe_trend * safe_seasonal)
             # Replace NaNs and Infs
             residual = tf.where(
-                tf.math.is_finite(residual), residual, tf.zeros_like(residual)
+                tf.math.is_finite(residual),
+                residual,
+                tf.zeros_like(residual),
             )
 
         # Stack components

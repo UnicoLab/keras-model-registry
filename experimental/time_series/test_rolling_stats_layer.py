@@ -19,10 +19,15 @@ class TestRollingStatsLayer(tf.test.TestCase):
             (3, ["mean"], 2, 0.0, False),
             (3, ["mean"], 1, -999.0, False),
             (3, ["mean"], 1, 0.0, True),
-        ]
+        ],
     )
     def test_rolling_stats_layer_config(
-        self, window_size, statistics, window_stride, pad_value, keep_original
+        self,
+        window_size,
+        statistics,
+        window_stride,
+        pad_value,
+        keep_original,
     ):
         # Create the layer
         layer = RollingStatsLayer(
@@ -48,7 +53,9 @@ class TestRollingStatsLayer(tf.test.TestCase):
 
         # Create a layer with window_size=3, keep_original=False
         layer = RollingStatsLayer(
-            window_size=3, statistics=["mean"], keep_original=False
+            window_size=3,
+            statistics=["mean"],
+            keep_original=False,
         )
 
         # Apply the layer
@@ -74,7 +81,9 @@ class TestRollingStatsLayer(tf.test.TestCase):
 
         # Create a layer with multiple statistics, keep_original=False
         layer = RollingStatsLayer(
-            window_size=3, statistics=["mean", "min", "max"], keep_original=False
+            window_size=3,
+            statistics=["mean", "min", "max"],
+            keep_original=False,
         )
 
         # Apply the layer
@@ -91,7 +100,7 @@ class TestRollingStatsLayer(tf.test.TestCase):
                 [3.0, 1.0, 5.0],  # Mean, min, max of [1,3,5]
                 [5.0, 3.0, 7.0],  # Mean, min, max of [3,5,7]
                 [7.0, 5.0, 9.0],  # Mean, min, max of [5,7,9]
-            ]
+            ],
         )
 
         # Check shape and content
@@ -106,7 +115,10 @@ class TestRollingStatsLayer(tf.test.TestCase):
 
         # Create a layer with window_stride=2, keep_original=False
         layer = RollingStatsLayer(
-            window_size=3, statistics=["mean"], window_stride=2, keep_original=False
+            window_size=3,
+            statistics=["mean"],
+            window_stride=2,
+            keep_original=False,
         )
 
         # Apply the layer
@@ -132,7 +144,10 @@ class TestRollingStatsLayer(tf.test.TestCase):
 
         # Create a layer with drop_na=False, keep_original=False
         layer = RollingStatsLayer(
-            window_size=3, statistics=["mean"], drop_na=False, keep_original=False
+            window_size=3,
+            statistics=["mean"],
+            drop_na=False,
+            keep_original=False,
         )
 
         # Apply the layer
@@ -184,7 +199,9 @@ class TestRollingStatsLayer(tf.test.TestCase):
 
         # Create a layer with keep_original=True
         layer = RollingStatsLayer(
-            window_size=3, statistics=["mean"], keep_original=True
+            window_size=3,
+            statistics=["mean"],
+            keep_original=True,
         )
 
         # Apply the layer
@@ -200,7 +217,7 @@ class TestRollingStatsLayer(tf.test.TestCase):
                 [3.0, 2.0],  # Original value and mean of [1,2,3]
                 [4.0, 3.0],  # Original value and mean of [2,3,4]
                 [5.0, 4.0],  # Original value and mean of [3,4,5]
-            ]
+            ],
         )
 
         # Check shape and content

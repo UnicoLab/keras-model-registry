@@ -30,15 +30,16 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
 
         # Reshape to batch format (batch_size=2, time_steps=100)
         self.additive_batch = np.stack(
-            [self.additive_series, self.additive_series * 1.5]
+            [self.additive_series, self.additive_series * 1.5],
         )
         self.multiplicative_batch = np.stack(
-            [self.multiplicative_series, self.multiplicative_series * 1.2]
+            [self.multiplicative_series, self.multiplicative_series * 1.2],
         )
 
         # Create multi-feature version (batch_size=2, time_steps=100, features=2)
         self.multi_feature_batch = np.stack(
-            [self.additive_batch, self.multiplicative_batch], axis=-1
+            [self.additive_batch, self.multiplicative_batch],
+            axis=-1,
         )
 
     def test_init(self):
@@ -80,7 +81,10 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
         """Test layer call with 2D inputs and additive method."""
         # Initialize layer with additive method
         layer = SeasonalDecompositionLayer(
-            period=10, method="additive", keep_original=False, drop_na=False
+            period=10,
+            method="additive",
+            keep_original=False,
+            drop_na=False,
         )
 
         # Apply decomposition
@@ -97,7 +101,8 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
         # Basic sanity checks on components
         # Trend should be smoother than original
         self.assertLess(
-            np.std(np.diff(trend[0])), np.std(np.diff(self.additive_batch[0]))
+            np.std(np.diff(trend[0])),
+            np.std(np.diff(self.additive_batch[0])),
         )
 
         # Seasonal component should have a repeating pattern
@@ -112,14 +117,20 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
         # Original series should approximately equal sum of components
         reconstructed = trend + seasonal + residual
         np.testing.assert_allclose(
-            self.additive_batch, reconstructed.numpy(), rtol=1e-4, atol=1e-4
+            self.additive_batch,
+            reconstructed.numpy(),
+            rtol=1e-4,
+            atol=1e-4,
         )
 
     def test_call_2d_multiplicative(self):
         """Test layer call with 2D inputs and multiplicative method."""
         # Initialize layer with multiplicative method
         layer = SeasonalDecompositionLayer(
-            period=10, method="multiplicative", keep_original=False, drop_na=False
+            period=10,
+            method="multiplicative",
+            keep_original=False,
+            drop_na=False,
         )
 
         # Apply decomposition
@@ -136,7 +147,8 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
         # Basic sanity checks
         # Trend should be smoother than original
         self.assertLess(
-            np.std(np.diff(trend[0])), np.std(np.diff(self.multiplicative_batch[0]))
+            np.std(np.diff(trend[0])),
+            np.std(np.diff(self.multiplicative_batch[0])),
         )
 
         # Seasonal component should have a repeating pattern
@@ -160,7 +172,10 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
         """Test layer call with 3D inputs (multiple features)."""
         # Initialize layer
         layer = SeasonalDecompositionLayer(
-            period=10, method="additive", keep_original=True, drop_na=False
+            period=10,
+            method="additive",
+            keep_original=True,
+            drop_na=False,
         )
 
         # Apply decomposition
@@ -180,7 +195,8 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
 
         # Create a larger batch to better test drop_na
         larger_batch = np.tile(
-            self.additive_batch, (5, 1)
+            self.additive_batch,
+            (5, 1),
         )  # Create a batch with 10 samples
 
         # Apply decomposition
@@ -195,7 +211,9 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
         """Test compute_output_shape method."""
         # Test with keep_original=False, drop_na=False
         layer = SeasonalDecompositionLayer(
-            period=10, keep_original=False, drop_na=False
+            period=10,
+            keep_original=False,
+            drop_na=False,
         )
 
         # 2D input
@@ -210,7 +228,10 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
 
         # Test with keep_original=True, drop_na=True
         layer = SeasonalDecompositionLayer(
-            period=10, trend_window=5, keep_original=True, drop_na=True
+            period=10,
+            trend_window=5,
+            keep_original=True,
+            drop_na=True,
         )
 
         # 2D input with drop_na
@@ -219,14 +240,16 @@ class TestSeasonalDecompositionLayer(unittest.TestCase):
         # Calculate expected shape: drop (trend_window-1)/2 rows
         expected_batch_size = 32 - (5 - 1) // 2  # 32 - 2 = 30
         self.assertEqual(
-            output_shape, (expected_batch_size, 100, 4)
+            output_shape,
+            (expected_batch_size, 100, 4),
         )  # 30 rows, 4 components
 
         # 3D input with drop_na
         input_shape = (32, 100, 5)
         output_shape = layer.compute_output_shape(input_shape)
         self.assertEqual(
-            output_shape, (expected_batch_size, 100, 20)
+            output_shape,
+            (expected_batch_size, 100, 20),
         )  # 30 rows, 5 features * 4 components
 
     def test_get_config(self):

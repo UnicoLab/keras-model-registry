@@ -1,6 +1,5 @@
 """Unit tests for InterpretableMultiHeadAttention layer."""
 import unittest
-import keras
 import tensorflow as tf
 from keras import layers, Model, ops
 
@@ -20,7 +19,7 @@ class TestInterpretableMultiHeadAttention(unittest.TestCase):
         self.layer = InterpretableMultiHeadAttention(
             d_model=self.d_model,
             n_head=self.n_head,
-            dropout_rate=self.dropout_rate
+            dropout_rate=self.dropout_rate,
         )
 
     def test_initialization(self) -> None:
@@ -80,7 +79,7 @@ class TestInterpretableMultiHeadAttention(unittest.TestCase):
         query_input = layers.Input(shape=(self.seq_len, self.d_model))
         key_input = layers.Input(shape=(self.seq_len, self.d_model))
         value_input = layers.Input(shape=(self.seq_len, self.d_model))
-        
+
         outputs = self.layer(query_input, key_input, value_input)
         model = Model(inputs=[query_input, key_input, value_input], outputs=outputs)
 
@@ -92,13 +91,13 @@ class TestInterpretableMultiHeadAttention(unittest.TestCase):
         query = tf.random.normal((self.batch_size, self.seq_len, self.d_model))
         key = tf.random.normal((self.batch_size, self.seq_len, self.d_model))
         value = tf.random.normal((self.batch_size, self.seq_len, self.d_model))
-        
+
         original_output = model([query, key, value])
         reconstructed_output = reconstructed_model([query, key, value])
-        
+
         # Check that outputs have the same shape
         self.assertEqual(original_output.shape, reconstructed_output.shape)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

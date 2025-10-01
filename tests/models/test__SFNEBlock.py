@@ -10,6 +10,7 @@ import tensorflow as tf  # Used for testing only
 from keras import layers, Model
 from kmr.models.SFNEBlock import SFNEBlock
 
+
 class TestSFNEBlock(unittest.TestCase):
     """Test cases for the SFNEBlock model."""
 
@@ -26,22 +27,14 @@ class TestSFNEBlock(unittest.TestCase):
     def test_initialization(self) -> None:
         """Test model initialization with various parameters."""
         # Test default initialization
-        model = SFNEBlock(
-            input_dim=self.input_dim,
-            output_dim=self.output_dim
-        )
+        model = SFNEBlock(input_dim=self.input_dim, output_dim=self.output_dim)
         self.assertEqual(model.input_dim, self.input_dim)
         self.assertEqual(model.output_dim, self.output_dim)
         self.assertEqual(model.hidden_dim, 64)  # Default value
         self.assertEqual(model.num_layers, 2)  # Default value
 
         # Test custom initialization
-        model = SFNEBlock(
-            input_dim=8,
-            output_dim=4,
-            hidden_dim=16,
-            num_layers=3
-        )
+        model = SFNEBlock(input_dim=8, output_dim=4, hidden_dim=16, num_layers=3)
         self.assertEqual(model.input_dim, 8)
         self.assertEqual(model.output_dim, 4)
         self.assertEqual(model.hidden_dim, 16)
@@ -66,13 +59,13 @@ class TestSFNEBlock(unittest.TestCase):
             SFNEBlock(
                 input_dim=self.input_dim,
                 output_dim=self.output_dim,
-                hidden_dim=0
+                hidden_dim=0,
             )
         with self.assertRaises(ValueError):
             SFNEBlock(
                 input_dim=self.input_dim,
                 output_dim=self.output_dim,
-                hidden_dim=-1
+                hidden_dim=-1,
             )
 
         # Test invalid num_layers
@@ -80,13 +73,13 @@ class TestSFNEBlock(unittest.TestCase):
             SFNEBlock(
                 input_dim=self.input_dim,
                 output_dim=self.output_dim,
-                num_layers=0
+                num_layers=0,
             )
         with self.assertRaises(ValueError):
             SFNEBlock(
                 input_dim=self.input_dim,
                 output_dim=self.output_dim,
-                num_layers=-1
+                num_layers=-1,
             )
 
     def test_build(self) -> None:
@@ -96,17 +89,17 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
+            num_layers=2,
         )
-        
+
         # Call the model once to build it
         _ = model(self.test_input)
-        
+
         # Check if layers are created
         self.assertIsNotNone(model.input_layer)
         self.assertEqual(len(model.hidden_layers), 2)
         self.assertIsNotNone(model.output_layer)
-        
+
         # Check layer dimensions
         self.assertEqual(model.input_layer.units, self.hidden_dim)
         for hidden_layer in model.hidden_layers:
@@ -120,24 +113,24 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
+            num_layers=2,
         )
         output = model(self.test_input)
         self.assertEqual(output.shape, (self.batch_size, self.output_dim))
 
         # Test with different input shapes
         test_shapes = [
-            (16, 8, 4),  # batch_size, input_dim, output_dim
+            (16, 8, 4),
             (64, 32, 16),
-            (128, 64, 32)
-        ]
+            (128, 64, 32),
+        ]  # batch_size, input_dim, output_dim
         for shape in test_shapes:
             # Create new model instance for each shape
             model = SFNEBlock(
                 input_dim=shape[1],
                 output_dim=shape[2],
                 hidden_dim=shape[1] * 2,
-                num_layers=2
+                num_layers=2,
             )
             test_input = tf.random.normal((shape[0], shape[1]))
             output = model(test_input)
@@ -149,12 +142,12 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
+            num_layers=2,
         )
-        
+
         # Call the model once to build it
         _ = model(self.test_input)
-        
+
         # Check that the output has the correct shape
         output = model(self.test_input)
         self.assertEqual(output.shape, (self.batch_size, self.output_dim))
@@ -165,13 +158,13 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
+            num_layers=2,
         )
-        
+
         # For this model, training mode might affect the output due to dropout
         output_train = model(self.test_input, training=True)
         output_infer = model(self.test_input, training=False)
-        
+
         # Shapes should be the same
         self.assertEqual(output_train.shape, output_infer.shape)
 
@@ -181,7 +174,7 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
+            num_layers=2,
         )
         config = original_model.get_config()
 
@@ -202,23 +195,25 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
-        )(inputs)
+            num_layers=2,
+        )(
+            inputs,
+        )
         outputs = layers.Dense(1)(x)
         model = Model(inputs=inputs, outputs=outputs)
-        
+
         # Compile the model
-        model.compile(optimizer='adam', loss='mse')
-        
+        model.compile(optimizer="adam", loss="mse")
+
         # Generate some dummy data
         x_data = tf.random.normal((100, self.input_dim))
         y_data = tf.random.normal((100, 1))
-        
+
         # Train for one step to ensure everything works
         history = model.fit(x_data, y_data, epochs=1, verbose=0)
-        
+
         # Check that loss was computed
-        self.assertIsNotNone(history.history['loss'])
+        self.assertIsNotNone(history.history["loss"])
 
     def test_learnable_weights(self) -> None:
         """Test that the model's weights are learnable."""
@@ -226,39 +221,43 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
+            num_layers=2,
         )
-        
+
         # Call the model once to build it
         _ = model(self.test_input)
-        
+
         # Get initial weights
         initial_weights = model.get_weights()
-        
+
         # Create a simple model with the SFNEBlock
         inputs = layers.Input(shape=(self.input_dim,))
         x = SFNEBlock(
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=2
-        )(inputs)
+            num_layers=2,
+        )(
+            inputs,
+        )
         outputs = layers.Dense(1)(x)
         keras_model = Model(inputs=inputs, outputs=outputs)
-        
+
         # Compile the model
-        keras_model.compile(optimizer='adam', loss='mse')
-        
+        keras_model.compile(optimizer="adam", loss="mse")
+
         # Generate some dummy data
         x_data = tf.random.normal((100, self.input_dim))
         y_data = tf.random.normal((100, 1))
-        
+
         # Train for a few steps
         keras_model.fit(x_data, y_data, epochs=5, verbose=0)
-        
+
         # Get updated weights
-        updated_weights = keras_model.layers[1].get_weights()  # Index 1 should be the SFNEBlock
-        
+        updated_weights = keras_model.layers[
+            1
+        ].get_weights()  # Index 1 should be the SFNEBlock
+
         # Weights should have changed
         for i in range(len(initial_weights)):
             self.assertFalse(np.array_equal(initial_weights[i], updated_weights[i]))
@@ -270,30 +269,31 @@ class TestSFNEBlock(unittest.TestCase):
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=1
+            num_layers=1,
         )
         _ = model_1(self.test_input)
         self.assertEqual(len(model_1.hidden_layers), 1)
-        
+
         # Test with 3 layers
         model_3 = SFNEBlock(
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=3
+            num_layers=3,
         )
         _ = model_3(self.test_input)
         self.assertEqual(len(model_3.hidden_layers), 3)
-        
+
         # Test with 5 layers
         model_5 = SFNEBlock(
             input_dim=self.input_dim,
             output_dim=self.output_dim,
             hidden_dim=self.hidden_dim,
-            num_layers=5
+            num_layers=5,
         )
         _ = model_5(self.test_input)
         self.assertEqual(len(model_5.hidden_layers), 5)
+
 
 if __name__ == "__main__":
     unittest.main()

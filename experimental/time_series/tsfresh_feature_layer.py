@@ -162,7 +162,8 @@ class TSFreshFeatureLayer(Layer):
 
             # Initialize output array
             result = np.zeros(
-                (batch_size, n_windows, n_output_features), dtype=np.float32
+                (batch_size, n_windows, n_output_features),
+                dtype=np.float32,
             )
 
             # Process each sample in the batch
@@ -244,7 +245,7 @@ class TSFreshFeatureLayer(Layer):
             else:
                 # Multi-feature input
                 result.set_shape(
-                    [inputs.shape[0], n_windows, inputs.shape[2] * n_output_features]
+                    [inputs.shape[0], n_windows, inputs.shape[2] * n_output_features],
                 )
 
         return result
@@ -361,7 +362,7 @@ class TSFreshFeatureLayer(Layer):
                 if len(series) > 2:
                     # A point is a peak if it's greater than both neighbors
                     peaks = np.where(
-                        (series[1:-1] > series[:-2]) & (series[1:-1] > series[2:])
+                        (series[1:-1] > series[:-2]) & (series[1:-1] > series[2:]),
                     )[0]
                     results.append(len(peaks) / len(series))
                 else:
@@ -372,7 +373,7 @@ class TSFreshFeatureLayer(Layer):
                 if len(series) > 2:
                     # A point is a valley if it's less than both neighbors
                     valleys = np.where(
-                        (series[1:-1] < series[:-2]) & (series[1:-1] < series[2:])
+                        (series[1:-1] < series[:-2]) & (series[1:-1] < series[2:]),
                     )[0]
                     results.append(len(valleys) / len(series))
                 else:

@@ -1,5 +1,4 @@
 # standard library
-from typing import Tuple
 
 # pypi/conda library
 import tensorflow as tf
@@ -33,7 +32,7 @@ class FeedBackModel(tf.keras.Model):
         self.lstm_rnn = tf.keras.layers.RNN(self.lstm_cell, return_state=True)
         self.dense = tf.keras.layers.Dense(self.nr_features_out)
 
-    def warmup(self, inputs: tf.Tensor) -> Tuple[tf.Tensor, tf.Tensor]:
+    def warmup(self, inputs: tf.Tensor) -> tuple[tf.Tensor, tf.Tensor]:
         """This method returns a single time-step prediction and the internal state of the LSTM:"""
         # inputs.shape => (batch, time, features)
         # x.shape => (batch, lstm_units)

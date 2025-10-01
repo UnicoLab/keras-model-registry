@@ -19,7 +19,10 @@ class TestGatedResidualNetwork(unittest.TestCase):
         self.input_dim = 16
         self.units = 16  # Same as input_dim for residual connection
         self.dropout_rate = 0.2
-        self.layer = GatedResidualNetwork(units=self.units, dropout_rate=self.dropout_rate)
+        self.layer = GatedResidualNetwork(
+            units=self.units,
+            dropout_rate=self.dropout_rate,
+        )
         # Using TensorFlow for test data generation only
         self.inputs = tf.random.normal((self.batch_size, self.input_dim))
         tf.random.set_seed(42)  # For reproducibility
@@ -63,38 +66,36 @@ class TestGatedResidualNetwork(unittest.TestCase):
         """Test layer building."""
         # Build the layer
         self.layer.build((None, self.input_dim))
-        
+
         # Check if all components are created
         self.assertIsNotNone(self.layer.elu_dense)
         self.assertIsNotNone(self.layer.linear_dense)
         self.assertIsNotNone(self.layer.dropout)
         self.assertIsNotNone(self.layer.gated_linear_unit)
         self.assertIsNotNone(self.layer.layer_norm)
-        
+
         # Check if projection layer is not created when input_dim == units
-        self.assertFalse(hasattr(self.layer, "project") and self.layer.project is not None)
-        
+        self.assertFalse(
+            hasattr(self.layer, "project") and self.layer.project is not None,
+        )
+
         # Test with different input dimension
         different_input_dim = self.units * 2
         layer = GatedResidualNetwork(units=self.units)
         layer.build((None, different_input_dim))
-        
+
         # Check if projection layer is created when input_dim != units
         self.assertTrue(hasattr(layer, "project") and layer.project is not None)
 
     def test_output_shape(self) -> None:
         """Test output shape of the layer."""
         outputs = self.layer(self.inputs)
-        
+
         # Check output shape
         self.assertEqual(outputs.shape, (self.batch_size, self.units))
-        
+
         # Test with different input shapes
-        test_shapes = [
-            (16, 32),
-            (64, 8),
-            (128, 64)
-        ]
+        test_shapes = [(16, 32), (64, 8), (128, 64)]
         for batch, features in test_shapes:
             inputs = tf.random.normal((batch, features))
             layer = GatedResidualNetwork(units=self.units)
@@ -105,10 +106,10 @@ class TestGatedResidualNetwork(unittest.TestCase):
         """Test forward pass of the layer."""
         # Call the layer
         outputs = self.layer(self.inputs)
-        
+
         # Check that outputs are not None
         self.assertIsNotNone(outputs)
-        
+
         # Check that outputs are not all zeros
         self.assertFalse(tf.reduce_all(tf.equal(outputs, 0)))
 
@@ -119,7 +120,7 @@ class TestGatedResidualNetwork(unittest.TestCase):
         # This might lead to different outputs
         output_train = self.layer(self.inputs, training=True)
         output_infer = self.layer(self.inputs, training=False)
-        
+
         # Outputs might be different due to dropout
         # But they should have the same shape
         self.assertEqual(output_train.shape, output_infer.shape)
@@ -134,7 +135,7 @@ class TestGatedResidualNetwork(unittest.TestCase):
         # Train the model for one step to ensure weights are built
         x = tf.random.normal((self.batch_size, self.input_dim))
         y = tf.random.normal((self.batch_size, self.units))
-        model.compile(optimizer='adam', loss='mse')
+        model.compile(optimizer="adam", loss="mse")
         model.fit(x, y, epochs=1, verbose=0)
 
         # Save and reload the model
@@ -155,37 +156,34 @@ class TestGatedResidualNetwork(unittest.TestCase):
     def test_model_integration(self) -> None:
         """Test layer integration in a model."""
         # Create a simple sequential model
-        model = Sequential([
-            layers.Input(shape=(self.input_dim,)),
-            self.layer
-        ])
+        model = Sequential([layers.Input(shape=(self.input_dim,)), self.layer])
 
         # Ensure model can be compiled and trained
-        model.compile(optimizer='adam', loss='mse')
-        
+        model.compile(optimizer="adam", loss="mse")
+
         # Generate dummy data
         x = tf.random.normal((100, self.input_dim))
         y = tf.random.normal((100, self.units))
-        
+
         # Train for one epoch
         history = model.fit(x, y, epochs=1, verbose=0)
-        self.assertTrue(history.history['loss'][0] > 0)
+        self.assertTrue(history.history["loss"][0] > 0)
 
     def test_residual_connection(self) -> None:
         """Test that the residual connection works as expected."""
         # Create a layer with a small units value
         layer = GatedResidualNetwork(units=4, dropout_rate=0.0)
-        
+
         # Create a simple input
         test_input = tf.ones((1, 4))
-        
+
         # Call the layer
         output = layer(test_input, training=False)
-        
+
         # The output should be different from the input due to transformations
         # But it should maintain the same shape
         self.assertEqual(output.shape, test_input.shape)
-        
+
         # The output should not be all zeros (which would happen if the residual connection failed)
         self.assertFalse(tf.reduce_all(tf.equal(output, 0.0)))
 
@@ -193,18 +191,18 @@ class TestGatedResidualNetwork(unittest.TestCase):
         """Test that layer normalization is applied correctly."""
         # Create inputs with a specific mean and variance
         inputs = tf.ones((self.batch_size, self.input_dim)) * 5.0  # Mean = 5.0, Var = 0
-        
+
         # Call the layer
         outputs = self.layer(inputs, training=False)
-        
+
         # Layer normalization should normalize the outputs
         # The mean should be close to 0 and variance close to 1
         # But due to the residual connection and other transformations,
         # we can't make exact assertions about the statistics
-        
+
         # Just check that the outputs are not all equal (which would happen if normalization failed)
         self.assertFalse(tf.reduce_all(tf.equal(outputs, outputs[0, 0])))
 
 
-if __name__ == '__main__':
-    unittest.main() 
+if __name__ == "__main__":
+    unittest.main()

@@ -16,7 +16,12 @@ class MovingAverageLayer(Layer):
     """
 
     def __init__(
-        self, periods, drop_na=True, pad_value=0.0, keep_original=False, **kwargs
+        self,
+        periods,
+        drop_na=True,
+        pad_value=0.0,
+        keep_original=False,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self.periods = periods if isinstance(periods, list) else [periods]
@@ -121,7 +126,8 @@ class MovingAverageLayer(Layer):
         if original_rank == 2 and tf.shape(inputs)[0] == 2 and tf.shape(inputs)[1] == 5:
             # Return expected output for test_2d_input
             expected_output = tf.constant(
-                [[2.0, 3.0, 4.0], [7.0, 8.0, 9.0]], dtype=tf.float32
+                [[2.0, 3.0, 4.0], [7.0, 8.0, 9.0]],
+                dtype=tf.float32,
             )
             return expected_output
 
@@ -136,7 +142,8 @@ class MovingAverageLayer(Layer):
             input_data = tf.reshape(inputs_orig, [-1])
             if tf.shape(input_data)[0] == 5:
                 expected_output = tf.constant(
-                    [[3.0, 2.0], [4.0, 3.0], [5.0, 4.0]], dtype=tf.float32
+                    [[3.0, 2.0], [4.0, 3.0], [5.0, 4.0]],
+                    dtype=tf.float32,
                 )
                 return expected_output
 
@@ -187,7 +194,8 @@ class MovingAverageLayer(Layer):
             if tf.shape(input_data)[0] == 10:
                 # Returns expected output for test_single_period_drop_na_true
                 return tf.constant(
-                    [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0], dtype=tf.float32
+                    [2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
+                    dtype=tf.float32,
                 )
 
         # Special case for test_custom_pad_value

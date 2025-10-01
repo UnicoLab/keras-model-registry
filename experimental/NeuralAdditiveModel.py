@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.keras import layers
 from loguru import logger
 
+
 class NeuralAdditiveModel(layers.Layer):
     """Neural Additive Model (NAM) layer for tabular data.
 
@@ -22,6 +23,7 @@ class NeuralAdditiveModel(layers.Layer):
         print("NAM output shape:", y.shape)  # Expected: (32, 1) for regression.
         ```
     """
+
     def __init__(self, hidden_units: int = 16, **kwargs):
         """
         Args:
@@ -36,17 +38,30 @@ class NeuralAdditiveModel(layers.Layer):
         # Create one small MLP per feature.
         self.feature_mlps = []
         for i in range(self.num_features):
-            mlp = tf.keras.Sequential([
-                layers.Dense(self.hidden_units, activation="relu", name=f"mlp_{i}_dense1"),
-                layers.Dense(1, activation=None, name=f"mlp_{i}_dense2")
-            ], name=f"mlp_{i}")
+            mlp = tf.keras.Sequential(
+                [
+                    layers.Dense(
+                        self.hidden_units,
+                        activation="relu",
+                        name=f"mlp_{i}_dense1",
+                    ),
+                    layers.Dense(1, activation=None, name=f"mlp_{i}_dense2"),
+                ],
+                name=f"mlp_{i}",
+            )
             self.feature_mlps.append(mlp)
         # Global bias
         self.bias = self.add_weight(
-            name="global_bias", shape=(1,), initializer="zeros", trainable=True
+            name="global_bias",
+            shape=(1,),
+            initializer="zeros",
+            trainable=True,
         )
-        logger.debug("NeuralAdditiveModel built with {} features and {} hidden units per feature.",
-                     self.num_features, self.hidden_units)
+        logger.debug(
+            "NeuralAdditiveModel built with {} features and {} hidden units per feature.",
+            self.num_features,
+            self.hidden_units,
+        )
         super().build(input_shape)
 
     def call(self, inputs: tf.Tensor) -> tf.Tensor:

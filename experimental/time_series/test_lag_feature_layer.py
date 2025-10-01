@@ -19,10 +19,14 @@ class TestLagFeatureLayer(tf.test.TestCase):
             ([1, 2], False, 0.0, False),
             ([1, 2], True, -999.0, False),
             ([1, 2], True, 0.0, True),
-        ]
+        ],
     )
     def test_lag_feature_layer_config(
-        self, lag_indices, drop_na, fill_value, keep_original
+        self,
+        lag_indices,
+        drop_na,
+        fill_value,
+        keep_original,
     ):
         """Test the configuration options for LagFeatureLayer."""
         # Create the layer
@@ -65,7 +69,7 @@ class TestLagFeatureLayer(tf.test.TestCase):
                 [7.0, 5.0],
                 [8.0, 6.0],
                 [9.0, 7.0],
-            ]
+            ],
         )
 
         # Check that the output shape is as expected
@@ -82,7 +86,10 @@ class TestLagFeatureLayer(tf.test.TestCase):
 
         # Create a layer with lag indices [1, 2] and drop_na=False
         layer = LagFeatureLayer(
-            lag_indices=[1, 2], drop_na=False, fill_value=0.0, keep_original=False
+            lag_indices=[1, 2],
+            drop_na=False,
+            fill_value=0.0,
+            keep_original=False,
         )
 
         # Apply the layer
@@ -100,7 +107,7 @@ class TestLagFeatureLayer(tf.test.TestCase):
                 [2.0, 1.0],  # Second value of lag 1, first value of lag 2
                 [3.0, 2.0],  # and so on...
                 [4.0, 3.0],
-            ]
+            ],
         )
 
         # Check that the output shape is as expected
@@ -118,7 +125,10 @@ class TestLagFeatureLayer(tf.test.TestCase):
         # Create a layer with lag indices [2] and a custom fill_value
         fill_value = -999.0
         layer = LagFeatureLayer(
-            lag_indices=[2], drop_na=False, fill_value=fill_value, keep_original=False
+            lag_indices=[2],
+            drop_na=False,
+            fill_value=fill_value,
+            keep_original=False,
         )
 
         # Apply the layer
@@ -153,7 +163,7 @@ class TestLagFeatureLayer(tf.test.TestCase):
                 [3.0, 2.0, 1.0],  # Input[2], Input[2-1], Input[2-2] = 3.0, 2.0, 1.0
                 [4.0, 3.0, 2.0],  # Input[3], Input[3-1], Input[3-2] = 4.0, 3.0, 2.0
                 [5.0, 4.0, 3.0],  # Input[4], Input[4-1], Input[4-2] = 5.0, 4.0, 3.0
-            ]
+            ],
         )
 
         # Check that the output shape is as expected

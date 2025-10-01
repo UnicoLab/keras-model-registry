@@ -25,7 +25,7 @@ class TestGatedFeatureSelection(unittest.TestCase):
         """Test output shape of the layer."""
         inputs = tf.random.normal((self.batch_size, self.input_dim))
         outputs = self.layer(inputs)
-        
+
         self.assertEqual(outputs.shape, (self.batch_size, self.input_dim))
 
     def test_serialization(self) -> None:
@@ -38,7 +38,7 @@ class TestGatedFeatureSelection(unittest.TestCase):
         # Train the model for one step to ensure weights are built
         x = tf.random.normal((self.batch_size, self.input_dim))
         y = tf.random.normal((self.batch_size, self.input_dim))
-        model.compile(optimizer='adam', loss='mse')
+        model.compile(optimizer="adam", loss="mse")
         model.fit(x, y, epochs=1, verbose=0)
 
         # Save and reload the model
@@ -60,33 +60,31 @@ class TestGatedFeatureSelection(unittest.TestCase):
         """Test if residual connection is working properly."""
         inputs = tf.ones((1, self.input_dim))
         outputs = self.layer(inputs)
-        
+
         # Output should be different from input due to gating and residual
         tf.debugging.assert_none_equal(inputs, outputs)
-        
+
         # But should maintain the same shape
         self.assertEqual(inputs.shape, outputs.shape)
 
     def test_model_integration(self) -> None:
         """Test layer integration in a model."""
         # Create a simple model
-        model = keras.Sequential([
-            layers.Input(shape=(self.input_dim,)),
-            self.layer,
-            layers.Dense(1)
-        ])
+        model = keras.Sequential(
+            [layers.Input(shape=(self.input_dim,)), self.layer, layers.Dense(1)],
+        )
 
         # Ensure model can be compiled and trained
-        model.compile(optimizer='adam', loss='mse')
-        
+        model.compile(optimizer="adam", loss="mse")
+
         # Generate dummy data
         x = tf.random.normal((100, self.input_dim))
         y = tf.random.normal((100, 1))
-        
+
         # Train for one epoch
         history = model.fit(x, y, epochs=1, verbose=0)
-        self.assertTrue(history.history['loss'][0] > 0)
+        self.assertTrue(history.history["loss"][0] > 0)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

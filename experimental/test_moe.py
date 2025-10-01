@@ -99,25 +99,29 @@ class TestExpertBlock(unittest.TestCase):
         expert = ExpertBlock(expert_dim=32)
         self.assertEqual(expert.expert_dim, 32)
         self.assertEqual(
-            len(expert.hidden_layers), 6
+            len(expert.hidden_layers),
+            6,
         )  # 2 layers with activation, BN, no dropout
 
         # With custom hidden dims
         expert = ExpertBlock(expert_dim=32, hidden_dims=[64, 48, 32])
         self.assertEqual(
-            len(expert.hidden_layers), 9
+            len(expert.hidden_layers),
+            9,
         )  # 3 layers with activation, BN, no dropout
 
         # With dropout
         expert = ExpertBlock(expert_dim=32, dropout_rate=0.2)
         self.assertEqual(
-            len(expert.hidden_layers), 8
+            len(expert.hidden_layers),
+            8,
         )  # 2 layers with activation, BN, dropout
 
         # Without batch normalization
         expert = ExpertBlock(expert_dim=32, use_batch_norm=False)
         self.assertEqual(
-            len(expert.hidden_layers), 4
+            len(expert.hidden_layers),
+            4,
         )  # 2 layers with activation, no BN, no dropout
 
     def test_expert_forward_pass(self):
@@ -166,7 +170,7 @@ class TestExpertBlock(unittest.TestCase):
         self.assertFalse(
             all(
                 np.array_equal(w1, w2) for w1, w2 in zip(initial_weights, final_weights)
-            )
+            ),
         )
 
     def test_expert_config(self):
@@ -244,7 +248,9 @@ class TestFeatureMoE(unittest.TestCase):
 
         # Create MoE with learned routing
         moe = FeatureMoE(
-            num_experts=num_experts, expert_dim=expert_dim, routing="learned"
+            num_experts=num_experts,
+            expert_dim=expert_dim,
+            routing="learned",
         )
 
         # Forward pass
@@ -340,7 +346,9 @@ class TestFeatureMoE(unittest.TestCase):
 
         # Create MoE with frozen experts
         moe = FeatureMoE(
-            num_experts=num_experts, expert_dim=expert_dim, freeze_experts=True
+            num_experts=num_experts,
+            expert_dim=expert_dim,
+            freeze_experts=True,
         )
 
         # Forward pass in training mode
@@ -399,7 +407,10 @@ class TestFeatureMoE(unittest.TestCase):
 
         # Test a learned routing config
         moe_learned = FeatureMoE(
-            num_experts=4, expert_dim=48, routing="learned", name="test_learned_moe"
+            num_experts=4,
+            expert_dim=48,
+            routing="learned",
+            name="test_learned_moe",
         )
 
         config_learned = moe_learned.get_config()
@@ -420,10 +431,12 @@ class TestMoEIntegration(unittest.TestCase):
         # Define features for testing
         self.features = {
             "num1": NumericalFeature(
-                name="num1", feature_type=FeatureType.FLOAT_NORMALIZED
+                name="num1",
+                feature_type=FeatureType.FLOAT_NORMALIZED,
             ),
             "num2": NumericalFeature(
-                name="num2", feature_type=FeatureType.FLOAT_NORMALIZED
+                name="num2",
+                feature_type=FeatureType.FLOAT_NORMALIZED,
             ),
         }
 
@@ -463,7 +476,8 @@ class TestMoEIntegration(unittest.TestCase):
 
         # Check model structure - accounting for expert layers within MoE
         self.assertEqual(
-            len(model.layers), 13
+            len(model.layers),
+            13,
         )  # 5 inputs, 5 dense, stack, MoE (with experts), unstack
         self.assertEqual(len(model.outputs), 5)
 

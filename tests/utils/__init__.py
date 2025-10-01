@@ -1,3 +1,1 @@
-"""
-Test module for kmr.utils package.
-""" 
+"""Test module for kmr.utils package."""

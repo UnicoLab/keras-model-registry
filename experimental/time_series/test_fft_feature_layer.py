@@ -29,14 +29,14 @@ class TestFFTFeatureLayer(unittest.TestCase):
 
         # Create a batch (batch_size=3)
         self.batch_series = np.stack(
-            [self.series, self.series * 1.2 + 0.5, self.series * 0.8 - 1.0]
+            [self.series, self.series * 1.2 + 0.5, self.series * 0.8 - 1.0],
         )
 
         # Create multi-feature version (batch_size=3, time_steps=200, features=2)
         second_feature = np.random.normal(0, 1, 200)
         multi_feature = np.stack([self.series, second_feature], axis=-1)
         self.multi_feature_batch = np.stack(
-            [multi_feature, multi_feature, multi_feature]
+            [multi_feature, multi_feature, multi_feature],
         )
 
     def test_init(self):
@@ -170,7 +170,7 @@ class TestFFTFeatureLayer(unittest.TestCase):
             expected_norm_freq = freq_idx / 101
             # One of the extracted frequencies should be close to this expected frequency
             self.assertTrue(
-                np.any(np.isclose(normalized_freqs, expected_norm_freq, atol=0.1))
+                np.any(np.isclose(normalized_freqs, expected_norm_freq, atol=0.1)),
             )
 
     def test_extract_statistical_features(self):
@@ -202,14 +202,18 @@ class TestFFTFeatureLayer(unittest.TestCase):
         total_energy = np.sum(spectrum[0])
 
         np.testing.assert_allclose(
-            low_energy + mid_energy + high_energy, total_energy, rtol=1e-5
+            low_energy + mid_energy + high_energy,
+            total_energy,
+            rtol=1e-5,
         )
 
     def test_call_2d_power(self):
         """Test layer call with 2D inputs and power feature type."""
         # Initialize layer
         layer = FFTFeatureLayer(
-            num_features=5, feature_type="power", keep_original=True
+            num_features=5,
+            feature_type="power",
+            keep_original=True,
         )
 
         # Apply FFT feature extraction
@@ -235,7 +239,9 @@ class TestFFTFeatureLayer(unittest.TestCase):
         """Test layer call with 2D inputs and dominant feature type."""
         # Initialize layer
         layer = FFTFeatureLayer(
-            num_features=3, feature_type="dominant", keep_original=True
+            num_features=3,
+            feature_type="dominant",
+            keep_original=True,
         )
 
         # Apply FFT feature extraction
@@ -261,7 +267,9 @@ class TestFFTFeatureLayer(unittest.TestCase):
         """Test layer call with 3D inputs (multiple features)."""
         # Initialize layer
         layer = FFTFeatureLayer(
-            num_features=5, feature_type="power", keep_original=True
+            num_features=5,
+            feature_type="power",
+            keep_original=True,
         )
 
         # Apply FFT feature extraction
@@ -281,7 +289,9 @@ class TestFFTFeatureLayer(unittest.TestCase):
         """Test compute_output_shape method with power feature type."""
         # Initialize layer with keep_original=True
         layer = FFTFeatureLayer(
-            num_features=5, feature_type="power", keep_original=True
+            num_features=5,
+            feature_type="power",
+            keep_original=True,
         )
 
         # 2D input
@@ -296,7 +306,9 @@ class TestFFTFeatureLayer(unittest.TestCase):
 
         # Test with keep_original=False
         layer = FFTFeatureLayer(
-            num_features=5, feature_type="power", keep_original=False
+            num_features=5,
+            feature_type="power",
+            keep_original=False,
         )
 
         # 2D input
@@ -313,7 +325,9 @@ class TestFFTFeatureLayer(unittest.TestCase):
         """Test compute_output_shape method with dominant feature type."""
         # Initialize layer with keep_original=True
         layer = FFTFeatureLayer(
-            num_features=3, feature_type="dominant", keep_original=True
+            num_features=3,
+            feature_type="dominant",
+            keep_original=True,
         )
 
         # 2D input

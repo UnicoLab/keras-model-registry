@@ -24,7 +24,7 @@ class TextPreprocessingLayer(tf.keras.layers.Layer):
         # Define punctuation and stop words patterns as part of the configuration
         self.punctuation_pattern = re.escape(string.punctuation)
         self.stop_words_pattern = r"|".join(
-            [re.escape(word) for word in self.stop_words]
+            [re.escape(word) for word in self.stop_words],
         )
 
     def call(self, x: tf.Tensor) -> tf.Tensor:
@@ -182,13 +182,17 @@ class DateParsingLayer(tf.keras.layers.Layer):
                 day_of_month + ((13 * (m + 1)) // 5) + k + (k // 4) + (j // 4) - (2 * j)
             ) % 7
             day_of_week = tf.where(
-                h == 0, 6, h - 1
+                h == 0,
+                6,
+                h - 1,
             )  # Adjust to 0-6 range where 0 is Sunday
 
             return tf.stack([year, month, day_of_month, day_of_week])
 
         parsed_dates = tf.map_fn(
-            parse_date, tf.squeeze(inputs), fn_output_signature=tf.int32
+            parse_date,
+            tf.squeeze(inputs),
+            fn_output_signature=tf.int32,
         )
         return parsed_dates
 
@@ -221,7 +225,9 @@ class DateEncodingLayer(tf.keras.layers.Layer):
 
     @tf.function
     def cyclic_encoding(
-        self, value: tf.Tensor, period: float
+        self,
+        value: tf.Tensor,
+        period: float,
     ) -> tuple[tf.Tensor, tf.Tensor]:
         """Encode a value as a cyclical feature using sine and cosine transformations.
 
@@ -273,10 +279,12 @@ class DateEncodingLayer(tf.keras.layers.Layer):
         year_sin, year_cos = self.cyclic_encoding(year_float, period=1.0)
         month_sin, month_cos = self.cyclic_encoding(month_float, period=12.0)
         day_of_month_sin, day_of_month_cos = self.cyclic_encoding(
-            day_of_month_float, period=31.0
+            day_of_month_float,
+            period=31.0,
         )
         day_of_week_sin, day_of_week_cos = self.cyclic_encoding(
-            day_of_week_float, period=7.0
+            day_of_week_float,
+            period=7.0,
         )
 
         encoded = tf.stack(
@@ -560,10 +568,10 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
         mean = tf.reduce_mean(inputs)
         variance = tf.math.reduce_variance(inputs)
         skewness = tf.reduce_mean(
-            tf.pow((inputs - mean) / tf.sqrt(variance + self.epsilon), 3)
+            tf.pow((inputs - mean) / tf.sqrt(variance + self.epsilon), 3),
         )
         kurtosis = tf.reduce_mean(
-            tf.pow((inputs - mean) / tf.sqrt(variance + self.epsilon), 4)
+            tf.pow((inputs - mean) / tf.sqrt(variance + self.epsilon), 4),
         )
 
         # Range statistics
@@ -579,20 +587,23 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
         zero_ratio = num_zeros / total_elements
 
         is_bounded = tf.logical_and(
-            tf.greater(min_val, -1000.0), tf.less(max_val, 1000.0)
+            tf.greater(min_val, -1000.0),
+            tf.less(max_val, 1000.0),
         )  # Arbitrary bounds for demonstration
 
         # Distribution checks
         is_sparse = zero_ratio > 0.5
         is_zero_inflated = tf.logical_and(
-            tf.greater(zero_ratio, 0.3), tf.logical_not(is_sparse)
+            tf.greater(zero_ratio, 0.3),
+            tf.logical_not(is_sparse),
         )
         is_normal = tf.logical_and(tf.abs(kurtosis - 3.0) < 0.5, tf.abs(skewness) < 0.5)
         is_uniform = tf.abs(kurtosis - 1.8) < 0.2
         is_heavy_tailed = self._check_heavy_tailed(inputs)
         is_cauchy = kurtosis > 20.0  # Extremely heavy-tailed
         is_exponential = tf.logical_and(
-            tf.abs(skewness - 2.0) < 0.5, tf.greater_equal(min_val, -self.epsilon)
+            tf.abs(skewness - 2.0) < 0.5,
+            tf.greater_equal(min_val, -self.epsilon),
         )
         is_log_normal = self._check_log_normal(inputs)
         is_multimodal = self._detect_multimodality(inputs)
@@ -605,12 +616,14 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
             tf.logical_and(tf.greater_equal(min_val, 0.0), tf.less_equal(max_val, 1.0)),
         )
         is_gamma = tf.logical_and(
-            tf.greater_equal(min_val, -self.epsilon), tf.greater(skewness, 0.0)
+            tf.greater_equal(min_val, -self.epsilon),
+            tf.greater(skewness, 0.0),
         )
         is_poisson = tf.logical_and(
             is_discrete,
             tf.logical_and(
-                tf.greater(variance / mean, 0.8), tf.less(variance / mean, 1.2)
+                tf.greater(variance / mean, 0.8),
+                tf.less(variance / mean, 1.2),
             ),
         )
 
@@ -667,7 +680,7 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
                     DistributionType.POISSON: is_poisson,
                     DistributionType.CAUCHY: is_cauchy,
                     DistributionType.ZERO_INFLATED: is_zero_inflated,
-                }
+                },
             )
             tf.print(
                 "\n--------------------------------",
@@ -771,7 +784,7 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
                 tf.cast(
                     tf.abs(flattened_inputs - tf.round(flattened_inputs)) < 0.1,
                     tf.float32,
-                )
+                ),
             )
             > 0.9
         )  # 90% of values are nearly integer
@@ -779,7 +792,10 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
         return tf.logical_and(unique_val_vs_range, is_mostly_integer)
 
     def _check_periodicity(
-        self, data: tf.Tensor, max_lag: int = 50, threshold: float = 0.3
+        self,
+        data: tf.Tensor,
+        max_lag: int = 50,
+        threshold: float = 0.3,
     ) -> tf.Tensor:
         """Test for periodicity in time series data using autocorrelation.
 
@@ -797,7 +813,8 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
 
         # Set max_lag to the minimum of provided max_lag and n_samples // 2
         max_lag = tf.minimum(
-            tf.cast(max_lag, tf.int32), tf.cast(n_samples // 2, tf.int32)
+            tf.cast(max_lag, tf.int32),
+            tf.cast(n_samples // 2, tf.int32),
         )
 
         # Handle cases where n_samples is too small
@@ -831,7 +848,7 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
         condition2 = autocorr > tf.concat([[0.0], autocorr[:-1]], 0)
         condition3 = autocorr > tf.concat([autocorr[1:], [0.0]], 0)
         peaks = tf.where(
-            tf.logical_and(tf.logical_and(condition1, condition2), condition3)
+            tf.logical_and(tf.logical_and(condition1, condition2), condition3),
         )
 
         # Check if we found more than one significant peak
@@ -933,7 +950,8 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
     def _handle_normal(self, inputs: tf.Tensor, stats: dict) -> tf.Tensor:
         """Handle normal distribution using TFP Normal distribution."""
         dist = self.normal_dist(
-            loc=stats["mean"], scale=tf.sqrt(stats["variance"] + self.epsilon)
+            loc=stats["mean"],
+            scale=tf.sqrt(stats["variance"] + self.epsilon),
         )
         normalized = dist.cdf(inputs)
         return 2.0 * normalized - 1.0  # Scale to [-1, 1]
@@ -964,7 +982,7 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
             self.mixture_components,
         )
         scales_init = tf.ones_like(means_init) * tf.sqrt(
-            stats["variance"] / self.mixture_components + self.epsilon
+            stats["variance"] / self.mixture_components + self.epsilon,
         )
 
         # Normalize mixture weights
@@ -1075,12 +1093,16 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
             )
 
         transformed = tf.cond(
-            tf.greater(tf.size(non_zero_inputs), 0), non_zero_transform, lambda: inputs
+            tf.greater(tf.size(non_zero_inputs), 0),
+            non_zero_transform,
+            lambda: inputs,
         )
 
         # Preserve zeros (values where |inputs| < epsilon) in the output.
         return tf.where(
-            tf.abs(inputs) < self.epsilon, tf.zeros_like(inputs), transformed
+            tf.abs(inputs) < self.epsilon,
+            tf.zeros_like(inputs),
+            transformed,
         )
 
     def _handle_bounded(self, inputs: tf.Tensor, stats: dict) -> tf.Tensor:
@@ -1143,7 +1165,9 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
         for i in range(tf.get_static_value(num_unique)):
             value_mask = tf.equal(inputs, sorted_values[i])
             normalized_inputs = tf.where(
-                value_mask, normalized_values[i], normalized_inputs
+                value_mask,
+                normalized_values[i],
+                normalized_inputs,
             )
 
         return normalized_inputs
@@ -1187,10 +1211,10 @@ class DistributionAwareEncoder(tf.keras.layers.Layer):
             for harmonic in [2, 3, 4]:  # Add up to the 4th harmonic.
                 harmonic_freq = tf.cast(harmonic, tf.float32) * self.frequency
                 harmonic_features.append(
-                    tf.sin(harmonic_freq * normalized + self.phase)
+                    tf.sin(harmonic_freq * normalized + self.phase),
                 )
                 harmonic_features.append(
-                    tf.cos(harmonic_freq * normalized + self.phase)
+                    tf.cos(harmonic_freq * normalized + self.phase),
                 )
             harmonic_tensor = tf.concat(harmonic_features, axis=-1)
             return tf.concat([base_features, harmonic_tensor], axis=-1)
@@ -1318,7 +1342,8 @@ class TransformerBlock(tf.keras.layers.Layer):
 
         # Define layers
         self.multihead_attention = tf.keras.layers.MultiHeadAttention(
-            num_heads=num_heads, key_dim=dim_model
+            num_heads=num_heads,
+            key_dim=dim_model,
         )
         self.dropout1 = tf.keras.layers.Dropout(dropout_rate)
         self.add1 = tf.keras.layers.Add()
@@ -1371,7 +1396,11 @@ class TabularAttention(tf.keras.layers.Layer):
     """
 
     def __init__(
-        self, num_heads: int, d_model: int, dropout_rate: float = 0.1, **kwargs
+        self,
+        num_heads: int,
+        d_model: int,
+        dropout_rate: float = 0.1,
+        **kwargs,
     ):
         """Initialize the TabularAttention layer.
 
@@ -1442,7 +1471,7 @@ class TabularAttention(tf.keras.layers.Layer):
         """
         if len(inputs.shape) != 3:
             raise ValueError(
-                "Input tensor must be 3-dimensional (batch_size, num_samples, num_features)"
+                "Input tensor must be 3-dimensional (batch_size, num_samples, num_features)",
             )
 
         # Project inputs to d_model dimension
@@ -1450,28 +1479,32 @@ class TabularAttention(tf.keras.layers.Layer):
 
         # Inter-feature attention: across columns (features)
         features = self.feature_attention(
-            projected, projected, projected, training=training
+            projected,
+            projected,
+            projected,
+            training=training,
         )
         features = self.feature_layernorm(
-            projected + self.feature_dropout(features, training=training)
+            projected + self.feature_dropout(features, training=training),
         )
         features_ffn = self.ffn(features)
         features = self.feature_layernorm2(
-            features + self.feature_dropout2(features_ffn, training=training)
+            features + self.feature_dropout2(features_ffn, training=training),
         )
 
         # Inter-sample attention: across rows (samples)
         samples = tf.transpose(
-            features, perm=[0, 2, 1]
+            features,
+            perm=[0, 2, 1],
         )  # Transpose for sample attention
         samples = self.sample_attention(samples, samples, samples, training=training)
         samples = tf.transpose(samples, perm=[0, 2, 1])  # Transpose back
         samples = self.sample_layernorm(
-            features + self.sample_dropout(samples, training=training)
+            features + self.sample_dropout(samples, training=training),
         )
         samples_ffn = self.ffn(samples)
         outputs = self.sample_layernorm2(
-            samples + self.sample_dropout2(samples_ffn, training=training)
+            samples + self.sample_dropout2(samples_ffn, training=training),
         )
 
         return outputs
@@ -1868,7 +1901,11 @@ class VariableSelection(tf.keras.layers.Layer):
     """
 
     def __init__(
-        self, nr_features: int, units: int, dropout_rate: float = 0.2, **kwargs: dict
+        self,
+        nr_features: int,
+        units: int,
+        dropout_rate: float = 0.2,
+        **kwargs: dict,
     ) -> None:
         """Initialize the VariableSelection layer.
 
@@ -1894,7 +1931,9 @@ class VariableSelection(tf.keras.layers.Layer):
         self.softmax = tf.keras.layers.Dense(units=nr_features, activation="softmax")
 
     def call(
-        self, inputs: list[tf.Tensor], training: bool = False
+        self,
+        inputs: list[tf.Tensor],
+        training: bool = False,
     ) -> tuple[tf.Tensor, tf.Tensor]:
         """Forward pass of the layer.
 
@@ -1919,7 +1958,8 @@ class VariableSelection(tf.keras.layers.Layer):
 
         # Apply feature selection weights
         selected_features = tf.squeeze(
-            tf.matmul(feature_weights, x, transpose_a=True), axis=1
+            tf.matmul(feature_weights, x, transpose_a=True),
+            axis=1,
         )
         return selected_features, feature_weights
 
@@ -2015,7 +2055,7 @@ class AdvancedNumericalEmbedding(layers.Layer):
 
         if self.num_bins is None:
             raise ValueError(
-                "num_bins must be provided to activate the discrete branch."
+                "num_bins must be provided to activate the discrete branch.",
             )
 
     def build(self, input_shape):
@@ -2025,7 +2065,7 @@ class AdvancedNumericalEmbedding(layers.Layer):
         self.cont_mlp = tf.keras.Sequential(
             [
                 layers.TimeDistributed(
-                    layers.Dense(self.mlp_hidden_units, activation="relu")
+                    layers.Dense(self.mlp_hidden_units, activation="relu"),
                 ),
                 layers.TimeDistributed(layers.Dense(self.embedding_dim)),
             ],
@@ -2038,11 +2078,13 @@ class AdvancedNumericalEmbedding(layers.Layer):
         )
         if self.use_batch_norm:
             self.batch_norm = layers.TimeDistributed(
-                layers.BatchNormalization(), name="cont_batch_norm"
+                layers.BatchNormalization(),
+                name="cont_batch_norm",
             )
         # Residual projection to match embedding_dim.
         self.residual_proj = layers.TimeDistributed(
-            layers.Dense(self.embedding_dim, activation=None), name="residual_proj"
+            layers.Dense(self.embedding_dim, activation=None),
+            name="residual_proj",
         )
         # Discrete branch: Create one Embedding layer per feature.
         self.bin_embeddings = []
@@ -2128,7 +2170,7 @@ class AdvancedNumericalEmbedding(layers.Layer):
         for i in range(self.num_features):
             feat_bins = bin_indices[:, i]  # (batch,)
             feat_embed = self.bin_embeddings[i](
-                feat_bins
+                feat_bins,
             )  # i is a Python integer here.
             disc_embeddings.append(feat_embed)
         disc = tf.stack(disc_embeddings, axis=1)  # (batch, num_features, embedding_dim)
@@ -2152,7 +2194,7 @@ class AdvancedNumericalEmbedding(layers.Layer):
                 "init_max": self.init_max,
                 "dropout_rate": self.dropout_rate,
                 "use_batch_norm": self.use_batch_norm,
-            }
+            },
         )
         return config
 
@@ -2200,14 +2242,14 @@ class GlobalAdvancedNumericalEmbedding(tf.keras.layers.Layer):
                 global_init_min = float(global_init_min)
             except Exception:
                 raise ValueError(
-                    "init_min must be a Python scalar, list, tuple or numpy array"
+                    "init_min must be a Python scalar, list, tuple or numpy array",
                 )
         if not isinstance(global_init_max, (list, tuple, np.ndarray)):
             try:
                 global_init_max = float(global_init_max)
             except Exception:
                 raise ValueError(
-                    "init_max must be a Python scalar, list, tuple or numpy array"
+                    "init_max must be a Python scalar, list, tuple or numpy array",
                 )
         self.global_init_min = global_init_min
         self.global_init_max = global_init_max
@@ -2228,11 +2270,11 @@ class GlobalAdvancedNumericalEmbedding(tf.keras.layers.Layer):
         )
         if self.global_pooling == "average":
             self.global_pooling_layer = tf.keras.layers.GlobalAveragePooling1D(
-                name="global_avg_pool"
+                name="global_avg_pool",
             )
         elif self.global_pooling == "max":
             self.global_pooling_layer = tf.keras.layers.GlobalMaxPooling1D(
-                name="global_max_pool"
+                name="global_max_pool",
             )
         else:
             raise ValueError(f"Unsupported pooling method: {self.global_pooling}")
@@ -2268,6 +2310,6 @@ class GlobalAdvancedNumericalEmbedding(tf.keras.layers.Layer):
                 "global_dropout_rate": self.global_dropout_rate,
                 "global_use_batch_norm": self.global_use_batch_norm,
                 "global_pooling": self.global_pooling,
-            }
+            },
         )
         return config

@@ -1,8 +1,8 @@
 from keras import Model
+from loguru import logger
 
 
 class BaseModel(Model):
-
     def filer_inputs(self, inputs: dict) -> dict:
         return {k: v for k, v in inputs.items() if k in self.inputs}
 

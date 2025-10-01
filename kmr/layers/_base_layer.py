@@ -5,7 +5,7 @@ from keras import Layer
 from keras.saving import register_keras_serializable
 from loguru import logger
 
-T = TypeVar('T', bound='BaseLayer')
+T = TypeVar("T", bound="BaseLayer")
 
 
 @register_keras_serializable(package="kmr.layers")
@@ -38,7 +38,7 @@ class BaseLayer(Layer):
     # Class-level configuration
     _required_kwargs: ClassVar[set[str]] = set()
     _optional_kwargs: ClassVar[set[str]] = set()
-    _valid_dtypes: ClassVar[set[str]] = {'float32', 'float64'}
+    _valid_dtypes: ClassVar[set[str]] = {"float32", "float64"}
 
     def __init__(self, **kwargs: Any) -> None:
         """Initialize the base layer.
@@ -48,7 +48,7 @@ class BaseLayer(Layer):
         """
         # Extract layer-specific kwargs
         layer_kwargs = {}
-        for key in ['trainable', 'name', 'dtype', 'dynamic']:
+        for key in ["trainable", "name", "dtype", "dynamic"]:
             if key in kwargs:
                 layer_kwargs[key] = kwargs.pop(key)
 
@@ -65,14 +65,13 @@ class BaseLayer(Layer):
             NotImplementedError: If the child class doesn't implement this method.
         """
         raise NotImplementedError(
-            f"_validate_params not implemented for {self.__class__.__name__}"
+            f"_validate_params not implemented for {self.__class__.__name__}",
         )
 
     def _log_initialization(self) -> None:
         """Log layer initialization details using loguru."""
         logger.debug(
-            f"Initialized {self.__class__.__name__} with parameters: "
-            f"{self.get_config()}"
+            f"Initialized {self.__class__.__name__} with parameters: {self.get_config()}",
         )
 
     def _validate_dtype(self, tensor: Any, name: str) -> None:
@@ -85,11 +84,10 @@ class BaseLayer(Layer):
         Raises:
             ValueError: If tensor dtype is not supported.
         """
-        dtype = getattr(tensor.dtype, 'name', str(tensor.dtype))
+        dtype = getattr(tensor.dtype, "name", str(tensor.dtype))
         if dtype not in self._valid_dtypes:
             raise ValueError(
-                f"Unsupported dtype {dtype} for {name}. "
-                f"Supported dtypes: {self._valid_dtypes}"
+                f"Unsupported dtype {dtype} for {name}. Supported dtypes: {self._valid_dtypes}",
             )
 
     def get_config(self) -> dict[str, Any]:
@@ -111,16 +109,3 @@ class BaseLayer(Layer):
             A new instance of the layer.
         """
         return cls(**config)
-
-    def _validate_params(self) -> None:
-        """Validate layer parameters.
-
-        This method should be overridden by child classes to implement
-        parameter validation logic.
-
-        Raises:
-            NotImplementedError: If the child class doesn't implement this method.
-        """
-        raise NotImplementedError(
-            f"_validate_params not implemented for {self.__class__.__name__}"
-        )

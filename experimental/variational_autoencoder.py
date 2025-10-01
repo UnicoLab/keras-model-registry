@@ -172,7 +172,12 @@ class VariationalAutoencoder(tf.keras.models.Model):
 
     """
 
-    def __init__(self, input_dim: int, encoding_dim: int, intermediate_dim: int) -> None:
+    def __init__(
+        self,
+        input_dim: int,
+        encoding_dim: int,
+        intermediate_dim: int,
+    ) -> None:
         """Initializes the Autoencoder with the given dimensions.
 
         Args:
@@ -192,7 +197,9 @@ class VariationalAutoencoder(tf.keras.models.Model):
 
         # metrics storage
         self.total_loss_tracker = tf.keras.metrics.Mean(name="total_loss")
-        self.reconstruction_loss_tracker = tf.keras.metrics.Mean(name="reconstruction_loss")
+        self.reconstruction_loss_tracker = tf.keras.metrics.Mean(
+            name="reconstruction_loss",
+        )
         self.kl_loss_tracker = tf.keras.metrics.Mean(name="kl_loss")
 
         self._initialize()
@@ -201,26 +208,46 @@ class VariationalAutoencoder(tf.keras.models.Model):
         """Initializes the encoder, decoder, and autoencoder models."""
         # Building the encoder
         encoder_input = tf.keras.Input(shape=(self.input_dim,))
-        encoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(encoder_input)
+        encoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(
+            encoder_input,
+        )
         encoded = tf.keras.layers.Dropout(0.2)(encoded)
         z_mean = tf.keras.layers.Dense(units=self.encoding_dim, name="z_mean")(encoded)
-        z_log_var = tf.keras.layers.Dense(units=self.encoding_dim, name="z_log_var")(encoded)
+        z_log_var = tf.keras.layers.Dense(units=self.encoding_dim, name="z_log_var")(
+            encoded,
+        )
         z = Sampling()([z_mean, z_log_var])
-        self._encoder = tf.keras.Model(inputs=encoder_input, outputs=[z_mean, z_log_var, z], name="encoder")
+        self._encoder = tf.keras.Model(
+            inputs=encoder_input,
+            outputs=[z_mean, z_log_var, z],
+            name="encoder",
+        )
 
         # Building the decoder
         decoder_input = tf.keras.Input(shape=(self.encoding_dim,))
-        decoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(decoder_input)
+        decoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(
+            decoder_input,
+        )
         decoded = tf.keras.layers.Dropout(0.2)(decoded)
-        decoded = tf.keras.layers.Dense(units=self.input_dim, activation="sigmoid")(decoded)
+        decoded = tf.keras.layers.Dense(units=self.input_dim, activation="sigmoid")(
+            decoded,
+        )
         decoded = tf.keras.layers.Dropout(0.2)(decoded)
-        self._decoder = tf.keras.Model(inputs=decoder_input, outputs=decoded, name="decoder")
+        self._decoder = tf.keras.Model(
+            inputs=decoder_input,
+            outputs=decoded,
+            name="decoder",
+        )
 
         # Building the autoencoder
         vae_input = tf.keras.Input(shape=(self.input_dim,))
         _, _, z = self._encoder(vae_input)
         decoded = self._decoder(z)
-        self._vae = tf.keras.Model(inputs=vae_input, outputs=decoded, name="autoencoder")
+        self._vae = tf.keras.Model(
+            inputs=vae_input,
+            outputs=decoded,
+            name="autoencoder",
+        )
 
     @property
     def encoder(self) -> tf.keras.Model:
@@ -279,11 +306,17 @@ class VariationalAutoencoder(tf.keras.models.Model):
         with tf.GradientTape() as tape:
             z_mean, z_log_var, z = self.encoder(data)
             reconstruction = self.decoder(z)
-            reconstruction_loss = tf.reduce_mean(tf.reduce_sum(tf.square(data - reconstruction)))
+            reconstruction_loss = tf.reduce_mean(
+                tf.reduce_sum(tf.square(data - reconstruction)),
+            )
 
             # Improved KL divergence calculation with epsilon
             kl_loss = -0.5 * tf.reduce_sum(
-                1 + z_log_var - tf.square(z_mean) - tf.exp(tf.clip_by_value(z_log_var, -10, 10)) + epsilon,
+                1
+                + z_log_var
+                - tf.square(z_mean)
+                - tf.exp(tf.clip_by_value(z_log_var, -10, 10))
+                + epsilon,
                 axis=-1,
             )
             kl_loss = tf.reduce_mean(kl_loss)
@@ -365,7 +398,10 @@ class AnomalyDetector:
     def setup_callbacks(self) -> list:
         """Sets up the callbacks for keras model."""
         # assuring existance of the CSV output folder
-        Path(conf.paths.TRAIN__UPLOAD__SYNC__ARTIFACTS, conf.model.MODEL_NAME).mkdir(parents=True, exist_ok=True)
+        Path(conf.paths.TRAIN__UPLOAD__SYNC__ARTIFACTS, conf.model.MODEL_NAME).mkdir(
+            parents=True,
+            exist_ok=True,
+        )
 
         # settin gup callbacks
         manager = CallbackManager(
@@ -405,7 +441,9 @@ class AnomalyDetector:
         """
         logger.info("Compiling the anomaly detector model")
         self.vae.compile(optimizer="adam")
-        logger.info("Model compiled with optimizer: adam and loss: mean_squared_error ✅")
+        logger.info(
+            "Model compiled with optimizer: adam and loss: mean_squared_error ✅",
+        )
 
         logger.info("Starting model training... ⚙️")
         self.fit_history = self.vae.fit(
@@ -413,7 +451,9 @@ class AnomalyDetector:
             epochs=epochs,
             callbacks=self.setup_callbacks(),
         )
-        logger.info("Training completed ✅, predicting scores for the training data (incrementally) 📊")
+        logger.info(
+            "Training completed ✅, predicting scores for the training data (incrementally) 📊",
+        )
 
         # setting up threshold
         logger.info("Setting up threshold")
@@ -448,7 +488,9 @@ class AnomalyDetector:
         self.median = median_metric.result().numpy()
         self.std = std_metric.result().numpy()
 
-        logger.info(f"Mean: {self.mean}, median: {self.median}, standard deviation: {self.std} estimated ✅")
+        logger.info(
+            f"Mean: {self.mean}, median: {self.median}, standard deviation: {self.std} estimated ✅",
+        )
         logger.info("Setting up the threshold compleate completed -> ✅!")
 
     def predict(self, ds: tf.data.Dataset) -> np.ndarray:
@@ -466,7 +508,11 @@ class AnomalyDetector:
         scores = tf.reduce_mean(tf.abs(ds - x_pred), axis=1)
         return scores.numpy()
 
-    def is_anomaly(self, ds: tf.data.Dataset, percentile_to_use: str = "median") -> dict[str, list[np.ndarray]]:
+    def is_anomaly(
+        self,
+        ds: tf.data.Dataset,
+        percentile_to_use: str = "median",
+    ) -> dict[str, list[np.ndarray]]:
         """Determine whether each sample in a batch of data is an anomaly.
 
         Args:
@@ -482,11 +528,15 @@ class AnomalyDetector:
         # choosing percentile to use
         self.percentile = getattr(self, percentile_to_use)
 
-        logger.info(f"Applying anomaly detection threshold in batches: {self.threshold} ⚙️")
+        logger.info(
+            f"Applying anomaly detection threshold in batches: {self.threshold} ⚙️",
+        )
         for batch in ds:
             logger.debug("Predicting batch of data")
             batch_scores = self.predict(batch)
-            batch_anomalies = batch_scores > self.percentile + (self.threshold * self.std)
+            batch_anomalies = batch_scores > self.percentile + (
+                self.threshold * self.std
+            )
             # appending storage
             scores.append(batch_scores)
             anomalies.append(batch_anomalies)
@@ -499,7 +549,9 @@ class AnomalyDetector:
         logger.debug("Extracting statistics 📊")
         u, c = np.unique(anomalies, return_counts=True)
         perc_anomalies = (c[1] / c[0]) * 100
-        logger.info(f"Anomaly scores: {u}, counts: {c}, anomalies: {perc_anomalies} % 🚨")
+        logger.info(
+            f"Anomaly scores: {u}, counts: {c}, anomalies: {perc_anomalies} % 🚨",
+        )
         # defining outputs
         output = {
             "score": scores.flatten(),
@@ -553,7 +605,10 @@ class AnomalyDetectionModelProd(tf.keras.Model):
         self.input_shapes = preprocessing_model.input_shape
 
         # Define the inputs
-        self.inputs = {name: tf.keras.Input(shape=shape[1:], name=name) for name, shape in self.input_shapes.items()}
+        self.inputs = {
+            name: tf.keras.Input(shape=shape[1:], name=name)
+            for name, shape in self.input_shapes.items()
+        }
 
     def call(self, inputs) -> dict[str, tf.Tensor]:
         """Main model entrypoint.
@@ -656,8 +711,17 @@ class AnomalyDetectionModelProdFunctional(tf.keras.Model):
         self.anomaly_threshold = self.percentile + (self.threshold * self.std)
 
         # Dynamically create inputs based on the preprocessing model's input shape
-        self.input_shapes = dict(zip(preprocessing_model.input_names, preprocessing_model.input_shape, strict=True))
-        self.inputs = {name: tf.keras.Input(shape=shape[1:], name=name) for name, shape in self.input_shapes.items()}
+        self.input_shapes = dict(
+            zip(
+                preprocessing_model.input_names,
+                preprocessing_model.input_shape,
+                strict=True,
+            ),
+        )
+        self.inputs = {
+            name: tf.keras.Input(shape=shape[1:], name=name)
+            for name, shape in self.input_shapes.items()
+        }
 
         # Data Flow definition
         x = preprocessing_model(self.inputs)

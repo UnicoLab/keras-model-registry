@@ -1,5 +1,4 @@
-"""
-This module implements a TabularMoELayer (Mixture-of-Experts) that routes input features 
+"""This module implements a TabularMoELayer (Mixture-of-Experts) that routes input features
 through multiple expert sub-networks and aggregates their outputs via a learnable gating mechanism.
 This approach is useful for tabular data where different experts can specialize in different feature patterns.
 """
@@ -10,6 +9,7 @@ from keras import layers, ops
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
 from kmr.layers._base_layer import BaseLayer
+
 
 @register_keras_serializable(package="kmr.layers")
 class TabularMoELayer(BaseLayer):
@@ -37,7 +37,7 @@ class TabularMoELayer(BaseLayer):
 
         # Tabular data with 8 features
         x = keras.random.normal((32, 8))
-        
+
         # Create the layer with 4 experts and 16 units per expert
         moe_layer = TabularMoELayer(num_experts=4, expert_units=16)
         y = moe_layer(x)
@@ -50,20 +50,20 @@ class TabularMoELayer(BaseLayer):
         num_experts: int = 4,
         expert_units: int = 16,
         name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         # Set public attributes
         self.num_experts = num_experts
         self.expert_units = expert_units
-        
+
         # Initialize instance variables
-        self.experts = None
-        self.expert_outputs = None
-        self.gate = None
-        
+        self.experts: list[Any] | None = None
+        self.expert_outputs: list[Any] | None = None
+        self.gate: Any | None = None
+
         # Validate parameters during initialization
         self._validate_params()
-        
+
         # Call parent's __init__
         super().__init__(name=name, **kwargs)
 
@@ -82,37 +82,24 @@ class TabularMoELayer(BaseLayer):
         """
         # Validate parameters again during build
         self._validate_params()
-        
+
         # Create expert networks
         self.experts = [
-            layers.Dense(
-                self.expert_units, 
-                activation="relu", 
-                name=f"expert_{i}"
-            )
+            layers.Dense(self.expert_units, activation="relu", name=f"expert_{i}")
             for i in range(self.num_experts)
         ]
-        
+
         # Create expert output projections
         self.expert_outputs = [
-            layers.Dense(
-                input_shape[-1], 
-                activation=None, 
-                name=f"expert_out_{i}"
-            )
+            layers.Dense(input_shape[-1], activation=None, name=f"expert_out_{i}")
             for i in range(self.num_experts)
         ]
-        
+
         # Create gating network
-        self.gate = layers.Dense(
-            self.num_experts, 
-            activation="softmax", 
-            name="gate"
-        )
-        
+        self.gate = layers.Dense(self.num_experts, activation="softmax", name="gate")
+
         logger.debug(
-            f"TabularMoELayer built with num_experts={self.num_experts}, "
-            f"expert_units={self.expert_units}"
+            f"TabularMoELayer built with num_experts={self.num_experts}, expert_units={self.expert_units}",
         )
         super().build(input_shape)
 
@@ -132,19 +119,19 @@ class TabularMoELayer(BaseLayer):
             x = self.experts[i](inputs)
             x = self.expert_outputs[i](x)
             expert_outputs.append(x)
-        
+
         # Stack outputs: shape (batch, num_experts, features)
         experts_stack = ops.stack(expert_outputs, axis=1)
-        
+
         # Compute gating weights: shape (batch, num_experts)
         gate_weights = self.gate(inputs)
-        
+
         # Reshape for broadcasting: (batch, num_experts, 1)
         gate_weights = ops.expand_dims(gate_weights, axis=-1)
-        
+
         # Aggregate expert outputs with gating weights
         output = ops.sum(experts_stack * gate_weights, axis=1)
-        
+
         return output
 
     def get_config(self) -> dict[str, Any]:
@@ -154,8 +141,10 @@ class TabularMoELayer(BaseLayer):
             Python dictionary containing the layer configuration.
         """
         config = super().get_config()
-        config.update({
-            "num_experts": self.num_experts,
-            "expert_units": self.expert_units,
-        })
-        return config 
+        config.update(
+            {
+                "num_experts": self.num_experts,
+                "expert_units": self.expert_units,
+            },
+        )
+        return config

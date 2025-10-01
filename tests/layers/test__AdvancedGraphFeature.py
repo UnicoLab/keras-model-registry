@@ -6,9 +6,7 @@ hierarchical aggregation.
 """
 
 import unittest
-import numpy as np
 import tensorflow as tf
-from keras import ops
 from kmr.layers.AdvancedGraphFeature import AdvancedGraphFeatureLayer
 
 
@@ -19,7 +17,7 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
     serialization, and edge cases.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         """Initialize common test variables."""
         self.batch_size = 32
         self.num_features = 10
@@ -31,10 +29,12 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
 
         # Create standard test inputs
         self.test_inputs = tf.random.normal(
-            (self.batch_size, self.num_features), mean=0, stddev=1
+            (self.batch_size, self.num_features),
+            mean=0,
+            stddev=1,
         )
 
-    def test_initialization(self):
+    def test_initialization(self) -> None:
         """Test layer initialization with various parameter combinations."""
         # Test basic initialization
         layer = AdvancedGraphFeatureLayer(
@@ -69,7 +69,7 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
                 hierarchical=True,
             )
 
-    def test_build_validation(self):
+    def test_build_validation(self) -> None:
         """Test layer building and shape inference."""
         layer = AdvancedGraphFeatureLayer(
             embed_dim=self.embed_dim,
@@ -94,10 +94,11 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
         layer.build(input_shape=(None, self.num_features))
         self.assertIsNotNone(layer.grouping_matrix)
         self.assertEqual(
-            layer.grouping_matrix.shape, (self.num_features, self.num_groups)
+            layer.grouping_matrix.shape,
+            (self.num_features, self.num_groups),
         )
 
-    def test_output_shape(self):
+    def test_output_shape(self) -> None:
         """Test output tensor shapes for various configurations."""
         # Test basic configuration
         layer = AdvancedGraphFeatureLayer(
@@ -105,9 +106,7 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
             num_heads=self.num_heads,
         )
         output = layer(self.test_inputs)
-        self.assertEqual(
-            output.shape, (self.batch_size, self.num_features)
-        )
+        self.assertEqual(output.shape, (self.batch_size, self.num_features))
 
         # Test hierarchical configuration
         layer = AdvancedGraphFeatureLayer(
@@ -117,11 +116,9 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
             num_groups=self.num_groups,
         )
         output = layer(self.test_inputs)
-        self.assertEqual(
-            output.shape, (self.batch_size, self.num_features)
-        )
+        self.assertEqual(output.shape, (self.batch_size, self.num_features))
 
-    def test_training_mode(self):
+    def test_training_mode(self) -> None:
         """Test layer behavior in training vs inference modes."""
         layer = AdvancedGraphFeatureLayer(
             embed_dim=self.embed_dim,
@@ -130,12 +127,8 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
         )
 
         # Run multiple times to check for consistency in each mode
-        training_outputs = [
-            layer(self.test_inputs, training=True) for _ in range(3)
-        ]
-        inference_outputs = [
-            layer(self.test_inputs, training=False) for _ in range(3)
-        ]
+        training_outputs = [layer(self.test_inputs, training=True) for _ in range(3)]
+        inference_outputs = [layer(self.test_inputs, training=False) for _ in range(3)]
 
         # Training outputs should differ due to dropout
         training_diffs = [
@@ -151,7 +144,7 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
         ]
         self.assertTrue(all(diff < 1e-6 for diff in inference_diffs))
 
-    def test_serialization(self):
+    def test_serialization(self) -> None:
         """Test layer serialization and deserialization."""
         original_layer = AdvancedGraphFeatureLayer(
             embed_dim=self.embed_dim,
@@ -175,11 +168,9 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
 
         # Check if new layer produces same output
         new_output = new_layer(self.test_inputs)
-        self.assertTrue(
-            tf.reduce_all(tf.abs(original_output - new_output) < 1e-6)
-        )
+        self.assertTrue(tf.reduce_all(tf.abs(original_output - new_output) < 1e-6))
 
-    def test_attention_weights(self):
+    def test_attention_weights(self) -> None:
         """Test attention weight properties."""
         layer = AdvancedGraphFeatureLayer(
             embed_dim=self.embed_dim,
@@ -188,15 +179,15 @@ class TestAdvancedGraphFeatureLayer(unittest.TestCase):
 
         # Create test input and run layer
         inputs = tf.random.normal((1, self.num_features))
-        outputs = layer(inputs)
-        
+        layer(inputs)
+
         # Get attention weights
         attention = layer._last_attention
-        
+
         # Check shape
         expected_shape = (1, self.num_heads, self.num_features, self.num_features)
         self.assertEqual(attention.shape, expected_shape)
-        
+
         # Check properties
         attention_sum = tf.reduce_sum(attention, axis=-1)
         self.assertTrue(tf.reduce_all(tf.abs(attention_sum - 1.0) < 1e-6))

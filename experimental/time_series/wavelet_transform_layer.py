@@ -43,7 +43,7 @@ class WaveletTransformLayer(Layer):
             or isinstance(keep_levels, list)
         ):
             raise ValueError(
-                "keep_levels must be 'all', 'approx', or a list of level indices"
+                "keep_levels must be 'all', 'approx', or a list of level indices",
             )
 
     def build(self, input_shape):
@@ -128,7 +128,10 @@ class WaveletTransformLayer(Layer):
 
             # Filter and process coefficients
             result = self._process_coefficients(
-                all_coeffs, batch_size, n_features, time_steps
+                all_coeffs,
+                batch_size,
+                n_features,
+                time_steps,
             )
 
             return result.astype(np.float32)
@@ -165,7 +168,8 @@ class WaveletTransformLayer(Layer):
         if self.flatten_output:
             # Initialize output array
             result = np.zeros(
-                (batch_size, n_features * n_output_features), dtype=np.float32
+                (batch_size, n_features * n_output_features),
+                dtype=np.float32,
             )
 
             for b in range(batch_size):

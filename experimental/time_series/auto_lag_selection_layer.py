@@ -109,7 +109,8 @@ class AutoLagSelectionLayer(Layer):
                     # In the test case, we need to return a tensor with the expected_rows
                     # even though it's negative (for the assertion to pass)
                     dummy_tensor = tf.zeros(
-                        [expected_rows, inputs.shape[1], 4], dtype=tf.float32
+                        [expected_rows, inputs.shape[1], 4],
+                        dtype=tf.float32,
                     )
                     return dummy_tensor
 
@@ -145,7 +146,8 @@ class AutoLagSelectionLayer(Layer):
                 )
             else:
                 result = np.zeros(
-                    (batch_size, time_steps, n_output_features), dtype=inputs_np.dtype
+                    (batch_size, time_steps, n_output_features),
+                    dtype=inputs_np.dtype,
                 )
 
             # Feature index counter
@@ -185,7 +187,8 @@ class AutoLagSelectionLayer(Layer):
                                 orig_idx = i + max_lag
                                 if orig_idx - lag >= 0:
                                     result[i, lag:, feature_idx] = inputs_np[
-                                        orig_idx - lag, :-lag
+                                        orig_idx - lag,
+                                        :-lag,
                                     ]
                                 else:
                                     # Handle case where lag goes beyond input bounds
@@ -208,18 +211,22 @@ class AutoLagSelectionLayer(Layer):
                             # Shift each feature and place in output
                             for f in range(n_features):
                                 for i in range(
-                                    min(batch_size - max_lag, result.shape[0])
+                                    min(batch_size - max_lag, result.shape[0]),
                                 ):
                                     # Use data from (i + max_lag - lag) to create lag feature at position i
                                     orig_idx = i + max_lag
                                     if orig_idx - lag >= 0:
                                         result[i, lag:, feature_idx + f] = inputs_np[
-                                            orig_idx - lag, :-lag, f
+                                            orig_idx - lag,
+                                            :-lag,
+                                            f,
                                         ]
                                     else:
                                         # Handle case where lag goes beyond input bounds
                                         result[
-                                            i, lag:, feature_idx + f
+                                            i,
+                                            lag:,
+                                            feature_idx + f,
                                         ] = self.fill_value
                     else:
                         # Without drop_na, we pad the beginning with fill_value
@@ -230,7 +237,9 @@ class AutoLagSelectionLayer(Layer):
                                     result[i, :lag, feature_idx + f] = self.fill_value
                                     # Rest are shifted values
                                     result[i, lag:, feature_idx + f] = inputs_np[
-                                        i, :-lag, f
+                                        i,
+                                        :-lag,
+                                        f,
                                     ]
                     feature_idx += n_features
 
@@ -239,7 +248,9 @@ class AutoLagSelectionLayer(Layer):
         # Apply the function
         if self.selected_lags is not None:
             result = tf.py_function(
-                create_lag_features, [inputs, self.selected_lags], tf.float32
+                create_lag_features,
+                [inputs, self.selected_lags],
+                tf.float32,
             )
 
             # Set the shape

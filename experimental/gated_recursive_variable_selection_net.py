@@ -1,5 +1,4 @@
 # standard library
-from typing import List
 
 # pypi/conda library
 import pandas as pd
@@ -209,7 +208,9 @@ class GRVSNModel:
             )(outputs)
             logger.info("LogNormal Distribution ready to be used !")
         elif self.CONF.model.MODEL_MODE == self.CONF.mmo.CLASSIFICATION:
-            outputs = tf.keras.layers.Dense(1, name="output", activation="sigmoid")(features)
+            outputs = tf.keras.layers.Dense(1, name="output", activation="sigmoid")(
+                features,
+            )
         else:
             outputs = tf.keras.layers.Dense(units=1, name="output")(features)
         # defining model
@@ -233,7 +234,7 @@ class GRVSNModel:
         logger.info(f"Model loss successfully defined: {self.loss} ✅")
         return self.loss
 
-    def define_metrics(self) -> List[tf.keras.metrics.Metric]:
+    def define_metrics(self) -> list[tf.keras.metrics.Metric]:
         """Define corresponding model metrics"""
         _mode = self.CONF.model.MODEL_MODE
         logger.info(f"Defining model metrics for: {_mode}")
@@ -262,7 +263,9 @@ class GRVSNModel:
         """Compaling model with appropiate loss and metrics"""
         logger.info("Compiling model")
         self.model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=self.CONF.model.LEARNING_RATE),
+            optimizer=tf.keras.optimizers.Adam(
+                learning_rate=self.CONF.model.LEARNING_RATE,
+            ),
             loss=self.define_loss(),
             metrics=self.define_metrics(),
         )

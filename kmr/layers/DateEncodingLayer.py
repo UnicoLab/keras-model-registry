@@ -4,6 +4,8 @@ This layer takes date components (year, month, day, day of week) and encodes the
 into cyclical features using sine and cosine transformations.
 """
 
+from typing import Any
+
 import keras
 import numpy as np
 from keras import ops
@@ -29,12 +31,7 @@ class DateEncodingLayer(keras.layers.Layer):
         [year_sin, year_cos, month_sin, month_cos, day_sin, day_cos, dow_sin, dow_cos]
     """
 
-    def __init__(
-        self,
-        min_year: int = 1900,
-        max_year: int = 2100,
-        **kwargs
-    ):
+    def __init__(self, min_year: int = 1900, max_year: int = 2100, **kwargs):
         """Initialize the layer."""
         super().__init__(**kwargs)
         self.min_year = min_year
@@ -43,10 +40,10 @@ class DateEncodingLayer(keras.layers.Layer):
         # Validate inputs
         if min_year >= max_year:
             raise ValueError(
-                f"min_year ({min_year}) must be less than max_year ({max_year})"
+                f"min_year ({min_year}) must be less than max_year ({max_year})",
             )
 
-    def call(self, inputs):
+    def call(self, inputs) -> Any:
         """Apply the layer to the inputs.
 
         Args:
@@ -82,13 +79,22 @@ class DateEncodingLayer(keras.layers.Layer):
 
         # Combine all features
         encoded = ops.stack(
-            [year_sin, year_cos, month_sin, month_cos, day_sin, day_cos, dow_sin, dow_cos],
-            axis=-1
+            [
+                year_sin,
+                year_cos,
+                month_sin,
+                month_cos,
+                day_sin,
+                day_cos,
+                dow_sin,
+                dow_cos,
+            ],
+            axis=-1,
         )
 
         return encoded
 
-    def compute_output_shape(self, input_shape):
+    def compute_output_shape(self, input_shape) -> tuple[int, ...]:
         """Compute the output shape of the layer.
 
         Args:
@@ -99,15 +105,17 @@ class DateEncodingLayer(keras.layers.Layer):
         """
         return input_shape[:-1] + (8,)
 
-    def get_config(self):
+    def get_config(self) -> dict[str, Any]:
         """Return the configuration of the layer.
 
         Returns:
             Dictionary containing the layer configuration
         """
         config = super().get_config()
-        config.update({
-            "min_year": self.min_year,
-            "max_year": self.max_year,
-        })
-        return config 
+        config.update(
+            {
+                "min_year": self.min_year,
+                "max_year": self.max_year,
+            },
+        )
+        return config

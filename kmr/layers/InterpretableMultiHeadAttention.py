@@ -64,10 +64,18 @@ class InterpretableMultiHeadAttention(layers.Layer):
 
     # Valid kwargs for MultiHeadAttention
     _valid_mha_kwargs: ClassVar[set[str]] = {
-        'value_dim', 'use_bias', 'output_shape', 'attention_axes',
-        'kernel_initializer', 'bias_initializer', 'kernel_regularizer',
-        'bias_regularizer', 'activity_regularizer', 'kernel_constraint',
-        'bias_constraint', 'seed'
+        "value_dim",
+        "use_bias",
+        "output_shape",
+        "attention_axes",
+        "kernel_initializer",
+        "bias_initializer",
+        "kernel_regularizer",
+        "bias_regularizer",
+        "activity_regularizer",
+        "kernel_constraint",
+        "bias_constraint",
+        "seed",
     }
 
     def __init__(
@@ -75,26 +83,28 @@ class InterpretableMultiHeadAttention(layers.Layer):
         d_model: int,
         n_head: int,
         dropout_rate: float = 0.1,
-        **kwargs: dict[str, Any]
+        **kwargs: dict[str, Any],
     ) -> None:
         """Initialize the layer."""
         # Extract MHA-specific kwargs
         mha_kwargs = {k: v for k, v in kwargs.items() if k in self._valid_mha_kwargs}
         # Remove MHA kwargs from the kwargs passed to parent
-        layer_kwargs = {k: v for k, v in kwargs.items() if k not in self._valid_mha_kwargs}
-        
+        layer_kwargs = {
+            k: v for k, v in kwargs.items() if k not in self._valid_mha_kwargs
+        }
+
         super().__init__(**layer_kwargs)
         self.d_model = d_model
         self.n_head = n_head
         self.dropout_rate = dropout_rate
         self.mha_kwargs = mha_kwargs
-        
+
         # Initialize multihead attention
         self.mha = layers.MultiHeadAttention(
             num_heads=n_head,
             key_dim=d_model,
             dropout=dropout_rate,
-            **mha_kwargs
+            **mha_kwargs,
         )
         self.attention_scores: Any | None = None
 
@@ -103,7 +113,7 @@ class InterpretableMultiHeadAttention(layers.Layer):
         query: KerasTensor,
         key: KerasTensor,
         value: KerasTensor,
-        training: bool = False
+        training: bool = False,
     ) -> KerasTensor:
         """Forward pass of the layer.
 
@@ -129,12 +139,14 @@ class InterpretableMultiHeadAttention(layers.Layer):
     def get_config(self) -> dict[str, Any]:
         """Return the config dictionary for serialization."""
         config = super().get_config()
-        config.update({
-            "d_model": self.d_model,
-            "n_head": self.n_head,
-            "dropout_rate": self.dropout_rate,
-            **self.mha_kwargs
-        })
+        config.update(
+            {
+                "d_model": self.d_model,
+                "n_head": self.n_head,
+                "dropout_rate": self.dropout_rate,
+                **self.mha_kwargs,
+            },
+        )
         return config
 
     @classmethod

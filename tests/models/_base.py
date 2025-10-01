@@ -1,7 +1,6 @@
 """Base test classes for model testing."""
 import unittest
 import tempfile
-import keras
 import tensorflow as tf
 from pathlib import Path
 import numpy as np
@@ -36,16 +35,20 @@ class FakeDataGenerator:
     """
 
     def __init__(self):
-        """
-        Initializes the FakeDataGenerator. 
-        
+        """Initializes the FakeDataGenerator.
+
         Currently, no specific parameters are stored in the constructor.
-        In future expansions, you can add parameters like random seeds, custom 
+        In future expansions, you can add parameters like random seeds, custom
         distributions, or user-defined dictionaries of generation rules.
         """
         logger.debug("Initialized FakeDataGenerator.")
 
-    def generate_csv(self, path: str, features_specs: dict[str, str], nr_of_rows: int = 100) -> str:
+    def generate_csv(
+        self,
+        path: str,
+        features_specs: dict[str, str],
+        nr_of_rows: int = 100,
+    ) -> str:
         """Generate a CSV string with synthetic data for the specified features.
 
         Args:
@@ -78,7 +81,11 @@ class FakeDataGenerator:
         logger.debug("CSV data generation completed.")
         return csv_data
 
-    def _generate_dataframe(self, features_specs: dict[str, str], nr_of_rows: int) -> pd.DataFrame:
+    def _generate_dataframe(
+        self,
+        features_specs: dict[str, str],
+        nr_of_rows: int,
+    ) -> pd.DataFrame:
         """Generate a pandas DataFrame based on the given feature specifications.
 
         Args:
@@ -92,7 +99,7 @@ class FakeDataGenerator:
         for feature_name, feature_type in features_specs.items():
             feature_type_lower = feature_type.lower().strip()
             logger.debug(
-                f"Generating data for feature '{feature_name}' with type '{feature_type_lower}'."
+                f"Generating data for feature '{feature_name}' with type '{feature_type_lower}'.",
             )
 
             if feature_type_lower in (
@@ -125,7 +132,7 @@ class FakeDataGenerator:
                 # Fallback for unsupported or custom types
                 logger.warning(
                     f"Feature type '{feature_type_lower}' not recognized. "
-                    "Generating random float data as fallback."
+                    "Generating random float data as fallback.",
                 )
                 data[feature_name] = np.random.randn(nr_of_rows)
 
@@ -136,7 +143,7 @@ class BaseModelTest(unittest.TestCase):
     """Base test class for model testing."""
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         logger.info("🛎 Setting up test class")
         # create the temp file in setUp method if you want a fresh directory for each test.
         # This is useful if you don't want to share state between tests.
@@ -167,10 +174,10 @@ class BaseModelTest(unittest.TestCase):
         super().setUpClass()
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         logger.info("🛎 Tearing down test class")
         super().tearDownClass()
-        
+
         # Remove the temporary file after the test is done
         cls.temp_dir.cleanup()
 
@@ -239,7 +246,7 @@ class BaseModelTest(unittest.TestCase):
         model_path = str(self.temp_file / model_filename)
         logger.debug(f"Saving the model to {model_path}.")
         model.save(model_path)
-        
+
         logger.debug("Generating predictions from the original model.")
         original_predictions = model.predict(dataset, verbose=0)
 
@@ -262,8 +269,8 @@ class BaseModelTest(unittest.TestCase):
 
         Note:
             This method assumes your custom model has an `export` method
-            that saves the model in TF SavedModel format with a `serve` 
-            signature, or a built-in `tf.keras.Model.save` (if handling 
+            that saves the model in TF SavedModel format with a `serve`
+            signature, or a built-in `tf.keras.Model.save` (if handling
             signatures is done manually).
 
         Args:
@@ -307,13 +314,13 @@ class BaseModelTest(unittest.TestCase):
         serving_fn = reloaded_artifact.signatures.get(serving_fn_name, None)
         if serving_fn is None:
             raise ValueError(
-                f"No serving function named '{serving_fn_name}' found in the loaded artifact."
+                f"No serving function named '{serving_fn_name}' found in the loaded artifact.",
             )
 
         # Convert dataset to a dictionary of Tensors for signatures
         # This depends on how your serve function expects inputs.
-        inputs = list(dataset.take(1))[0][0]  # (features, labels)
-        
+        list(dataset.take(1))[0][0]  # (features, labels)
+
         # You may need to adapt this to match your signature's input keys
         loaded_predictions = []
         for batch_features, _ in dataset:

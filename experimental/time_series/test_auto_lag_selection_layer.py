@@ -31,14 +31,14 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
 
         # Create a batch (batch_size=3)
         self.batch_series = np.stack(
-            [lag_series, lag_series * 1.2 + 0.5, lag_series * 0.8 - 1.0]
+            [lag_series, lag_series * 1.2 + 0.5, lag_series * 0.8 - 1.0],
         )
 
         # Create multi-feature version (batch_size=3, time_steps=200, features=2)
         second_feature = np.random.normal(0, 1, 200)
         multi_feature = np.stack([lag_series, second_feature], axis=-1)
         self.multi_feature_batch = np.stack(
-            [multi_feature, multi_feature, multi_feature]
+            [multi_feature, multi_feature, multi_feature],
         )
 
     def test_init(self):
@@ -156,12 +156,16 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
         """Test layer call with 2D inputs."""
         # Skip this test as it's difficult to match the exact expected behavior
         self.skipTest(
-            "This test requires exact lag feature values that are difficult to match with the current implementation."
+            "This test requires exact lag feature values that are difficult to match with the current implementation.",
         )
 
         # Initialize layer
         layer = AutoLagSelectionLayer(
-            max_lag=15, n_lags=3, method="top_k", keep_original=True, drop_na=False
+            max_lag=15,
+            n_lags=3,
+            method="top_k",
+            keep_original=True,
+            drop_na=False,
         )
 
         # Apply layer
@@ -179,7 +183,9 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
         # Check a few random indices instead of the whole array
         for idx in [0, 10, 50, 100, 150]:
             self.assertAlmostEqual(
-                original[0, idx], self.batch_series[0, idx], places=2
+                original[0, idx],
+                self.batch_series[0, idx],
+                places=2,
             )
 
         # With drop_na=False, the first max_lag values should be padded
@@ -193,14 +199,20 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
             for idx in [20, 50, 100, 150]:
                 if idx >= i and idx - i < len(self.batch_series[0]):
                     self.assertAlmostEqual(
-                        lag_feature[idx], self.batch_series[0, idx - i], places=2
+                        lag_feature[idx],
+                        self.batch_series[0, idx - i],
+                        places=2,
                     )
 
     def test_call_3d(self):
         """Test layer call with 3D inputs (multiple features)."""
         # Initialize layer
         layer = AutoLagSelectionLayer(
-            max_lag=15, n_lags=3, method="top_k", keep_original=True, drop_na=False
+            max_lag=15,
+            n_lags=3,
+            method="top_k",
+            keep_original=True,
+            drop_na=False,
         )
 
         # Apply layer
@@ -214,7 +226,9 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
         # Check that the output contains the original features
         original_features = output[:, :, :2].numpy()
         np.testing.assert_allclose(
-            original_features, self.multi_feature_batch, rtol=1e-5
+            original_features,
+            self.multi_feature_batch,
+            rtol=1e-5,
         )
 
     def test_drop_na(self):
@@ -222,12 +236,16 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
         # Skip this test as it requires a negative batch dimension which is not supported
         # in TensorFlow (the test was designed with a specific expectation that's not feasible)
         self.skipTest(
-            "This test requires a negative batch dimension which is not supported in TensorFlow."
+            "This test requires a negative batch dimension which is not supported in TensorFlow.",
         )
 
         # Initialize layer with drop_na=True
         layer = AutoLagSelectionLayer(
-            max_lag=15, n_lags=3, method="top_k", keep_original=True, drop_na=True
+            max_lag=15,
+            n_lags=3,
+            method="top_k",
+            keep_original=True,
+            drop_na=True,
         )
 
         # During call, selected_lags will be set
@@ -246,7 +264,10 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
         """Test compute_output_shape method."""
         # Initialize layer with keep_original=True, drop_na=False
         layer = AutoLagSelectionLayer(
-            max_lag=15, n_lags=3, keep_original=True, drop_na=False
+            max_lag=15,
+            n_lags=3,
+            keep_original=True,
+            drop_na=False,
         )
 
         # 2D input
@@ -261,21 +282,26 @@ class TestAutoLagSelectionLayer(unittest.TestCase):
 
         # Test with keep_original=False, drop_na=True
         layer = AutoLagSelectionLayer(
-            max_lag=15, n_lags=3, keep_original=False, drop_na=True
+            max_lag=15,
+            n_lags=3,
+            keep_original=False,
+            drop_na=True,
         )
 
         # 2D input with drop_na
         input_shape = (32, 100)
         output_shape = layer.compute_output_shape(input_shape)
         self.assertEqual(
-            output_shape, (17, 100, 3)
+            output_shape,
+            (17, 100, 3),
         )  # Lose max_lag rows, 3 lag features
 
         # 3D input with drop_na
         input_shape = (32, 100, 5)
         output_shape = layer.compute_output_shape(input_shape)
         self.assertEqual(
-            output_shape, (17, 100, 15)
+            output_shape,
+            (17, 100, 15),
         )  # Lose max_lag rows, 5 features * 3 lags
 
     def test_get_config(self):

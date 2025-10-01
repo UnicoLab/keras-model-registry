@@ -5,10 +5,10 @@ The actual layer implementation uses only Keras 3 operations.
 """
 
 import unittest
-import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model
 from kmr.layers.SlowNetwork import SlowNetwork
+
 
 class TestSlowNetwork(unittest.TestCase):
     """Test cases for the SlowNetwork layer."""
@@ -32,11 +32,7 @@ class TestSlowNetwork(unittest.TestCase):
         self.assertEqual(layer.units, 128)  # Default value
 
         # Test custom initialization
-        layer = SlowNetwork(
-            input_dim=8,
-            num_layers=5,
-            units=32
-        )
+        layer = SlowNetwork(input_dim=8, num_layers=5, units=32)
         self.assertEqual(layer.input_dim, 8)
         self.assertEqual(layer.num_layers, 5)
         self.assertEqual(layer.units, 32)
@@ -67,20 +63,20 @@ class TestSlowNetwork(unittest.TestCase):
         layer = SlowNetwork(
             input_dim=self.input_dim,
             num_layers=self.num_layers,
-            units=self.units
+            units=self.units,
         )
         layer.build(input_shape=(None, self.input_dim))
-        
+
         # Check if hidden layers are created
         self.assertEqual(len(layer.hidden_layers), self.num_layers)
-        
+
         # Check if output layer is created
         self.assertIsNotNone(layer.output_layer)
-        
+
         # Check hidden layer dimensions
         for hidden_layer in layer.hidden_layers:
             self.assertEqual(hidden_layer.units, self.units)
-        
+
         # Check output layer dimensions
         self.assertEqual(layer.output_layer.units, self.input_dim)
 
@@ -90,24 +86,16 @@ class TestSlowNetwork(unittest.TestCase):
         layer = SlowNetwork(
             input_dim=self.input_dim,
             num_layers=self.num_layers,
-            units=self.units
+            units=self.units,
         )
         output = layer(self.test_input)
         self.assertEqual(output.shape, self.test_input.shape)
 
         # Test with different input shapes
-        test_shapes = [
-            (16, 8),
-            (64, 32),
-            (128, 64)
-        ]
+        test_shapes = [(16, 8), (64, 32), (128, 64)]
         for shape in test_shapes:
             # Create new layer instance for each shape
-            layer = SlowNetwork(
-                input_dim=shape[1],
-                num_layers=2,
-                units=shape[1] * 2
-            )
+            layer = SlowNetwork(input_dim=shape[1], num_layers=2, units=shape[1] * 2)
             test_input = tf.random.normal((shape[0], shape[1]))
             output = layer(test_input)
             self.assertEqual(output.shape, test_input.shape)
@@ -117,12 +105,12 @@ class TestSlowNetwork(unittest.TestCase):
         layer = SlowNetwork(
             input_dim=self.input_dim,
             num_layers=self.num_layers,
-            units=self.units
+            units=self.units,
         )
-        
+
         # Call the layer once to build it
         _ = layer(self.test_input)
-        
+
         # Check that the output is different from the input
         # This is a basic test to ensure the layer is doing some transformation
         output = layer(self.test_input)
@@ -133,17 +121,17 @@ class TestSlowNetwork(unittest.TestCase):
         layer = SlowNetwork(
             input_dim=self.input_dim,
             num_layers=self.num_layers,
-            units=self.units
+            units=self.units,
         )
-        
+
         # For this layer, training mode doesn't affect the output
         # But we test it for completeness
         output_train = layer(self.test_input, training=True)
         output_infer = layer(self.test_input, training=False)
-        
+
         # Shapes should be the same
         self.assertEqual(output_train.shape, output_infer.shape)
-        
+
         # Outputs should be the same since training doesn't affect this layer
         self.assertTrue(tf.reduce_all(tf.equal(output_train, output_infer)))
 
@@ -152,7 +140,7 @@ class TestSlowNetwork(unittest.TestCase):
         original_layer = SlowNetwork(
             input_dim=self.input_dim,
             num_layers=self.num_layers,
-            units=self.units
+            units=self.units,
         )
         config = original_layer.get_config()
 
@@ -171,23 +159,24 @@ class TestSlowNetwork(unittest.TestCase):
         x = SlowNetwork(
             input_dim=self.input_dim,
             num_layers=self.num_layers,
-            units=self.units
+            units=self.units,
         )(inputs)
         outputs = layers.Dense(1)(x)
         model = Model(inputs=inputs, outputs=outputs)
-        
+
         # Compile the model
-        model.compile(optimizer='adam', loss='mse')
-        
+        model.compile(optimizer="adam", loss="mse")
+
         # Generate some dummy data
         x_data = tf.random.normal((100, self.input_dim))
         y_data = tf.random.normal((100, 1))
-        
+
         # Train for one step to ensure everything works
         history = model.fit(x_data, y_data, epochs=1, verbose=0)
-        
+
         # Check that loss was computed
-        self.assertIsNotNone(history.history['loss'])
+        self.assertIsNotNone(history.history["loss"])
+
 
 if __name__ == "__main__":
-    unittest.main() 
+    unittest.main()

@@ -1,10 +1,10 @@
 """Unit tests for the BoostingBlock layer."""
 
 import unittest
-import numpy as np
 from keras import layers
 import tensorflow as tf
 from kmr.layers.BoostingBlock import BoostingBlock
+
 
 class TestBoostingBlock(unittest.TestCase):
     """Test cases for the BoostingBlock layer."""
@@ -32,7 +32,7 @@ class TestBoostingBlock(unittest.TestCase):
             hidden_activation="selu",
             output_activation="tanh",
             gamma_trainable=False,
-            dropout_rate=0.1
+            dropout_rate=0.1,
         )
         self.assertEqual(layer.hidden_units, [32, 16])
         self.assertEqual(layer.hidden_activation, "selu")
@@ -65,10 +65,7 @@ class TestBoostingBlock(unittest.TestCase):
         self.assertTrue(layer.gamma.trainable)
 
         # Test multiple hidden layers with dropout
-        layer = BoostingBlock(
-            hidden_units=[8, 4],
-            dropout_rate=0.1
-        )
+        layer = BoostingBlock(hidden_units=[8, 4], dropout_rate=0.1)
         layer.build(input_shape=(None, self.input_dim))
         self.assertEqual(len(layer.hidden_layers), 4)  # 2 dense + 2 dropout
         self.assertIsInstance(layer.hidden_layers[0], layers.Dense)
@@ -82,11 +79,7 @@ class TestBoostingBlock(unittest.TestCase):
         self.assertEqual(output.shape, self.test_input.shape)
 
         # Test with different input shapes
-        test_shapes = [
-            (16, 8),
-            (64, 32),
-            (128, 64)
-        ]
+        test_shapes = [(16, 8), (64, 32), (128, 64)]
         for shape in test_shapes:
             # Create new layer instance for each shape
             layer = BoostingBlock(hidden_units=shape[1] // 2)
@@ -96,23 +89,24 @@ class TestBoostingBlock(unittest.TestCase):
 
     def test_training_mode(self) -> None:
         """Test layer behavior in training and inference modes."""
-        layer = BoostingBlock(
-            hidden_units=self.hidden_units,
-            dropout_rate=0.5
-        )
+        layer = BoostingBlock(hidden_units=self.hidden_units, dropout_rate=0.5)
 
         # Test that outputs are different in training vs inference
         output1 = layer(self.test_input, training=True)
         output2 = layer(self.test_input, training=True)
-        output3 = layer(self.test_input, training=False)
+        layer(self.test_input, training=False)
 
         # Outputs should be different in training mode due to dropout
         self.assertFalse(tf.reduce_all(tf.equal(output1, output2)))
         # Output should be deterministic in inference mode
-        self.assertTrue(tf.reduce_all(tf.equal(
-            layer(self.test_input, training=False),
-            layer(self.test_input, training=False)
-        )))
+        self.assertTrue(
+            tf.reduce_all(
+                tf.equal(
+                    layer(self.test_input, training=False),
+                    layer(self.test_input, training=False),
+                ),
+            ),
+        )
 
     def test_serialization(self) -> None:
         """Test layer serialization and deserialization."""
@@ -121,7 +115,7 @@ class TestBoostingBlock(unittest.TestCase):
             hidden_activation="selu",
             output_activation="tanh",
             gamma_trainable=False,
-            dropout_rate=0.1
+            dropout_rate=0.1,
         )
         config = original_layer.get_config()
 
@@ -130,8 +124,14 @@ class TestBoostingBlock(unittest.TestCase):
 
         # Check if configurations match
         self.assertEqual(restored_layer.hidden_units, original_layer.hidden_units)
-        self.assertEqual(restored_layer.hidden_activation, original_layer.hidden_activation)
-        self.assertEqual(restored_layer.output_activation, original_layer.output_activation)
+        self.assertEqual(
+            restored_layer.hidden_activation,
+            original_layer.hidden_activation,
+        )
+        self.assertEqual(
+            restored_layer.output_activation,
+            original_layer.output_activation,
+        )
         self.assertEqual(restored_layer.gamma_trainable, original_layer.gamma_trainable)
         self.assertEqual(restored_layer.dropout_rate, original_layer.dropout_rate)
 
@@ -151,6 +151,7 @@ class TestBoostingBlock(unittest.TestCase):
         output_one_gamma = layer(self.test_input)
         # Output should be different from input when gamma is one
         self.assertFalse(tf.reduce_all(tf.equal(output_one_gamma, self.test_input)))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -29,7 +29,7 @@
 #         # Test default initialization
 #         layer = TextPreprocessingLayer(stop_words=self.stop_words)
 #         self.assertEqual(layer.stop_words, self.stop_words)
-        
+
 #         # Test with empty stop words list
 #         empty_stop_words = []
 #         layer = TextPreprocessingLayer(stop_words=empty_stop_words)
@@ -45,7 +45,7 @@
 #         """Test that text is properly converted to lowercase."""
 #         layer = TextPreprocessingLayer(stop_words=[])
 #         output = layer(self.test_texts)
-        
+
 #         # Check that all text is lowercase
 #         for i in range(len(self.test_texts)):
 #             self.assertEqual(
@@ -57,7 +57,7 @@
 #         """Test that punctuation is properly removed."""
 #         layer = TextPreprocessingLayer(stop_words=[])
 #         output = layer(self.test_texts)
-        
+
 #         # Check that common punctuation is removed
 #         for i in range(len(self.test_texts)):
 #             text = output[i].numpy().decode('utf-8')
@@ -69,7 +69,7 @@
 #         """Test that stop words are properly removed."""
 #         layer = TextPreprocessingLayer(stop_words=self.stop_words)
 #         output = layer(self.test_texts)
-        
+
 #         # Check that stop words are removed
 #         for i in range(len(self.test_texts)):
 #             text = output[i].numpy().decode('utf-8')
@@ -81,7 +81,7 @@
 #         """Test that whitespace is properly normalized."""
 #         layer = TextPreprocessingLayer(stop_words=[])
 #         output = layer(self.test_texts)
-        
+
 #         # Check that multiple spaces are normalized
 #         for i in range(len(self.test_texts)):
 #             text = output[i].numpy().decode('utf-8')
@@ -91,7 +91,7 @@
 #         """Test that output shape matches input shape."""
 #         layer = TextPreprocessingLayer(stop_words=self.stop_words)
 #         output = layer(self.test_texts)
-        
+
 #         # Check that output shape matches input shape
 #         self.assertEqual(output.shape, self.test_texts.shape)
 
@@ -99,17 +99,17 @@
 #         """Test layer serialization and deserialization."""
 #         original_layer = TextPreprocessingLayer(stop_words=self.stop_words)
 #         config = original_layer.get_config()
-        
+
 #         # Create new layer from config
 #         restored_layer = TextPreprocessingLayer.from_config(config)
-        
+
 #         # Check if configurations match
 #         self.assertEqual(restored_layer.stop_words, original_layer.stop_words)
-        
+
 #         # Check that outputs match
 #         original_output = original_layer(self.test_texts)
 #         restored_output = restored_layer(self.test_texts)
-        
+
 #         for i in range(len(self.test_texts)):
 #             self.assertEqual(
 #                 original_output[i].numpy().decode('utf-8'),
@@ -121,28 +121,28 @@
 #         # Create a simple model with the preprocessing layer
 #         inputs = layers.Input(shape=(), dtype="string")
 #         x = TextPreprocessingLayer(stop_words=self.stop_words)(inputs)
-        
+
 #         # Add a text vectorization layer
 #         vectorize = layers.TextVectorization(max_tokens=1000)(x)
-        
+
 #         # Add a dense layer for classification
 #         outputs = layers.Dense(1, activation="sigmoid")(vectorize)
-        
+
 #         model = Model(inputs=inputs, outputs=outputs)
-        
+
 #         # Compile the model
 #         model.compile(optimizer="adam", loss="binary_crossentropy")
-        
+
 #         # Generate some dummy data
 #         x_data = tf.constant(["Sample text one", "Sample text two", "Another example"])
 #         y_data = tf.constant([0, 1, 0])
-        
+
 #         # Fit the model for one step to ensure everything works
 #         model.fit(x_data, y_data, epochs=1, verbose=0)
-        
+
 #         # Make a prediction to ensure the pipeline works
 #         pred = model.predict(tf.constant(["Test prediction"]))
 #         self.assertEqual(pred.shape, (1, 1))
 
 # if __name__ == "__main__":
-#     unittest.main() 
+#     unittest.main()

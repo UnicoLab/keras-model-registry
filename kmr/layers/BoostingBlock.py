@@ -1,5 +1,4 @@
-"""
-This module implements a BoostingBlock layer that simulates gradient boosting behavior in a neural network.
+"""This module implements a BoostingBlock layer that simulates gradient boosting behavior in a neural network.
 The layer computes a correction term via a configurable MLP and adds a scaled version to the input.
 """
 
@@ -9,6 +8,7 @@ from keras import layers, initializers
 from keras import KerasTensor
 from kmr.layers._base_layer import BaseLayer
 from keras.saving import register_keras_serializable
+
 
 @register_keras_serializable(package="kmr.layers")
 class BoostingBlock(BaseLayer):
@@ -79,10 +79,12 @@ class BoostingBlock(BaseLayer):
         bias_initializer: str | initializers.Initializer = "zeros",
         dropout_rate: float | None = None,
         name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         # Set attributes before calling parent's __init__
-        self._hidden_units = [hidden_units] if isinstance(hidden_units, int) else hidden_units
+        self._hidden_units = (
+            [hidden_units] if isinstance(hidden_units, int) else hidden_units
+        )
         self._hidden_activation = hidden_activation
         self._output_activation = output_activation
         self._gamma_trainable = gamma_trainable
@@ -127,12 +129,12 @@ class BoostingBlock(BaseLayer):
                     use_bias=self.use_bias,
                     kernel_initializer=self.kernel_initializer,
                     bias_initializer=self.bias_initializer,
-                    name=f"hidden_{i+1}"
-                )
+                    name=f"hidden_{i+1}",
+                ),
             )
             if self.dropout_rate is not None:
                 self.hidden_layers.append(
-                    layers.Dropout(rate=self.dropout_rate, name=f"dropout_{i+1}")
+                    layers.Dropout(rate=self.dropout_rate, name=f"dropout_{i+1}"),
                 )
 
         # Build output layer
@@ -142,7 +144,7 @@ class BoostingBlock(BaseLayer):
             use_bias=self.use_bias,
             kernel_initializer=self.kernel_initializer,
             bias_initializer=self.bias_initializer,
-            name="output"
+            name="output",
         )
 
         # Learnable scaling factor
@@ -150,12 +152,12 @@ class BoostingBlock(BaseLayer):
             name="gamma",
             shape=(1,),
             initializer=self.gamma_initializer,
-            trainable=self.gamma_trainable
+            trainable=self.gamma_trainable,
         )
 
         logger.debug(
             f"BoostingBlock built with hidden_units={self.hidden_units}, "
-            f"activation={self.hidden_activation}, dropout={self.dropout_rate}"
+            f"activation={self.hidden_activation}, dropout={self.dropout_rate}",
         )
         super().build(input_shape)
 
@@ -185,25 +187,65 @@ class BoostingBlock(BaseLayer):
         config = super().get_config()
 
         # Use private attributes during initialization, public attributes after
-        hidden_units = getattr(self, 'hidden_units', getattr(self, '_hidden_units', None))
-        hidden_activation = getattr(self, 'hidden_activation', getattr(self, '_hidden_activation', None))
-        output_activation = getattr(self, 'output_activation', getattr(self, '_output_activation', None))
-        gamma_trainable = getattr(self, 'gamma_trainable', getattr(self, '_gamma_trainable', None))
-        gamma_initializer = getattr(self, 'gamma_initializer', getattr(self, '_gamma_initializer', None))
-        use_bias = getattr(self, 'use_bias', getattr(self, '_use_bias', None))
-        kernel_initializer = getattr(self, 'kernel_initializer', getattr(self, '_kernel_initializer', None))
-        bias_initializer = getattr(self, 'bias_initializer', getattr(self, '_bias_initializer', None))
-        dropout_rate = getattr(self, 'dropout_rate', getattr(self, '_dropout_rate', None))
+        hidden_units = getattr(
+            self,
+            "hidden_units",
+            getattr(self, "_hidden_units", None),
+        )
+        hidden_activation = getattr(
+            self,
+            "hidden_activation",
+            getattr(self, "_hidden_activation", None),
+        )
+        output_activation = getattr(
+            self,
+            "output_activation",
+            getattr(self, "_output_activation", None),
+        )
+        gamma_trainable = getattr(
+            self,
+            "gamma_trainable",
+            getattr(self, "_gamma_trainable", None),
+        )
+        gamma_initializer = getattr(
+            self,
+            "gamma_initializer",
+            getattr(self, "_gamma_initializer", None),
+        )
+        use_bias = getattr(self, "use_bias", getattr(self, "_use_bias", None))
+        kernel_initializer = getattr(
+            self,
+            "kernel_initializer",
+            getattr(self, "_kernel_initializer", None),
+        )
+        bias_initializer = getattr(
+            self,
+            "bias_initializer",
+            getattr(self, "_bias_initializer", None),
+        )
+        dropout_rate = getattr(
+            self,
+            "dropout_rate",
+            getattr(self, "_dropout_rate", None),
+        )
 
-        config.update({
-            "hidden_units": hidden_units,
-            "hidden_activation": hidden_activation,
-            "output_activation": output_activation,
-            "gamma_trainable": gamma_trainable,
-            "gamma_initializer": initializers.serialize(gamma_initializer) if gamma_initializer else None,
-            "use_bias": use_bias,
-            "kernel_initializer": initializers.serialize(kernel_initializer) if kernel_initializer else None,
-            "bias_initializer": initializers.serialize(bias_initializer) if bias_initializer else None,
-            "dropout_rate": dropout_rate,
-        })
+        config.update(
+            {
+                "hidden_units": hidden_units,
+                "hidden_activation": hidden_activation,
+                "output_activation": output_activation,
+                "gamma_trainable": gamma_trainable,
+                "gamma_initializer": initializers.serialize(gamma_initializer)
+                if gamma_initializer
+                else None,
+                "use_bias": use_bias,
+                "kernel_initializer": initializers.serialize(kernel_initializer)
+                if kernel_initializer
+                else None,
+                "bias_initializer": initializers.serialize(bias_initializer)
+                if bias_initializer
+                else None,
+                "dropout_rate": dropout_rate,
+            },
+        )
         return config

@@ -36,7 +36,8 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         # Second feature is just random noise
         second_feature = np.random.normal(0, 1, size=(3, 100))
         self.multi_feature_batch = np.stack(
-            [self.batch_series, second_feature], axis=-1
+            [self.batch_series, second_feature],
+            axis=-1,
         )
 
     def test_init(self):
@@ -100,7 +101,8 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         """Test layer call with 2D inputs."""
         # Initialize layer
         layer = TSFreshFeatureLayer(
-            features=["mean", "std", "min", "max", "median"], normalize=False
+            features=["mean", "std", "min", "max", "median"],
+            normalize=False,
         )
 
         # Apply layer
@@ -121,7 +123,8 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         """Test layer call with 3D inputs."""
         # Initialize layer
         layer = TSFreshFeatureLayer(
-            features=["mean", "std", "min", "max", "median", "iqr"], normalize=False
+            features=["mean", "std", "min", "max", "median", "iqr"],
+            normalize=False,
         )
 
         # Apply layer
@@ -148,7 +151,10 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         """Test extracting features using windows."""
         # Initialize layer with window
         layer = TSFreshFeatureLayer(
-            features=["mean", "std"], window_size=20, stride=1, normalize=False
+            features=["mean", "std"],
+            window_size=20,
+            stride=1,
+            normalize=False,
         )
 
         # Apply layer
@@ -173,7 +179,8 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         """Test extracting statistical features."""
         # Initialize layer with statistical features
         layer = TSFreshFeatureLayer(
-            features=["skewness", "kurtosis", "abs_energy"], normalize=False
+            features=["skewness", "kurtosis", "abs_energy"],
+            normalize=False,
         )
 
         # Apply layer
@@ -194,7 +201,8 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         """Test extracting quantile features."""
         # Initialize layer with quantile features
         layer = TSFreshFeatureLayer(
-            features=["quantile_05", "quantile_95"], normalize=False
+            features=["quantile_05", "quantile_95"],
+            normalize=False,
         )
 
         # Apply layer
@@ -225,12 +233,15 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         input_shape = (32, 100, 3)
         output_shape = layer1.compute_output_shape(input_shape)
         self.assertEqual(
-            output_shape, (32, 12)
+            output_shape,
+            (32, 12),
         )  # (batch_size, n_features * input_features)
 
         # Test with window
         layer2 = TSFreshFeatureLayer(
-            features=["mean", "std", "min", "max"], window_size=20, stride=1
+            features=["mean", "std", "min", "max"],
+            window_size=20,
+            stride=1,
         )
 
         # For 2D input (batch_size, time_steps)
@@ -238,7 +249,8 @@ class TestTSFreshFeatureLayer(unittest.TestCase):
         output_shape = layer2.compute_output_shape(input_shape)
         n_windows = 100 - 20 + 1
         self.assertEqual(
-            output_shape, (32, n_windows, 4)
+            output_shape,
+            (32, n_windows, 4),
         )  # (batch_size, n_windows, n_features)
 
     def test_get_config(self):

@@ -1,6 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 
+
 class AdaptiveConv2D(layers.Layer):
     """Adaptive convolution layer with a learnable Gaussian envelope.
 
@@ -16,13 +17,19 @@ class AdaptiveConv2D(layers.Layer):
         >>> output_tensor = adaptive_conv(input_tensor)
         >>> print(output_tensor.shape)  # Expected shape: (32, 62, 62, 16) with VALID padding.
     """
+
     def __init__(self, filters: int, kernel_size: int, **kwargs) -> None:
         super().__init__(**kwargs)
         self.filters = filters
         self.kernel_size = kernel_size
 
     def build(self, input_shape: tf.TensorShape) -> None:
-        kernel_shape = (self.kernel_size, self.kernel_size, input_shape[-1], self.filters)
+        kernel_shape = (
+            self.kernel_size,
+            self.kernel_size,
+            input_shape[-1],
+            self.filters,
+        )
         self.kernel = self.add_weight(
             name="kernel",
             shape=kernel_shape,
@@ -44,12 +51,23 @@ class AdaptiveConv2D(layers.Layer):
 
     def call(self, inputs: tf.Tensor) -> tf.Tensor:
         # Compute Gaussian envelope: exp(-||coords||^2 / (2 * sigma^2))
-        envelope = tf.exp(-tf.reduce_sum(tf.square(self.coords), axis=-1) / (2 * tf.square(self.sigma)))
-        envelope = tf.expand_dims(envelope, axis=-1)  # Shape: (kernel_size, kernel_size, 1)
+        envelope = tf.exp(
+            -tf.reduce_sum(tf.square(self.coords), axis=-1)
+            / (2 * tf.square(self.sigma)),
+        )
+        envelope = tf.expand_dims(
+            envelope,
+            axis=-1,
+        )  # Shape: (kernel_size, kernel_size, 1)
         # Modulate kernel weights with the envelope
         adaptive_kernel = self.kernel * envelope
         # Apply convolution using the adaptive kernel
-        return tf.nn.conv2d(inputs, adaptive_kernel, strides=[1, 1, 1, 1], padding="VALID")
+        return tf.nn.conv2d(
+            inputs,
+            adaptive_kernel,
+            strides=[1, 1, 1, 1],
+            padding="VALID",
+        )
 
     def get_config(self) -> dict:
         config = super().get_config()

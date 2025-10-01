@@ -1,5 +1,4 @@
-"""
-This module implements a DifferentialPreprocessingLayer that applies multiple candidate transformations
+"""This module implements a DifferentialPreprocessingLayer that applies multiple candidate transformations
 to tabular data and learns to combine them optimally. It also handles missing values with learnable imputation.
 This approach is useful for tabular data where the optimal preprocessing strategy is not known in advance.
 """
@@ -10,6 +9,7 @@ from keras import layers, ops
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
 from kmr.layers._base_layer import BaseLayer
+
 
 @register_keras_serializable(package="kmr.layers")
 class DifferentialPreprocessingLayer(BaseLayer):
@@ -53,7 +53,7 @@ class DifferentialPreprocessingLayer(BaseLayer):
             [1.0, 2.0, 3.0, 4.0],
             [2.0, 3.0, 4.0, 5.0],
         ], dtype="float32")
-        
+
         # Instantiate the layer for 4 features.
         preproc_layer = DifferentialPreprocessingLayer(num_features=4, mlp_hidden_units=8)
         y = preproc_layer(x)
@@ -66,13 +66,13 @@ class DifferentialPreprocessingLayer(BaseLayer):
         num_features: int,
         mlp_hidden_units: int = 4,
         name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         # Set public attributes
         self.num_features = num_features
         self.mlp_hidden_units = mlp_hidden_units
         self.num_candidates = 4  # We have 4 candidate branches
-        
+
         # Initialize instance variables
         self.impute = None
         self.gamma = None
@@ -80,10 +80,10 @@ class DifferentialPreprocessingLayer(BaseLayer):
         self.mlp_hidden = None
         self.mlp_output = None
         self.alpha = None
-        
+
         # Validate parameters during initialization
         self._validate_params()
-        
+
         # Call parent's __init__
         super().__init__(name=name, **kwargs)
 
@@ -92,7 +92,9 @@ class DifferentialPreprocessingLayer(BaseLayer):
         if self.num_features <= 0:
             raise ValueError(f"num_features must be positive, got {self.num_features}")
         if self.mlp_hidden_units <= 0:
-            raise ValueError(f"mlp_hidden_units must be positive, got {self.mlp_hidden_units}")
+            raise ValueError(
+                f"mlp_hidden_units must be positive, got {self.mlp_hidden_units}",
+            )
 
     def build(self, input_shape: tuple[int, ...]) -> None:
         """Builds the layer with the given input shape.
@@ -102,7 +104,7 @@ class DifferentialPreprocessingLayer(BaseLayer):
         """
         # Validate parameters again during build
         self._validate_params()
-        
+
         # Trainable imputation vector (shape: [num_features])
         self.impute = self.add_weight(
             name="impute",
@@ -110,7 +112,7 @@ class DifferentialPreprocessingLayer(BaseLayer):
             initializer="zeros",
             trainable=True,
         )
-        
+
         # Affine branch parameters: scale and bias
         self.gamma = self.add_weight(
             name="gamma",
@@ -118,27 +120,27 @@ class DifferentialPreprocessingLayer(BaseLayer):
             initializer="ones",
             trainable=True,
         )
-        
+
         self.beta = self.add_weight(
             name="beta",
             shape=(self.num_features,),
             initializer="zeros",
             trainable=True,
         )
-        
+
         # Nonlinear branch: a small MLP
         self.mlp_hidden = layers.Dense(
             units=self.mlp_hidden_units,
             activation="relu",
-            name="mlp_hidden"
+            name="mlp_hidden",
         )
-        
+
         self.mlp_output = layers.Dense(
             units=self.num_features,
             activation=None,
-            name="mlp_output"
+            name="mlp_output",
         )
-        
+
         # Combination weights for the 4 candidate transformations
         self.alpha = self.add_weight(
             name="alpha",
@@ -146,10 +148,10 @@ class DifferentialPreprocessingLayer(BaseLayer):
             initializer="zeros",
             trainable=True,
         )
-        
+
         logger.debug(
             f"DifferentialPreprocessingLayer built with num_features={self.num_features}, "
-            f"mlp_hidden_units={self.mlp_hidden_units}"
+            f"mlp_hidden_units={self.mlp_hidden_units}",
         )
         super().build(input_shape)
 
@@ -170,34 +172,34 @@ class DifferentialPreprocessingLayer(BaseLayer):
             ops.reshape(self.impute, (1, self.num_features)),
             inputs,
         )
-        
+
         # Candidate 1: Identity
         candidate_identity = imputed
-        
+
         # Candidate 2: Affine transformation
         candidate_affine = self.gamma * imputed + self.beta
-        
+
         # Candidate 3: Nonlinear transformation (MLP)
         candidate_nonlinear = self.mlp_hidden(imputed)
         candidate_nonlinear = self.mlp_output(candidate_nonlinear)
-        
+
         # Candidate 4: Log transformation
         # Use softplus to ensure the argument is positive
         candidate_log = ops.log(ops.nn.softplus(imputed) + 1e-6)
-        
+
         # Stack candidates: shape (batch, num_features, num_candidates)
         candidates = ops.stack(
             [candidate_identity, candidate_affine, candidate_nonlinear, candidate_log],
-            axis=-1
+            axis=-1,
         )
-        
+
         # Compute softmax weights
         weights = ops.nn.softmax(self.alpha)
         weights = ops.reshape(weights, (1, 1, self.num_candidates))
-        
+
         # Weighted sum
         output = ops.sum(weights * candidates, axis=-1)
-        
+
         return output
 
     def get_config(self) -> dict[str, Any]:
@@ -207,8 +209,10 @@ class DifferentialPreprocessingLayer(BaseLayer):
             Python dictionary containing the layer configuration.
         """
         config = super().get_config()
-        config.update({
-            "num_features": self.num_features,
-            "mlp_hidden_units": self.mlp_hidden_units,
-        })
-        return config 
+        config.update(
+            {
+                "num_features": self.num_features,
+                "mlp_hidden_units": self.mlp_hidden_units,
+            },
+        )
+        return config

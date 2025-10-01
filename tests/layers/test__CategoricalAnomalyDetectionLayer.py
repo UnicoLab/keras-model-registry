@@ -48,7 +48,7 @@ class TestCategoricalAnomalyDetectionLayer(unittest.TestCase):
         # Check anomaly detection
         anomalies = outputs["anomaly"].numpy()
         self.assertFalse(anomalies[0][0])  # "red" is valid
-        self.assertTrue(anomalies[1][0])   # "purple" is invalid
+        self.assertTrue(anomalies[1][0])  # "purple" is invalid
         self.assertFalse(anomalies[2][0])  # "green" is valid
 
     def test_int_anomaly_detection(self) -> None:
@@ -63,7 +63,7 @@ class TestCategoricalAnomalyDetectionLayer(unittest.TestCase):
         # Check anomaly detection
         anomalies = outputs["anomaly"].numpy()
         self.assertFalse(anomalies[0][0])  # 1 is valid
-        self.assertTrue(anomalies[1][0])   # 4 is invalid
+        self.assertTrue(anomalies[1][0])  # 4 is invalid
         self.assertFalse(anomalies[2][0])  # 2 is valid
 
     def test_empty_vocabulary(self) -> None:
@@ -90,7 +90,9 @@ class TestCategoricalAnomalyDetectionLayer(unittest.TestCase):
         model_json = model.to_json()
         loaded_model = tf.keras.models.model_from_json(
             model_json,
-            custom_objects={"CategoricalAnomalyDetectionLayer": CategoricalAnomalyDetectionLayer}
+            custom_objects={
+                "CategoricalAnomalyDetectionLayer": CategoricalAnomalyDetectionLayer,
+            },
         )
 
         # Test loaded model
@@ -104,15 +106,15 @@ class TestCategoricalAnomalyDetectionLayer(unittest.TestCase):
                 # Compare strings directly
                 self.assertEqual(
                     original_output[key].numpy().tolist(),
-                    loaded_output[key].numpy().tolist()
+                    loaded_output[key].numpy().tolist(),
                 )
             else:
                 # Compare numerical values
                 self.assertTrue(
                     np.allclose(
                         original_output[key].numpy(),
-                        loaded_output[key].numpy()
-                    )
+                        loaded_output[key].numpy(),
+                    ),
                 )
 
 

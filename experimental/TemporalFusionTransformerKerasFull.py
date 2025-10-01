@@ -1,7 +1,5 @@
 import tensorflow as tf
 from keras import layers, models
-from keras import KerasTensor
-from keras.saving import register_keras_serializable
 
 
 class TemporalFusionTransformerKerasFull(models.Model):
@@ -33,6 +31,7 @@ class TemporalFusionTransformerKerasFull(models.Model):
         n_targets (int): Number of target series (default 1).
         loss_size (int): Number of output parameters per target (use 2 for [μ, log(σ²)]).
     """
+
     def __init__(
         self,
         encoder_length: int,
@@ -63,7 +62,7 @@ class TemporalFusionTransformerKerasFull(models.Model):
         # ---------------------------
         # For static numeric variables, use a Dense layer to project to hidden size.
         self.static_numeric_dense = {
-            var: layers.Dense(hidden_size, activation='elu')
+            var: layers.Dense(hidden_size, activation="elu")
             for var in static_numeric_variables
         }
         # For static categorical variables, use MultiEmbedding.
@@ -86,11 +85,27 @@ class TemporalFusionTransformerKerasFull(models.Model):
             context_size=None,
         )
         # GRNs to generate static context:
-        self.static_context_grn = GatedResidualNetwork(hidden_size, hidden_size, dropout_rate=dropout_rate)
-        self.static_context_hidden_encoder_grn = GatedResidualNetwork(hidden_size, hidden_size, dropout_rate=dropout_rate)
-        self.static_context_cell_encoder_grn = GatedResidualNetwork(hidden_size, hidden_size, dropout_rate=dropout_rate)
-        self.static_context_enrichment = GatedResidualNetwork(hidden_size, hidden_size, dropout_rate=dropout_rate)
-        
+        self.static_context_grn = GatedResidualNetwork(
+            hidden_size,
+            hidden_size,
+            dropout_rate=dropout_rate,
+        )
+        self.static_context_hidden_encoder_grn = GatedResidualNetwork(
+            hidden_size,
+            hidden_size,
+            dropout_rate=dropout_rate,
+        )
+        self.static_context_cell_encoder_grn = GatedResidualNetwork(
+            hidden_size,
+            hidden_size,
+            dropout_rate=dropout_rate,
+        )
+        self.static_context_enrichment = GatedResidualNetwork(
+            hidden_size,
+            hidden_size,
+            dropout_rate=dropout_rate,
+        )
+
         # ---------------------------
         # Time-varying (encoder/decoder) variable selection
         # ---------------------------
@@ -113,31 +128,54 @@ class TemporalFusionTransformerKerasFull(models.Model):
         # ---------------------------
         # LSTM encoder and decoder (local processing)
         # ---------------------------
-        self.encoder_lstm = layers.LSTM(hidden_size, return_sequences=True, return_state=True,
-                                        dropout=dropout_rate, recurrent_dropout=dropout_rate)
-        self.decoder_lstm = layers.LSTM(hidden_size, return_sequences=True, return_state=True,
-                                        dropout=dropout_rate, recurrent_dropout=dropout_rate)
+        self.encoder_lstm = layers.LSTM(
+            hidden_size,
+            return_sequences=True,
+            return_state=True,
+            dropout=dropout_rate,
+            recurrent_dropout=dropout_rate,
+        )
+        self.decoder_lstm = layers.LSTM(
+            hidden_size,
+            return_sequences=True,
+            return_state=True,
+            dropout=dropout_rate,
+            recurrent_dropout=dropout_rate,
+        )
 
-        self.lstm_layers = lstm_layers  # currently only single layer is implemented for simplicity
+        self.lstm_layers = (
+            lstm_layers  # currently only single layer is implemented for simplicity
+        )
 
         self.post_lstm_gan = GateAddNorm(hidden_size, dropout_rate=dropout_rate)
 
         # ---------------------------
         # Long-range processing: Multi-head attention
         # ---------------------------
-        self.multihead_attn = InterpretableMultiHeadAttention(d_model=hidden_size, n_head=num_attention_heads, dropout_rate=dropout_rate)
+        self.multihead_attn = InterpretableMultiHeadAttention(
+            d_model=hidden_size,
+            n_head=num_attention_heads,
+            dropout_rate=dropout_rate,
+        )
         self.post_attn_gan = GateAddNorm(hidden_size, dropout_rate=dropout_rate)
 
         # ---------------------------
         # Feed-forward block (using GRN)
         # ---------------------------
-        self.feed_forward_block = GatedResidualNetwork(hidden_size, hidden_size, dropout_rate=dropout_rate)
+        self.feed_forward_block = GatedResidualNetwork(
+            hidden_size,
+            hidden_size,
+            dropout_rate=dropout_rate,
+        )
         self.ff_addnorm = layers.LayerNormalization()
 
         # ---------------------------
         # Pre-output processing
         # ---------------------------
-        self.pre_output_gan = GateAddNorm(hidden_size, dropout_rate=0.0)  # no dropout here
+        self.pre_output_gan = GateAddNorm(
+            hidden_size,
+            dropout_rate=0.0,
+        )  # no dropout here
 
         # Final output layer: outputs n_targets * loss_size (e.g., 1*2 = 2)
         self.output_layer = layers.Dense(n_targets * loss_size, activation=None)
@@ -160,9 +198,15 @@ class TemporalFusionTransformerKerasFull(models.Model):
         # Process static covariates:
         static_numeric_transformed = {}
         for var, tensor in static_numeric.items():
-            static_numeric_transformed[var] = self.static_numeric_dense[var](tensor)  # (batch, hidden_size)
-        static_cat_emb = self.static_embedding(static_categorical)  # dict: var -> (batch, 1, emb_dim)
-        static_cat_transformed = {var: self.flatten(static_cat_emb[var]) for var in static_cat_emb}
+            static_numeric_transformed[var] = self.static_numeric_dense[var](
+                tensor,
+            )  # (batch, hidden_size)
+        static_cat_emb = self.static_embedding(
+            static_categorical,
+        )  # dict: var -> (batch, 1, emb_dim)
+        static_cat_transformed = {
+            var: self.flatten(static_cat_emb[var]) for var in static_cat_emb
+        }
         # Combine all static features into one dict:
         static_features = {}
         static_features.update(static_numeric_transformed)
@@ -175,34 +219,72 @@ class TemporalFusionTransformerKerasFull(models.Model):
         # Remove time dimension: (batch, hidden_size)
         static_context = tf.squeeze(static_context, axis=1)
         # Generate static contexts via GRNs:
-        overall_static_context = self.static_context_grn(static_context, training=training)  # for enrichment
-        hidden_encoder_context = self.static_context_hidden_encoder_grn(static_context, training=training)
-        cell_encoder_context = self.static_context_cell_encoder_grn(static_context, training=training)
-        enrichment_context = self.static_context_enrichment(static_context, training=training)
-        
+        overall_static_context = self.static_context_grn(
+            static_context,
+            training=training,
+        )  # for enrichment
+        hidden_encoder_context = self.static_context_hidden_encoder_grn(
+            static_context,
+            training=training,
+        )
+        cell_encoder_context = self.static_context_cell_encoder_grn(
+            static_context,
+            training=training,
+        )
+        enrichment_context = self.static_context_enrichment(
+            static_context,
+            training=training,
+        )
+
         # Expand static context to match time steps for later addition
-        enrichment_context_exp = tf.expand_dims(enrichment_context, axis=1)  # (batch, 1, hidden_size)
+        enrichment_context_exp = tf.expand_dims(
+            enrichment_context,
+            axis=1,
+        )  # (batch, 1, hidden_size)
 
         # Process time-varying encoder inputs via VSN (with static context as additional input)
-        encoder_processed = self.encoder_vsn(encoder_data, context=tf.expand_dims(static_context, axis=1), training=training)
+        encoder_processed = self.encoder_vsn(
+            encoder_data,
+            context=tf.expand_dims(static_context, axis=1),
+            training=training,
+        )
         # Process time-varying decoder inputs similarly
-        decoder_processed = self.decoder_vsn(decoder_data, context=tf.expand_dims(static_context, axis=1), training=training)
+        decoder_processed = self.decoder_vsn(
+            decoder_data,
+            context=tf.expand_dims(static_context, axis=1),
+            training=training,
+        )
 
         # LSTM encoder; note: here we use single-layer LSTM for simplicity
-        enc_outputs, enc_h, enc_c = self.encoder_lstm(encoder_processed, training=training)
+        enc_outputs, enc_h, enc_c = self.encoder_lstm(
+            encoder_processed,
+            training=training,
+        )
         # For decoder initial states, combine LSTM states with static context
         dec_init_h = hidden_encoder_context  # (batch, hidden_size)
-        dec_init_c = cell_encoder_context      # (batch, hidden_size)
-        dec_outputs, _, _ = self.decoder_lstm(decoder_processed, initial_state=[dec_init_h, dec_init_c], training=training)
+        dec_init_c = cell_encoder_context  # (batch, hidden_size)
+        dec_outputs, _, _ = self.decoder_lstm(
+            decoder_processed,
+            initial_state=[dec_init_h, dec_init_c],
+            training=training,
+        )
         # Post LSTM GateAddNorm
         dec_outputs = self.post_lstm_gan(dec_outputs, dec_outputs, training=training)
 
         # Multi-head attention: query=decoder, key=value=encoder outputs
-        attn_output = self.multihead_attn(query=dec_outputs, key=enc_outputs, value=enc_outputs, training=training)
+        attn_output = self.multihead_attn(
+            query=dec_outputs,
+            key=enc_outputs,
+            value=enc_outputs,
+            training=training,
+        )
         attn_output = self.post_attn_gan(dec_outputs, attn_output, training=training)
 
         # Add static enrichment (broadcast along time axis)
-        static_enriched = attn_output + tf.tile(enrichment_context_exp, [1, self.decoder_length, 1])
+        static_enriched = attn_output + tf.tile(
+            enrichment_context_exp,
+            [1, self.decoder_length, 1],
+        )
         # Feed-forward block
         ff_output = self.feed_forward_block(static_enriched, training=training)
         ff_output = self.ff_addnorm(static_enriched + ff_output)
@@ -211,6 +293,9 @@ class TemporalFusionTransformerKerasFull(models.Model):
         # Final output layer
         out = self.output_layer(pre_out)
         # Reshape to (batch, decoder_length, n_targets, loss_size); here n_targets=1 so we can squeeze.
-        out = tf.reshape(out, (batch_size, self.decoder_length, self.n_targets, self.loss_size))
+        out = tf.reshape(
+            out,
+            (batch_size, self.decoder_length, self.n_targets, self.loss_size),
+        )
         # For probabilistic forecasting, we return last dim as [μ, log(σ²)]
         return tf.squeeze(out, axis=2)

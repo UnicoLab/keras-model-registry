@@ -1,6 +1,7 @@
 from keras import layers, ops
 from keras import KerasTensor
-from typing import Any, List, Union, Sequence
+from typing import Any
+from collections.abc import Sequence
 from keras.saving import register_keras_serializable
 
 
@@ -30,19 +31,19 @@ class SparseAttentionWeighting(layers.Layer):
     batch_size = 32
     num_modules = 3
     feature_dim = 64
-    
+
     # Create three different module outputs
     module1 = layers.Dense(feature_dim)(inputs)
     module2 = layers.Dense(feature_dim)(inputs)
     module3 = layers.Dense(feature_dim)(inputs)
-    
+
     # Combine module outputs using sparse attention
     attention = SparseAttentionWeighting(
         num_modules=num_modules,
         temperature=0.5  # Lower temperature for sharper attention
     )
     combined_output = attention([module1, module2, module3])
-    
+
     # The layer will learn which modules are most important
     # and weight their outputs accordingly
     ```
@@ -82,7 +83,7 @@ class SparseAttentionWeighting(layers.Layer):
         super().__init__(**kwargs)
         self.num_modules = num_modules
         self.temperature = temperature
-        
+
         # Learnable attention weights
         self.attention_weights = self.add_weight(
             shape=(num_modules,),
@@ -113,17 +114,16 @@ class SparseAttentionWeighting(layers.Layer):
         """
         if len(module_outputs) != self.num_modules:
             raise ValueError(
-                f"Expected {self.num_modules} module outputs, "
-                f"but got {len(module_outputs)}"
+                f"Expected {self.num_modules} module outputs, but got {len(module_outputs)}",
             )
 
         # Temperature-scaled softmax for sharper attention
         attention_probs = ops.softmax(self.attention_weights / self.temperature)
-        
+
         # Stack and weight module outputs
         stacked_outputs = ops.stack(module_outputs, axis=1)
         attention_weights = ops.expand_dims(ops.expand_dims(attention_probs, 0), -1)
-        
+
         # Weighted combination of outputs
         weighted_sum = ops.sum(stacked_outputs * attention_weights, axis=1)
         return weighted_sum
@@ -137,10 +137,12 @@ class SparseAttentionWeighting(layers.Layer):
             - temperature: Temperature scaling parameter
         """
         config = super().get_config()
-        config.update({
-            "num_modules": self.num_modules,
-            "temperature": self.temperature,
-        })
+        config.update(
+            {
+                "num_modules": self.num_modules,
+                "temperature": self.temperature,
+            },
+        )
         return config
 
     @classmethod

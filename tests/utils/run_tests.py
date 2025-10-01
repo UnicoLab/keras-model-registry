@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-"""
-Test runner for kmr.utils package tests.
+"""Test runner for kmr.utils package tests.
 
 This script runs all the unit tests for the kmr.utils package
 and generates a coverage report.
@@ -19,15 +18,12 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # Start code coverage
-cov = coverage.Coverage(
-    source=['kmr.utils'],
-    omit=['*/__pycache__/*', '*/tests/*']
-)
+cov = coverage.Coverage(source=["kmr.utils"], omit=["*/__pycache__/*", "*/tests/*"])
 cov.start()
 
 # Find and run all tests in the utils directory
 test_loader = unittest.TestLoader()
-test_suite = test_loader.discover(os.path.dirname(__file__), pattern='test_*.py')
+test_suite = test_loader.discover(os.path.dirname(__file__), pattern="test_*.py")
 
 # Run the tests
 test_runner = unittest.TextTestRunner(verbosity=2)
@@ -39,8 +35,7 @@ cov.save()
 cov.report()
 
 # Generate HTML report
-cov.html_report(directory='htmlcov')
-print(f"HTML coverage report generated in htmlcov/")
+cov.html_report(directory="htmlcov")
 
 # Exit with appropriate code
-sys.exit(not result.wasSuccessful()) 
+sys.exit(not result.wasSuccessful())

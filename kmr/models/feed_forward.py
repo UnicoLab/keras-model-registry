@@ -11,10 +11,10 @@ from ._base import BaseModel
 @register_keras_serializable(package="kmr")
 class BaseFeedForwardModel(BaseModel):
     """Base feed forward neural network model.
-    
+
     This model implements a basic feed forward neural network with configurable
     hidden layers, activations, and regularization options.
-    
+
     Example:
         ```python
         # Create a simple feed forward model
@@ -23,29 +23,29 @@ class BaseFeedForwardModel(BaseModel):
             hidden_units=[64, 32],
             output_units=1
         )
-        
+
         # Compile and train the model
         model.compile(optimizer='adam', loss='mse')
         model.fit(train_dataset, epochs=10)
         ```
     """
-    
+
     def __init__(
         self,
         feature_names: list[str],
         hidden_units: list[int],
         output_units: int = 1,
         dropout_rate: float = 0.0,
-        activation: str = 'relu',
+        activation: str = "relu",
         preprocessing_model: Model | None = None,
-        kernel_initializer: str | Any | None = 'glorot_uniform',
-        bias_initializer: str | Any | None = 'zeros',
+        kernel_initializer: str | Any | None = "glorot_uniform",
+        bias_initializer: str | Any | None = "zeros",
         kernel_regularizer: str | Any | None = None,
         bias_regularizer: str | Any | None = None,
         activity_regularizer: str | Any | None = None,
         kernel_constraint: str | Any | None = None,
         bias_constraint: str | Any | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """Initialize Feed Forward Neural Network.
 
@@ -110,10 +110,10 @@ class BaseFeedForwardModel(BaseModel):
                 activity_regularizer=activity_regularizer,
                 kernel_constraint=kernel_constraint,
                 bias_constraint=bias_constraint,
-                name=f'hidden_{i}'
+                name=f"hidden_{i}",
             )
             self.hidden_layers.append(dense)
-            
+
             # Add dropout if specified
             if dropout_rate > 0:
                 dropout = layers.Dropout(rate=dropout_rate)
@@ -130,7 +130,7 @@ class BaseFeedForwardModel(BaseModel):
             activity_regularizer=activity_regularizer,
             kernel_constraint=kernel_constraint,
             bias_constraint=bias_constraint,
-            name='output'
+            name="output",
         )
 
         # Build the model
@@ -156,21 +156,26 @@ class BaseFeedForwardModel(BaseModel):
         # Create model
         self._model = Model(inputs=inputs, outputs=outputs)
 
-    def call(self, inputs: dict[str, KerasTensor] | KerasTensor, training: bool = False) -> KerasTensor:
+    def call(
+        self,
+        inputs: dict[str, KerasTensor] | KerasTensor,
+        training: bool = False,
+    ) -> KerasTensor:
         """Forward pass of the model.
-        
+
         Args:
             inputs: Dictionary of input tensors or a single tensor.
             training: Whether in training mode.
-            
+
         Returns:
             Model output tensor.
         """
         # Convert dictionary inputs to list of tensors
-        if isinstance(inputs, dict):
-            x = [inputs[name] for name in self.feature_names]
-        else:
-            x = inputs
+        x = (
+            [inputs[name] for name in self.feature_names]
+            if isinstance(inputs, dict)
+            else inputs
+        )
 
         # Pass through internal model
         return self._model(x, training=training)
@@ -182,25 +187,27 @@ class BaseFeedForwardModel(BaseModel):
             Dict containing model configuration.
         """
         config = super().get_config()
-        config.update({
-            'feature_names': self.feature_names,
-            'hidden_units': self.hidden_units,
-            'output_units': self.output_units,
-            'dropout_rate': self.dropout_rate,
-            'activation': self.activation,
-            'preprocessing_model': self.preprocessing_model,
-            'kernel_initializer': self.kernel_initializer,
-            'bias_initializer': self.bias_initializer,
-            'kernel_regularizer': self.kernel_regularizer,
-            'bias_regularizer': self.bias_regularizer,
-            'activity_regularizer': self.activity_regularizer,
-            'kernel_constraint': self.kernel_constraint,
-            'bias_constraint': self.bias_constraint,
-        })
+        config.update(
+            {
+                "feature_names": self.feature_names,
+                "hidden_units": self.hidden_units,
+                "output_units": self.output_units,
+                "dropout_rate": self.dropout_rate,
+                "activation": self.activation,
+                "preprocessing_model": self.preprocessing_model,
+                "kernel_initializer": self.kernel_initializer,
+                "bias_initializer": self.bias_initializer,
+                "kernel_regularizer": self.kernel_regularizer,
+                "bias_regularizer": self.bias_regularizer,
+                "activity_regularizer": self.activity_regularizer,
+                "kernel_constraint": self.kernel_constraint,
+                "bias_constraint": self.bias_constraint,
+            },
+        )
         return config
 
     @classmethod
-    def from_config(cls, config: dict[str, Any]) -> 'BaseFeedForwardModel':
+    def from_config(cls, config: dict[str, Any]) -> "BaseFeedForwardModel":
         """Create model from configuration.
 
         Args:
@@ -210,7 +217,7 @@ class BaseFeedForwardModel(BaseModel):
             Instantiated model.
         """
         # Extract preprocessing model if present
-        preprocessing_model = config.pop('preprocessing_model', None)
-        
+        preprocessing_model = config.pop("preprocessing_model", None)
+
         # Create model instance
         return cls(preprocessing_model=preprocessing_model, **config)

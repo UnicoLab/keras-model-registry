@@ -27,14 +27,14 @@ class TestWaveletTransformLayer(unittest.TestCase):
                 series,
                 series * 1.2 + 0.5,  # Scaled and shifted
                 series * 0.8 - 0.3,  # Scaled and shifted
-            ]
+            ],
         )
 
         # Create multi-feature version (batch_size=3, time_steps=256, features=2)
         second_feature = np.random.normal(0, 1, size=len(t))
         multi_feature = np.stack([series, second_feature], axis=-1)
         self.multi_feature_batch = np.stack(
-            [multi_feature, multi_feature, multi_feature]
+            [multi_feature, multi_feature, multi_feature],
         )
 
     def test_init(self):
@@ -69,7 +69,10 @@ class TestWaveletTransformLayer(unittest.TestCase):
         """Test layer call with 2D inputs."""
         # Initialize layer
         layer = WaveletTransformLayer(
-            levels=3, window_sizes=[4, 8, 16], flatten_output=True, drop_na=False
+            levels=3,
+            window_sizes=[4, 8, 16],
+            flatten_output=True,
+            drop_na=False,
         )
 
         # Apply layer
@@ -88,7 +91,10 @@ class TestWaveletTransformLayer(unittest.TestCase):
         """Test layer call with 3D inputs (multiple features)."""
         # Initialize layer
         layer = WaveletTransformLayer(
-            levels=2, window_sizes=[4, 8], flatten_output=True, drop_na=False
+            levels=2,
+            window_sizes=[4, 8],
+            flatten_output=True,
+            drop_na=False,
         )
 
         # Apply layer
@@ -161,7 +167,10 @@ class TestWaveletTransformLayer(unittest.TestCase):
         """Test compute_output_shape method."""
         # Initialize layer
         layer = WaveletTransformLayer(
-            levels=3, window_sizes=[4, 8, 16], flatten_output=True, drop_na=False
+            levels=3,
+            window_sizes=[4, 8, 16],
+            flatten_output=True,
+            drop_na=False,
         )
 
         # 2D input

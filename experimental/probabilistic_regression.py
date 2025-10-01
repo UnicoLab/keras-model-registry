@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # pypi/conda library
 
-from typing import Any, Dict
+from typing import Any
 
 import tensorflow as tf
 import tensorflow_probability as tfp
@@ -98,7 +98,7 @@ class Model:
         logger.info("Preparing layers...")
         nn_dims = self.CONF.model.NN_DIMS.split("-")
 
-        logger.info(f"Preparing first layer...")
+        logger.info("Preparing first layer...")
         first_layer_dim = nn_dims.pop(0)
         x = tf.keras.layers.Dense(
             units=first_layer_dim,
@@ -106,7 +106,10 @@ class Model:
             kernel_regularizer=self.CONF.model.REGULARIZATION,
             name=f"layer_{first_layer_dim}",
         )(input_data)
-        x = tf.keras.layers.Dropout(self.CONF.model.DROPOUT, name=f"dropout_{first_layer_dim}")(x)
+        x = tf.keras.layers.Dropout(
+            self.CONF.model.DROPOUT,
+            name=f"dropout_{first_layer_dim}",
+        )(x)
 
         for nr_units in nn_dims:
             logger.info(f"Preparing layer... {nr_units}")
@@ -116,7 +119,10 @@ class Model:
                 kernel_regularizer=self.CONF.model.REGULARIZATION,
                 name=f"layer_{nr_units}",
             )(x)
-            x = tf.keras.layers.Dropout(self.CONF.model.DROPOUT, name=f"dropout_{nr_units}")(x)
+            x = tf.keras.layers.Dropout(
+                self.CONF.model.DROPOUT,
+                name=f"dropout_{nr_units}",
+            )(x)
 
         # preparing output layer
         logger.info("Preparing output layer...")
@@ -124,7 +130,10 @@ class Model:
 
         # building LogNormal distribution as an output
         dist = tfp.layers.DistributionLambda(
-            lambda t: tfd.LogNormal(loc=t[..., :1], scale=tf.math.softplus(0.05 * t[..., 1:])),
+            lambda t: tfd.LogNormal(
+                loc=t[..., :1],
+                scale=tf.math.softplus(0.05 * t[..., 1:]),
+            ),
             dtype=tf.float32,
             name="dist",
         )(output)
@@ -132,13 +141,15 @@ class Model:
         # defining inputs and output
         logger.info("Defining inputs and output...")
         self.model = tf.keras.models.Model(inputs=inputs, outputs=dist)
-        logger.info(f"Model ready to be trained ✅")
+        logger.info("Model ready to be trained ✅")
 
     def compile_model(self) -> None:
         """Compaling model with appropiate loss and metrics."""
         logger.info("Compiling model")
         self.model.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=self.CONF.model.LEARNING_RATE),
+            optimizer=tf.keras.optimizers.Adam(
+                learning_rate=self.CONF.model.LEARNING_RATE,
+            ),
             loss=NegLogLikelihood(),
             # loss="mean_squared_error",
             metrics=[
@@ -215,7 +226,7 @@ class ModelTransform(tf.keras.Model):
         super().__init__()
         self.model = model
 
-    def call(self, inputs, training=False) -> Dict[str, Any]:
+    def call(self, inputs, training=False) -> dict[str, Any]:
         yhat = self.model(inputs)
         median = yhat.quantile(0.5)
         q25 = yhat.quantile(0.25)
@@ -223,4 +234,11 @@ class ModelTransform(tf.keras.Model):
         stddev = yhat.stddev()
         mean = yhat.mean()
         p_range = q75 - q25
-        return {"mean": mean, "median": median, "stddev": stddev, "q25": q25, "q75": q75, "p_range": p_range}
+        return {
+            "mean": mean,
+            "median": median,
+            "stddev": stddev,
+            "q25": q25,
+            "q75": q75,
+            "p_range": p_range,
+        }

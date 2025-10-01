@@ -1,27 +1,27 @@
-"""
-This module implements a DifferentiableTabularPreprocessor layer that integrates preprocessing
+"""This module implements a DifferentiableTabularPreprocessor layer that integrates preprocessing
 into the model so that the optimal imputation and normalization parameters are learned end-to-end.
 This approach is useful for tabular data with missing values and features that need normalization.
 """
 
 from typing import Any
 from loguru import logger
-from keras import layers, ops
+from keras import ops
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
 from kmr.layers._base_layer import BaseLayer
 
+
 @register_keras_serializable(package="kmr.layers")
 class DifferentiableTabularPreprocessor(BaseLayer):
     """A differentiable preprocessing layer for numeric tabular data.
-    
+
     This layer:
       - Replaces missing values (NaNs) with a learnable imputation vector.
       - Applies a learned affine transformation (scaling and shifting) to each feature.
-      
-    The idea is to integrate preprocessing into the model so that the optimal 
+
+    The idea is to integrate preprocessing into the model so that the optimal
     imputation and normalization parameters are learned end-to-end.
-    
+
     Args:
         num_features: Number of numeric features in the input.
         name: Optional name for the layer.
@@ -31,19 +31,19 @@ class DifferentiableTabularPreprocessor(BaseLayer):
 
     Output shape:
         2D tensor with shape: `(batch_size, num_features)` (same as input)
-    
+
     Example:
         ```python
         import keras
         import numpy as np
         from kmr.layers import DifferentiableTabularPreprocessor
-        
+
         # Suppose we have tabular data with 5 numeric features
         x = keras.ops.convert_to_tensor([
             [1.0, np.nan, 3.0, 4.0, 5.0],
             [2.0, 2.0, np.nan, 4.0, 5.0]
         ], dtype="float32")
-        
+
         preproc = DifferentiableTabularPreprocessor(num_features=5)
         y = preproc(x)
         print(y)
@@ -54,19 +54,19 @@ class DifferentiableTabularPreprocessor(BaseLayer):
         self,
         num_features: int,
         name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         # Set public attributes
         self.num_features = num_features
-        
+
         # Initialize instance variables
         self.impute = None
         self.gamma = None
         self.beta = None
-        
+
         # Validate parameters during initialization
         self._validate_params()
-        
+
         # Call parent's __init__
         super().__init__(name=name, **kwargs)
 
@@ -83,7 +83,7 @@ class DifferentiableTabularPreprocessor(BaseLayer):
         """
         # Validate parameters again during build
         self._validate_params()
-        
+
         # Trainable imputation: one scalar per feature to replace missing values.
         self.impute = self.add_weight(
             name="impute",
@@ -91,7 +91,7 @@ class DifferentiableTabularPreprocessor(BaseLayer):
             initializer="zeros",
             trainable=True,
         )
-        
+
         # Learnable normalization parameters (scale and shift).
         self.gamma = self.add_weight(
             name="gamma",
@@ -99,15 +99,17 @@ class DifferentiableTabularPreprocessor(BaseLayer):
             initializer="ones",
             trainable=True,
         )
-        
+
         self.beta = self.add_weight(
             name="beta",
             shape=(self.num_features,),
             initializer="zeros",
             trainable=True,
         )
-        
-        logger.debug(f"DifferentiableTabularPreprocessor built with num_features={self.num_features}")
+
+        logger.debug(
+            f"DifferentiableTabularPreprocessor built with num_features={self.num_features}",
+        )
         super().build(input_shape)
 
     def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
@@ -128,11 +130,11 @@ class DifferentiableTabularPreprocessor(BaseLayer):
             ops.reshape(self.impute, (1, self.num_features)),
             inputs,
         )
-        
+
         # Apply a learnable affine transformation to normalize each feature.
         # This is similar in spirit to BatchNorm but without relying on batch statistics.
         normalized = self.gamma * imputed + self.beta
-        
+
         return normalized
 
     def get_config(self) -> dict[str, Any]:
@@ -142,7 +144,9 @@ class DifferentiableTabularPreprocessor(BaseLayer):
             Python dictionary containing the layer configuration.
         """
         config = super().get_config()
-        config.update({
-            "num_features": self.num_features,
-        })
-        return config 
+        config.update(
+            {
+                "num_features": self.num_features,
+            },
+        )
+        return config

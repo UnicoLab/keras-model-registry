@@ -55,7 +55,7 @@ class MissingValueHandlerLayer(Layer):
         ]
         if self.strategy not in valid_strategies:
             raise ValueError(
-                f"Strategy must be one of {valid_strategies}, got {strategy}"
+                f"Strategy must be one of {valid_strategies}, got {strategy}",
             )
 
     def call(self, inputs, training=None):
@@ -93,7 +93,7 @@ class MissingValueHandlerLayer(Layer):
                     inputs_tensor.shape[2] * 2
                 )  # Original features + indicators
                 result.set_shape(
-                    [inputs_tensor.shape[0], inputs_tensor.shape[1], feature_dim]
+                    [inputs_tensor.shape[0], inputs_tensor.shape[1], feature_dim],
                 )
             else:
                 result.set_shape(inputs_tensor.shape)
@@ -412,7 +412,8 @@ class MissingValueHandlerLayer(Layer):
                 else:
                     # No valid values at this phase, fall back to rolling mean
                     self._numpy_rolling_mean_imputation(
-                        data[b : b + 1], mask[b : b + 1]
+                        data[b : b + 1],
+                        mask[b : b + 1],
                     )
 
     def compute_output_shape(self, input_shape):

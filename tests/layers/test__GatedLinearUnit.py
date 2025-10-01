@@ -52,14 +52,14 @@ class TestGatedLinearUnit(unittest.TestCase):
         """Test layer building."""
         # Build the layer
         self.layer.build((None, self.input_dim))
-        
+
         # Check if linear and sigmoid layers are created
         self.assertIsNotNone(self.layer.linear)
         self.assertIsNotNone(self.layer.sigmoid)
-        
+
         # Check if linear layer has the correct units
         self.assertEqual(self.layer.linear.units, self.units)
-        
+
         # Check if sigmoid layer has the correct units and activation
         self.assertEqual(self.layer.sigmoid.units, self.units)
         self.assertEqual(self.layer.sigmoid.activation.__name__, "sigmoid")
@@ -67,16 +67,12 @@ class TestGatedLinearUnit(unittest.TestCase):
     def test_output_shape(self) -> None:
         """Test output shape of the layer."""
         outputs = self.layer(self.inputs)
-        
+
         # Check output shape
         self.assertEqual(outputs.shape, (self.batch_size, self.units))
-        
+
         # Test with different input shapes
-        test_shapes = [
-            (16, 32),
-            (64, 8),
-            (128, 64)
-        ]
+        test_shapes = [(16, 32), (64, 8), (128, 64)]
         for batch, features in test_shapes:
             inputs = tf.random.normal((batch, features))
             layer = GatedLinearUnit(units=self.units)
@@ -87,10 +83,10 @@ class TestGatedLinearUnit(unittest.TestCase):
         """Test forward pass of the layer."""
         # Call the layer
         outputs = self.layer(self.inputs)
-        
+
         # Check that outputs are not None
         self.assertIsNotNone(outputs)
-        
+
         # Check that outputs are not all zeros
         self.assertFalse(tf.reduce_all(tf.equal(outputs, 0)))
 
@@ -100,7 +96,7 @@ class TestGatedLinearUnit(unittest.TestCase):
         # But we test it for completeness
         output_train = self.layer(self.inputs, training=True)
         output_infer = self.layer(self.inputs, training=False)
-        
+
         # Outputs should be the same regardless of training mode
         self.assertTrue(tf.reduce_all(tf.equal(output_train, output_infer)))
 
@@ -114,7 +110,7 @@ class TestGatedLinearUnit(unittest.TestCase):
         # Train the model for one step to ensure weights are built
         x = tf.random.normal((self.batch_size, self.input_dim))
         y = tf.random.normal((self.batch_size, self.units))
-        model.compile(optimizer='adam', loss='mse')
+        model.compile(optimizer="adam", loss="mse")
         model.fit(x, y, epochs=1, verbose=0)
 
         # Save and reload the model
@@ -135,46 +131,43 @@ class TestGatedLinearUnit(unittest.TestCase):
     def test_model_integration(self) -> None:
         """Test layer integration in a model."""
         # Create a simple sequential model
-        model = Sequential([
-            layers.Input(shape=(self.input_dim,)),
-            self.layer
-        ])
+        model = Sequential([layers.Input(shape=(self.input_dim,)), self.layer])
 
         # Ensure model can be compiled and trained
-        model.compile(optimizer='adam', loss='mse')
-        
+        model.compile(optimizer="adam", loss="mse")
+
         # Generate dummy data
         x = tf.random.normal((100, self.input_dim))
         y = tf.random.normal((100, self.units))
-        
+
         # Train for one epoch
         history = model.fit(x, y, epochs=1, verbose=0)
-        self.assertTrue(history.history['loss'][0] > 0)
+        self.assertTrue(history.history["loss"][0] > 0)
 
     def test_gating_mechanism(self) -> None:
         """Test that the gating mechanism works as expected."""
         # Create a layer with controlled weights
         layer = GatedLinearUnit(units=1)
-        
+
         # Call the layer once to build it
         _ = layer(tf.zeros((1, 1)))
-        
+
         # Set weights for linear and sigmoid layers
         # Linear: weight=1, bias=0 -> output = input
         # Sigmoid: weight=0, bias=0 -> output = 0.5
         layer.linear.set_weights([tf.ones((1, 1)), tf.zeros((1,))])
         layer.sigmoid.set_weights([tf.zeros((1, 1)), tf.zeros((1,))])
-        
+
         # Test with a simple input
         test_input = tf.constant([[2.0]])
         output = layer(test_input)
-        
+
         # Expected: linear(2.0) * sigmoid(2.0) = 2.0 * 0.5 = 1.0
         expected = tf.constant([[1.0]])
-        
+
         # Check that output is close to expected
         self.assertTrue(tf.reduce_all(tf.abs(output - expected) < 1e-5))
 
 
-if __name__ == '__main__':
-    unittest.main() 
+if __name__ == "__main__":
+    unittest.main()

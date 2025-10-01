@@ -17,16 +17,18 @@ class GatedFeatureSelection(layers.Layer):
         super().__init__()
         self.input_dim = input_dim
         self.reduction_ratio = reduction_ratio
-        
+
         # More powerful gate network with skip connection
         hidden_dim = max(input_dim // reduction_ratio, 1)
-        self.gate_net = models.Sequential([
-            layers.Dense(hidden_dim, activation="relu"),
-            layers.BatchNormalization(),
-            layers.Dense(hidden_dim, activation="relu"),
-            layers.BatchNormalization(),
-            layers.Dense(input_dim, activation="sigmoid"),
-        ])
+        self.gate_net = models.Sequential(
+            [
+                layers.Dense(hidden_dim, activation="relu"),
+                layers.BatchNormalization(),
+                layers.Dense(hidden_dim, activation="relu"),
+                layers.BatchNormalization(),
+                layers.Dense(input_dim, activation="sigmoid"),
+            ],
+        )
 
     def call(self, inputs: tf.Tensor) -> tf.Tensor:
         """Apply gated feature selection with residual connection.
@@ -39,7 +41,7 @@ class GatedFeatureSelection(layers.Layer):
         """
         # Compute feature gates
         gates = self.gate_net(inputs)
-        
+
         # Residual connection with gating
         return inputs * gates + 0.1 * inputs  # Small residual to maintain gradient flow
 
@@ -77,7 +79,7 @@ class SparseAttentionWeighting(layers.Layer):
         super().__init__()
         self.num_modules = num_modules
         self.temperature = temperature
-        
+
         # Learnable attention weights
         self.attention_weights = self.add_weight(
             shape=(num_modules,),
@@ -97,11 +99,11 @@ class SparseAttentionWeighting(layers.Layer):
         """
         # Temperature-scaled softmax for sharper attention
         attention_probs = tf.nn.softmax(self.attention_weights / self.temperature)
-        
+
         # Stack and weight module outputs
         stacked_outputs = tf.stack(module_outputs, axis=1)
         attention_weights = tf.expand_dims(tf.expand_dims(attention_probs, 0), -1)
-        
+
         # Weighted combination with residual
         weighted_sum = tf.reduce_sum(stacked_outputs * attention_weights, axis=1)
         return weighted_sum
@@ -138,13 +140,15 @@ class ColumnAttention(layers.Layer):
         """
         super().__init__()
         self.input_dim = input_dim
-        
+
         # Two-layer attention mechanism for better feature interaction
-        self.attention_net = models.Sequential([
-            layers.Dense(max(input_dim // 2, 1), activation="relu"),
-            layers.BatchNormalization(),
-            layers.Dense(input_dim, activation="softmax"),
-        ])
+        self.attention_net = models.Sequential(
+            [
+                layers.Dense(max(input_dim // 2, 1), activation="relu"),
+                layers.BatchNormalization(),
+                layers.Dense(input_dim, activation="softmax"),
+            ],
+        )
 
     def call(self, inputs: tf.Tensor) -> tf.Tensor:
         """Apply column attention.
@@ -157,7 +161,7 @@ class ColumnAttention(layers.Layer):
         """
         # Compute attention weights with shape [batch_size, input_dim]
         attention_weights = self.attention_net(inputs)
-        
+
         # Apply attention
         return inputs * attention_weights
 
@@ -188,11 +192,16 @@ class RowAttention(layers.Layer):
     def __init__(self) -> None:
         """Initialize row attention."""
         super().__init__()
-        self.attention = models.Sequential([
-            layers.Dense(32, activation="relu"),
-            layers.BatchNormalization(),
-            layers.Dense(1, activation="sigmoid"),  # Changed to sigmoid for stable training
-        ])
+        self.attention = models.Sequential(
+            [
+                layers.Dense(32, activation="relu"),
+                layers.BatchNormalization(),
+                layers.Dense(
+                    1,
+                    activation="sigmoid",
+                ),  # Changed to sigmoid for stable training
+            ],
+        )
 
     def call(self, inputs: tf.Tensor) -> tf.Tensor:
         """Apply row attention.
@@ -205,7 +214,7 @@ class RowAttention(layers.Layer):
         """
         # Compute attention scores [batch_size, 1]
         attention_scores = self.attention(inputs)
-        
+
         # Apply attention with residual
         return inputs * attention_scores + 0.1 * inputs
 
@@ -290,7 +299,12 @@ class StochasticDepth(layers.Layer):
         super().__init__()
         self.survival_prob = survival_prob
 
-    def call(self, inputs: tf.Tensor, residual: tf.Tensor, training: bool = False) -> tf.Tensor:
+    def call(
+        self,
+        inputs: tf.Tensor,
+        residual: tf.Tensor,
+        training: bool = False,
+    ) -> tf.Tensor:
         """Apply stochastic depth.
 
         Args:
@@ -338,7 +352,7 @@ class StochasticDepth(layers.Layer):
 
 class DifferentialBoostingLoss(tf.keras.losses.Loss):
     """Custom loss function for differential boosting.
-    
+
     This loss function combines:
     1. MSE for accurate predictions
     2. L1 regularization on module weights for sparsity
@@ -349,7 +363,7 @@ class DifferentialBoostingLoss(tf.keras.losses.Loss):
         self,
         reg_lambda: float = 0.01,
         diversity_weight: float = 0.05,
-        smoothness_weight: float = 0.005
+        smoothness_weight: float = 0.005,
     ) -> None:
         """Initialize loss function.
 
@@ -358,12 +372,19 @@ class DifferentialBoostingLoss(tf.keras.losses.Loss):
             diversity_weight: Weight for diversity penalty
             smoothness_weight: Weight for prediction smoothness
         """
-        super().__init__(reduction=tf.keras.losses.Reduction.NONE)  # Use NONE reduction for more control
+        super().__init__(
+            reduction=tf.keras.losses.Reduction.NONE,
+        )  # Use NONE reduction for more control
         self.reg_lambda = reg_lambda
         self.diversity_weight = diversity_weight
         self.smoothness_weight = smoothness_weight
 
-    def call(self, y_true: tf.Tensor, y_pred: tf.Tensor, sample_weight=None) -> tf.Tensor:
+    def call(
+        self,
+        y_true: tf.Tensor,
+        y_pred: tf.Tensor,
+        sample_weight=None,
+    ) -> tf.Tensor:
         """Compute loss value.
 
         Args:
@@ -376,15 +397,15 @@ class DifferentialBoostingLoss(tf.keras.losses.Loss):
         """
         # Basic MSE loss per sample
         mse_loss = tf.square(y_true - y_pred)
-        
+
         # Final loss is just MSE for now
         # The model's train_step will add regularization
         total_loss = mse_loss
-        
+
         # Apply sample weights if provided
         if sample_weight is not None:
             total_loss = total_loss * sample_weight
-        
+
         return total_loss
 
     def get_config(self) -> dict[str, Any]:
@@ -430,13 +451,13 @@ class DifferentialBoostingNN(models.Model):
         self.learning_rate = learning_rate
         self.gradient_clip = gradient_clip
         self.last_inputs = None
-        
+
         # Input normalization
         self.input_norm = layers.BatchNormalization(name="input_normalization")
-        
+
         # Initialize stochastic depth
         self.stochastic_depth = StochasticDepth(survival_prob)
-        
+
         # Create modules with increasing capacity
         self.modules = []
         self.module_weights = self.add_weight(
@@ -449,25 +470,28 @@ class DifferentialBoostingNN(models.Model):
         for i in range(num_modules):
             # Increase capacity for later modules
             current_hidden_dim = hidden_dim * (i + 1)
-            
-            module = models.Sequential([
-                layers.BatchNormalization(name=f"module_{i}_input_norm"),
-                ColumnAttention(input_dim),
-                GatedFeatureSelection(input_dim),
-                layers.Dense(current_hidden_dim, activation=None),
-                layers.BatchNormalization(name=f"module_{i}_hidden_norm_1"),
-                layers.Activation("relu"),
-                layers.Dropout(0.1),
-                layers.Dense(current_hidden_dim // 2, activation=None),
-                layers.BatchNormalization(name=f"module_{i}_hidden_norm_2"),
-                layers.Activation("relu"),
-                layers.Dense(1, activation=None),
-            ], name=f"module_{i}")
+
+            module = models.Sequential(
+                [
+                    layers.BatchNormalization(name=f"module_{i}_input_norm"),
+                    ColumnAttention(input_dim),
+                    GatedFeatureSelection(input_dim),
+                    layers.Dense(current_hidden_dim, activation=None),
+                    layers.BatchNormalization(name=f"module_{i}_hidden_norm_1"),
+                    layers.Activation("relu"),
+                    layers.Dropout(0.1),
+                    layers.Dense(current_hidden_dim // 2, activation=None),
+                    layers.BatchNormalization(name=f"module_{i}_hidden_norm_2"),
+                    layers.Activation("relu"),
+                    layers.Dense(1, activation=None),
+                ],
+                name=f"module_{i}",
+            )
             self.modules.append(module)
 
         # Attention with lower temperature for sharper focus
         self.attention = SparseAttentionWeighting(num_modules, temperature=0.1)
-        
+
         # Optimizer with gradient clipping and weight decay
         self.optimizer = tf.keras.optimizers.AdamW(
             learning_rate=self.learning_rate,
@@ -481,31 +505,31 @@ class DifferentialBoostingNN(models.Model):
         batch_size = tf.shape(inputs)[0]
         current_prediction = tf.zeros([batch_size, 1])
         module_predictions = []
-        
+
         # Normalize inputs using pre-created layer
         inputs = self.input_norm(inputs, training=training)
-        
+
         for i, module in enumerate(self.modules):
             # Each module predicts residual
             residual_pred = module(inputs, training=training)
-            
+
             if training:
                 residual_pred = self.stochastic_depth(
                     tf.zeros_like(residual_pred),
                     residual_pred,
                     training=training,
                 )
-            
+
             # Scale prediction with softmax-normalized weights
             scaled_pred = residual_pred * tf.nn.softmax(self.module_weights)[i]
             module_predictions.append(scaled_pred)
-            
+
             # Update current prediction
             current_prediction += scaled_pred
-        
+
         # Combine predictions with attention
         final_prediction = self.attention(module_predictions)
-        
+
         return final_prediction
 
     def train_step(self, data: tuple[tf.Tensor, tf.Tensor]) -> dict[str, float]:
@@ -518,56 +542,58 @@ class DifferentialBoostingNN(models.Model):
             Dictionary of metric results
         """
         x, y = data
-        
+
         with tf.GradientTape() as tape:
             # Forward pass
             y_pred = self(x, training=True)
-            
+
             # Get the basic loss (MSE)
             loss = self.compiled_loss(y, y_pred)
-            
+
             # Add L1 regularization on module weights
             l1_loss = self.reg_lambda * tf.reduce_sum(tf.abs(self.module_weights))
             l1_loss = l1_loss / tf.cast(tf.shape(y)[0], tf.float32)
-            
+
             # Get module predictions for diversity loss
             module_preds = []
             current_pred = tf.zeros_like(y)
-            
+
             for i, module in enumerate(self.modules):
                 residual = module(x, training=True)
                 scaled_residual = residual * tf.nn.softmax(self.module_weights)[i]
                 current_pred += scaled_residual
                 module_preds.append(current_pred)
-            
+
             # Stack predictions [batch_size, num_modules, 1]
             stacked_preds = tf.stack(module_preds, axis=1)
-            
+
             # Diversity loss between consecutive modules
             diffs = stacked_preds[:, 1:] - stacked_preds[:, :-1]
             diversity_loss = -0.05 * tf.reduce_mean(tf.square(diffs))
-            
+
             # Smoothness loss
             smoothness_loss = 0.005 * tf.reduce_mean(tf.abs(diffs))
-            
+
             # Total loss
-            total_loss = tf.reduce_mean(loss) + l1_loss + diversity_loss + smoothness_loss
-        
+            total_loss = (
+                tf.reduce_mean(loss) + l1_loss + diversity_loss + smoothness_loss
+            )
+
         # Compute gradients
         gradients = tape.gradient(total_loss, self.trainable_variables)
-        
+
         # Clip gradients
         gradients, _ = tf.clip_by_global_norm(gradients, self.gradient_clip)
-        
+
         # Apply gradients
         self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
-        
+
         # Update metrics
         self.compiled_metrics.update_state(y, y_pred)
-        
+
         # Return metrics
         results = {m.name: m.result() for m in self.metrics}
-        results['loss'] = total_loss
+        results["loss"] = total_loss
         return results
 
     def get_config(self) -> dict[str, Any]:

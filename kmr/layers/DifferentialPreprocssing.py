@@ -113,7 +113,9 @@ class DifferentialPreprocssingLayer(BaseLayer):
         if num_features <= 0:
             raise ValueError(f"num_features must be positive, got {num_features}")
         if mlp_hidden_units <= 0:
-            raise ValueError(f"mlp_hidden_units must be positive, got {mlp_hidden_units}")
+            raise ValueError(
+                f"mlp_hidden_units must be positive, got {mlp_hidden_units}",
+            )
 
         super().__init__(**kwargs)
 
@@ -145,7 +147,7 @@ class DifferentialPreprocssingLayer(BaseLayer):
         """
         if input_shape[1] != self.num_features:
             raise ValueError(
-                f"Input shape {input_shape} does not match num_features {self.num_features}"
+                f"Input shape {input_shape} does not match num_features {self.num_features}",
             )
 
         # Trainable imputation vector (shape: [num_features])
@@ -253,14 +255,14 @@ class DifferentialPreprocssingLayer(BaseLayer):
 
         # Candidate 1: Identity.
         candidate_identity = imputed
-        
+
         # Candidate 2: Affine transformation.
         candidate_affine = self.gamma * imputed + self.beta
-        
+
         # Candidate 3: Nonlinear transformation (MLP).
         candidate_nonlinear = self.mlp_hidden(imputed)
         candidate_nonlinear = self.mlp_output(candidate_nonlinear)
-        
+
         # Candidate 4: Log transformation.
         # Use softplus to ensure the argument is positive.
         epsilon = ops.cast(1e-6, dtype=inputs.dtype)
@@ -269,13 +271,13 @@ class DifferentialPreprocssingLayer(BaseLayer):
         # Stack candidates: shape (batch, num_features, num_candidates)
         candidates = ops.stack(
             [candidate_identity, candidate_affine, candidate_nonlinear, candidate_log],
-            axis=-1
+            axis=-1,
         )
-        
+
         # Compute softmax weights.
         weights = ops.nn.softmax(self.alpha)
         weights = ops.reshape(weights, (1, 1, self.num_candidates))
-        
+
         # Weighted sum.
         output = ops.sum(weights * candidates, axis=-1)
         return output
@@ -301,8 +303,10 @@ class DifferentialPreprocssingLayer(BaseLayer):
             ```
         """
         config = super().get_config()
-        config.update({
-            "num_features": self.num_features,
-            "mlp_hidden_units": self.mlp_hidden_units,
-        })
+        config.update(
+            {
+                "num_features": self.num_features,
+                "mlp_hidden_units": self.mlp_hidden_units,
+            },
+        )
         return config

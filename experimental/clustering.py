@@ -1,5 +1,4 @@
 # standard library
-from typing import List, Tuple
 
 # pypi/conda library
 import numpy as np
@@ -55,25 +54,45 @@ class Autoencoder(tf.keras.models.Model):
         """
         # Building the encoder
         encoder_input = tf.keras.Input(shape=(self.input_dim,))
-        encoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(encoder_input)
+        encoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(
+            encoder_input,
+        )
         encoded = tf.keras.layers.Dropout(0.1)(encoded)
-        encoded = tf.keras.layers.Dense(units=self.encoding_dim, activation="relu")(encoded)
+        encoded = tf.keras.layers.Dense(units=self.encoding_dim, activation="relu")(
+            encoded,
+        )
         encoded = tf.keras.layers.Dropout(0.1)(encoded)
-        self._encoder = tf.keras.Model(inputs=encoder_input, outputs=encoded, name="encoder")
+        self._encoder = tf.keras.Model(
+            inputs=encoder_input,
+            outputs=encoded,
+            name="encoder",
+        )
 
         # Building the decoder
         decoder_input = tf.keras.Input(shape=(self.encoding_dim,))
-        decoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(decoder_input)
+        decoded = tf.keras.layers.Dense(units=self.intermediate_dim, activation="relu")(
+            decoder_input,
+        )
         decoded = tf.keras.layers.Dropout(0.1)(decoded)
-        decoded = tf.keras.layers.Dense(units=self.input_dim, activation="sigmoid")(decoded)
+        decoded = tf.keras.layers.Dense(units=self.input_dim, activation="sigmoid")(
+            decoded,
+        )
         decoded = tf.keras.layers.Dropout(0.1)(decoded)
-        self._decoder = tf.keras.Model(inputs=decoder_input, outputs=decoded, name="decoder")
+        self._decoder = tf.keras.Model(
+            inputs=decoder_input,
+            outputs=decoded,
+            name="decoder",
+        )
 
         # Building the autoencoder
         autoencoder_input = tf.keras.Input(shape=(self.input_dim,))
         encoded = self._encoder(autoencoder_input)
         decoded = self._decoder(encoded)
-        self._autoencoder = tf.keras.Model(inputs=autoencoder_input, outputs=decoded, name="autoencoder")
+        self._autoencoder = tf.keras.Model(
+            inputs=autoencoder_input,
+            outputs=decoded,
+            name="autoencoder",
+        )
 
     @property
     def encoder(self):
@@ -159,7 +178,11 @@ class AEKMeans(tf.keras.models.Model):
         # models
         self.encoder = encoder
         self.preprocessing_model = preprocessing_model
-        self.optimizer = optimizer if optimizer is not None else tf.keras.optimizers.Adam(learning_rate=0.001)
+        self.optimizer = (
+            optimizer
+            if optimizer is not None
+            else tf.keras.optimizers.Adam(learning_rate=0.001)
+        )
 
     def _compute_distances(self, inputs):
         """
@@ -180,8 +203,10 @@ class AEKMeans(tf.keras.models.Model):
         """
         try:
             if len(inputs.shape) != 2 or inputs.shape[1] != self.latent_dim:
-                logger.error(f"Invalid input shape: {inputs.shape}, expected [batch_size, {self.latent_dim}]")
-                return
+                logger.error(
+                    f"Invalid input shape: {inputs.shape}, expected [batch_size, {self.latent_dim}]",
+                )
+                return None
 
             x_sq = tf.reduce_sum(tf.square(inputs), axis=1, keepdims=True)
             clusters_sq = tf.reduce_sum(tf.square(self.clusters), axis=1)
@@ -205,7 +230,7 @@ class AEKMeans(tf.keras.models.Model):
         inertia = tf.reduce_sum(min_distances)
         return inertia.numpy()
 
-    def optimize_clusters(self, x, cluster_range: int) -> Tuple[int, List]:
+    def optimize_clusters(self, x, cluster_range: int) -> tuple[int, list]:
         """
         Optimizes number of cluster using elbow method.
 
@@ -219,7 +244,10 @@ class AEKMeans(tf.keras.models.Model):
         """
         _cluster_range = range(1, cluster_range)
         inertia_values = []
-        for k in tqdm(_cluster_range, total=cluster_range - 1):  # Start from 1 to avoid zero clusters
+        for k in tqdm(
+            _cluster_range,
+            total=cluster_range - 1,
+        ):  # Start from 1 to avoid zero clusters
             self.clusters = self.add_weight(
                 shape=(k, self.latent_dim),
                 initializer="random_normal",
@@ -255,7 +283,9 @@ class AEKMeans(tf.keras.models.Model):
         x_encoded = self.encoder.predict(x)
 
         # Create a new tf.data.Dataset with the transformed data
-        dataset_transformed = tf.data.Dataset.from_tensor_slices(x_encoded).batch(CONF.train.TRAIN_BATCH_SIZE)
+        dataset_transformed = tf.data.Dataset.from_tensor_slices(x_encoded).batch(
+            CONF.train.TRAIN_BATCH_SIZE,
+        )
 
         # Train K-means on the transformed data
         for _ in tqdm(range(self.nr_epochs), total=self.nr_epochs):
@@ -337,7 +367,10 @@ class AEKMeansProd(tf.keras.models.Model):
         self.input_shapes = self.preprocessing_model.input_shape
 
         # Define the inputs
-        self.inputs = {name: tf.keras.Input(shape=shape[1:], name=name) for name, shape in self.input_shapes.items()}
+        self.inputs = {
+            name: tf.keras.Input(shape=shape[1:], name=name)
+            for name, shape in self.input_shapes.items()
+        }
 
     def get_config(self):
         """
@@ -367,7 +400,9 @@ class AEKMeansProd(tf.keras.models.Model):
         """
         preprocessing_model = config.pop("preprocessing_model")
         encoder = config.pop("encoder")
-        clusters = tf.constant(config.pop("clusters"))  # Convert numpy array back to tensor
+        clusters = tf.constant(
+            config.pop("clusters"),
+        )  # Convert numpy array back to tensor
         return cls(preprocessing_model, encoder, clusters)
 
     def _compute_distances(self, inputs):

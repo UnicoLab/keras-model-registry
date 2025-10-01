@@ -69,7 +69,7 @@ class GatedFeatureSelection(layers.Layer):
 
     def build(self, input_shape: tuple) -> None:
         """Build the gating network.
-        
+
         Creates a multi-layer gating network with batch normalization and ReLU
         activations. The network architecture is:
         1. Dense(hidden_dim) -> ReLU -> BatchNorm
@@ -84,19 +84,20 @@ class GatedFeatureSelection(layers.Layer):
         """
         if input_shape[-1] != self.input_dim:
             raise ValueError(
-                f"Last dimension of input shape {input_shape[-1]} "
-                f"does not match input_dim {self.input_dim}"
+                f"Last dimension of input shape {input_shape[-1]} does not match input_dim {self.input_dim}",
             )
 
         # More powerful gate network with skip connection
         hidden_dim = max(self.input_dim // self.reduction_ratio, 1)
-        self.gate_net = models.Sequential([
-            layers.Dense(hidden_dim, activation="relu"),
-            layers.BatchNormalization(),
-            layers.Dense(hidden_dim, activation="relu"),
-            layers.BatchNormalization(),
-            layers.Dense(self.input_dim, activation="sigmoid"),
-        ])
+        self.gate_net = models.Sequential(
+            [
+                layers.Dense(hidden_dim, activation="relu"),
+                layers.BatchNormalization(),
+                layers.Dense(hidden_dim, activation="relu"),
+                layers.BatchNormalization(),
+                layers.Dense(self.input_dim, activation="sigmoid"),
+            ],
+        )
         self.built = True
 
     def call(self, inputs: KerasTensor) -> KerasTensor:
@@ -116,7 +117,7 @@ class GatedFeatureSelection(layers.Layer):
         """
         # Compute feature gates
         gates = self.gate_net(inputs)
-        
+
         # Residual connection with gating
         return inputs * gates + 0.1 * inputs  # Small residual to maintain gradient flow
 
@@ -129,10 +130,12 @@ class GatedFeatureSelection(layers.Layer):
             - reduction_ratio: Ratio for hidden dimension reduction
         """
         config = super().get_config()
-        config.update({
-            "input_dim": self.input_dim,
-            "reduction_ratio": self.reduction_ratio,
-        })
+        config.update(
+            {
+                "input_dim": self.input_dim,
+                "reduction_ratio": self.reduction_ratio,
+            },
+        )
         return config
 
     @classmethod

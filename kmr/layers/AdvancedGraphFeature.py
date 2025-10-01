@@ -62,7 +62,6 @@ class AdvancedGraphFeatureLayer(BaseLayer):
             must be specified when hierarchical aggregation is enabled.
 
     Examples:
-
         **Basic Usage:**
 
         ```python
@@ -82,7 +81,7 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         ```python
         import keras
         from kmr.layers import AdvancedGraphFeatureLayer
-    
+
         # Dummy tabular data with 10 features for 32 samples.
         x = keras.random.normal((32, 10))
         # Create the advanced graph layer with hierarchical aggregation into 4 groups.
@@ -96,7 +95,7 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         ```python
         import keras
         from kmr.layers import AdvancedGraphFeatureLayer
-    
+
         # Dummy tabular data with 10 features for 32 samples.
         x = keras.random.normal((32, 10))
         # Create the advanced graph layer with an embedding dimension of 16 and 4 heads.
@@ -105,6 +104,7 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         print("Output shape:", y.shape)  # Expected: (32, 10)
         ```
     """
+
     def __init__(
         self,
         embed_dim: int,
@@ -114,12 +114,22 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         num_groups: int | None = None,
         **kwargs,
     ) -> None:
+        """Initialize the AdvancedGraphFeature layer.
+
+        Args:
+            embed_dim: Embedding dimension.
+            num_heads: Number of attention heads.
+            dropout_rate: Dropout rate.
+            hierarchical: Whether to use hierarchical attention.
+            num_groups: Number of groups for hierarchical attention.
+            **kwargs: Additional keyword arguments.
+        """
         # Validate parameters before setting attributes
         if embed_dim % num_heads != 0:
             raise ValueError("embed_dim must be divisible by num_heads")
         if hierarchical and num_groups is None:
             raise ValueError("num_groups must be specified when hierarchical is True")
-            
+
         # Set attributes before calling super().__init__
         self.embed_dim = embed_dim
         self.num_heads = num_heads
@@ -127,20 +137,28 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         self.hierarchical = hierarchical
         self.num_groups = num_groups
         self.depth = embed_dim // num_heads
-        
+
         super().__init__(**kwargs)
 
     def build(self, input_shape) -> None:
+        """Build the layer based on input shape.
+
+        Args:
+            input_shape: Shape of the input tensor.
+        """
         # Number of features is the last dimension of the input.
         self.num_features = int(input_shape[-1])
-        logger.debug("Building AdvancedGraphFeatureLayer with {} features.", self.num_features)
+        logger.debug(
+            "Building AdvancedGraphFeatureLayer with {} features.",
+            self.num_features,
+        )
 
         # Projection layer: project each scalar feature to an embedding vector.
         self.projection = layers.Dense(
             self.embed_dim,
             activation=None,
             name="projection",
-            kernel_initializer=initializers.GlorotUniform(seed=42)
+            kernel_initializer=initializers.GlorotUniform(seed=42),
         )
 
         # Edge attention dense layer for edge attribute learning.
@@ -151,17 +169,21 @@ class AdvancedGraphFeatureLayer(BaseLayer):
             activation=None,
             use_bias=False,
             name="edge_attention_dense",
-            kernel_initializer=initializers.GlorotUniform(seed=42)
+            kernel_initializer=initializers.GlorotUniform(seed=42),
         )
         self.leaky_relu = layers.LeakyReLU(alpha=0.2)
-        self.dropout = layers.Dropout(self.dropout_rate) if self.dropout_rate > 0 else lambda x, training: x
+        self.dropout = (
+            layers.Dropout(self.dropout_rate)
+            if self.dropout_rate > 0
+            else lambda x, _: x
+        )
 
         # Final projection: maps the flattened aggregated embedding back to the original feature space.
         self.out_proj = layers.Dense(
             self.num_features,
             activation=None,
             name="out_proj",
-            kernel_initializer=initializers.GlorotUniform(seed=42)
+            kernel_initializer=initializers.GlorotUniform(seed=42),
         )
 
         # Hierarchical aggregation components.
@@ -178,7 +200,7 @@ class AdvancedGraphFeatureLayer(BaseLayer):
                 self.num_features * self.embed_dim,
                 activation=None,
                 name="group_expander",
-                kernel_initializer=initializers.GlorotUniform(seed=42)
+                kernel_initializer=initializers.GlorotUniform(seed=42),
             )
 
         # Final layer normalization.
@@ -186,8 +208,7 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         super().build(input_shape)
 
     def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
-        """
-        Args:
+        """Args:
             inputs (KerasTensor): Input tensor of shape (batch, num_features).
             training (bool, optional): Whether the call is in training mode.
 
@@ -214,36 +235,57 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         # Shape: (batch, num_heads, num_features, num_features, 3 * depth)
 
         # Step 4: Compute raw attention scores using the edge_attention_dense layer.
-        raw_scores = self.edge_attention_dense(edge_features)  # (batch, num_heads, num_features, num_features, 1)
-        raw_scores = ops.squeeze(raw_scores, axis=-1)  # (batch, num_heads, num_features, num_features)
+        raw_scores = self.edge_attention_dense(
+            edge_features,
+        )  # (batch, num_heads, num_features, num_features, 1)
+        raw_scores = ops.squeeze(
+            raw_scores,
+            axis=-1,
+        )  # (batch, num_heads, num_features, num_features)
         raw_scores = self.leaky_relu(raw_scores)
         # Normalize attention scores with softmax over the last axis (neighbor dimension).
         attention = ops.nn.softmax(raw_scores, axis=-1)
         attention = self.dropout(attention, training=training)
-        
+
         # Store attention weights for testing
         self._last_attention = attention
 
         # Step 5: Aggregate feature embeddings using computed attention.
-        # Multiply attention (batch, num_heads, num_features, num_features) with h (batch, num_heads, num_features, depth).
+        # Multiply attention (batch, num_heads, num_features, num_features) with h
+        # (batch, num_heads, num_features, depth).
         aggregated = ops.matmul(attention, h)  # (batch, num_heads, num_features, depth)
         # Reassemble multi-head outputs: transpose and reshape back to (batch, num_features, embed_dim).
         aggregated = ops.transpose(aggregated, axes=[0, 2, 1, 3])
-        aggregated = ops.reshape(aggregated, (batch_size, self.num_features, self.embed_dim))
+        aggregated = ops.reshape(
+            aggregated,
+            (batch_size, self.num_features, self.embed_dim),
+        )
 
         # Step 6 (Optional): Hierarchical aggregation.
         if self.hierarchical:
             # Normalize grouping matrix over groups.
-            grouping_weights = ops.nn.softmax(self.grouping_matrix, axis=-1)  # (num_features, num_groups)
+            grouping_weights = ops.nn.softmax(
+                self.grouping_matrix,
+                axis=-1,
+            )  # (num_features, num_groups)
             # Compute group representations as a weighted sum over features.
             # Transpose aggregated to (batch, embed_dim, num_features) and multiply by grouping_weights.
-            group_repr = ops.matmul(ops.transpose(aggregated, axes=[0, 2, 1]), grouping_weights)
+            group_repr = ops.matmul(
+                ops.transpose(aggregated, axes=[0, 2, 1]),
+                grouping_weights,
+            )
             # Transpose back to (batch, num_groups, embed_dim).
             group_repr = ops.transpose(group_repr, axes=[0, 2, 1])
             # Flatten and expand back to feature space.
-            group_flat = ops.reshape(group_repr, (batch_size, -1))  # (batch, num_groups * embed_dim)
+            group_flat = ops.reshape(
+                group_repr,
+                (batch_size, -1),
+            )  # (batch, num_groups * embed_dim)
             hierarchical_features = self.group_expander(group_flat)
-            hierarchical_features = ops.reshape(hierarchical_features, (batch_size, self.num_features, self.embed_dim))
+            hierarchical_features = ops.reshape(
+                hierarchical_features,
+                (batch_size, self.num_features, self.embed_dim),
+            )
             # Fuse hierarchical aggregated features with the multi-head aggregated features.
             aggregated = aggregated + hierarchical_features
 
@@ -270,16 +312,18 @@ class AdvancedGraphFeatureLayer(BaseLayer):
             dict: A dictionary containing the configuration of the layer.
         """
         config = super().get_config()
-        config.update({
-            "embed_dim": self.embed_dim,
-            "num_heads": self.num_heads,
-            "dropout_rate": self.dropout_rate,
-            "hierarchical": self.hierarchical,
-            "num_groups": self.num_groups if self.hierarchical else None,
-        })
+        config.update(
+            {
+                "embed_dim": self.embed_dim,
+                "num_heads": self.num_heads,
+                "dropout_rate": self.dropout_rate,
+                "hierarchical": self.hierarchical,
+                "num_groups": self.num_groups if self.hierarchical else None,
+            },
+        )
         return config
 
-    def compute_output_shape(self, input_shape):
+    def compute_output_shape(self, input_shape) -> tuple[int, ...]:
         """Compute the output shape of the layer.
 
         Args:

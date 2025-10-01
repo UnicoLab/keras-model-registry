@@ -16,7 +16,12 @@ class DifferencingLayer(Layer):
     """
 
     def __init__(
-        self, order=1, drop_na=True, fill_value=0.0, keep_original=False, **kwargs
+        self,
+        order=1,
+        drop_na=True,
+        fill_value=0.0,
+        keep_original=False,
+        **kwargs,
     ):
         super().__init__(**kwargs)
         self.order = order

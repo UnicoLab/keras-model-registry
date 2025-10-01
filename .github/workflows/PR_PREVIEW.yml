@@ -50,7 +50,7 @@ jobs:
       - name: Install and Build
         shell: bash
         run: |
-          mkdocs build
+          poetry run mkdocs build
           echo "DOC GENERATED - OK!"
 
       - name: Deploy preview

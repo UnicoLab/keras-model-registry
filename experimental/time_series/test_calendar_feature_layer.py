@@ -64,7 +64,8 @@ class TestCalendarFeatureLayer(unittest.TestCase):
         """Test layer call with basic features."""
         # Initialize layer with basic features
         layer = CalendarFeatureLayer(
-            features=["month", "day", "day_of_week", "is_weekend"], normalize=False
+            features=["month", "day", "day_of_week", "is_weekend"],
+            normalize=False,
         )
 
         # Apply layer
@@ -85,7 +86,7 @@ class TestCalendarFeatureLayer(unittest.TestCase):
         """Test layer call with cyclic features."""
         # Initialize layer with cyclic features
         layer = CalendarFeatureLayer(
-            features=["month_sin", "month_cos", "day_of_week_sin", "day_of_week_cos"]
+            features=["month_sin", "month_cos", "day_of_week_sin", "day_of_week_cos"],
         )
 
         # Apply layer
@@ -104,7 +105,7 @@ class TestCalendarFeatureLayer(unittest.TestCase):
         """Test compute_output_shape method."""
         # Initialize layer
         layer = CalendarFeatureLayer(
-            features=["month", "day", "day_of_week", "is_weekend"]
+            features=["month", "day", "day_of_week", "is_weekend"],
         )
 
         # Test with different input shapes

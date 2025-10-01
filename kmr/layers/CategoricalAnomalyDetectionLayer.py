@@ -1,6 +1,5 @@
 from typing import Any
 import numpy as np
-import keras.ops as KO
 from keras import KerasTensor
 from keras import layers, ops
 from loguru import logger
@@ -55,8 +54,8 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
         self.built = False
         super().__init__(**kwargs)
         self.set_dtype(dtype.lower())  # Use setter method
-        
-    def build(self, input_shape: tuple[int | None, int]) -> None:
+
+    def build(self, _: tuple[int | None, int]) -> None:
         """Builds the layer.
 
         Args:
@@ -66,28 +65,33 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
             # Ensure lookup layer is initialized
             if self.lookup is None:
                 self.set_dtype(self._dtype)
-            
+
             # Initialize lookup with empty vocabulary if not already set
             if not self.lookup.vocabulary_size():
                 # For empty vocabulary, use adapt with empty array
                 self.lookup.adapt(np.array([]).reshape(-1, 1))
-            
+
             self.built = True
 
     @property
-    def dtype(self):
+    def dtype(self) -> Any:
+        """Get the dtype of the layer."""
         return self._dtype
 
-    def set_dtype(self, value):
+    def set_dtype(self, value) -> None:
         """Set the dtype and initialize the appropriate lookup layer."""
         self._dtype = value
         if self._dtype == "string":
             self.lookup = layers.StringLookup(
-                output_mode="int", num_oov_indices=1, name="string_lookup"
+                output_mode="int",
+                num_oov_indices=1,
+                name="string_lookup",
             )
         elif self._dtype == "int":
             self.lookup = layers.IntegerLookup(
-                output_mode="int", num_oov_indices=1, name="int_lookup"
+                output_mode="int",
+                num_oov_indices=1,
+                name="int_lookup",
             )
         else:
             raise ValueError(f"Unsupported dtype: {value}")
@@ -99,18 +103,20 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
             vocabulary: list of valid categorical values.
         """
         # Convert vocabulary to numpy array
-        if not vocabulary:
-            # For empty vocabulary, add a dummy value that will never match
-            vocab_array = np.array(['__EMPTY_VOCABULARY__'])
-        else:
-            vocab_array = np.array(vocabulary)
-        
+        # For empty vocabulary, add a dummy value that will never match
+        vocab_array = (
+            np.array(["__EMPTY_VOCABULARY__"])
+            if not vocabulary
+            else np.array(vocabulary)
+        )
+
         # Initialize the lookup layer with the vocabulary
         self.lookup.adapt(vocab_array.reshape(-1, 1))
         logger.info("Categorical layer initialized with vocabulary: {}", vocabulary)
 
     def compute_output_shape(
-        self, input_shape: tuple[int | None, int]
+        self,
+        input_shape: tuple[int | None, int],
     ) -> dict[str, tuple[int | None, int]]:
         batch_size = input_shape[0]
         return {
@@ -123,7 +129,9 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
         }
 
     def call(
-        self, inputs: KerasTensor, training: bool | None = None
+        self,
+        inputs: KerasTensor,
+        _: bool | None = None,
     ) -> dict[str, KerasTensor]:
         # Ensure layer is built
         if not self.built:
@@ -134,17 +142,19 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
         anomaly = ops.equal(mapped, 0)
         score = ops.cast(anomaly, "float32") * 100.0
         proba = score  # 100 if anomaly, else 0
-        threshold = KO.convert_to_tensor([0], dtype="float32")
+        threshold = ops.convert_to_tensor([0], dtype="float32")
 
         # Create the reason strings
-        anomaly_reason = KO.convert_to_tensor(
-            "Categorical anomaly: token not in allowed vocabulary", dtype="string"
+        anomaly_reason = ops.convert_to_tensor(
+            "Categorical anomaly: token not in allowed vocabulary",
+            dtype="string",
         )
-        normal_reason = KO.convert_to_tensor(
-            "Token within allowed vocabulary", dtype="string"
+        normal_reason = ops.convert_to_tensor(
+            "Token within allowed vocabulary",
+            dtype="string",
         )
 
-        reason = KO.where(anomaly, anomaly_reason, normal_reason)
+        reason = ops.where(anomaly, anomaly_reason, normal_reason)
 
         return {
             "score": score,
@@ -156,15 +166,21 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
         }
 
     def get_config(self) -> dict[str, Any]:
+        """Get the configuration of the layer."""
         config = super().get_config()
-        config.update({
-            "dtype": self.dtype,
-            "vocabulary": self.lookup.get_vocabulary() if self.lookup is not None else []
-        })
+        config.update(
+            {
+                "dtype": self.dtype,
+                "vocabulary": self.lookup.get_vocabulary()
+                if self.lookup is not None
+                else [],
+            },
+        )
         return config
 
     @classmethod
-    def from_config(cls, config):
+    def from_config(cls, config) -> Any:
+        """Create layer from configuration."""
         # Get vocabulary from config
         vocabulary = config.pop("vocabulary", [])
         # Create layer instance

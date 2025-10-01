@@ -4,6 +4,8 @@ This layer adds seasonal information based on the month, encoding it as a one-ho
 for the four seasons: Winter, Spring, Summer, and Fall.
 """
 
+from typing import Any
+
 import keras
 from keras import ops
 
@@ -29,7 +31,7 @@ class SeasonLayer(keras.layers.Layer):
         """Initialize the layer."""
         super().__init__(**kwargs)
 
-    def call(self, inputs):
+    def call(self, inputs) -> tuple[Any, Any]:
         """Apply the layer to the inputs.
 
         Args:
@@ -41,79 +43,70 @@ class SeasonLayer(keras.layers.Layer):
         """
         # Extract month (second component)
         month = inputs[..., 1]
-        
+
         # Create one-hot encoded seasons
         # Winter: December (12), January (1), February (2)
         # Spring: March (3), April (4), May (5)
         # Summer: June (6), July (7), August (8)
         # Fall: September (9), October (10), November (11)
-        
+
         # Initialize season tensors with zeros
         winter = ops.zeros_like(month, dtype="float32")
         spring = ops.zeros_like(month, dtype="float32")
         summer = ops.zeros_like(month, dtype="float32")
         fall = ops.zeros_like(month, dtype="float32")
-        
+
         # Set season values based on month
         # Winter
         winter = ops.where(
             ops.logical_or(
                 ops.equal(month, 12),
-                ops.logical_or(
-                    ops.equal(month, 1),
-                    ops.equal(month, 2)
-                )
+                ops.logical_or(ops.equal(month, 1), ops.equal(month, 2)),
             ),
             ops.ones_like(month, dtype="float32"),
-            winter
+            winter,
         )
-        
+
         # Spring
         spring = ops.where(
             ops.logical_or(
                 ops.equal(month, 3),
-                ops.logical_or(
-                    ops.equal(month, 4),
-                    ops.equal(month, 5)
-                )
+                ops.logical_or(ops.equal(month, 4), ops.equal(month, 5)),
             ),
             ops.ones_like(month, dtype="float32"),
-            spring
+            spring,
         )
-        
+
         # Summer
         summer = ops.where(
             ops.logical_or(
                 ops.equal(month, 6),
-                ops.logical_or(
-                    ops.equal(month, 7),
-                    ops.equal(month, 8)
-                )
+                ops.logical_or(ops.equal(month, 7), ops.equal(month, 8)),
             ),
             ops.ones_like(month, dtype="float32"),
-            summer
+            summer,
         )
-        
+
         # Fall
         fall = ops.where(
             ops.logical_or(
                 ops.equal(month, 9),
-                ops.logical_or(
-                    ops.equal(month, 10),
-                    ops.equal(month, 11)
-                )
+                ops.logical_or(ops.equal(month, 10), ops.equal(month, 11)),
             ),
             ops.ones_like(month, dtype="float32"),
-            fall
+            fall,
         )
-        
+
         # Stack season values
         seasons = ops.stack([winter, spring, summer, fall], axis=-1)
-        
+
         # Concatenate original inputs with seasons
         return ops.concatenate([inputs, seasons], axis=-1)
 
-    def compute_output_shape(self, input_shape):
+    def compute_output_shape(
+        self,
+        input_shape,
+    ) -> tuple[tuple[int, ...], tuple[int, ...]]:
         """Compute the output shape of the layer.
 
         Args:
@@ -124,10 +117,10 @@ class SeasonLayer(keras.layers.Layer):
         """
         return input_shape[:-1] + (input_shape[-1] + 4,)
 
-    def get_config(self):
+    def get_config(self) -> dict[str, Any]:
         """Return the configuration of the layer.
 
         Returns:
             Dictionary containing the layer configuration
         """
-        return super().get_config() 
+        return super().get_config()

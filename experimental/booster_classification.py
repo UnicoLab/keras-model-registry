@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 # project plugin
 from pathlib import Path
-from typing import List
 
 import tensorflow as tf
 
@@ -9,7 +8,12 @@ import tensorflow as tf
 from config import Config
 from loguru import logger
 from tensorflow_decision_forests import tuner as tfdf_tuner
-from tensorflow_decision_forests.keras import FeatureSemantic, FeatureUsage, GradientBoostedTreesModel, Task
+from tensorflow_decision_forests.keras import (
+    FeatureSemantic,
+    FeatureUsage,
+    GradientBoostedTreesModel,
+    Task,
+)
 from theparrot.tf.preprocessing import PreprocessModel
 from theparrot.tools import log_method_calls
 
@@ -17,7 +21,13 @@ from theparrot.tools import log_method_calls
 class MaxProbaIndexLayer(tf.keras.layers.Layer):
     """Custom Layer to post-process results from probability estimations into a given class directly."""
 
-    def __init__(self, threshold: float, num_classes: int, label_classes: List[str], **kwargs):
+    def __init__(
+        self,
+        threshold: float,
+        num_classes: int,
+        label_classes: list[str],
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         self.threshold = threshold
         self.num_classes = num_classes
@@ -36,7 +46,7 @@ class MaxProbaIndexLayer(tf.keras.layers.Layer):
                 "threshold": self.threshold,
                 "num_classes": self.num_classes,
                 "label_classes": self.label_classes,
-            }
+            },
         )
         return config
 
@@ -62,14 +72,14 @@ class Model:
             features (list(FeaturesUsage)): list and semantic of the input features of the model
 
         """
-        logger.info(f"Preparing Features Definition")
+        logger.info("Preparing Features Definition")
         self.features = []
         for col_num in self.CONF.model.NUM_COLS:
             self.features.append(
                 FeatureUsage(
                     name=col_num,
                     semantic=FeatureSemantic.NUMERICAL,
-                )
+                ),
             )
             logger.info(f"Added {col_num} as numerical feature")
         for cat_col in self.CONF.model.CAT_COLS:
@@ -77,7 +87,7 @@ class Model:
                 FeatureUsage(
                     name=cat_col,
                     semantic=FeatureSemantic.CATEGORICAL,
-                )
+                ),
             )
             logger.info(f"Added {cat_col} as categorical feature")
         logger.info("Features Definition Completed ✅")
@@ -107,7 +117,9 @@ class Model:
         """Training the feature space to preprocess the raw data."""
         logger.info("🏗️ Preparing training dataset using Preprocessing model")
         # we are skipping the label for the training
-        _ppr_path = self.get_csv_file_pattern(path=self.CONF.paths.TRAIN__DOWNLOAD__SYNC__TRAIN_DATA)
+        _ppr_path = self.get_csv_file_pattern(
+            path=self.CONF.paths.TRAIN__DOWNLOAD__SYNC__TRAIN_DATA,
+        )
         logger.info(f"🔍 Looking for data in : {_ppr_path}")
         self.pm = PreprocessModel(
             path_data=_ppr_path,
@@ -139,7 +151,9 @@ class Model:
 
         # Replace the prediction_layer with the CustomPredictionLayer
         prediction_layer = MaxProbaIndexLayer(
-            threshold=self.CONF.model.THRESHOLD, num_classes=_nr_classes, label_classes=self.CONF.model.LABEL_CLASSES
+            threshold=self.CONF.model.THRESHOLD,
+            num_classes=_nr_classes,
+            label_classes=self.CONF.model.LABEL_CLASSES,
         )
 
         # Define the input layer
@@ -160,7 +174,10 @@ class Model:
         output_labels = inverse_lookup(predictions)
 
         # Build the model
-        self.postprocess_model = tf.keras.models.Model(inputs=input_scores, outputs=output_labels)
+        self.postprocess_model = tf.keras.models.Model(
+            inputs=input_scores,
+            outputs=output_labels,
+        )
 
     @log_method_calls
     def prepare_tuner(self):
@@ -178,11 +195,15 @@ class Model:
                 tuner.choice(key, value)
 
             if self.CONF.model.TUNER_NR_TRIALS:
-                logger.info(f"(TUNER_NR_TRIALS > 0) -> Adding tuner to: {self.CONF.model.XGB_CONFIG}")
+                logger.info(
+                    f"(TUNER_NR_TRIALS > 0) -> Adding tuner to: {self.CONF.model.XGB_CONFIG}",
+                )
                 self.CONF.model.XGB_CONFIG["tuner"] = tuner
             logger.info("Tuner ready")
         else:
-            logger.warning("Tuner is not compatible with multi-outputs models (desactivating)")
+            logger.warning(
+                "Tuner is not compatible with multi-outputs models (desactivating)",
+            )
 
     @log_method_calls(
         start_msg="Initializing model 🤖",

@@ -7,7 +7,7 @@ features to different "expert" networks based on their characteristics.
 
 import tensorflow as tf
 from tensorflow import keras
-from typing import Dict, List, Optional
+from typing import Optional
 
 
 @tf.keras.utils.register_keras_serializable(package="kdp.moe")
@@ -72,7 +72,12 @@ class UnstackLayer(tf.keras.layers.Layer):
     """
 
     def __init__(
-        self, axis=1, name="unstack_features", trainable=True, dtype=None, **kwargs
+        self,
+        axis=1,
+        name="unstack_features",
+        trainable=True,
+        dtype=None,
+        **kwargs,
     ):
         """
         Initialize the layer.
@@ -134,7 +139,7 @@ class ExpertBlock(keras.layers.Layer):
     def __init__(
         self,
         expert_dim: int = 64,
-        hidden_dims: List[int] = None,
+        hidden_dims: list[int] = None,
         activation: str = "relu",
         dropout_rate: float = 0.0,
         use_batch_norm: bool = True,
@@ -169,26 +174,28 @@ class ExpertBlock(keras.layers.Layer):
 
         for i, units in enumerate(self.hidden_dims):
             self.hidden_layers.append(
-                keras.layers.Dense(units, activation=None, name=f"expert_dense_{i}")
+                keras.layers.Dense(units, activation=None, name=f"expert_dense_{i}"),
             )
 
             if self.use_batch_norm:
                 self.hidden_layers.append(
-                    keras.layers.BatchNormalization(name=f"expert_bn_{i}")
+                    keras.layers.BatchNormalization(name=f"expert_bn_{i}"),
                 )
 
             self.hidden_layers.append(
-                keras.layers.Activation(self.activation, name=f"expert_act_{i}")
+                keras.layers.Activation(self.activation, name=f"expert_act_{i}"),
             )
 
             if self.dropout_rate > 0:
                 self.hidden_layers.append(
-                    keras.layers.Dropout(self.dropout_rate, name=f"expert_drop_{i}")
+                    keras.layers.Dropout(self.dropout_rate, name=f"expert_drop_{i}"),
                 )
 
         # Output layer
         self.output_layer = keras.layers.Dense(
-            self.expert_dim, activation=None, name="expert_output"
+            self.expert_dim,
+            activation=None,
+            name="expert_output",
         )
 
     def call(self, inputs, training=None):
@@ -206,7 +213,8 @@ class ExpertBlock(keras.layers.Layer):
 
         for layer in self.hidden_layers:
             if isinstance(layer, keras.layers.Dropout) or isinstance(
-                layer, keras.layers.BatchNormalization
+                layer,
+                keras.layers.BatchNormalization,
             ):
                 x = layer(x, training=training)
             else:
@@ -224,7 +232,7 @@ class ExpertBlock(keras.layers.Layer):
                 "activation": self.activation,
                 "dropout_rate": self.dropout_rate,
                 "use_batch_norm": self.use_batch_norm,
-            }
+            },
         )
         return config
 
@@ -243,12 +251,12 @@ class FeatureMoE(keras.layers.Layer):
         self,
         num_experts: int = 4,
         expert_dim: int = 64,
-        expert_hidden_dims: List[int] = None,
+        expert_hidden_dims: list[int] = None,
         routing: str = "learned",
         sparsity: int = 2,
         routing_activation: str = "softmax",
-        feature_names: Optional[List[str]] = None,
-        predefined_assignments: Optional[Dict[str, int]] = None,
+        feature_names: Optional[list[str]] = None,
+        predefined_assignments: Optional[dict[str, int]] = None,
         freeze_experts: bool = False,
         dropout_rate: float = 0.0,
         use_batch_norm: bool = True,
@@ -295,7 +303,7 @@ class FeatureMoE(keras.layers.Layer):
             not feature_names or not predefined_assignments
         ):
             raise ValueError(
-                "For predefined routing, feature_names and predefined_assignments must be provided"
+                "For predefined routing, feature_names and predefined_assignments must be provided",
             )
 
         # Initialize experts
@@ -332,13 +340,17 @@ class FeatureMoE(keras.layers.Layer):
                 if isinstance(expert_idx, int):
                     # One expert per feature
                     self.assignment_matrix = tf.tensor_scatter_nd_update(
-                        self.assignment_matrix, [[i, expert_idx]], [1.0]
+                        self.assignment_matrix,
+                        [[i, expert_idx]],
+                        [1.0],
                     )
                 else:
                     # Multiple experts with weights
                     for expert_id, weight in expert_idx.items():
                         self.assignment_matrix = tf.tensor_scatter_nd_update(
-                            self.assignment_matrix, [[i, expert_id]], [weight]
+                            self.assignment_matrix,
+                            [[i, expert_id]],
+                            [weight],
                         )
 
         # Convert to a constant tensor for efficiency
@@ -365,7 +377,8 @@ class FeatureMoE(keras.layers.Layer):
             # Average the feature representations along the batch dimension
             # to get feature-level routing rather than instance-level
             feature_reprs = tf.reduce_mean(
-                inputs, axis=0
+                inputs,
+                axis=0,
             )  # [num_features, feature_dim]
 
             # Get logits from router
@@ -377,7 +390,9 @@ class FeatureMoE(keras.layers.Layer):
             else:  # Implement sparse routing
                 # Sort logits and keep only top-k
                 top_logits, top_indices = tf.nn.top_k(
-                    routing_logits, k=self.sparsity, sorted=True
+                    routing_logits,
+                    k=self.sparsity,
+                    sorted=True,
                 )
 
                 # Create a mask for the top-k logits
@@ -419,7 +434,8 @@ class FeatureMoE(keras.layers.Layer):
 
         # Compute routing weights
         routing_weights = self._compute_routing_weights(
-            inputs, training
+            inputs,
+            training,
         )  # [1, num_features, num_experts]
 
         # Apply each expert to all features
@@ -433,12 +449,14 @@ class FeatureMoE(keras.layers.Layer):
 
         # Stack expert outputs along a new axis
         stacked_outputs = tf.stack(
-            expert_outputs, axis=-2
+            expert_outputs,
+            axis=-2,
         )  # [batch_size, num_features, num_experts, expert_dim]
 
         # Weight expert outputs by routing weights
         routing_weights_expanded = tf.expand_dims(
-            routing_weights, -1
+            routing_weights,
+            -1,
         )  # [1, num_features, num_experts, 1]
         weighted_outputs = (
             stacked_outputs * routing_weights_expanded
@@ -446,7 +464,8 @@ class FeatureMoE(keras.layers.Layer):
 
         # Sum over experts
         combined_outputs = tf.reduce_sum(
-            weighted_outputs, axis=-2
+            weighted_outputs,
+            axis=-2,
         )  # [batch_size, num_features, expert_dim]
 
         return combined_outputs
@@ -487,7 +506,7 @@ class FeatureMoE(keras.layers.Layer):
                 "freeze_experts": self.freeze_experts,
                 "dropout_rate": self.dropout_rate,
                 "use_batch_norm": self.use_batch_norm,
-            }
+            },
         )
 
         # Only include feature_names and predefined_assignments if using predefined routing
@@ -496,7 +515,7 @@ class FeatureMoE(keras.layers.Layer):
                 {
                     "feature_names": self.feature_names,
                     "predefined_assignments": self.predefined_assignments,
-                }
+                },
             )
 
         return config
@@ -505,13 +524,13 @@ class FeatureMoE(keras.layers.Layer):
 # Utility function to add Feature-wise MoE to a model
 def add_feature_moe_to_model(
     model: keras.Model,
-    feature_inputs: Dict[str, keras.layers.Layer],
+    feature_inputs: dict[str, keras.layers.Layer],
     num_experts: int = 4,
     expert_dim: int = 64,
-    expert_hidden_dims: List[int] = None,
+    expert_hidden_dims: list[int] = None,
     routing: str = "learned",
     sparsity: int = 2,
-    predefined_assignments: Optional[Dict[str, int]] = None,
+    predefined_assignments: Optional[dict[str, int]] = None,
     use_residual: bool = True,
 ) -> keras.Model:
     """
@@ -560,26 +579,29 @@ def add_feature_moe_to_model(
     # Create new outputs with optional residual connections
     new_outputs = []
     for i, (feature_name, original_output) in enumerate(
-        zip(feature_names, feature_outputs)
+        zip(feature_names, feature_outputs),
     ):
         expert_output = unstacked_outputs[i]
 
         # Add residual connection if shapes match
         if use_residual and original_output.shape[-1] == expert_output.shape[-1]:
             combined = keras.layers.Add(name=f"{feature_name}_moe_residual")(
-                [original_output, expert_output]
+                [original_output, expert_output],
             )
         else:
             # Otherwise just use the expert output
             combined = keras.layers.Dense(
-                expert_dim, name=f"{feature_name}_moe_projection"
+                expert_dim,
+                name=f"{feature_name}_moe_projection",
             )(expert_output)
 
         new_outputs.append(combined)
 
     # Create a new model with updated outputs
     new_model = keras.Model(
-        inputs=model.inputs, outputs=new_outputs, name=f"{model.name}_with_moe"
+        inputs=model.inputs,
+        outputs=new_outputs,
+        name=f"{model.name}_with_moe",
     )
 
     return new_model

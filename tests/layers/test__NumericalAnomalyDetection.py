@@ -35,7 +35,9 @@ class TestNumericalAnomalyDetection(unittest.TestCase):
             self.assertEqual(layer.units, self.hidden_dims[i])
 
         # Check decoder layers
-        expected_decoder_dims = list(reversed(self.hidden_dims[:-1])) + [self.num_features]
+        expected_decoder_dims = list(reversed(self.hidden_dims[:-1])) + [
+            self.num_features,
+        ]
         self.assertEqual(len(self.layer.decoder_layers), len(expected_decoder_dims))
         for i, layer in enumerate(self.layer.decoder_layers):
             self.assertEqual(layer.units, expected_decoder_dims[i])
@@ -47,7 +49,9 @@ class TestNumericalAnomalyDetection(unittest.TestCase):
     def test_call(self) -> None:
         """Test forward pass."""
         inputs = ops.convert_to_tensor(
-            np.random.normal(size=(self.batch_size, self.num_features)).astype(np.float32)
+            np.random.normal(size=(self.batch_size, self.num_features)).astype(
+                np.float32,
+            ),
         )
         self.layer.build(inputs.shape)
         outputs = self.layer(inputs)
@@ -85,7 +89,7 @@ class TestNumericalAnomalyDetection(unittest.TestCase):
         # Test with single feature
         layer = NumericalAnomalyDetection(hidden_dims=[2, 1])
         inputs = ops.convert_to_tensor(
-            np.random.normal(size=(self.batch_size, 1)).astype(np.float32)
+            np.random.normal(size=(self.batch_size, 1)).astype(np.float32),
         )
         layer.build(inputs.shape)
         outputs = layer(inputs)
@@ -94,7 +98,7 @@ class TestNumericalAnomalyDetection(unittest.TestCase):
         # Test with large number of features
         layer = NumericalAnomalyDetection(hidden_dims=[64, 32])
         inputs = ops.convert_to_tensor(
-            np.random.normal(size=(self.batch_size, 50)).astype(np.float32)
+            np.random.normal(size=(self.batch_size, 50)).astype(np.float32),
         )
         layer.build(inputs.shape)
         outputs = layer(inputs)

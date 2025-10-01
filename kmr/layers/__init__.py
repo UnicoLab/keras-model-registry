@@ -10,11 +10,15 @@ from kmr.layers.BoostingEnsembleLayer import BoostingEnsembleLayer
 from kmr.layers.GatedFeatureFusion import GatedFeatureFusion
 from kmr.layers.GraphFeatureAggregation import GraphFeatureAggregation
 from kmr.layers.TabularMoELayer import TabularMoELayer
-from kmr.layers.DifferentiableTabularPreprocessor import DifferentiableTabularPreprocessor
+from kmr.layers.DifferentiableTabularPreprocessor import (
+    DifferentiableTabularPreprocessor,
+)
 from kmr.layers.DifferentialPreprocessingLayer import DifferentialPreprocessingLayer
 from kmr.layers.SlowNetwork import SlowNetwork
 from kmr.layers.HyperZZWOperator import HyperZZWOperator
-from kmr.layers.MultiHeadGraphFeaturePreprocessor import MultiHeadGraphFeaturePreprocessor
+from kmr.layers.MultiHeadGraphFeaturePreprocessor import (
+    MultiHeadGraphFeaturePreprocessor,
+)
 from kmr.layers.DistributionTransformLayer import DistributionTransformLayer
 from kmr.layers.DistributionAwareEncoder import DistributionAwareEncoder
 from kmr.layers.CastToFloat32Layer import CastToFloat32Layer

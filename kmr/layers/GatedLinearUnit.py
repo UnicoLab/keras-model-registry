@@ -1,13 +1,13 @@
-"""
-This module implements a GatedLinearUnit layer that applies a gated linear transformation
+"""This module implements a GatedLinearUnit layer that applies a gated linear transformation
 to input tensors. It's particularly useful for controlling information flow in neural networks.
 """
 
-from typing import Any, Dict
-from keras import layers, ops
+from typing import Any
+from keras import layers
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
 from kmr.layers._base_layer import BaseLayer
+
 
 @register_keras_serializable(package="kmr.layers")
 class GatedLinearUnit(BaseLayer):
@@ -31,10 +31,10 @@ class GatedLinearUnit(BaseLayer):
         ```python
         import keras
         from kmr.layers import GatedLinearUnit
-        
+
         # Create sample input data
         x = keras.random.normal((32, 16))  # 32 samples, 16 features
-        
+
         # Create the layer
         glu = GatedLinearUnit(units=8)
         y = glu(x)
@@ -42,60 +42,57 @@ class GatedLinearUnit(BaseLayer):
         ```
     """
 
-    def __init__(
-        self,
-        units: int,
-        name: str | None = None,
-        **kwargs: Any
-    ) -> None:
+    def __init__(self, units: int, name: str | None = None, **kwargs: Any) -> None:
         # Set private attributes first
         self._units = units
-        
+
         # Validate parameters
         self._validate_params()
-        
+
         # Set public attributes BEFORE calling parent's __init__
         self.units = self._units
         self.linear = None
         self.sigmoid = None
-        
+
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
-    
+
     def _validate_params(self) -> None:
         """Validate layer parameters."""
         if not isinstance(self._units, int) or self._units <= 0:
             raise ValueError(f"units must be a positive integer, got {self._units}")
-    
+
     def build(self, input_shape: tuple[int, ...]) -> None:
         """Builds the layer with the given input shape.
-        
+
         Args:
             input_shape: Tuple of integers defining the input shape.
         """
         self.linear = layers.Dense(self.units)
         self.sigmoid = layers.Dense(self.units, activation="sigmoid")
         super().build(input_shape)
-    
+
     def call(self, inputs: KerasTensor) -> KerasTensor:
         """Forward pass of the layer.
-        
+
         Args:
             inputs: Input tensor.
-            
+
         Returns:
             Output tensor after applying gated linear transformation.
         """
         return self.linear(inputs) * self.sigmoid(inputs)
-    
-    def get_config(self) -> Dict[str, Any]:
+
+    def get_config(self) -> dict[str, Any]:
         """Get layer configuration.
-        
+
         Returns:
             Dictionary containing the layer configuration.
         """
         config = super().get_config()
-        config.update({
-            "units": self.units,
-        })
-        return config 
+        config.update(
+            {
+                "units": self.units,
+            },
+        )
+        return config

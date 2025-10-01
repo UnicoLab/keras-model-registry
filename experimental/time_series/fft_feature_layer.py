@@ -43,12 +43,12 @@ class FFTFeatureLayer(Layer):
         # Validate parameters
         if self.feature_type not in ["power", "dominant", "full", "stats"]:
             raise ValueError(
-                f"Feature type must be 'power', 'dominant', 'full', or 'stats', got {feature_type}"
+                f"Feature type must be 'power', 'dominant', 'full', or 'stats', got {feature_type}",
             )
 
         if self.window_function not in ["none", "hann", "hamming"]:
             raise ValueError(
-                f"Window function must be 'none', 'hann', or 'hamming', got {window_function}"
+                f"Window function must be 'none', 'hann', or 'hamming', got {window_function}",
             )
 
     def build(self, input_shape):
@@ -143,7 +143,7 @@ class FFTFeatureLayer(Layer):
             # Hamming window: w(n) = 0.54 - 0.46 * cos(2πn/(N-1))
             n = tf.range(0, time_steps, dtype=tf.float32)
             window = 0.54 - 0.46 * tf.cos(
-                2.0 * np.pi * n / tf.cast(time_steps - 1, tf.float32)
+                2.0 * np.pi * n / tf.cast(time_steps - 1, tf.float32),
             )
         else:
             # No window function
@@ -163,7 +163,9 @@ class FFTFeatureLayer(Layer):
         # Normalize if requested
         if self.normalize:
             power_spectrum = power_spectrum / tf.reduce_max(
-                power_spectrum, axis=1, keepdims=True
+                power_spectrum,
+                axis=1,
+                keepdims=True,
             )
 
         # Extract features based on feature_type
@@ -188,7 +190,9 @@ class FFTFeatureLayer(Layer):
 
         # Calculate indices for evenly spaced frequencies
         indices = tf.linspace(
-            0.0, tf.cast(spectrum_length - 1, tf.float32), self.num_features
+            0.0,
+            tf.cast(spectrum_length - 1, tf.float32),
+            self.num_features,
         )
         indices = tf.cast(indices, tf.int32)
 
@@ -217,12 +221,14 @@ class FFTFeatureLayer(Layer):
 
         # Combine powers and normalized frequency indices
         freq_indices_norm = tf.cast(indices, tf.float32) / tf.cast(
-            tf.shape(power_spectrum)[1], tf.float32
+            tf.shape(power_spectrum)[1],
+            tf.float32,
         )
 
         # Stack powers, normalized frequencies, and phases
         features = tf.stack(
-            [dominant_powers, freq_indices_norm, dominant_phases], axis=2
+            [dominant_powers, freq_indices_norm, dominant_phases],
+            axis=2,
         )
 
         # Flatten the features
@@ -249,7 +255,8 @@ class FFTFeatureLayer(Layer):
         # Kurtosis (fourth moment)
         fourth = centered**4
         kurt = (
-            tf.reduce_mean(fourth, axis=1, keepdims=True) / (std_power**4 + 1e-10) - 3.0
+            tf.reduce_mean(fourth, axis=1, keepdims=True) / (std_power**4 + 1e-10)
+            - 3.0
         )
 
         # Energy in different frequency bands
@@ -262,7 +269,9 @@ class FFTFeatureLayer(Layer):
         # Energy in each band
         low_energy = tf.reduce_sum(power_spectrum[:, :low_band], axis=1, keepdims=True)
         mid_energy = tf.reduce_sum(
-            power_spectrum[:, low_band:mid_band], axis=1, keepdims=True
+            power_spectrum[:, low_band:mid_band],
+            axis=1,
+            keepdims=True,
         )
         high_energy = tf.reduce_sum(power_spectrum[:, mid_band:], axis=1, keepdims=True)
 

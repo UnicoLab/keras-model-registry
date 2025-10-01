@@ -65,22 +65,26 @@ class NumericalAnomalyDetection(BaseLayer):
         self.encoder_layers = []
         for dim in self.hidden_dims:
             self.encoder_layers.append(
-                layers.Dense(dim, activation="relu", name=f"encoder_{dim}")
+                layers.Dense(dim, activation="relu", name=f"encoder_{dim}"),
             )
 
         # Decoder layers
         self.decoder_layers = []
         for dim in reversed(self.hidden_dims[:-1]):
             self.decoder_layers.append(
-                layers.Dense(dim, activation="relu", name=f"decoder_{dim}")
+                layers.Dense(dim, activation="relu", name=f"decoder_{dim}"),
             )
         self.decoder_layers.append(
-            layers.Dense(self.num_features, name="decoder_output")
+            layers.Dense(self.num_features, name="decoder_output"),
         )
 
         # Distribution parameters
         self.mean_layer = layers.Dense(self.num_features, name="mean")
-        self.var_layer = layers.Dense(self.num_features, activation="softplus", name="variance")
+        self.var_layer = layers.Dense(
+            self.num_features,
+            activation="softplus",
+            name="variance",
+        )
 
         logger.debug(
             "NumericalAnomalyDetection built with {} features and hidden dims {}.",
@@ -121,8 +125,8 @@ class NumericalAnomalyDetection(BaseLayer):
 
         # Combine errors (both components are non-negative)
         anomaly_scores = (
-            self.reconstruction_weight * reconstruction_error +
-            self.distribution_weight * distribution_error
+            self.reconstruction_weight * reconstruction_error
+            + self.distribution_weight * distribution_error
         )
 
         return anomaly_scores
@@ -145,9 +149,11 @@ class NumericalAnomalyDetection(BaseLayer):
             Layer configuration dictionary.
         """
         config = super().get_config()
-        config.update({
-            "hidden_dims": self.hidden_dims,
-            "reconstruction_weight": self.reconstruction_weight,
-            "distribution_weight": self.distribution_weight,
-        })
+        config.update(
+            {
+                "hidden_dims": self.hidden_dims,
+                "reconstruction_weight": self.reconstruction_weight,
+                "distribution_weight": self.distribution_weight,
+            },
+        )
         return config

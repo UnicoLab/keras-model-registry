@@ -26,7 +26,7 @@ class TestDifferencingLayer(tf.test.TestCase):
             (1, True, -999.0, False),
             # With keep_original=True
             (1, True, 0.0, True),
-        ]
+        ],
     )
     def test_differencing_layer_config(self, order, drop_na, fill_value, keep_original):
         # Create the layer
@@ -89,7 +89,7 @@ class TestDifferencingLayer(tf.test.TestCase):
                 [2.0],  # (9-4) - (4-1) = 5 - 3 = 2
                 [2.0],  # (16-9) - (9-4) = 7 - 5 = 2
                 [2.0],  # (25-16) - (16-9) = 9 - 7 = 2
-            ]
+            ],
         )
 
         # Check shape and content
@@ -120,7 +120,7 @@ class TestDifferencingLayer(tf.test.TestCase):
                 [2.0],  # 5 - 3
                 [2.0],  # 7 - 5
                 [2.0],  # 9 - 7
-            ]
+            ],
         )
 
         # Check shape and content
@@ -136,7 +136,10 @@ class TestDifferencingLayer(tf.test.TestCase):
         # Create a layer with custom fill_value and keep_original=False
         fill_value = -999.0
         layer = DifferencingLayer(
-            order=1, drop_na=False, fill_value=fill_value, keep_original=False
+            order=1,
+            drop_na=False,
+            fill_value=fill_value,
+            keep_original=False,
         )
 
         # Apply the layer
@@ -152,7 +155,10 @@ class TestDifferencingLayer(tf.test.TestCase):
         """Test that the layer can be serialized and deserialized."""
         # Create a layer with custom configuration
         original_layer = DifferencingLayer(
-            order=3, drop_na=False, fill_value=-1.0, name="test_differencing_layer"
+            order=3,
+            drop_na=False,
+            fill_value=-1.0,
+            name="test_differencing_layer",
         )
 
         # Get config

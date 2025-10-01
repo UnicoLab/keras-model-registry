@@ -19,7 +19,6 @@ FeatureSpace = dict[str, FeatureType]
 BusinessRules = dict[str, list[Rule]]
 
 
-
 @register_keras_serializable(package="kmr.layers")
 class BusinessRulesLayer(BaseLayer):
     """Evaluates business-defined rules for anomaly detection.
@@ -63,7 +62,7 @@ class BusinessRulesLayer(BaseLayer):
         trainable_weights: bool = True,
         weight_initializer: str | initializers.Initializer = "ones",
         name: str | None = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """Initializes the layer.
 
@@ -89,7 +88,7 @@ class BusinessRulesLayer(BaseLayer):
         if feature_type not in ["numerical", "categorical"]:
             raise ValueError(
                 f"Invalid feature_type: {feature_type}. "
-                "Must be 'numerical' or 'categorical'"
+                "Must be 'numerical' or 'categorical'",
             )
 
         super().__init__(name=name, **kwargs)
@@ -113,18 +112,18 @@ class BusinessRulesLayer(BaseLayer):
                 name=f"rule_weight_{i}",
                 shape=(1,),
                 initializer=self.weight_initializer,
-                trainable=self.weights_trainable
+                trainable=self.weights_trainable,
             )
             self.rule_weights.append(weight)
 
         logger.debug(
-            f"BusinessRulesLayer built with {len(self.rules)} rules, "
-            f"trainable={self.weights_trainable}"
+            f"BusinessRulesLayer built with {len(self.rules)} rules, trainable={self.weights_trainable}",
         )
         super().build(input_shape)
 
     def compute_output_shape(
-        self, input_shape: tuple[int | None, int]
+        self,
+        input_shape: tuple[int | None, int],
     ) -> dict[str, tuple[int | None, int]]:
         batch_size = input_shape[0]
         return {
@@ -136,7 +135,9 @@ class BusinessRulesLayer(BaseLayer):
         }
 
     def call(
-        self, inputs: KerasTensor, training: bool | None = None
+        self,
+        inputs: KerasTensor,
+        training: bool | None = None,
     ) -> dict[str, KerasTensor]:
         """Forward pass of the layer.
 
@@ -177,20 +178,22 @@ class BusinessRulesLayer(BaseLayer):
         scores = []
         reasons = []
 
-        for (op, value), weight in zip(self.rules, self.rule_weights):
+        for (op, value), weight in zip(self.rules, self.rule_weights, strict=False):
             value_t = convert_to_tensor(float(value), dtype="float32")
 
             if op == ">":
                 violation = ops.less(x, value_t)
                 score = ops.maximum(value_t - x, ops.zeros_like(x))
                 reason = convert_to_tensor(
-                    f"Value below minimum ({value})", dtype="string"
+                    f"Value below minimum ({value})",
+                    dtype="string",
                 )
             elif op == "<":
                 violation = ops.greater_equal(x, value_t)
                 score = ops.maximum(x - value_t, ops.zeros_like(x))
                 reason = convert_to_tensor(
-                    f"Value above maximum ({value})", dtype="string"
+                    f"Value above maximum ({value})",
+                    dtype="string",
                 )
             else:
                 raise ValueError(f"Unsupported operator: {op}")
@@ -205,7 +208,8 @@ class BusinessRulesLayer(BaseLayer):
 
         # Combine results
         final_violation = ops.cast(
-            ops.any(ops.stack(violations, axis=0), axis=0), "bool"
+            ops.any(ops.stack(violations, axis=0), axis=0),
+            "bool",
         )
         scores_stacked = ops.stack(scores, axis=0)
         final_score = ops.max(scores_stacked, axis=0)
@@ -236,7 +240,7 @@ class BusinessRulesLayer(BaseLayer):
         violations = []
         reasons = []
 
-        for (op, values), weight in zip(self.rules, self.rule_weights):
+        for (op, values), weight in zip(self.rules, self.rule_weights, strict=False):
             # Ensure values is a list
             if not isinstance(values, list):
                 values = [values]
@@ -251,12 +255,14 @@ class BusinessRulesLayer(BaseLayer):
             if op in ("==", "in"):
                 violation = ops.logical_not(is_member)
                 reason = convert_to_tensor(
-                    f"Value not in allowed set: {values}", dtype="string"
+                    f"Value not in allowed set: {values}",
+                    dtype="string",
                 )
             elif op in ("!=", "not in"):
                 violation = is_member
                 reason = convert_to_tensor(
-                    f"Value in disallowed set: {values}", dtype="string"
+                    f"Value in disallowed set: {values}",
+                    dtype="string",
                 )
             else:
                 raise ValueError(f"Unsupported operator: {op}")
@@ -268,7 +274,8 @@ class BusinessRulesLayer(BaseLayer):
 
         # Combine results
         final_violation = ops.cast(
-            ops.any(ops.stack(violations, axis=0), axis=0), "bool"
+            ops.any(ops.stack(violations, axis=0), axis=0),
+            "bool",
         )
         final_proba = ops.mean(ops.stack(violations, axis=0), axis=0) * 100.0
 
@@ -287,6 +294,7 @@ class BusinessRulesLayer(BaseLayer):
             "business_reason": final_reason,
             "business_value": x,
         }
+
     def get_config(self) -> dict[str, Any]:
         """Return the config of the layer.
 
@@ -298,23 +306,29 @@ class BusinessRulesLayer(BaseLayer):
         # Use private attributes during initialization, public attributes after
         rules = getattr(self, "rules", getattr(self, "_rules", None))
         feature_type = getattr(
-            self, "feature_type",
-            getattr(self, "_feature_type", None)
+            self,
+            "feature_type",
+            getattr(self, "_feature_type", None),
         )
         weights_trainable = getattr(
-            self, "weights_trainable",
-            getattr(self, "_weights_trainable", None)
+            self,
+            "weights_trainable",
+            getattr(self, "_weights_trainable", None),
         )
         weight_initializer = getattr(
-            self, "weight_initializer",
-            getattr(self, "_weight_initializer", None)
+            self,
+            "weight_initializer",
+            getattr(self, "_weight_initializer", None),
         )
 
-        config.update({
-            "rules": rules,
-            "feature_type": feature_type,
-            "trainable_weights": weights_trainable,
-            "weight_initializer": initializers.serialize(weight_initializer)
-            if weight_initializer else None
-        })
+        config.update(
+            {
+                "rules": rules,
+                "feature_type": feature_type,
+                "trainable_weights": weights_trainable,
+                "weight_initializer": initializers.serialize(weight_initializer)
+                if weight_initializer
+                else None,
+            },
+        )
         return config

@@ -1,11 +1,12 @@
 import tensorflow as tf
 from tensorflow.keras import layers
 
+
 class SqueezeExcite2D(layers.Layer):
     """Squeeze-and-Excitation block for 2D inputs.
 
     This block recalibrates channel-wise feature responses by modeling channel interdependencies.
-    
+
     Example:
         >>> import tensorflow as tf
         >>> from squeeze_excite import SqueezeExcite2D
@@ -14,6 +15,7 @@ class SqueezeExcite2D(layers.Layer):
         >>> output_tensor = se_block(input_tensor)
         >>> print(output_tensor.shape)  # Expected shape: (32, 64, 64, 128)
     """
+
     def __init__(self, ratio: int = 16, **kwargs) -> None:
         super().__init__(**kwargs)
         self.ratio = ratio

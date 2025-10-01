@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 # pypi/conda library
 import tensorflow as tf
@@ -43,7 +42,7 @@ class TextSimilarityModel:
                     output_dim=self.CONF.model.EMBEDDING_DIM,
                 ),
                 tf.keras.layers.GlobalAveragePooling1D(),
-            ]
+            ],
         )
 
         self.query_model = tf.keras.Sequential(
@@ -54,7 +53,7 @@ class TextSimilarityModel:
                     units=self.CONF.model.QUERY_MODEL_DIM,
                     activation=self.CONF.model.QUERY_MODEL_ACTIVATION,
                 ),
-            ]
+            ],
         )
 
         self.candidate_model = tf.keras.Sequential(
@@ -65,7 +64,7 @@ class TextSimilarityModel:
                     units=self.CONF.model.CANDIDATE_MODEL_DIM,
                     activation=self.CONF.model.CANDIDATE_MODEL_ACTIVATION,
                 ),
-            ]
+            ],
         )
 
     def init_simi_model(self, raw_data):
@@ -76,13 +75,15 @@ class TextSimilarityModel:
 
         """
         # defining data
-        data_simi = raw_data.batch(self.CONF.model.SIMI_MODEL_BATCH_SIZE).map(self.candidate_model)
+        data_simi = raw_data.batch(self.CONF.model.SIMI_MODEL_BATCH_SIZE).map(
+            self.candidate_model,
+        )
 
         # defining retrieval model
         self.similarity_model = tfrs.tasks.Retrieval(
             metrics=tfrs.metrics.FactorizedTopK(
                 candidates=data_simi,
-            )
+            ),
         )
 
     def build_index(self, raw_data):
@@ -93,7 +94,9 @@ class TextSimilarityModel:
 
         """
         # building dataset
-        data_index = raw_data.batch(self.CONF.model.SIMI_MODEL_BATCH_SIZE).map(lambda x: (x, self.candidate_model(x)))
+        data_index = raw_data.batch(self.CONF.model.SIMI_MODEL_BATCH_SIZE).map(
+            lambda x: (x, self.candidate_model(x)),
+        )
         # building index
         self.index = tfrs.layers.factorized_top_k.ScaNN(
             query_model=self.query_model,
@@ -107,7 +110,9 @@ class TextSimilarityModel:
     def compile(self):
         logger.info("Preparing custom optimizers: RADAM")
         self.compile(
-            optimizer=tf.keras.optimizers.Adam(learning_rate=self.CONF.model.LEARNING_RATE),
+            optimizer=tf.keras.optimizers.Adam(
+                learning_rate=self.CONF.model.LEARNING_RATE,
+            ),
         )
 
     def setup_callbacks(self):

@@ -138,17 +138,17 @@ class CalendarFeatureLayer(Layer):
                             [
                                 s.decode("utf-8") if isinstance(s, bytes) else s
                                 for s in date_inputs
-                            ]
+                            ],
                         )
                     # Also handle case where strings are repr'd as bytes
                     elif isinstance(date_inputs[0], str) and date_inputs[0].startswith(
-                        "b'"
+                        "b'",
                     ):
                         date_inputs = np.array(
                             [
                                 s[2:-1] if s.startswith("b'") and s.endswith("'") else s
                                 for s in date_inputs
-                            ]
+                            ],
                         )
                 except (IndexError, TypeError):
                     pass  # Handle empty arrays or arrays with mixed types
@@ -161,7 +161,7 @@ class CalendarFeatureLayer(Layer):
             print(f"Date inputs type: {type(date_inputs)}, dtype: {date_inputs.dtype}")
             if len(date_inputs) > 0:
                 print(
-                    f"First element type: {type(date_inputs[0])}, value: {date_inputs[0]}"
+                    f"First element type: {type(date_inputs[0])}, value: {date_inputs[0]}",
                 )
 
             # Convert to pandas datetime

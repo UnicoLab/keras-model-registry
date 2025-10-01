@@ -240,7 +240,13 @@ class Autoencoder(tf.keras.Model):
         """
         super().compile(optimizer=optimizer, loss=loss, **kwargs)
 
-    def fit(self, data, epochs: int, callbacks=None, **kwargs) -> tf.keras.callbacks.History:
+    def fit(
+        self,
+        data,
+        epochs: int,
+        callbacks=None,
+        **kwargs,
+    ) -> tf.keras.callbacks.History:
         """Fits the model to the given data.
 
         Args:
@@ -298,7 +304,11 @@ class Autoencoder(tf.keras.Model):
         scores = tf.reduce_mean(tf.abs(data - x_pred), axis=1)
         return scores.numpy()
 
-    def is_anomaly(self, data: tf.data.Dataset, percentile_to_use: str = "median") -> dict[str, list[np.ndarray]]:
+    def is_anomaly(
+        self,
+        data: tf.data.Dataset,
+        percentile_to_use: str = "median",
+    ) -> dict[str, list[np.ndarray]]:
         """Determines if the given data contains anomalies.
 
         Args:
@@ -314,7 +324,9 @@ class Autoencoder(tf.keras.Model):
 
         for batch in data:
             batch_scores = self.predict(batch)
-            batch_anomalies = batch_scores > self.percentile + (self.threshold * self.std)
+            batch_anomalies = batch_scores > self.percentile + (
+                self.threshold * self.std
+            )
             scores.append(batch_scores)
             anomalies.append(batch_anomalies)
 
@@ -495,7 +507,9 @@ class AnomalyDetectionModelProd(tf.keras.Model):
             AnomalyDetectionModelProd: A new instance of the model.
         """
         instance = cls(
-            preprocessing_model=tf.keras.models.model_from_json(config["preprocessing_model"]),
+            preprocessing_model=tf.keras.models.model_from_json(
+                config["preprocessing_model"],
+            ),
             anomaly_model=tf.keras.models.model_from_json(config["anomaly_model"]),
             median=config["median"],
             std=config["std"],

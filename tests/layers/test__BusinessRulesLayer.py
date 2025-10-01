@@ -6,6 +6,7 @@ import tensorflow as tf
 from keras import Model, Input
 from kmr.layers import BusinessRulesLayer
 
+
 class TestBusinessRulesLayer(unittest.TestCase):
     """Test cases for BusinessRulesLayer."""
 
@@ -13,22 +14,16 @@ class TestBusinessRulesLayer(unittest.TestCase):
         """Set up test cases."""
         self.batch_size = 32
         self.input_dim = 10
-        self.numeric_rules = [
-            (">", 0.0),
-            ("<", 1.0)
-        ]
+        self.numeric_rules = [(">", 0.0), ("<", 1.0)]
         self.categorical_rules = [
             ("in", ["red", "green", "blue"]),
-            ("not in", ["invalid", "error"])
+            ("not in", ["invalid", "error"]),
         ]
 
     def test_initialization(self) -> None:
         """Test layer initialization."""
         # Test numeric rules
-        layer = BusinessRulesLayer(
-            rules=self.numeric_rules,
-            feature_type="numerical"
-        )
+        layer = BusinessRulesLayer(rules=self.numeric_rules, feature_type="numerical")
         self.assertEqual(layer.rules, self.numeric_rules)
         self.assertEqual(layer.feature_type, "numerical")
         self.assertTrue(layer.weights_trainable)
@@ -37,7 +32,7 @@ class TestBusinessRulesLayer(unittest.TestCase):
         layer = BusinessRulesLayer(
             rules=self.categorical_rules,
             feature_type="categorical",
-            trainable_weights=False
+            trainable_weights=False,
         )
         self.assertEqual(layer.rules, self.categorical_rules)
         self.assertEqual(layer.feature_type, "categorical")
@@ -47,16 +42,13 @@ class TestBusinessRulesLayer(unittest.TestCase):
         """Test invalid initialization parameters."""
         # Invalid feature type
         with self.assertRaises(ValueError):
-            BusinessRulesLayer(
-                rules=self.numeric_rules,
-                feature_type="invalid"
-            )
+            BusinessRulesLayer(rules=self.numeric_rules, feature_type="invalid")
 
         # Invalid numeric operator
         with self.assertRaises(ValueError):
             layer = BusinessRulesLayer(
                 rules=[("invalid", 0.0)],
-                feature_type="numerical"
+                feature_type="numerical",
             )
             inputs = tf.random.uniform((self.batch_size, 1))
             layer(inputs)
@@ -65,17 +57,14 @@ class TestBusinessRulesLayer(unittest.TestCase):
         with self.assertRaises(ValueError):
             layer = BusinessRulesLayer(
                 rules=[("invalid", ["red"])],
-                feature_type="categorical"
+                feature_type="categorical",
             )
             inputs = tf.constant([["red"]], dtype=tf.string)
             layer(inputs)
 
     def test_numerical_rules(self) -> None:
         """Test numerical rule application."""
-        layer = BusinessRulesLayer(
-            rules=self.numeric_rules,
-            feature_type="numerical"
-        )
+        layer = BusinessRulesLayer(rules=self.numeric_rules, feature_type="numerical")
 
         # Test values within range
         inputs = tf.random.uniform((self.batch_size, 1))
@@ -100,7 +89,7 @@ class TestBusinessRulesLayer(unittest.TestCase):
         """Test categorical rule application."""
         layer = BusinessRulesLayer(
             rules=self.categorical_rules,
-            feature_type="categorical"
+            feature_type="categorical",
         )
 
         # Test valid and invalid values
@@ -118,7 +107,7 @@ class TestBusinessRulesLayer(unittest.TestCase):
         layer = BusinessRulesLayer(
             rules=self.numeric_rules,
             feature_type="numerical",
-            trainable_weights=True
+            trainable_weights=True,
         )
         self.assertTrue(layer.weights_trainable)
 
@@ -126,7 +115,7 @@ class TestBusinessRulesLayer(unittest.TestCase):
         layer = BusinessRulesLayer(
             rules=self.numeric_rules,
             feature_type="numerical",
-            trainable_weights=False
+            trainable_weights=False,
         )
         self.assertFalse(layer.weights_trainable)
 
@@ -134,10 +123,7 @@ class TestBusinessRulesLayer(unittest.TestCase):
         """Test layer serialization."""
         # Create and save model with layer
         inputs = Input(shape=(1,))
-        layer = BusinessRulesLayer(
-            rules=self.numeric_rules,
-            feature_type="numerical"
-        )
+        layer = BusinessRulesLayer(rules=self.numeric_rules, feature_type="numerical")
         outputs = layer(inputs)
         model = Model(inputs=inputs, outputs=outputs)
 
@@ -145,7 +131,7 @@ class TestBusinessRulesLayer(unittest.TestCase):
         model_json = model.to_json()
         loaded_model = tf.keras.models.model_from_json(
             model_json,
-            custom_objects={"BusinessRulesLayer": BusinessRulesLayer}
+            custom_objects={"BusinessRulesLayer": BusinessRulesLayer},
         )
 
         # Test loaded model
@@ -155,20 +141,21 @@ class TestBusinessRulesLayer(unittest.TestCase):
 
         # Compare outputs
         for key in original_output:
-            if key == 'business_reason':
+            if key == "business_reason":
                 # Compare strings directly
                 self.assertEqual(
                     original_output[key].numpy().tolist(),
-                    loaded_output[key].numpy().tolist()
+                    loaded_output[key].numpy().tolist(),
                 )
             else:
                 # Compare numerical values
                 self.assertTrue(
                     np.allclose(
                         original_output[key].numpy(),
-                        loaded_output[key].numpy()
-                    )
+                        loaded_output[key].numpy(),
+                    ),
                 )
+
 
 if __name__ == "__main__":
     unittest.main()

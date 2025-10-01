@@ -9,6 +9,16 @@ This directory contains comprehensive examples demonstrating how to use KMR laye
 - **Description**: Demonstrates the comprehensive documentation available in KMR layers
 - **Highlights**: Parameter documentation, usage examples, best practices, and performance considerations
 
+### 🚀 BaseFeedForwardModel Guide
+- **File**: `feed_forward_guide.md`
+- **Description**: Complete guide for using BaseFeedForwardModel with preprocessing
+- **Highlights**: Multi-feature input, preprocessing integration, model serialization, and best practices
+
+### 🤝 KDP Integration Guide
+- **File**: `kdp_integration_guide.md`
+- **Description**: Integration guide for BaseFeedForwardModel with Keras Data Processor
+- **Highlights**: End-to-end preprocessing, automated feature engineering, and production workflows
+
 ## 📚 Example Categories
 
 ### 1. 🚀 Basic Usage Examples

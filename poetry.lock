@@ -941,6 +941,29 @@ docs = ["myst-parser", "pydata-sphinx-theme", "sphinx-autodoc-typehints", "sphin
 test = ["ipykernel", "pre-commit", "pytest (<8)", "pytest-cov", "pytest-timeout"]
 
 [[package]]
+name = "kdp"
+version = "1.11.2"
+description = "Data Preprocessing model based on Keras preprocessing layers"
+optional = false
+python-versions = ">=3.9,<4.0"
+files = []
+develop = false
+
+[package.dependencies]
+loguru = "^0.7.2"
+numpy = ">=1.22.0"
+pandas = "^2.2.0"
+parameterized = "^0.9.0"
+tensorflow = "^2.18.0"
+tf-keras = "^2.18.0"
+
+[package.source]
+type = "git"
+url = "https://github.com/piotrlaczkowski/keras-data-processor.git"
+reference = "HEAD"
+resolved_reference = "933d4113202b92a58970a4eea952379b380e90b1"
+
+[[package]]
 name = "keras"
 version = "3.8.0"
 description = "Multi-backend Keras"
@@ -1742,6 +1765,20 @@ spss = ["pyreadstat (>=1.2.0)"]
 sql-other = ["SQLAlchemy (>=2.0.0)", "adbc-driver-postgresql (>=0.8.0)", "adbc-driver-sqlite (>=0.8.0)"]
 test = ["hypothesis (>=6.46.1)", "pytest (>=7.3.2)", "pytest-xdist (>=2.2.0)"]
 xml = ["lxml (>=4.9.2)"]
+
+[[package]]
+name = "parameterized"
+version = "0.9.0"
+description = "Parameterized testing with any Python test framework"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "parameterized-0.9.0-py2.py3-none-any.whl", hash = "sha256:4e0758e3d41bea3bbd05ec14fc2c24736723f243b28d702081aef438c9372b1b"},
+    {file = "parameterized-0.9.0.tar.gz", hash = "sha256:7fc905272cefa4f364c1a3429cbbe9c0f98b793988efb5bf90aac80f08db09b1"},
+]
+
+[package.extras]
+dev = ["jinja2"]
 
 [[package]]
 name = "parso"
@@ -2655,6 +2692,20 @@ files = [
 tests = ["pytest", "pytest-cov"]
 
 [[package]]
+name = "tf-keras"
+version = "2.18.0"
+description = "Deep learning for humans."
+optional = false
+python-versions = ">=3.9"
+files = [
+    {file = "tf_keras-2.18.0-py3-none-any.whl", hash = "sha256:c431d04027eef790fcd3261cf7fdf93eb74f3cb32e05078b57b7f5a54bd53262"},
+    {file = "tf_keras-2.18.0.tar.gz", hash = "sha256:ebf744519b322afead33086a2aba872245473294affd40973694f3eb7c7ad77d"},
+]
+
+[package.dependencies]
+tensorflow = ">=2.18,<2.19"
+
+[[package]]
 name = "tomli"
 version = "2.2.1"
 description = "A lil' TOML parser"
@@ -3011,4 +3062,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<3.13"
-content-hash = "408f395685eccefc40f4ca50f06c1e13b0343231d0f96b759c807436106143d7"
+content-hash = "8ba160b5879720a20117f30262e11f4451e5667eed7531b0e6b71b0d39c0bf44"

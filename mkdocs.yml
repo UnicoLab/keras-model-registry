@@ -49,6 +49,8 @@ nav:
   - 📖 Examples & Guides:
     - 📋 Examples Overview: examples/README.md
     - ✨ Rich Docstrings Showcase: examples/rich_docstrings_showcase.md
+    - 🚀 BaseFeedForwardModel Guide: examples/feed_forward_guide.md
+    - 🤝 KDP Integration Guide: examples/kdp_integration_guide.md
     - 🔍 Data Analyzer Examples: examples/data_analyzer_examples.md
   - 🛠️ Development:
     - 🤝 Contributing: contributing.md

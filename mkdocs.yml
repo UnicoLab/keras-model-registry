@@ -1,6 +1,7 @@
 site_name: KMR - Keras Model Registry
 theme:
   name: "material"
+  custom_dir: docs/overrides
   icon:
     logo: material/atom
     repo: fontawesome/brands/github
@@ -23,7 +24,7 @@ theme:
     - media: "(prefers-color-scheme: light)"
       scheme: default
       primary: indigo
-      accent: indigo
+      accent: pink
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
@@ -31,10 +32,13 @@ theme:
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
       primary: indigo
-      accent: indigo
+      accent: pink
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
 
 nav:
   - 🚀 Getting Started: index.md

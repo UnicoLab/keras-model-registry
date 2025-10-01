@@ -60,6 +60,15 @@ class MultiResolutionTabularAttention(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the MultiResolutionTabularAttention.
+
+        Args:
+            num_heads: Number of attention heads.
+            d_model: Model dimension.
+            dropout_rate: Dropout rate.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes first
         self._num_heads = num_heads
         self._d_model = d_model

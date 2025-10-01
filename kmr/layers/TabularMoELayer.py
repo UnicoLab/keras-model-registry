@@ -52,6 +52,14 @@ class TabularMoELayer(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the TabularMoELayer.
+
+        Args:
+            num_experts: Number of expert networks.
+            expert_units: Number of units in each expert.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set public attributes
         self.num_experts = num_experts
         self.expert_units = expert_units
@@ -103,7 +111,7 @@ class TabularMoELayer(BaseLayer):
         )
         super().build(input_shape)
 
-    def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
+    def call(self, inputs: KerasTensor, _: bool | None = None) -> KerasTensor:
         """Forward pass of the layer.
 
         Args:

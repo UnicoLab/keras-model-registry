@@ -71,6 +71,18 @@ class BoostingEnsembleLayer(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the BoostingEnsembleLayer.
+
+        Args:
+            num_learners: Number of boosting learners.
+            learner_units: Number of units per learner or list of units.
+            hidden_activation: Activation function for hidden layers.
+            output_activation: Activation function for output layer.
+            gamma_trainable: Whether gamma parameter is trainable.
+            dropout_rate: Dropout rate.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes before calling parent's __init__
         self._num_learners = num_learners
         self._learner_units = learner_units

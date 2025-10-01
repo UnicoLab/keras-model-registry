@@ -54,6 +54,14 @@ class HyperZZWOperator(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the HyperZZWOperator.
+
+        Args:
+            input_dim: Input dimension.
+            context_dim: Context dimension.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set public attributes
         self.input_dim = input_dim
         self.context_dim = context_dim

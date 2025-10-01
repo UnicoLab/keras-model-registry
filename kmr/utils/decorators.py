@@ -142,12 +142,13 @@ def add_serialization(cls: T) -> T:
     original_init = cls.__init__
 
     @functools.wraps(original_init)
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the decorator.
 
         Args:
-            args (list): provided class argumnets.
-            kwargs (dict): provided kwargs for the class.
+            self: The instance being initialized.
+            *args: Provided class arguments.
+            **kwargs: Provided kwargs for the class.
 
         """
         # Bind the arguments to get a dictionary of the parameters
@@ -177,6 +178,8 @@ def add_serialization(cls: T) -> T:
         """Create an instance from a configuration dictionary.
 
         Args:
+            cls: The class being instantiated.
+            config: Configuration dictionary.
             config (dict): deserialized config for the class instantiation.
         """
         return cls(**config)

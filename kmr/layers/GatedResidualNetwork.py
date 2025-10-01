@@ -51,6 +51,14 @@ class GatedResidualNetwork(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the GatedResidualNetwork.
+
+        Args:
+            units: Number of units in the network.
+            dropout_rate: Dropout rate.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes first
         self._units = units
         self._dropout_rate = dropout_rate

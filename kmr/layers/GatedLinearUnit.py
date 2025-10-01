@@ -43,6 +43,13 @@ class GatedLinearUnit(BaseLayer):
     """
 
     def __init__(self, units: int, name: str | None = None, **kwargs: Any) -> None:
+        """Initialize the GatedLinearUnit layer.
+
+        Args:
+            units: Number of units in the layer.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes first
         self._units = units
 

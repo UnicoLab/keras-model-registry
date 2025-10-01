@@ -87,6 +87,19 @@ class DistributionTransformLayer(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the DistributionTransformLayer.
+
+        Args:
+            transform_type: Type of transformation to apply.
+            lambda_param: Lambda parameter for Box-Cox transformation.
+            epsilon: Small value to avoid division by zero.
+            min_value: Minimum value for clipping.
+            max_value: Maximum value for clipping.
+            clip_values: Whether to clip values.
+            auto_candidates: List of candidate transformations for auto mode.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes first
         self._transform_type = transform_type
         self._lambda_param = lambda_param
@@ -219,12 +232,11 @@ class DistributionTransformLayer(BaseLayer):
 
         # Compute median (50th percentile)
         median_idx = n // 2
-        if n % 2 == 0:
-            # Even number of elements, average the middle two
-            median = (x_sorted[median_idx - 1] + x_sorted[median_idx]) / 2.0
-        else:
-            # Odd number of elements, take the middle one
-            median = x_sorted[median_idx]
+        median = (
+            (x_sorted[median_idx - 1] + x_sorted[median_idx]) / 2.0
+            if n % 2 == 0
+            else x_sorted[median_idx]
+        )
 
         # Compute 25th and 75th percentiles for IQR
         q1_idx = n // 4

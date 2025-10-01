@@ -70,6 +70,16 @@ class VariableSelection(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the VariableSelection layer.
+
+        Args:
+            nr_features: Number of input features.
+            units: Number of units in the selection network.
+            dropout_rate: Dropout rate.
+            use_context: Whether to use context for selection.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes first
         self._nr_features = nr_features
         self._units = units

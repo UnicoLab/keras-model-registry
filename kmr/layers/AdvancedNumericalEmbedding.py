@@ -73,6 +73,19 @@ class AdvancedNumericalEmbedding(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the AdvancedNumericalEmbedding layer.
+
+        Args:
+            embedding_dim: Embedding dimension.
+            mlp_hidden_units: Hidden units in MLP.
+            num_bins: Number of bins for discretization.
+            init_min: Minimum initialization value.
+            init_max: Maximum initialization value.
+            dropout_rate: Dropout rate.
+            use_batch_norm: Whether to use batch normalization.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes first
         self._embedding_dim = embedding_dim
         self._mlp_hidden_units = mlp_hidden_units
@@ -215,7 +228,7 @@ class AdvancedNumericalEmbedding(BaseLayer):
         self.learned_min = self.add_weight(
             name="learned_min",
             shape=(self.num_features,),
-            initializer=lambda shape, dtype: ops.convert_to_tensor(
+            initializer=lambda shape, dtype=None: ops.convert_to_tensor(
                 init_min_list,
                 dtype="float32",
             ),
@@ -225,7 +238,7 @@ class AdvancedNumericalEmbedding(BaseLayer):
         self.learned_max = self.add_weight(
             name="learned_max",
             shape=(self.num_features,),
-            initializer=lambda shape, dtype: ops.convert_to_tensor(
+            initializer=lambda shape, dtype=None: ops.convert_to_tensor(
                 init_max_list,
                 dtype="float32",
             ),

@@ -81,6 +81,21 @@ class BoostingBlock(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the BoostingBlock layer.
+
+        Args:
+            hidden_units: Number of hidden units or list of units per layer.
+            hidden_activation: Activation function for hidden layers.
+            output_activation: Activation function for output layer.
+            gamma_trainable: Whether gamma parameter is trainable.
+            gamma_initializer: Initializer for gamma parameter.
+            use_bias: Whether to use bias.
+            kernel_initializer: Initializer for kernel weights.
+            bias_initializer: Initializer for bias weights.
+            dropout_rate: Dropout rate.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set attributes before calling parent's __init__
         self._hidden_units = (
             [hidden_units] if isinstance(hidden_units, int) else hidden_units

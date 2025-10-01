@@ -56,6 +56,13 @@ class DifferentiableTabularPreprocessor(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the DifferentiableTabularPreprocessor.
+
+        Args:
+            num_features: Number of input features.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set public attributes
         self.num_features = num_features
 
@@ -112,7 +119,7 @@ class DifferentiableTabularPreprocessor(BaseLayer):
         )
         super().build(input_shape)
 
-    def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
+    def call(self, inputs: KerasTensor, _: bool | None = None) -> KerasTensor:
         """Forward pass of the layer.
 
         Args:

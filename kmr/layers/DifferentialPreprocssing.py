@@ -193,7 +193,7 @@ class DifferentialPreprocssingLayer(BaseLayer):
         logger.debug("Layer built with {} features.", self.num_features)
         super().build(input_shape)
 
-    def call(self, inputs: KerasTensor | Any, training: bool = False) -> KerasTensor:
+    def call(self, inputs: KerasTensor | Any, _: bool = False) -> KerasTensor:
         """Forward pass of the layer, applying the preprocessing pipeline.
 
         This method implements the core preprocessing logic, applying multiple

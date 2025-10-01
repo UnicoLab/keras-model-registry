@@ -86,6 +86,17 @@ class DistributionAwareEncoder(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the DistributionAwareEncoder.
+
+        Args:
+            embedding_dim: Embedding dimension.
+            auto_detect: Whether to auto-detect distribution type.
+            distribution_type: Type of distribution.
+            transform_type: Type of transformation to apply.
+            add_distribution_embedding: Whether to add distribution embedding.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set private attributes first
         self._embedding_dim = embedding_dim
         self._auto_detect = auto_detect
@@ -295,17 +306,17 @@ class DistributionAwareEncoder(BaseLayer):
             Skewness value
         """
         # Calculate mean and standard deviation if not provided
-        if mean is None:
-            mean = ops.mean(x, axis=0, keepdims=True)
-        else:
-            # Ensure mean has keepdims for proper broadcasting
-            mean = ops.expand_dims(mean, axis=0)
+        mean = (
+            ops.mean(x, axis=0, keepdims=True)
+            if mean is None
+            else ops.expand_dims(mean, axis=0)
+        )
 
-        if std is None:
-            std = ops.std(x, axis=0, keepdims=True)
-        else:
-            # Ensure std has keepdims for proper broadcasting
-            std = ops.expand_dims(std, axis=0)
+        std = (
+            ops.std(x, axis=0, keepdims=True)
+            if std is None
+            else ops.expand_dims(std, axis=0)
+        )
 
         # Add small epsilon to std to avoid division by zero
         std = ops.maximum(std, 1e-10)
@@ -332,17 +343,17 @@ class DistributionAwareEncoder(BaseLayer):
             Kurtosis value
         """
         # Calculate mean and standard deviation if not provided
-        if mean is None:
-            mean = ops.mean(x, axis=0, keepdims=True)
-        else:
-            # Ensure mean has keepdims for proper broadcasting
-            mean = ops.expand_dims(mean, axis=0)
+        mean = (
+            ops.mean(x, axis=0, keepdims=True)
+            if mean is None
+            else ops.expand_dims(mean, axis=0)
+        )
 
-        if std is None:
-            std = ops.std(x, axis=0, keepdims=True)
-        else:
-            # Ensure std has keepdims for proper broadcasting
-            std = ops.expand_dims(std, axis=0)
+        std = (
+            ops.std(x, axis=0, keepdims=True)
+            if std is None
+            else ops.expand_dims(std, axis=0)
+        )
 
         # Add small epsilon to std to avoid division by zero
         std = ops.maximum(std, 1e-10)

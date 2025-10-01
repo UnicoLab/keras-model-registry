@@ -125,6 +125,14 @@ class BusinessRulesLayer(BaseLayer):
         self,
         input_shape: tuple[int | None, int],
     ) -> dict[str, tuple[int | None, int]]:
+        """Compute the output shape of the layer.
+
+        Args:
+            input_shape: Input shape tuple.
+
+        Returns:
+            Dictionary mapping output names to their shapes.
+        """
         batch_size = input_shape[0]
         return {
             "business_score": (batch_size, 1),
@@ -137,7 +145,7 @@ class BusinessRulesLayer(BaseLayer):
     def call(
         self,
         inputs: KerasTensor,
-        training: bool | None = None,
+        _: bool | None = None,
     ) -> dict[str, KerasTensor]:
         """Forward pass of the layer.
 

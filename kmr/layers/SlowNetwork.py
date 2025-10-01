@@ -52,6 +52,15 @@ class SlowNetwork(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the SlowNetwork layer.
+
+        Args:
+            input_dim: Input dimension.
+            num_layers: Number of hidden layers.
+            units: Number of units in each layer.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set public attributes
         self.input_dim = input_dim
         self.num_layers = num_layers
@@ -99,7 +108,7 @@ class SlowNetwork(BaseLayer):
         )
         super().build(input_shape)
 
-    def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
+    def call(self, inputs: KerasTensor, _: bool | None = None) -> KerasTensor:
         """Forward pass of the layer.
 
         Args:

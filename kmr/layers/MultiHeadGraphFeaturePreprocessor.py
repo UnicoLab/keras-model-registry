@@ -65,6 +65,15 @@ class MultiHeadGraphFeaturePreprocessor(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the MultiHeadGraphFeaturePreprocessor.
+
+        Args:
+            embed_dim: Embedding dimension.
+            num_heads: Number of attention heads.
+            dropout_rate: Dropout rate.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set public attributes
         self.embed_dim = embed_dim
         self.num_heads = num_heads
@@ -212,11 +221,11 @@ class MultiHeadGraphFeaturePreprocessor(BaseLayer):
         projected = ops.squeeze(projected, axis=-1)  # (batch, num_features)
 
         # Final dense layer with residual connection
-        if use_final_dense:
-            output = self.final_dense(projected) + inputs
-        else:
-            # Just add the projected output to the input directly
-            output = projected + inputs
+        output = (
+            self.final_dense(projected) + inputs
+            if use_final_dense
+            else projected + inputs
+        )
 
         return output
 

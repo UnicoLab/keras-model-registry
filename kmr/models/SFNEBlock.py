@@ -64,6 +64,19 @@ class SFNEBlock(BaseModel):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the SFNEBlock model.
+
+        Args:
+            input_dim: Input dimension.
+            output_dim: Output dimension.
+            hidden_dim: Hidden dimension.
+            num_layers: Number of layers.
+            slow_network_layers: Number of slow network layers.
+            slow_network_units: Number of units in slow network.
+            preprocessing_model: Preprocessing model.
+            name: Name of the model.
+            **kwargs: Additional keyword arguments.
+        """
         # Extract our specific parameters before calling parent's __init__
         self.input_dim = input_dim
         self.output_dim = output_dim if output_dim is not None else input_dim

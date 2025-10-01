@@ -43,6 +43,12 @@ class CastToFloat32Layer(BaseLayer):
     """
 
     def __init__(self, name: str | None = None, **kwargs: Any) -> None:
+        """Initialize the CastToFloat32Layer.
+
+        Args:
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # No private attributes to set
 
         # No parameters to validate

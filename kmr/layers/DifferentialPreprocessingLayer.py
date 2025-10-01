@@ -68,6 +68,14 @@ class DifferentialPreprocessingLayer(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the DifferentialPreprocessingLayer.
+
+        Args:
+            num_features: Number of input features.
+            mlp_hidden_units: Number of hidden units in MLP.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set public attributes
         self.num_features = num_features
         self.mlp_hidden_units = mlp_hidden_units
@@ -155,7 +163,7 @@ class DifferentialPreprocessingLayer(BaseLayer):
         )
         super().build(input_shape)
 
-    def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
+    def call(self, inputs: KerasTensor, _: bool | None = None) -> KerasTensor:
         """Forward pass of the layer.
 
         Args:

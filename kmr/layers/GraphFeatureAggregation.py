@@ -62,6 +62,15 @@ class GraphFeatureAggregation(BaseLayer):
         name: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Initialize the GraphFeatureAggregation layer.
+
+        Args:
+            embed_dim: Embedding dimension.
+            dropout_rate: Dropout rate.
+            leaky_relu_alpha: Alpha parameter for LeakyReLU.
+            name: Name of the layer.
+            **kwargs: Additional keyword arguments.
+        """
         # Set public attributes
         self.embed_dim = embed_dim
         self.dropout_rate = dropout_rate

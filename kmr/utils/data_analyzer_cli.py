@@ -5,10 +5,10 @@ This script provides a convenient way to analyze CSV data and get layer recommen
 from the command line.
 """
 
-import os
 import sys
 import json
 import argparse
+from pathlib import Path
 from typing import Any
 from loguru import logger
 from kmr.utils.data_analyzer import DataAnalyzer
@@ -90,7 +90,7 @@ def main() -> None:
     setup_logging(args.verbose)
 
     # Check if source exists
-    if not os.path.exists(args.source):
+    if not Path(args.source).exists():
         logger.error(f"Source not found: {args.source}")
         sys.exit(1)
 
@@ -104,7 +104,7 @@ def main() -> None:
 
         # Output result
         if args.output:
-            with open(args.output, "w") as f:
+            with Path(args.output).open("w") as f:
                 json.dump(formatted_result, f, indent=2)
             logger.info(f"Results saved to {args.output}")
         else:

@@ -4,13 +4,12 @@ This module provides utilities for analyzing tabular data and recommending
 appropriate KMR layers based on the data characteristics.
 """
 
-import os
-import glob
 import pandas as pd
 import numpy as np
 from typing import Any
 from loguru import logger
 from collections import defaultdict
+from pathlib import Path
 
 
 class DataAnalyzer:
@@ -243,7 +242,7 @@ class DataAnalyzer:
         results: dict[str, dict[str, Any]] = {}
 
         # Find all matching files
-        file_paths = glob.glob(os.path.join(directory_path, pattern))
+        file_paths = list(Path(directory_path).glob(pattern))
 
         if not file_paths:
             logger.warning(f"No files matching {pattern} found in {directory_path}")
@@ -251,8 +250,8 @@ class DataAnalyzer:
 
         # Analyze each file
         for file_path in file_paths:
-            filename = os.path.basename(file_path)
-            results[filename] = self.analyze_csv(file_path)
+            filename = file_path.name
+            results[filename] = self.analyze_csv(str(file_path))
 
         return results
 
@@ -426,7 +425,10 @@ class DataAnalyzer:
                                     date_features.append(col)
                                     date_detected = True
                                     break
-                            except Exception:
+                            except Exception as e:
+                                logger.debug(
+                                    f"Failed to parse date format {date_format} for column {col}: {e}",
+                                )
                                 continue
 
                         if not date_detected:
@@ -563,11 +565,11 @@ class DataAnalyzer:
         result: dict[str, Any] = {"analysis": None, "recommendations": None}
 
         # Determine if source is a file or directory
-        if os.path.isfile(source):
+        if Path(source).is_file():
             stats = self.analyze_csv(source)
-            result["analysis"] = {"file": os.path.basename(source), "stats": stats}
+            result["analysis"] = {"file": Path(source).name, "stats": stats}
             result["recommendations"] = self.recommend_layers(stats)
-        elif os.path.isdir(source):
+        elif Path(source).is_dir():
             analyses = self.analyze_directory(source, pattern)
             result["analysis"] = analyses
 

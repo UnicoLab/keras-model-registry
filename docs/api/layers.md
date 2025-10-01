@@ -1,124 +1,219 @@
-# Layers API Reference
+# 🧩 Layers API Reference
 
-This page provides comprehensive documentation for all KMR layers. All layers are designed to work exclusively with Keras 3 and follow consistent patterns for initialization, serialization, and usage.
+Welcome to the comprehensive KMR Layers documentation! All layers are designed to work exclusively with **Keras 3** and follow consistent patterns for initialization, serialization, and usage.
 
-## Core Layers
+!!! tip "What You'll Find Here"
+    Each layer includes detailed documentation with:
+    - ✨ **Complete parameter descriptions** with types and defaults
+    - 🎯 **Usage examples** showing real-world applications  
+    - ⚡ **Best practices** and performance considerations
+    - 🎨 **When to use** guidance for each layer
+    - 🔧 **Implementation notes** for developers
 
-### TabularAttention
-Multi-head attention mechanism specifically designed for tabular data processing.
+!!! success "Keras 3 Native"
+    All layers are built exclusively for Keras 3 with no TensorFlow dependencies in production code.
 
-### AdvancedNumericalEmbedding
-Advanced numerical feature embedding with learnable binning and MLP processing.
+## 📚 Layer Categories
 
-### GatedFeatureFusion
-Gated mechanism for fusing multiple feature representations.
+=== "🎯 Core Layers"
+    Essential layers for building tabular models with attention mechanisms and feature processing.
 
-### VariableSelection
-Variable selection network for identifying important features.
+=== "🔧 Feature Engineering"
+    Layers for data preprocessing, transformation, and feature engineering tasks.
 
-### TransformerBlock
+=== "🧠 Attention Mechanisms"
+    Advanced attention layers for capturing complex feature relationships.
+
+=== "🏗️ Specialized Layers"
+    Specialized layers for specific use cases like anomaly detection and boosting.
+
+## 🎯 Core Layers
+
+### 🧠 TabularAttention
+Dual attention mechanism for inter-feature and inter-sample relationships in tabular data.
+
+::: kmr.layers.TabularAttention
+
+### 🔢 AdvancedNumericalEmbedding
+Advanced numerical feature embedding with dual-branch architecture (continuous + discrete).
+
+::: kmr.layers.AdvancedNumericalEmbedding
+
+### 🔀 GatedFeatureFusion
+Gated mechanism for intelligently fusing multiple feature representations.
+
+::: kmr.layers.GatedFeatureFusion
+
+### 🎯 VariableSelection
+Intelligent variable selection network for identifying important features.
+
+::: kmr.layers.VariableSelection
+
+### 🔄 TransformerBlock
 Standard transformer block with multi-head attention and feed-forward networks.
 
-### StochasticDepth
-Stochastic depth regularization for improved training.
+::: kmr.layers.TransformerBlock
 
-## Feature Engineering Layers
+### 🎲 StochasticDepth
+Stochastic depth regularization for improved training and generalization.
 
-### DistributionTransformLayer
-Automatic distribution transformation for numerical features.
+::: kmr.layers.StochasticDepth
 
-### DateEncodingLayer
-Comprehensive date and time feature encoding.
+## 🔧 Feature Engineering Layers
 
-### DateParsingLayer
-Flexible date parsing and extraction.
+### 📊 DistributionTransformLayer
+Automatic distribution transformation for numerical features to improve model performance.
 
-### SeasonLayer
-Seasonal feature extraction from date/time data.
+::: kmr.layers.DistributionTransformLayer
 
-## Attention Mechanisms
+### 📅 DateEncodingLayer
+Comprehensive date and time feature encoding with multiple temporal representations.
 
-### ColumnAttention
-Column-wise attention for tabular data.
+::: kmr.layers.DateEncodingLayer
 
-### RowAttention
-Row-wise attention mechanisms.
+### 🔍 DateParsingLayer
+Flexible date parsing and extraction from various date formats and strings.
 
-### InterpretableMultiHeadAttention
-Interpretable multi-head attention with attention weight analysis.
+::: kmr.layers.DateParsingLayer
 
-### MultiResolutionTabularAttention
-Multi-resolution attention for different feature scales.
+### 🌸 SeasonLayer
+Seasonal feature extraction from date/time data for temporal pattern recognition.
 
-## Gated Networks
+::: kmr.layers.SeasonLayer
 
-### GatedLinearUnit
-Gated linear unit for feature gating.
+## 🧠 Attention Mechanisms
 
-### GatedResidualNetwork
-Gated residual network for complex feature interactions.
+### 📊 ColumnAttention
+Column-wise attention for tabular data to capture feature-level relationships.
 
-### GatedFeaturesSelection
-Gated feature selection mechanism.
+::: kmr.layers.ColumnAttention
 
-## Boosting Layers
+### 📋 RowAttention
+Row-wise attention mechanisms for sample-level pattern recognition.
 
-### BoostingBlock
-Gradient boosting inspired neural network block.
+::: kmr.layers.RowAttention
 
-### BoostingEnsembleLayer
-Ensemble of boosting blocks for improved performance.
+### 🔍 InterpretableMultiHeadAttention
+Interpretable multi-head attention with attention weight analysis and visualization.
 
-## Specialized Layers
+::: kmr.layers.InterpretableMultiHeadAttention
 
-### BusinessRulesLayer
-Integration of business rules into neural networks.
+### 🎯 MultiResolutionTabularAttention
+Multi-resolution attention for different feature scales and granularities.
 
-### NumericalAnomalyDetection
-Anomaly detection for numerical features.
+::: kmr.layers.MultiResolutionTabularAttention
 
-### CategoricalAnomalyDetectionLayer
-Anomaly detection for categorical features.
+## 🔀 Gated Networks
 
-### FeatureCutout
-Feature cutout for data augmentation.
+### ⚡ GatedLinearUnit
+Gated linear unit for intelligent feature gating and selective information flow.
 
-### SparseAttentionWeighting
-Sparse attention weighting mechanisms.
+::: kmr.layers.GatedLinearUnit
 
-### TabularMoELayer
-Mixture of Experts for tabular data.
+### 🔄 GatedResidualNetwork
+Gated residual network for complex feature interactions and gradient flow.
 
-## Utility Layers
+::: kmr.layers.GatedResidualNetwork
 
-### CastToFloat32Layer
-Type casting utility layer.
+### 🎯 GatedFeaturesSelection
+Gated feature selection mechanism for adaptive feature importance weighting.
 
-### DifferentiableTabularPreprocessor
-Differentiable preprocessing for tabular data.
+::: kmr.layers.GatedFeaturesSelection
 
-### DifferentialPreprocessingLayer
-Differential preprocessing operations.
+## 🚀 Boosting Layers
 
-### DistributionAwareEncoder
-Distribution-aware feature encoding.
+### 📈 BoostingBlock
+Gradient boosting inspired neural network block for sequential learning.
 
-### HyperZZWOperator
-Hyperparameter-aware operator.
+::: kmr.layers.BoostingBlock
 
-### SlowNetwork
-Slow network architecture for careful feature processing.
+### 🎯 BoostingEnsembleLayer
+Ensemble of boosting blocks for improved performance and robustness.
 
-### TextPreprocessingLayer
-Text preprocessing utilities.
+::: kmr.layers.BoostingEnsembleLayer
 
-## Graph and Advanced Features
+## 🏗️ Specialized Layers
 
-### AdvancedGraphFeature
-Advanced graph feature processing.
+### 📋 BusinessRulesLayer
+Integration of business rules and domain knowledge into neural networks.
 
-### GraphFeatureAggregation
-Graph feature aggregation mechanisms.
+::: kmr.layers.BusinessRulesLayer
 
-### MultiHeadGraphFeaturePreprocessor
-Multi-head graph feature preprocessing.
+### 🔍 NumericalAnomalyDetection
+Anomaly detection for numerical features using statistical and ML methods.
+
+::: kmr.layers.NumericalAnomalyDetection
+
+### 🏷️ CategoricalAnomalyDetectionLayer
+Anomaly detection for categorical features with pattern recognition.
+
+::: kmr.layers.CategoricalAnomalyDetectionLayer
+
+### ✂️ FeatureCutout
+Feature cutout for data augmentation and regularization in tabular data.
+
+::: kmr.layers.FeatureCutout
+
+### 🎯 SparseAttentionWeighting
+Sparse attention weighting mechanisms for efficient computation.
+
+::: kmr.layers.SparseAttentionWeighting
+
+### 🎭 TabularMoELayer
+Mixture of Experts for tabular data with adaptive expert selection.
+
+::: kmr.layers.TabularMoELayer
+
+## 🔧 Utility Layers
+
+### 🔢 CastToFloat32Layer
+Type casting utility layer for ensuring consistent data types.
+
+::: kmr.layers.CastToFloat32Layer
+
+### ⚙️ DifferentiableTabularPreprocessor
+Differentiable preprocessing for tabular data with gradient flow.
+
+::: kmr.layers.DifferentiableTabularPreprocessor
+
+### 🔄 DifferentialPreprocessingLayer
+Differential preprocessing operations for advanced data transformations.
+
+::: kmr.layers.DifferentialPreprocessingLayer
+
+### 📊 DistributionAwareEncoder
+Distribution-aware feature encoding for optimal representation learning.
+
+::: kmr.layers.DistributionAwareEncoder
+
+### 🎛️ HyperZZWOperator
+Hyperparameter-aware operator for adaptive model behavior.
+
+::: kmr.layers.HyperZZWOperator
+
+### 🐌 SlowNetwork
+Slow network architecture for careful and deliberate feature processing.
+
+::: kmr.layers.SlowNetwork
+
+### 📝 TextPreprocessingLayer
+Text preprocessing utilities for natural language features in tabular data.
+
+::: kmr.layers.TextPreprocessingLayer
+
+## 🕸️ Graph and Advanced Features
+
+### 🧠 AdvancedGraphFeature
+Advanced graph-based feature processing with dynamic adjacency learning.
+
+::: kmr.layers.AdvancedGraphFeature
+
+### 🔗 GraphFeatureAggregation
+Graph feature aggregation mechanisms for relationship modeling.
+
+::: kmr.layers.GraphFeatureAggregation
+
+### 🎯 MultiHeadGraphFeaturePreprocessor
+Multi-head graph feature preprocessing for complex feature interactions.
+
+::: kmr.layers.MultiHeadGraphFeaturePreprocessor

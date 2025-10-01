@@ -1,4 +1,14 @@
 repos:
+  - repo: local
+    hooks:
+      - id: update-docs
+        name: Update documentation
+        entry: poetry run mkdocs build
+        language: system
+        files: ^kmr/(layers|models)/.*\.py$
+        pass_filenames: false
+        always_run: false
+
   - repo: https://github.com/psf/black
     rev: 23.12.1
     hooks:
@@ -9,7 +19,7 @@ repos:
     rev: v0.1.8
     hooks:
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        args: [--fix, --exit-non-zero-on-fix, --config=ruff.toml]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.8.0

@@ -1,21 +1,43 @@
-# Models API Reference
+# 🏗️ Models API Reference
 
-This page provides comprehensive documentation for all KMR models. All models are designed to work exclusively with Keras 3 and provide high-level abstractions for common tabular data processing tasks.
+Welcome to the KMR Models documentation! All models are designed to work exclusively with **Keras 3** and provide high-level abstractions for common tabular data processing tasks.
 
-## Core Models
+!!! tip "What You'll Find Here"
+    Each model includes detailed documentation with:
+    - ✨ **Complete parameter descriptions** with types and defaults
+    - 🎯 **Usage examples** showing real-world applications
+    - ⚡ **Best practices** and performance considerations
+    - 🎨 **When to use** guidance for each model
+    - 🔧 **Implementation notes** for developers
 
-### BaseFeedForwardModel
-A flexible feed-forward model that can handle individual feature inputs and provides a clean interface for tabular data processing.
+!!! success "Ready-to-Use Models"
+    These models provide complete architectures that you can use out-of-the-box or customize for your specific needs.
 
-## Advanced Models
+!!! note "Base Classes"
+    All models inherit from `BaseModel` ensuring consistent behavior and Keras 3 compatibility.
 
-### SFNEBlock
+## 🏗️ Core Models
+
+### 🚀 BaseFeedForwardModel
+Flexible feed-forward model architecture for tabular data with customizable layers.
+
+::: kmr.models.feed_forward.BaseFeedForwardModel
+
+## 🎯 Advanced Models
+
+### 🧩 SFNEBlock
 Sparse Feature Network Ensemble block for advanced feature processing and ensemble learning.
 
-### TerminatorModel
-A comprehensive model that combines multiple SFNE blocks for complex tabular data tasks.
+::: kmr.models.SFNEBlock
 
-## Base Classes
+### 🎭 TerminatorModel
+Comprehensive tabular model that combines multiple SFNE blocks for complex data tasks.
 
-### BaseModel
-Base class for all KMR models, providing common functionality and ensuring compatibility with Keras 3.
+::: kmr.models.TerminatorModel
+
+## 🔧 Base Classes
+
+### 🏛️ BaseModel
+Base class for all KMR models, providing common functionality and Keras 3 compatibility.
+
+::: kmr.models._base.BaseModel

@@ -1,15 +1,19 @@
 # 🌟 Keras Model Registry (KMR) - Reusable Model Architecture Bricks in Keras 🌟
 
-<p align="center">
-  <img src="docs/kmr_logo.png" width="350"/>
-</p>
+<div align="center">
+  <img src="docs/kmr_logo.png" width="350" alt="KMR Logo"/>
+  
+  <p><strong>Provided and maintained by <a href="https://unicolab.ai">UnicoLab</a></strong></p>
+</div>
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Keras 3.8+](https://img.shields.io/badge/keras-3.8+-red.svg)](https://keras.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![UnicoLab](https://img.shields.io/badge/UnicoLab-Enterprise%20AI-blue.svg)](https://unicolab.ai)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://unicolab.github.io/keras-model-registry/)
 
-**KMR** is a comprehensive collection of reusable Keras layers and models specifically designed for tabular data processing, feature engineering, and advanced neural network architectures. Built with Keras 3, it provides a clean, efficient, and extensible foundation for building sophisticated machine learning models.
+**KMR** is a comprehensive collection of reusable Keras layers and models specifically designed for tabular data processing, feature engineering, and advanced neural network architectures. Built with Keras 3 and developed by [UnicoLab](https://unicolab.ai), it provides a clean, efficient, and extensible foundation for building sophisticated machine learning models for enterprise AI applications.
 
 ## ✨ Key Features
 

@@ -1,11 +1,15 @@
-name: "Manual Publish PyPI"
+name: "Publish to PyPI - UnicoLab"
 
 on:
+  push:
+    tags:
+      - 'v*.*.*'
   workflow_dispatch:
     inputs:
       VERSION:
         required: true
-        default: 1.6.0
+        default: 0.1.0
+        description: 'Version to publish (e.g., 0.1.0)'
 
 permissions:
   contents: write
@@ -13,49 +17,62 @@ permissions:
   id-token: write
 
 jobs:
-  SEMANTIC_RELEASE:
-    runs-on: ["ubuntu-latest"]
+  publish:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out the code
+        uses: actions/checkout@v4
+
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: '3.11'
 
-      - name: Install Python dependencies
-        shell: bash
-        run: |
-          # updating python
-          python -m pip install --upgrade pip
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
 
-          # installing poetry
-          pip install poetry
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
 
-          # disable venvs
-          poetry config virtualenvs.create false
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
 
-          # assuring we have all extras for testing as well
-          poetry install --all-extras --no-interaction
+      - name: Install project
+        run: poetry install --no-interaction
 
-      - name: Publishing to PyPI
-        shell: bash
-        run: |
-          # Configuring PyPi
-          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+      - name: Run tests
+        run: poetry run pytest tests/ -v
 
-          # Setting correct package version
-          poetry version ${{ inputs.VERSION }}
+      - name: Build package
+        run: poetry build
 
-          # Publishing to PyPi
-          poetry publish --build
+      - name: Publish to PyPI
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish --no-interaction
 
-      - name: "Releasing new documentation with mike"
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Deploy documentation
         continue-on-error: true
-        shell: bash
         run: |
-          echo "CURRENT VERSION:"
-          echo "${{ inputs.VERSION }}"
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
-          git pull --no-ff
-          mike deploy --push --update-aliases ${{ inputs.VERSION }} latest
+          git config user.name "UnicoLab Bot"
+          git config user.email "bot@unicolab.ai"
+          poetry run mike deploy --push --update-aliases ${{ github.ref_name }} latest

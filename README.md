@@ -173,13 +173,11 @@ for layer in recommendations:
 
 ## 📖 Documentation
 
-- **[API Overview](docs/api_overview.md)**: Complete list of all available layers and models
-- **[Layers Documentation](docs/layers.md)**: Detailed documentation for all layers
-- **[Models Documentation](docs/models.md)**: Detailed documentation for all models
+- **[Online Documentation](https://unicolab.github.io/keras-model-registry/)**: Full API reference with automatic docstring generation
+- **[API Reference](https://unicolab.github.io/keras-model-registry/api/)**: Complete documentation for all layers, models, and utilities
 - **[Layer Implementation Guide](docs/layers_implementation_guide.md)**: Comprehensive guide for implementing new layers
 - **[Data Analyzer Documentation](docs/data_analyzer.md)**: Complete guide to the data analysis tools
 - **[Contributing Guide](docs/contributing.md)**: How to contribute to the project
-- **[Online Documentation](https://unicolab.github.io/keras-model-registry/)**: Full API reference
 
 ## 🎯 Use Cases
 

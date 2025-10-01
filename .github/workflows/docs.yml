@@ -1,21 +1,13 @@
-name: Update Documentation
+name: Build and Deploy Documentation
 
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'kmr/layers/**'
-      - 'kmr/models/**'
-      - 'scripts/generate_docs.py'
   pull_request:
     branches: [ main ]
-    paths:
-      - 'kmr/layers/**'
-      - 'kmr/models/**'
-      - 'scripts/generate_docs.py'
 
 jobs:
-  update-docs:
+  docs:
     runs-on: ubuntu-latest
     
     steps:
@@ -32,24 +24,13 @@ jobs:
         pip install poetry
         poetry install
     
-    - name: Generate documentation
+    - name: Build documentation
       run: |
-        python scripts/generate_docs.py
+        mkdocs build
     
-    - name: Check for changes
-      id: verify-changed-files
-      run: |
-        if [ -n "$(git status --porcelain docs/)" ]; then
-          echo "changed=true" >> $GITHUB_OUTPUT
-        else
-          echo "changed=false" >> $GITHUB_OUTPUT
-        fi
-    
-    - name: Commit documentation changes
-      if: steps.verify-changed-files.outputs.changed == 'true'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add docs/
-        git commit -m "docs: auto-update documentation from docstrings" || exit 0
-        git push
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./site

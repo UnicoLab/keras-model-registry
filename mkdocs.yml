@@ -36,9 +36,17 @@ theme:
 
 nav:
   - 💡 KMR: index.md
+  - 📚 API Reference:
+    - Layers: api/layers.md
+    - Models: api/models.md
+    - Utils: api/utils.md
+  - 🛠️ Development:
+    - Contributing: contributing.md
+    - Layer Implementation Guide: layers_implementation_guide.md
+    - Data Analyzer: data_analyzer.md
 
 repo_name: Keras Model Registry
-repo_url: https://github.com/piotrlaczkowski/keras-model-registry
+repo_url: https://github.com/UnicoLab/keras-model-registry
 
 markdown_extensions:
   - attr_list
@@ -61,7 +69,7 @@ markdown_extensions:
 
 plugins:
   - search
-  - mkdocstrings
+  # - mkdocstrings  # Temporarily disabled due to dependency issues
   - mike:
       # These fields are all optional; the defaults are as below...
       canonical_version: null

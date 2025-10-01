@@ -1,14 +1,4 @@
 repos:
-  - repo: local
-    hooks:
-      - id: update-docs
-        name: Update documentation
-        entry: python scripts/generate_docs.py
-        language: system
-        files: ^kmr/(layers|models)/.*\.py$
-        pass_filenames: false
-        always_run: false
-
   - repo: https://github.com/psf/black
     rev: 23.12.1
     hooks:

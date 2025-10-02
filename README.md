@@ -36,118 +36,126 @@ pip install kmr
 # Or install from source
 git clone https://github.com/UnicoLab/keras-model-registry
 cd keras-model-registry
-pip install -e .
+poetry install
 ```
 
 ### 🚀 Quick Start Examples
 
-#### Example 1: Simple Tabular Model with Attention
+#### Example 1: Smart Data Preprocessing
 
 ```python
 import keras
-from kmr.layers import TabularAttention, AdvancedNumericalEmbedding
-from kmr.models import BaseFeedForwardModel
+from kmr.layers import DistributionTransformLayer
 
-# Create a simple model for tabular data
-inputs = keras.Input(shape=(20,))  # 20 features
+# Create a simple model with automatic data transformation
+inputs = keras.Input(shape=(10,))  # 10 numerical features
 
-# Apply advanced numerical embedding
-embedded = AdvancedNumericalEmbedding(embed_dim=16, num_heads=4)(inputs)
+# Automatically transform data to normal distribution
+transformed = DistributionTransformLayer(transform_type='auto')(inputs)
 
-# Add tabular attention
-attention = TabularAttention(num_heads=4, d_model=16, dropout_rate=0.1)
-# Reshape for attention (add sequence dimension)
-reshaped = keras.ops.expand_dims(embedded, axis=1)
-attended = attention(reshaped)
-flattened = keras.ops.reshape(attended, (-1, 16))
-
-# Final prediction
-outputs = keras.layers.Dense(1, activation='sigmoid')(flattened)
+# Simple neural network
+x = keras.layers.Dense(64, activation='relu')(transformed)
+x = keras.layers.Dropout(0.2)(x)
+outputs = keras.layers.Dense(1, activation='sigmoid')(x)
 
 model = keras.Model(inputs=inputs, outputs=outputs)
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-print("Model created with", model.count_params(), "parameters")
+print("Model ready! The layer will automatically choose the best transformation for your data.")
 ```
 
-#### Example 2: Feature Engineering Pipeline
+#### Example 2: Intelligent Feature Fusion
 
 ```python
 import keras
-from kmr.layers import (
-    DateEncodingLayer, 
-    DistributionTransformLayer,
-    GatedFeatureFusion,
-    VariableSelection
-)
+from kmr.layers import GatedFeatureFusion
 
-# Create a feature engineering pipeline
-inputs = keras.Input(shape=(10,))  # 10 features
+# Create two different representations of your data
+inputs = keras.Input(shape=(8,))  # 8 features
 
-# Apply distribution transformation
-transformed = DistributionTransformLayer(transform_type='auto')(inputs)
+# First representation: linear processing
+linear_features = keras.layers.Dense(16, activation='relu')(inputs)
 
-# Create two feature representations
-feat1 = keras.layers.Dense(16, activation='relu')(transformed)
-feat2 = keras.layers.Dense(16, activation='tanh')(transformed)
+# Second representation: non-linear processing  
+nonlinear_features = keras.layers.Dense(16, activation='tanh')(inputs)
 
-# Fuse features using gated fusion
-fused = GatedFeatureFusion()([feat1, feat2])
+# Intelligently combine both representations
+fused_features = GatedFeatureFusion()([linear_features, nonlinear_features])
 
-# Apply variable selection
-# Reshape for variable selection (needs 3D input)
-reshaped = keras.ops.expand_dims(fused, axis=1)
-selected, weights = VariableSelection(nr_features=1, units=16, use_context=False)(reshaped)
-
-# Final output
-outputs = keras.layers.Dense(1)(selected)
+# Final prediction
+outputs = keras.layers.Dense(1, activation='sigmoid')(fused_features)
 
 model = keras.Model(inputs=inputs, outputs=outputs)
-print("Feature engineering model ready!")
+model.compile(optimizer='adam', loss='binary_crossentropy')
+
+print("Smart feature fusion model ready! The layer learns which representation to trust more.")
 ```
 
-#### Example 3: Using Pre-built Models
+#### Example 3: Ready-to-Use Models
 
 ```python
 import keras
 from kmr.models import BaseFeedForwardModel
 
-# Create a feed-forward model with individual feature inputs
-feature_names = ['age', 'income', 'education', 'experience']
+# Create a complete model with just one line!
 model = BaseFeedForwardModel(
-    feature_names=feature_names,
+    feature_names=['age', 'income', 'education', 'experience'],
     hidden_units=[64, 32, 16],
     output_units=1,
     dropout_rate=0.2
 )
 
-# Prepare data (each feature as separate input)
+# Your data (each feature as separate input)
 age = keras.random.normal((100, 1))
-income = keras.random.normal((100, 1))
+income = keras.random.normal((100, 1)) 
 education = keras.random.normal((100, 1))
 experience = keras.random.normal((100, 1))
 
-# Train the model
+# Train with one command
 model.compile(optimizer='adam', loss='mse')
 model.fit([age, income, education, experience], 
           keras.random.normal((100, 1)), 
           epochs=10, verbose=0)
 
-print("Model trained successfully!")
+print("✅ Model trained successfully! No complex setup needed.")
 ```
 
-### Data Analyzer
+#### Example 4: Date Feature Engineering
+
+```python
+import keras
+from kmr.layers import DateEncodingLayer
+
+# Create a model that processes date information
+inputs = keras.Input(shape=(4,))  # [year, month, day, day_of_week]
+
+# Convert dates to cyclical features automatically
+date_features = DateEncodingLayer()(inputs)
+
+# Simple prediction model
+x = keras.layers.Dense(32, activation='relu')(date_features)
+outputs = keras.layers.Dense(1, activation='sigmoid')(x)
+
+model = keras.Model(inputs=inputs, outputs=outputs)
+model.compile(optimizer='adam', loss='binary_crossentropy')
+
+print("📅 Date-aware model ready! Handles seasonality and cyclical patterns automatically.")
+```
+
+### 🧠 Smart Data Analyzer
 
 ```python
 from kmr.utils import analyze_data
 
-# Analyze your CSV data and get layer recommendations
-results = analyze_data("path/to/your/data.csv")
+# Get intelligent recommendations for your data
+results = analyze_data("your_data.csv")
 recommendations = results["recommendations"]
 
-print("Recommended layers:")
+print("🎯 Recommended layers for your data:")
 for layer in recommendations:
-    print(f"- {layer['layer_name']}: {layer['description']}")
+    print(f"  • {layer['layer_name']}: {layer['description']}")
+    
+print("✨ No more guessing which layers to use!")
 ```
 
 ## 🏗️ Architecture Overview
@@ -183,45 +191,42 @@ for layer in recommendations:
 - **[Data Analyzer Documentation](docs/data_analyzer.md)**: Complete guide to the data analysis tools
 - **[Contributing Guide](docs/contributing.md)**: How to contribute to the project
 
-## 🎯 Use Cases
+## 🎯 Common Use Cases
 
-### Tabular Data Processing
+### 📊 Tabular Data Processing
 ```python
-from kmr.layers import DifferentiableTabularPreprocessor, TabularAttention
+from kmr.layers import DistributionTransformLayer, GatedFeatureFusion
 
-# Preprocess tabular data
-preprocessor = DifferentiableTabularPreprocessor(
-    numerical_features=['age', 'income'],
-    categorical_features=['category', 'region']
+# Smart preprocessing
+preprocessor = DistributionTransformLayer(transform_type='auto')
+
+# Feature combination
+fusion = GatedFeatureFusion()
+```
+
+### 🔧 Feature Engineering
+```python
+from kmr.layers import DateEncodingLayer, BusinessRulesLayer
+
+# Date features
+date_encoder = DateEncodingLayer()
+
+# Business rules validation
+rules = BusinessRulesLayer(
+    rules=[(">", 0), ("<", 100)], 
+    feature_type="numerical"
 )
-
-# Apply attention mechanism
-attention = TabularAttention(num_heads=8, d_model=64)
 ```
 
-### Feature Engineering
+### 🎨 Advanced Architectures
 ```python
-from kmr.layers import AdvancedNumericalEmbedding, GatedFeatureFusion
+from kmr.layers import StochasticDepth, GatedResidualNetwork
 
-# Advanced numerical embedding
-embedding = AdvancedNumericalEmbedding(embed_dim=32, num_heads=4)
+# Regularization
+stochastic_depth = StochasticDepth(survival_prob=0.8)
 
-# Feature fusion
-fusion = GatedFeatureFusion(units=64, dropout_rate=0.1)
-```
-
-### Date and Time Processing
-```python
-from kmr.layers import DateParsingLayer, DateEncodingLayer, SeasonLayer
-
-# Parse dates
-date_parser = DateParsingLayer(date_format="YYYY-MM-DD")
-
-# Encode dates
-date_encoder = DateEncodingLayer(embed_dim=16)
-
-# Extract seasonal features
-season_extractor = SeasonLayer()
+# Advanced processing
+grn = GatedResidualNetwork(units=64)
 ```
 
 ## 🧪 Testing

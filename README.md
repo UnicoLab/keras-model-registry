@@ -31,7 +31,7 @@
 
 ```bash
 # Install from PyPI (coming soon)
-pip install kmr
+poetry add kmr
 
 # Or install from source
 git clone https://github.com/UnicoLab/keras-model-registry

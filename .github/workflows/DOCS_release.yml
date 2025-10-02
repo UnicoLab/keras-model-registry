@@ -12,10 +12,12 @@ jobs:
   MIKE_RELEASE_DOCs:
     runs-on: ["ubuntu-latest"]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
@@ -30,15 +32,10 @@ jobs:
           # assuring we have all extras for testing as well
           poetry install --only doc --no-interaction
 
-      - name: Fetch latest gh-pages branch
+      - name: Configure Git
         run: |
-          git fetch origin gh-pages:gh-pages
-
-      - name: Rebase local changes
-        run: |
-          git checkout gh-pages
-          git rebase origin/gh-pages
-          git checkout main
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: "Releasing new documentation with mike"
         shell: bash
@@ -50,10 +47,4 @@ jobs:
           else
             echo "Using manually specified version: $VERSION"
           fi
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
           mike deploy --push --update-aliases $VERSION latest
-
-      - name: Push changes
-        run: |
-          git push origin gh-pages --force

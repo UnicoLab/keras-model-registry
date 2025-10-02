@@ -8,6 +8,9 @@
   <p><strong>🏢 Provided and maintained by <a href="https://unicolab.ai" target="_blank">UnicoLab</a></strong></p>
 </div>
 
+!!! success "🎯 Production-Ready Tabular AI"
+    Build sophisticated tabular models with **38+ specialized layers**, **smart preprocessing**, and **intelligent feature engineering** - all designed exclusively for Keras 3.
+
 ---
 
 ## 🎯 What is KMR?
@@ -28,63 +31,81 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
 ### Installation
 
 ```bash
+# Install from PyPI (recommended)
 pip install kmr
+
+# Or install from source using Poetry
+git clone https://github.com/UnicoLab/keras-model-registry
+cd keras-model-registry
+poetry install
 ```
 
 ### Basic Usage
 
 ```python
 import keras
-from kmr.layers import AdvancedGraphFeatureLayer, TabularAttention
+from kmr.layers import DistributionTransformLayer, GatedFeatureFusion
 
 # Create sample tabular data
-x = keras.random.normal((32, 10))  # 32 samples, 10 features
+inputs = keras.Input(shape=(10,))  # 10 features
 
-# Apply advanced graph-based feature processing
-graph_layer = AdvancedGraphFeatureLayer(
-    embed_dim=16,
-    num_heads=4,
-    hierarchical=True,
-    num_groups=4
-)
+# Smart data preprocessing
+transformed = DistributionTransformLayer(transform_type='auto')(inputs)
 
-# Process with tabular attention
-attention_layer = TabularAttention(
-    num_heads=8,
-    d_model=64,
-    dropout_rate=0.1
-)
+# Create two feature representations
+linear_features = keras.layers.Dense(16, activation='relu')(transformed)
+nonlinear_features = keras.layers.Dense(16, activation='tanh')(transformed)
 
-# Build your model
-output = attention_layer(graph_layer(x))
-print(f"Output shape: {output.shape}")  # (32, 100, 64)
+# Intelligently combine features
+fused = GatedFeatureFusion()([linear_features, nonlinear_features])
+
+# Final prediction
+outputs = keras.layers.Dense(1, activation='sigmoid')(fused)
+
+model = keras.Model(inputs=inputs, outputs=outputs)
+print("✅ Model ready! Smart preprocessing + intelligent feature fusion.")
 ```
 
 !!! success "That's it!"
-    In just a few lines, you've created a sophisticated tabular model with graph-based feature processing and multi-head attention!
+    In just a few lines, you've created a sophisticated tabular model with automatic data transformation and intelligent feature fusion!
 
-## 🧩 Core Components
+## 🧩 What's Inside KMR?
 
-### 🎯 Attention Layers
-- **TabularAttention**: Dual attention for features and samples
-- **AdvancedGraphFeature**: Graph-based feature relationships
-- **ColumnAttention** & **RowAttention**: Specialized attention mechanisms
-- **InterpretableMultiHeadAttention**: Attention with interpretability
+<div class="grid cards" markdown>
 
-### 🔧 Feature Engineering
-- **AdvancedNumericalEmbedding**: Dual-branch numerical feature processing
-- **DateEncodingLayer**: Comprehensive date/time feature extraction
-- **DistributionTransformLayer**: Automatic distribution transformation
-- **VariableSelection**: Intelligent feature selection
+-   :material-brain:{ .lg .middle } **38+ Production Layers**
 
-### 🏗️ Pre-built Models
-- **BaseFeedForwardModel**: Flexible feed-forward architecture
-- **SFNEBlock**: Sparse Feature Network Ensemble
-- **TerminatorModel**: Comprehensive tabular model
+    ---
 
-### 🔍 Smart Tools
-- **DataAnalyzer**: Intelligent layer recommendations
-- **CLI Tools**: Command-line data analysis
+    Advanced attention mechanisms, feature processing, and specialized architectures ready for production use.
+
+    [:octicons-arrow-right-24: Explore Layers](api/layers.md)
+
+-   :material-cog:{ .lg .middle } **Smart Preprocessing**
+
+    ---
+
+    Automatic data transformation, date encoding, and intelligent feature engineering layers.
+
+    [:octicons-arrow-right-24: See Examples](examples/README.md)
+
+-   :material-rocket-launch:{ .lg .middle } **Pre-built Models**
+
+    ---
+
+    Ready-to-use models like BaseFeedForwardModel and SFNEBlock for common ML tasks.
+
+    [:octicons-arrow-right-24: View Models](api/models.md)
+
+-   :material-chart-line:{ .lg .middle } **Data Analyzer**
+
+    ---
+
+    Intelligent CSV analysis tool that recommends the best layers for your specific data.
+
+    [:octicons-arrow-right-24: Try Analyzer](data_analyzer.md)
+
+</div>
 
 ## 📚 Documentation Highlights
 

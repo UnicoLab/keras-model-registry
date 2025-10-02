@@ -1,29 +1,37 @@
-# KMR Data Analyzer
+# 🔍 KMR Data Analyzer
 
-The KMR Data Analyzer is a utility that analyzes tabular data (CSV files) and recommends appropriate layers from the Keras Model Registry based on the data characteristics.
+The KMR Data Analyzer is an intelligent utility that analyzes your tabular data and automatically recommends the best KMR layers for your specific dataset.
 
-## Features
+!!! tip "Smart Recommendations"
+    Just provide your CSV file, and the analyzer will suggest the most appropriate layers based on your data characteristics!
 
-- Analyzes single CSV files or directories containing CSV files
-- Identifies different types of features (numerical, categorical, date, text)
-- Detects data characteristics such as high cardinality, missing values, correlations
-- Recommends appropriate KMR layers for different data characteristics
-- Extensible architecture to add custom layer recommendations
-- Command-line interface for easy usage
-- Python API for integration into scripts and notebooks
+## ✨ Features
 
-## Installation
+- 📊 **Automatic Analysis**: Analyzes single CSV files or entire directories
+- 🎯 **Feature Detection**: Identifies numerical, categorical, date, and text features
+- 🔍 **Data Insights**: Detects high cardinality, missing values, correlations, and patterns
+- 🧩 **Layer Recommendations**: Suggests the best KMR layers for your data
+- 🔧 **Extensible**: Add custom recommendation rules
+- 💻 **CLI & API**: Command-line interface and Python API
+- 📈 **Performance Tips**: Guidance on layer configuration and optimization
+
+## 🚀 Installation
 
 The Data Analyzer is included with the Keras Model Registry package.
 
 ```bash
-# Install the Keras Model Registry package
-pip install keras-model-registry
+# Install from PyPI (recommended)
+pip install kmr
+
+# Or install from source using Poetry
+git clone https://github.com/UnicoLab/keras-model-registry
+cd keras-model-registry
+poetry install
 ```
 
-## Usage
+## 💻 Usage
 
-### Command-line Interface
+### 🖥️ Command-line Interface
 
 The Data Analyzer can be used from the command line:
 
@@ -41,7 +49,7 @@ python -m kmr.utils.data_analyzer_cli path/to/data.csv --output results.json
 python -m kmr.utils.data_analyzer_cli path/to/data.csv --recommendations-only
 ```
 
-### Python API
+### 🐍 Python API
 
 You can also use the Data Analyzer in your Python code:
 

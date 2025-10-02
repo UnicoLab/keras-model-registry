@@ -1,14 +1,11 @@
 # 🧩 Layers API Reference
 
-Welcome to the comprehensive KMR Layers documentation! All layers are designed to work exclusively with **Keras 3** and follow consistent patterns for initialization, serialization, and usage.
+Welcome to the KMR Layers documentation! All layers are designed to work exclusively with **Keras 3** and follow consistent patterns for easy integration.
 
-!!! tip "What You'll Find Here"
-    Each layer includes detailed documentation with:
-    - ✨ **Complete parameter descriptions** with types and defaults
-    - 🎯 **Usage examples** showing real-world applications  
-    - ⚡ **Best practices** and performance considerations
-    - 🎨 **When to use** guidance for each layer
-    - 🔧 **Implementation notes** for developers
+!!! tip "Quick Navigation"
+    - 🎯 **Most Popular**: Start with TabularAttention, DistributionTransformLayer, GatedFeatureFusion
+    - 🔧 **Feature Engineering**: DateEncodingLayer, VariableSelection, BusinessRulesLayer  
+    - 🧠 **Advanced**: AdvancedNumericalEmbedding, TransformerBlock, StochasticDepth
 
 !!! success "Keras 3 Native"
     All layers are built exclusively for Keras 3 with no TensorFlow dependencies in production code.

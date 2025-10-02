@@ -95,19 +95,19 @@ plugins:
           paths: [.]
           options:
             docstring_style: google
-            show_source: true
+            show_source: false
             show_root_heading: true
             show_root_toc_entry: false
             show_object_full_path: false
             show_category_heading: true
             show_if_no_docstring: false
             members_order: source
-            filters: ["!^_"]
+            filters: ["!^_", "!^build", "!^call", "!^get_config", "!^_validate_params"]
             separate_signature: true
             merge_init_into_class: true
-            show_signature_annotations: true
-            show_type_annotations: true
-            show_bases: true
+            show_signature_annotations: false
+            show_type_annotations: false
+            show_bases: false
             show_submodules: false
             heading_level: 2
             show_signature: true

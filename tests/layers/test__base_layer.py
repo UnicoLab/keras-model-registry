@@ -8,7 +8,7 @@ from keras import ops
 from kmr.layers._base_layer import BaseLayer
 
 
-class TestCustomLayer(BaseLayer):
+class CustomTestLayer(BaseLayer):
     """Test layer implementation for testing BaseLayer functionality."""
 
     def __init__(self, units: int, activation: str = "linear", **kwargs) -> None:
@@ -56,7 +56,7 @@ class TestBaseLayer(unittest.TestCase):
     def setUp(self) -> None:
         """Set up test cases."""
         self.valid_params = {"units": 10, "activation": "relu"}
-        self.layer = TestCustomLayer(**self.valid_params)
+        self.layer = CustomTestLayer(**self.valid_params)
 
     def test_initialization(self) -> None:
         """Test layer initialization."""
@@ -66,14 +66,14 @@ class TestBaseLayer(unittest.TestCase):
     def test_required_params(self) -> None:
         """Test required parameter validation."""
         with self.assertRaises(TypeError):
-            TestCustomLayer(activation="relu")
+            CustomTestLayer(activation="relu")
 
     def test_invalid_params(self) -> None:
         """Test invalid parameter validation."""
         with self.assertRaises(ValueError):
-            TestCustomLayer(units=-1)
+            CustomTestLayer(units=-1)
         with self.assertRaises(ValueError):
-            TestCustomLayer(units=10, activation="invalid")
+            CustomTestLayer(units=10, activation="invalid")
 
     def test_dtype_validation(self) -> None:
         """Test tensor dtype validation."""
@@ -90,13 +90,13 @@ class TestBaseLayer(unittest.TestCase):
     def test_parameter_validation(self) -> None:
         """Test parameter validation."""
         # Test validation method directly
-        layer = TestCustomLayer(units=10)
+        layer = CustomTestLayer(units=10)
         self.assertIsNone(layer._validate_params())
 
     def test_serialization(self) -> None:
         """Test layer serialization and deserialization."""
         config = self.layer.get_config()
-        reconstructed_layer = TestCustomLayer.from_config(config)
+        reconstructed_layer = CustomTestLayer.from_config(config)
 
         self.assertEqual(self.layer.units, reconstructed_layer.units)
         self.assertEqual(self.layer.activation, reconstructed_layer.activation)

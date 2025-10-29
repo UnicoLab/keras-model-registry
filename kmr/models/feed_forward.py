@@ -1,5 +1,6 @@
 """Feed forward neural network model implementation."""
 from typing import Any
+import keras
 from keras import layers, Model
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
@@ -65,7 +66,7 @@ class BaseFeedForwardModel(BaseModel):
             bias_constraint: Bias constraint.
             **kwargs: Additional arguments.
         """
-        super().__init__(**kwargs)
+        super().__init__(preprocessing_model=preprocessing_model, **kwargs)
 
         # Store model parameters
         self.feature_names = feature_names
@@ -73,7 +74,6 @@ class BaseFeedForwardModel(BaseModel):
         self.output_units = output_units
         self.dropout_rate = dropout_rate
         self.activation = activation
-        self.preprocessing_model = preprocessing_model
         self.kernel_initializer = kernel_initializer
         self.bias_initializer = bias_initializer
         self.kernel_regularizer = kernel_regularizer
@@ -175,33 +175,54 @@ class BaseFeedForwardModel(BaseModel):
 
     def call(
         self,
-        inputs: dict[str, KerasTensor] | KerasTensor,
+        inputs: Any,
         training: bool = False,
     ) -> KerasTensor:
-        """Forward pass of the model.
+        """Forward pass of the model with universal input handling.
+
+        This method supports various input formats:
+        - Single tensors/vectors (numpy arrays, tensors)
+        - Lists/tuples of tensors
+        - Dictionaries (regular dict, OrderedDict)
+        - Mixed input formats
 
         Args:
-            inputs: Dictionary of input tensors or a single tensor.
+            inputs: Input data in various formats (dict, list, tensor, etc.)
             training: Whether in training mode.
 
         Returns:
             Model output tensor.
         """
-        # Check if preprocessing model expects multiple inputs (like KDP)
-        if (self.preprocessing_model is not None and 
-            hasattr(self.preprocessing_model, 'inputs') and 
-            len(self.preprocessing_model.inputs) > 1):
-            # KDP-style preprocessing: pass inputs as dictionary
-            return self._model(inputs, training=training)
+        # Use BaseModel's intelligent input processing
+        processed_inputs = self._process_inputs_for_model(
+            inputs, 
+            expected_keys=self.feature_names,
+            auto_split=True,
+            auto_reshape=True
+        )
+        
+        # Pass through internal model
+        if self.preprocessing_model is not None:
+            # For preprocessed inputs, we need to check if inputs are already preprocessed
+            # If inputs is a single tensor (preprocessed), apply hidden layers directly
+            if isinstance(processed_inputs, (list, tuple)) and len(processed_inputs) == 1:
+                # Single preprocessed tensor
+                x = processed_inputs[0]
+                for layer in self.hidden_layers:
+                    x = layer(x)
+                return self.output_layer(x)
+            elif hasattr(processed_inputs, 'shape') and len(processed_inputs.shape) == 2:
+                # Single preprocessed tensor (not in a list)
+                x = processed_inputs
+                for layer in self.hidden_layers:
+                    x = layer(x)
+                return self.output_layer(x)
+            else:
+                # Multiple inputs or dictionary - use internal model
+                return self._model(processed_inputs, training=training)
         else:
-            # Standard preprocessing: convert dictionary inputs to list of tensors
-            x = (
-                [inputs[name] for name in self.feature_names]
-                if isinstance(inputs, dict)
-                else inputs
-            )
-            # Pass through internal model
-            return self._model(x, training=training)
+            # Use the internal model for raw inputs
+            return self._model(processed_inputs, training=training)
 
     def get_config(self) -> dict[str, Any]:
         """Get model configuration.

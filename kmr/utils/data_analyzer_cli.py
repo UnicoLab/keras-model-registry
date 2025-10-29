@@ -109,7 +109,7 @@ def main() -> None:
             logger.info(f"Results saved to {args.output}")
         else:
             # Print to stdout
-            pass
+            print(json.dumps(formatted_result, indent=2))
 
     except Exception as e:
         logger.error(f"Error during analysis: {e}")

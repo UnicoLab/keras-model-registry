@@ -84,10 +84,13 @@ class SFNEBlock(BaseModel):
         self.num_layers = num_layers
         self.slow_network_layers = slow_network_layers
         self.slow_network_units = slow_network_units
-        self.preprocessing_model = preprocessing_model
 
-        # Call parent's __init__ with only the parameters it accepts
-        super().__init__(name=name, **kwargs)
+        # Call parent's __init__ with preprocessing model support
+        super().__init__(
+            preprocessing_model=preprocessing_model,
+            name=name,
+            **kwargs
+        )
 
         # Validate parameters
         self._validate_params()
@@ -135,30 +138,40 @@ class SFNEBlock(BaseModel):
 
     def call(
         self,
-        inputs: dict[str, KerasTensor] | KerasTensor,
+        inputs: Any,
         training: bool = False,
     ) -> KerasTensor:
-        """Forward pass of the model.
+        """Forward pass of the model with universal input handling.
+
+        This method supports various input formats:
+        - Single tensors/vectors (numpy arrays, tensors)
+        - Lists/tuples of tensors
+        - Dictionaries (regular dict, OrderedDict)
+        - Mixed input formats
 
         Args:
-            inputs: Input tensor with shape (batch_size, input_dim) or a dictionary with feature inputs.
+            inputs: Input data in various formats (dict, list, tensor, etc.)
             training: Boolean indicating whether the model should behave in training mode.
 
         Returns:
             Output tensor with shape (batch_size, output_dim).
         """
-        # Handle dictionary inputs if provided
-        if isinstance(inputs, dict):
-            # Filter inputs to only include those expected by the model
-            inputs = self.filer_inputs(inputs)
-            # Convert dictionary to a list of tensors
-            x = ops.concatenate(list(inputs.values()), axis=-1)
+        # Use BaseModel's intelligent input processing
+        # For SFNEBlock, we need to concatenate multiple inputs into a single tensor
+        processed_inputs = self._process_inputs_for_model(
+            inputs, 
+            expected_keys=None,  # No specific feature names for SFNEBlock
+            auto_split=False,    # Don't split single inputs
+            auto_reshape=False   # Don't reshape, let the model handle it
+        )
+        
+        # Handle the processed inputs
+        if isinstance(processed_inputs, list):
+            # Multiple inputs - concatenate them
+            x = ops.concatenate(processed_inputs, axis=-1)
         else:
-            x = inputs
-
-        # Apply preprocessing if available
-        if self.preprocessing_model is not None:
-            x = self.preprocessing_model(x, training=training)
+            # Single input
+            x = processed_inputs
 
         logger.debug(f"SFNEBlock input shape: {x.shape}")
 
@@ -170,13 +183,8 @@ class SFNEBlock(BaseModel):
             x = layer(x)
 
         # Generate hyper-kernels using the slow network
-        slow_input = (
-            ops.concatenate(list(inputs.values()), axis=-1)
-            if isinstance(inputs, dict)
-            else inputs
-        )
-
-        hyper_kernels = self.slow_network(slow_input, training=training)
+        # Compute slow network input - use the processed input x
+        hyper_kernels = self.slow_network(x, training=training)
         logger.debug(f"SFNEBlock hyper_kernels shape: {hyper_kernels.shape}")
 
         # Compute context-dependent weights

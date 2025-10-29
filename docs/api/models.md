@@ -35,6 +35,11 @@ Comprehensive tabular model that combines multiple SFNE blocks for complex data 
 
 ::: kmr.models.TerminatorModel
 
+### 🔍 Autoencoder
+Advanced autoencoder model for anomaly detection with optional preprocessing integration and automatic threshold configuration.
+
+::: kmr.models.autoencoder.Autoencoder
+
 ## 🔧 Base Classes
 
 ### 🏛️ BaseModel

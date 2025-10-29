@@ -3,6 +3,7 @@ advanced feature processing. It's designed for complex tabular data modeling tas
 """
 
 from typing import Any
+import keras
 from loguru import logger
 from keras import layers, Model
 from keras import KerasTensor
@@ -93,10 +94,13 @@ class TerminatorModel(BaseModel):
         self.num_blocks = num_blocks
         self.slow_network_layers = slow_network_layers
         self.slow_network_units = slow_network_units
-        self.preprocessing_model = preprocessing_model
 
-        # Call parent's __init__ with only the parameters it accepts
-        super().__init__(name=name, **kwargs)
+        # Call parent's __init__ with preprocessing model support
+        super().__init__(
+            preprocessing_model=preprocessing_model,
+            name=name,
+            **kwargs
+        )
 
         # Validate parameters
         self._validate_params()
@@ -120,7 +124,7 @@ class TerminatorModel(BaseModel):
             )
             for _ in range(num_blocks)
         ]
-        self.output_layer = layers.Dense(output_dim, activation="linear")
+        self.output_layer = layers.Dense(output_dim, activation="sigmoid")
 
         # Add a context-dependent layer to ensure context affects output
         self.context_dense = layers.Dense(input_dim, activation="relu")
@@ -150,29 +154,53 @@ class TerminatorModel(BaseModel):
 
     def call(
         self,
-        inputs: list[KerasTensor] | KerasTensor,
+        inputs: Any,
         training: bool = False,
     ) -> KerasTensor:
-        """Forward pass of the model.
+        """Forward pass of the model with universal input handling.
+
+        This method supports various input formats:
+        - List/tuple of tensors [input_tensor, context_tensor]
+        - Dictionary with 'input' and 'context' keys
+        - Single tensor (will be treated as input, context will be zeros)
 
         Args:
-            inputs: List of input tensors [input_tensor, context_tensor] or a single input tensor.
+            inputs: Input data in various formats (list, dict, tensor, etc.)
             training: Boolean indicating whether the model should behave in training mode.
 
         Returns:
             Output tensor with shape (batch_size, output_dim).
         """
-        # Handle inputs
-        if isinstance(inputs, list):
-            x, context = inputs
+        # Standardize inputs to OrderedDict format
+        standardized_inputs = self._standardize_inputs(inputs)
+        
+        # Extract input and context tensors
+        if len(standardized_inputs) >= 2:
+            # Multiple inputs - use first two as input and context
+            input_tensors = list(standardized_inputs.values())
+            x = input_tensors[0]
+            context = input_tensors[1]
+        elif 'input' in standardized_inputs and 'context' in standardized_inputs:
+            # Dictionary with named inputs
+            x = standardized_inputs['input']
+            context = standardized_inputs['context']
+        elif len(standardized_inputs) == 1:
+            # Single input - use zeros for context with correct dimensions
+            x = list(standardized_inputs.values())[0]
+            # Create context tensor with the correct context_dim
+            batch_size = x.shape[0]
+            context = keras.ops.zeros((batch_size, self.context_dim), dtype=x.dtype)
         else:
             raise ValueError(
-                "TerminatorModel expects a list of inputs [input_tensor, context_tensor]",
+                "TerminatorModel expects at least one input tensor. "
+                "For context-dependent behavior, provide [input_tensor, context_tensor] or "
+                "a dictionary with 'input' and 'context' keys."
             )
 
         # Apply preprocessing if available
         if self.preprocessing_model is not None:
-            x = self.preprocessing_model(x, training=training)
+            # Use BaseModel's preprocessing handling
+            x = self._process_preprocessed_inputs(standardized_inputs)
 
         logger.debug(
             f"TerminatorModel input shape: {x.shape}, context shape: {context.shape}",

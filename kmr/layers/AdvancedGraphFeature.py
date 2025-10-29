@@ -175,7 +175,7 @@ class AdvancedGraphFeatureLayer(BaseLayer):
         self.dropout = (
             layers.Dropout(self.dropout_rate)
             if self.dropout_rate > 0
-            else lambda x, _: x
+            else lambda x, training=None: x
         )
 
         # Final projection: maps the flattened aggregated embedding back to the original feature space.

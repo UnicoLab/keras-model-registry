@@ -118,23 +118,23 @@ endif
 .PHONY: docs_version_list
 ## List available versions of the docs
 docs_version_list:
-	mike list
+	poetry run mike list
 
 .PHONY: docs_version_serve
 ## Serve versioned docs
 docs_version_serve:
 	@echo "Start to serve versioned docs"
-	mike serve
+	poetry run mike serve
 
 .PHONY: docs
 ## Create or Deploy MkDocs based documentation to GitHub pages.
 deploy_doc:
-	mkdocs gh-deploy
+	poetry run mkdocs gh-deploy
 
 .PHONY: serve_doc
 ## Test MkDocs based documentation locally.
 serve_doc:
-	mkdocs serve
+	poetry run mkdocs serve
 
 # ------------------------------------
 # Clean All

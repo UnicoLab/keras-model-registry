@@ -12,13 +12,20 @@ theme:
     - navigation.expand
     - navigation.path
     - navigation.top
+    - navigation.instant
+    - navigation.tracking
+    - navigation.indexes
     - search.highlight
     - search.share
     - search.suggest
     - content.code.copy
     - content.code.annotate
+    - content.code.select
+    - content.tabs.link
     - content.action.edit
     - content.action.view
+    - toc.follow
+    - toc.integrate
   palette:
     # Light mode
     - media: "(prefers-color-scheme: light)"
@@ -41,22 +48,72 @@ theme:
     code: JetBrains Mono
 
 nav:
-  - 🚀 Getting Started: index.md
-  - 📚 API Reference:
-    - 🧩 Layers: api/layers.md
-    - 🏗️ Models: api/models.md
-    - 🔧 Utils: api/utils.md
-  - 📖 Examples & Guides:
-    - 📋 Examples Overview: examples/README.md
-    - ✨ Rich Docstrings Showcase: examples/rich_docstrings_showcase.md
-    - 🚀 BaseFeedForwardModel Guide: examples/feed_forward_guide.md
-    - 🤝 KDP Integration Guide: examples/kdp_integration_guide.md
-    - 🔍 Data Analyzer Examples: examples/data_analyzer_examples.md
-  - 🛠️ Development:
-    - 🤝 Contributing: contributing.md
-    - 📝 Layer Implementation Guide: layers_implementation_guide.md
-    - 🔍 Data Analyzer: data_analyzer.md
-    - 🚀 PyPI Setup Guide: PYPI_SETUP.md
+  - Home: index.md
+  - 🚀 Getting Started:
+    - Quick Start: getting-started/quickstart.md
+    - Installation: getting-started/installation.md
+    - Core Concepts: getting-started/concepts.md
+  - 🧩 Layers:
+    - Layer Explorer: layers-explorer.md
+    - 🧠 Attention:
+      - TabularAttention: layers/tabular-attention.md
+      - MultiResolutionTabularAttention: layers/multi-resolution-tabular-attention.md
+      - ColumnAttention: layers/column-attention.md
+      - RowAttention: layers/row-attention.md
+      - InterpretableMultiHeadAttention: layers/interpretable-multi-head-attention.md
+    - 🔧 Preprocessing:
+      - DifferentiableTabularPreprocessor: layers/differentiable-tabular-preprocessor.md
+      - DifferentialPreprocessingLayer: layers/differential-preprocessing-layer.md
+      - DateParsingLayer: layers/date-parsing-layer.md
+      - DateEncodingLayer: layers/date-encoding-layer.md
+      - SeasonLayer: layers/season-layer.md
+      - CastToFloat32Layer: layers/cast-to-float32-layer.md
+    - ⚙️ Feature Engineering:
+      - VariableSelection: layers/variable-selection.md
+      - GatedFeatureSelection: layers/gated-feature-selection.md
+      - GatedFeatureFusion: layers/gated-feature-fusion.md
+      - AdvancedNumericalEmbedding: layers/advanced-numerical-embedding.md
+      - DistributionAwareEncoder: layers/distribution-aware-encoder.md
+      - DistributionTransformLayer: layers/distribution-transform-layer.md
+      - SparseAttentionWeighting: layers/sparse-attention-weighting.md
+      - FeatureCutout: layers/feature-cutout.md
+    - 🏗️ Specialized:
+      - GatedResidualNetwork: layers/gated-residual-network.md
+      - GatedLinearUnit: layers/gated-linear-unit.md
+      - TransformerBlock: layers/transformer-block.md
+      - TabularMoELayer: layers/tabular-moe-layer.md
+      - BoostingBlock: layers/boosting-block.md
+      - BoostingEnsembleLayer: layers/boosting-ensemble-layer.md
+      - BusinessRulesLayer: layers/business-rules-layer.md
+      - StochasticDepth: layers/stochastic-depth.md
+      - SlowNetwork: layers/slow-network.md
+      - HyperZZWOperator: layers/hyper-zzw-operator.md
+      - TextPreprocessingLayer: layers/text-preprocessing-layer.md
+    - 🛠️ Utility:
+      - AdvancedGraphFeature: layers/advanced-graph-feature.md
+      - GraphFeatureAggregation: layers/graph-feature-aggregation.md
+      - MultiHeadGraphFeaturePreprocessor: layers/multi-head-graph-feature-preprocessor.md
+      - NumericalAnomalyDetection: layers/numerical-anomaly-detection.md
+      - CategoricalAnomalyDetectionLayer: layers/categorical-anomaly-detection-layer.md
+  - 📚 Tutorials:
+    - Basic Workflows: tutorials/basic-workflows.md
+    - Feature Engineering: tutorials/feature-engineering.md
+    - Model Building: tutorials/model-building.md
+  - 📖 Examples:
+    - Examples Overview: examples/README.md
+    - Rich Docstrings Showcase: examples/rich_docstrings_showcase.md
+    - BaseFeedForwardModel Guide: examples/feed_forward_guide.md
+    - KDP Integration Guide: examples/kdp_integration_guide.md
+    - Data Analyzer Examples: examples/data_analyzer_examples.md
+  - 📑 API Reference:
+    - Layers: api/layers.md
+    - Models: api/models.md
+    - Metrics: api/metrics.md
+    - Utils: api/utils.md
+  - 🤝 Contributing:
+    - Contributing Guide: contributing.md
+    - Layer Implementation Guide: layers_implementation_guide.md
+    - Data Analyzer: data_analyzer.md
 
 repo_name: Keras Model Registry
 repo_url: https://github.com/UnicoLab/keras-model-registry
@@ -80,8 +137,8 @@ markdown_extensions:
   - pymdownx.tabbed:
       alternate_style: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
   - pymdownx.keys
   - pymdownx.critic
   - pymdownx.caret
@@ -89,6 +146,8 @@ markdown_extensions:
 
 plugins:
   - search
+  - autorefs:
+      link_titles: false
   - mkdocstrings:
       handlers:
         python:
@@ -102,14 +161,15 @@ plugins:
             show_category_heading: true
             show_if_no_docstring: false
             members_order: source
+            group_by_category: true
             filters: ["!^_", "!^build", "!^call", "!^get_config", "!^_validate_params"]
             separate_signature: true
             merge_init_into_class: true
-            show_signature_annotations: false
-            show_type_annotations: false
+            show_signature_annotations: true
+            show_type_annotations: true
             show_bases: false
             show_submodules: false
-            heading_level: 2
+            heading_level: 3
             show_signature: true
             show_docstring: true
   - mike:
@@ -122,3 +182,9 @@ plugins:
 extra:
   version:
     provider: mike
+  css:
+    - assets/stylesheets/extra.css
+  javascripts:
+    - assets/javascripts/layer-filtering.js
+    - assets/javascripts/code-copy.js
+    - assets/javascripts/tabs.js

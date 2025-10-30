@@ -1,206 +1,293 @@
-# 🚀 BaseFeedForwardModel Guide
+# 🏗️ BaseFeedForwardModel Guide
 
-This guide demonstrates how to use the `BaseFeedForwardModel` from KMR for tabular data processing and model training. The `BaseFeedForwardModel` is designed to handle multiple input features and can optionally include a preprocessing model for feature engineering.
+Learn how to build feed-forward models using KMR layers. This guide covers the fundamentals of creating efficient feed-forward architectures for tabular data.
 
-## ✨ Key Features
+## 📋 Table of Contents
 
-- **Multi-feature Input**: Handles multiple input features of different types (numeric, categorical, boolean)
-- **Preprocessing Integration**: Supports custom preprocessing models for feature engineering
-- **Flexible Architecture**: Configurable hidden layers, dropout, and activation functions
-- **Keras Compatibility**: Full compatibility with Keras 3 and TensorFlow
-- **Serialization**: Complete model saving and loading support
+1. [Basic Feed-Forward Architecture](#basic-feed-forward-architecture)
+2. [Advanced Feed-Forward Patterns](#advanced-feed-forward-patterns)
+3. [Performance Optimization](#performance-optimization)
+4. [Real-World Examples](#real-world-examples)
 
-## 🏗️ Architecture
+## 🏛️ Basic Feed-Forward Architecture
 
-The `BaseFeedForwardModel` follows this architecture:
-
-```
-Input Features → Concatenation → Preprocessing Model → Hidden Layers → Output
-```
-
-1. **Input Layer**: Individual input layers for each feature
-2. **Concatenation**: Combines all features into a single tensor
-3. **Preprocessing Model** (optional): Custom preprocessing pipeline
-4. **Hidden Layers**: Configurable dense layers with dropout
-5. **Output Layer**: Final prediction layer
-
-## 📊 Example Usage
-
-### Basic Example
+### Simple Feed-Forward Model
 
 ```python
+import keras
 import numpy as np
-import pandas as pd
-import tensorflow as tf
-from keras import layers
-from keras.optimizers import Adam
-from keras.losses import MeanSquaredError
+from kmr.layers import VariableSelection, GatedFeatureFusion
 
-from kmr.models.feed_forward import BaseFeedForwardModel
+def create_basic_feedforward(input_dim, num_classes):
+    """Create a basic feed-forward model with KMR layers."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Feature selection
+    x = VariableSelection(hidden_dim=64)(inputs)
+    
+    # Dense layers
+    x = keras.layers.Dense(128, activation='relu')(x)
+    x = keras.layers.Dropout(0.2)(x)
+    x = keras.layers.Dense(64, activation='relu')(x)
+    x = keras.layers.Dropout(0.2)(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
 
-# Create sample data
-data = {
-    'numeric_feature_1': np.random.normal(10, 3, 1000),
-    'numeric_feature_2': np.random.exponential(2, 1000),
-    'categorical_feature': np.random.choice(['A', 'B', 'C', 'D'], 1000),
-    'boolean_feature': np.random.choice([True, False], 1000),
-    'target': np.random.normal(5, 1, 1000)
-}
-df = pd.DataFrame(data)
-
-# Define features
-feature_names = ['numeric_feature_1', 'numeric_feature_2', 'categorical_feature', 'boolean_feature']
-
-# Create preprocessing model
-preprocessing_model = tf.keras.Sequential([
-    layers.Dense(32, activation='relu'),
-    layers.Dropout(0.1),
-    layers.Dense(16, activation='relu'),
-    layers.Dropout(0.1)
-])
-
-# Build BaseFeedForwardModel
-model = BaseFeedForwardModel(
-    feature_names=feature_names,
-    hidden_units=[64, 32, 16],
-    output_units=1,
-    dropout_rate=0.2,
-    activation='relu',
-    preprocessing_model=preprocessing_model,
-    name='my_feed_forward_model'
-)
-
-# Compile and train
-model.compile(
-    optimizer=Adam(learning_rate=0.001),
-    loss=MeanSquaredError(),
-    metrics=['mae']
-)
-
-# Prepare data
-X_train = {name: df[name].values for name in feature_names}
-y_train = df['target'].values
-
-# Train
-history = model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
-
-# Make predictions
-predictions = model.predict(X_train)
+# Usage
+model = create_basic_feedforward(input_dim=20, num_classes=3)
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 ```
 
-### Advanced Example with Custom Preprocessing
+### Feed-Forward with Feature Engineering
 
 ```python
-from keras import Model, layers
-
-# Create custom preprocessing model
-def create_advanced_preprocessing(input_dim: int) -> Model:
-    inputs = layers.Input(shape=(input_dim,))
-    
-    # Feature engineering layers
-    x = layers.Dense(64, activation='relu')(inputs)
-    x = layers.BatchNormalization()(x)
-    x = layers.Dropout(0.2)(x)
-    
-    x = layers.Dense(32, activation='relu')(x)
-    x = layers.BatchNormalization()(x)
-    x = layers.Dropout(0.1)(x)
-    
-    outputs = layers.Dense(16, activation='relu')(x)
-    
-    return Model(inputs=inputs, outputs=outputs, name='advanced_preprocessing')
-
-# Use advanced preprocessing
-preprocessing_model = create_advanced_preprocessing(len(feature_names))
-
-model = BaseFeedForwardModel(
-    feature_names=feature_names,
-    hidden_units=[128, 64, 32],
-    output_units=1,
-    dropout_rate=0.3,
-    activation='relu',
-    preprocessing_model=preprocessing_model
+from kmr.layers import (
+    DifferentiableTabularPreprocessor,
+    AdvancedNumericalEmbedding,
+    GatedFeatureFusion
 )
+
+def create_engineered_feedforward(input_dim, num_classes):
+    """Create a feed-forward model with feature engineering."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Preprocessing
+    x = DifferentiableTabularPreprocessor()(inputs)
+    
+    # Feature engineering
+    x = AdvancedNumericalEmbedding(embedding_dim=64)(x)
+    x = GatedFeatureFusion(hidden_dim=128)(x)
+    
+    # Dense layers
+    x = keras.layers.Dense(128, activation='relu')(x)
+    x = keras.layers.Dropout(0.2)(x)
+    x = keras.layers.Dense(64, activation='relu')(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
 ```
 
-## 🔧 Configuration Options
+## 🚀 Advanced Feed-Forward Patterns
 
-### Model Parameters
-
-- **`feature_names`**: List of feature names (required)
-- **`hidden_units`**: List of hidden layer sizes (required)
-- **`output_units`**: Number of output units (default: 1)
-- **`dropout_rate`**: Dropout rate for hidden layers (default: 0.0)
-- **`activation`**: Activation function (default: 'relu')
-- **`preprocessing_model`**: Optional preprocessing model
-- **`kernel_initializer`**: Weight initialization (default: 'glorot_uniform')
-- **`bias_initializer`**: Bias initialization (default: 'zeros')
-
-### Preprocessing Model Requirements
-
-The preprocessing model should:
-- Accept a single input tensor (concatenated features)
-- Output a single tensor for the hidden layers
-- Be a valid Keras Model
-
-## 💾 Model Serialization
+### Residual Feed-Forward
 
 ```python
-# Save model
-model.save('my_model')
+from kmr.layers import GatedResidualNetwork
 
-# Load model
-loaded_model = tf.keras.models.load_model('my_model')
-
-# JSON serialization
-config = model.get_config()
-reconstructed_model = BaseFeedForwardModel.from_config(config)
+def create_residual_feedforward(input_dim, num_classes):
+    """Create a residual feed-forward model."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Residual blocks
+    x = GatedResidualNetwork(units=64, dropout_rate=0.1)(inputs)
+    x = GatedResidualNetwork(units=64, dropout_rate=0.1)(x)
+    x = GatedResidualNetwork(units=64, dropout_rate=0.1)(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
 ```
 
-## 🧪 Testing and Validation
-
-The model includes comprehensive testing:
-
-- **End-to-end training and prediction**
-- **Model serialization and loading**
-- **Error handling with invalid data**
-- **Performance testing with large datasets**
-- **Different architecture configurations**
-
-## 📈 Best Practices
-
-1. **Feature Engineering**: Use preprocessing models for complex feature transformations
-2. **Regularization**: Apply appropriate dropout rates to prevent overfitting
-3. **Data Validation**: Ensure input data matches expected feature names and types
-4. **Model Saving**: Always save models after training for reproducibility
-5. **Error Handling**: Validate input data before prediction
-
-## 🔍 Troubleshooting
-
-### Common Issues
-
-1. **Missing Features**: Ensure all `feature_names` are present in input data
-2. **Data Types**: Convert categorical features to appropriate numeric types
-3. **Shape Mismatches**: Verify preprocessing model output shape matches hidden layer input
-4. **Memory Issues**: Use appropriate batch sizes for large datasets
-
-### Debug Tips
+### Multi-Branch Feed-Forward
 
 ```python
-# Check model architecture
-model.summary()
-
-# Verify input shapes
-for name in feature_names:
-    print(f"{name}: {X_train[name].shape}")
-
-# Test preprocessing model separately
-preprocessed = preprocessing_model(tf.concat([X_train[name] for name in feature_names], axis=1))
-print(f"Preprocessed shape: {preprocessed.shape}")
+def create_multibranch_feedforward(input_dim, num_classes):
+    """Create a multi-branch feed-forward model."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Branch 1: Feature selection
+    branch1 = VariableSelection(hidden_dim=64)(inputs)
+    branch1 = keras.layers.Dense(64, activation='relu')(branch1)
+    
+    # Branch 2: Direct processing
+    branch2 = keras.layers.Dense(64, activation='relu')(inputs)
+    branch2 = keras.layers.Dense(64, activation='relu')(branch2)
+    
+    # Combine branches
+    x = keras.layers.Concatenate()([branch1, branch2])
+    x = keras.layers.Dense(128, activation='relu')(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
 ```
 
-## 🚀 Next Steps
+## ⚡ Performance Optimization
 
-- Explore the [KDP Integration Guide](kdp_integration_guide.md) for advanced preprocessing
-- Check out the [API Reference](../api/models.md) for detailed documentation
-- Visit the [Examples](../examples/README.md) for more use cases
+### Memory-Efficient Feed-Forward
+
+```python
+def create_memory_efficient_feedforward(input_dim, num_classes):
+    """Create a memory-efficient feed-forward model."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Use smaller dimensions
+    x = VariableSelection(hidden_dim=32)(inputs)
+    x = keras.layers.Dense(64, activation='relu')(x)
+    x = keras.layers.Dropout(0.1)(x)
+    x = keras.layers.Dense(32, activation='relu')(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
+```
+
+### Speed-Optimized Feed-Forward
+
+```python
+def create_speed_optimized_feedforward(input_dim, num_classes):
+    """Create a speed-optimized feed-forward model."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Minimal layers for speed
+    x = VariableSelection(hidden_dim=32)(inputs)
+    x = keras.layers.Dense(64, activation='relu')(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
+```
+
+## 🌍 Real-World Examples
+
+### Financial Risk Assessment
+
+```python
+def create_financial_risk_model(input_dim, num_classes):
+    """Create a financial risk assessment model."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Preprocessing
+    x = DifferentiableTabularPreprocessor()(inputs)
+    
+    # Feature selection
+    x = VariableSelection(hidden_dim=64)(x)
+    
+    # Risk assessment layers
+    x = keras.layers.Dense(128, activation='relu')(x)
+    x = keras.layers.Dropout(0.3)(x)
+    x = keras.layers.Dense(64, activation='relu')(x)
+    x = keras.layers.Dropout(0.2)(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
+```
+
+### Healthcare Outcome Prediction
+
+```python
+def create_healthcare_model(input_dim, num_classes):
+    """Create a healthcare outcome prediction model."""
+    
+    inputs = keras.Input(shape=(input_dim,))
+    
+    # Feature engineering
+    x = AdvancedNumericalEmbedding(embedding_dim=64)(inputs)
+    x = GatedFeatureFusion(hidden_dim=128)(x)
+    
+    # Medical processing layers
+    x = keras.layers.Dense(128, activation='relu')(x)
+    x = keras.layers.Dropout(0.2)(x)
+    x = keras.layers.Dense(64, activation='relu')(x)
+    
+    # Output
+    outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
+    
+    return keras.Model(inputs, outputs)
+```
+
+## 📊 Training and Evaluation
+
+### Training Configuration
+
+```python
+def train_feedforward_model(model, X_train, y_train, X_val, y_val):
+    """Train a feed-forward model with proper configuration."""
+    
+    # Compile model
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=0.001),
+        loss='categorical_crossentropy',
+        metrics=['accuracy']
+    )
+    
+    # Callbacks
+    callbacks = [
+        keras.callbacks.EarlyStopping(
+            monitor='val_loss',
+            patience=10,
+            restore_best_weights=True
+        ),
+        keras.callbacks.ReduceLROnPlateau(
+            monitor='val_loss',
+            factor=0.5,
+            patience=5
+        )
+    ]
+    
+    # Train
+    history = model.fit(
+        X_train, y_train,
+        validation_data=(X_val, y_val),
+        epochs=100,
+        batch_size=32,
+        callbacks=callbacks,
+        verbose=1
+    )
+    
+    return history
+```
+
+### Model Evaluation
+
+```python
+def evaluate_feedforward_model(model, X_test, y_test):
+    """Evaluate a feed-forward model."""
+    
+    # Basic evaluation
+    test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
+    
+    # Predictions
+    predictions = model.predict(X_test)
+    predicted_classes = np.argmax(predictions, axis=1)
+    true_classes = np.argmax(y_test, axis=1)
+    
+    # Additional metrics
+    from sklearn.metrics import classification_report
+    
+    print(f"Test Accuracy: {test_accuracy:.4f}")
+    print(f"Test Loss: {test_loss:.4f}")
+    print("\nClassification Report:")
+    print(classification_report(true_classes, predicted_classes))
+    
+    return test_accuracy, test_loss
+```
+
+## 📚 Next Steps
+
+1. **KDP Integration Guide**: Learn about Keras Data Processor integration
+2. **Data Analyzer Examples**: Explore data analysis workflows
+3. **Rich Docstrings Showcase**: See comprehensive examples
+4. **API Reference**: Deep dive into layer parameters
+
+---
+
+**Ready for more examples?** Check out the [KDP Integration Guide](kdp_integration_guide.md) next!

@@ -1,554 +1,507 @@
-# 🔍 Data Analyzer Examples
+# 📊 Data Analyzer Examples
 
-The KMR Data Analyzer is a powerful tool that automatically analyzes your tabular datasets and recommends the best KMR layers for your specific data characteristics. This page provides comprehensive examples showing how to use the Data Analyzer effectively.
+Comprehensive examples demonstrating data analysis workflows with KMR layers. Learn how to analyze, visualize, and understand your tabular data before building models.
 
-## 🚀 Quick Start
+## 📋 Table of Contents
 
-### Basic Analysis
+1. [Data Exploration](#data-exploration)
+2. [Feature Analysis](#feature-analysis)
+3. [Model Interpretation](#model-interpretation)
+4. [Performance Analysis](#performance-analysis)
 
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
+## 🔍 Data Exploration
 
-# Initialize the analyzer
-analyzer = DataAnalyzer()
-
-# Analyze your CSV file
-results = analyzer.analyze_file("data/my_dataset.csv")
-
-# Get layer recommendations
-recommendations = results.get_layer_recommendations()
-print("Recommended layers:", recommendations)
-```
-
-## 📊 Advanced Usage Examples
-
-### Custom Analysis Parameters
-
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
-
-# Initialize with custom parameters
-analyzer = DataAnalyzer(
-    sample_size=5000,           # Analyze first 5000 rows
-    correlation_threshold=0.8,  # High correlation threshold
-    categorical_threshold=0.05, # 5% unique values = categorical
-    missing_threshold=0.3       # 30% missing values threshold
-)
-
-# Analyze with detailed output
-results = analyzer.analyze_file(
-    "data/large_dataset.csv",
-    output_format="detailed",
-    include_statistics=True,
-    include_correlations=True
-)
-
-# Get comprehensive insights
-insights = results.get_data_insights()
-statistics = results.get_statistics()
-correlations = results.get_correlations()
-
-print("Data insights:", insights)
-print("Statistics:", statistics)
-print("Top correlations:", correlations)
-```
-
-### Batch Analysis
-
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
-import os
-import pandas as pd
-
-analyzer = DataAnalyzer()
-
-# Analyze multiple CSV files
-data_dir = "data/"
-csv_files = [f for f in os.listdir(data_dir) if f.endswith('.csv')]
-
-all_results = {}
-for file in csv_files:
-    file_path = os.path.join(data_dir, file)
-    print(f"Analyzing {file}...")
-    
-    results = analyzer.analyze_file(file_path)
-    all_results[file] = {
-        'recommendations': results.get_layer_recommendations(),
-        'insights': results.get_data_insights(),
-        'shape': results.get_data_shape()
-    }
-
-# Create a summary DataFrame
-summary_data = []
-for file, data in all_results.items():
-    summary_data.append({
-        'file': file,
-        'rows': data['shape'][0],
-        'columns': data['shape'][1],
-        'recommendations': ', '.join(data['recommendations']),
-        'insights': data['insights']['data_type']
-    })
-
-summary_df = pd.DataFrame(summary_data)
-print(summary_df)
-```
-
-## 🖥️ Command Line Interface
-
-### Basic CLI Usage
-
-```bash
-# Analyze a single CSV file
-kmr-analyze data/tabular_data.csv
-
-# Analyze with verbose output
-kmr-analyze data/tabular_data.csv --verbose
-
-# Save results to file
-kmr-analyze data/tabular_data.csv --output results.json
-```
-
-### Advanced CLI Options
-
-```bash
-# Analyze with custom parameters
-kmr-analyze data/large_dataset.csv \
-    --sample-size 10000 \
-    --correlation-threshold 0.7 \
-    --categorical-threshold 0.1 \
-    --output detailed_analysis.json \
-    --format json
-
-# Analyze multiple files
-kmr-analyze data/*.csv --batch --output batch_results.json
-
-# Get specific layer recommendations
-kmr-analyze data/tabular_data.csv --layers attention,embedding,feature_engineering
-
-# Include additional analysis
-kmr-analyze data/tabular_data.csv \
-    --include-statistics \
-    --include-correlations \
-    --include-missing-analysis
-```
-
-### CLI Integration with Scripts
-
-```bash
-#!/bin/bash
-# analyze_all_datasets.sh
-
-echo "Starting batch analysis of all datasets..."
-
-# Create output directory
-mkdir -p analysis_results
-
-# Analyze all CSV files
-for file in data/*.csv; do
-    filename=$(basename "$file" .csv)
-    echo "Analyzing $filename..."
-    
-    kmr-analyze "$file" \
-        --output "analysis_results/${filename}_analysis.json" \
-        --format json \
-        --include-statistics \
-        --include-correlations
-done
-
-echo "Analysis complete! Results saved in analysis_results/"
-```
-
-## 🔄 Complete Workflow Examples
-
-### From Data Analysis to Model Building
-
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
-from kmr.layers import TabularAttention, AdvancedNumericalEmbedding, VariableSelection
-from kmr.models import BaseFeedForwardModel
-import keras
-import pandas as pd
-
-def build_smart_model(csv_file):
-    """Build a model based on data analysis recommendations."""
-    
-    # Step 1: Analyze the data
-    analyzer = DataAnalyzer()
-    analysis = analyzer.analyze_file(csv_file)
-    
-    # Step 2: Get recommendations and insights
-    recommendations = analysis.get_layer_recommendations()
-    insights = analysis.get_data_insights()
-    data_shape = analysis.get_data_shape()
-    
-    print(f"Dataset shape: {data_shape}")
-    print(f"Data type: {insights['data_type']}")
-    print(f"Recommended layers: {recommendations}")
-    
-    # Step 3: Build model based on recommendations
-    num_features = data_shape[1]
-    inputs = keras.Input(shape=(num_features,))
-    
-    x = inputs
-    
-    # Apply recommended layers
-    if "AdvancedNumericalEmbedding" in recommendations:
-        x = AdvancedNumericalEmbedding(
-            embedding_dim=32,
-            mlp_hidden_units=64,
-            num_bins=20
-        )(x)
-    
-    if "VariableSelection" in recommendations:
-        x = VariableSelection(
-            nr_features=num_features,
-            units=32
-        )(x)
-    
-    if "TabularAttention" in recommendations:
-        x = TabularAttention(
-            num_heads=8,
-            d_model=64,
-            dropout_rate=0.1
-        )(x)
-    
-    # Add final layers
-    x = keras.layers.Dense(64, activation='relu')(x)
-    x = keras.layers.Dropout(0.2)(x)
-    outputs = keras.layers.Dense(1, activation='sigmoid')(x)
-    
-    # Create model
-    model = keras.Model(inputs, outputs)
-    model.compile(
-        optimizer='adam',
-        loss='binary_crossentropy',
-        metrics=['accuracy']
-    )
-    
-    return model, analysis
-
-# Use the function
-model, analysis = build_smart_model("data/my_dataset.csv")
-print("Model built with recommended layers!")
-model.summary()
-```
-
-### Automated Model Architecture Selection
-
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
-from kmr.layers import *
-import keras
-
-class SmartModelBuilder:
-    """Automatically build models based on data analysis."""
-    
-    def __init__(self):
-        self.analyzer = DataAnalyzer()
-        self.layer_mappings = {
-            "TabularAttention": lambda shape: TabularAttention(num_heads=4, d_model=32),
-            "AdvancedNumericalEmbedding": lambda shape: AdvancedNumericalEmbedding(embedding_dim=16),
-            "VariableSelection": lambda shape: VariableSelection(nr_features=shape[1], units=32),
-            "GatedFeatureFusion": lambda shape: GatedFeatureFusion(units=32),
-            "DistributionTransformLayer": lambda shape: DistributionTransformLayer(),
-            "DateEncodingLayer": lambda shape: DateEncodingLayer(),
-        }
-    
-    def build_model(self, csv_file, task_type="classification"):
-        """Build a model based on data analysis."""
-        
-        # Analyze data
-        analysis = self.analyzer.analyze_file(csv_file)
-        recommendations = analysis.get_layer_recommendations()
-        data_shape = analysis.get_data_shape()
-        
-        # Build model
-        inputs = keras.Input(shape=(data_shape[1],))
-        x = inputs
-        
-        # Apply recommended layers
-        for layer_name in recommendations:
-            if layer_name in self.layer_mappings:
-                layer = self.layer_mappings[layer_name](data_shape)
-                x = layer(x)
-        
-        # Add task-specific final layers
-        if task_type == "classification":
-            x = keras.layers.Dense(32, activation='relu')(x)
-            outputs = keras.layers.Dense(1, activation='sigmoid')(x)
-            loss = 'binary_crossentropy'
-            metrics = ['accuracy']
-        else:  # regression
-            x = keras.layers.Dense(32, activation='relu')(x)
-            outputs = keras.layers.Dense(1)(x)
-            loss = 'mse'
-            metrics = ['mae']
-        
-        # Create and compile model
-        model = keras.Model(inputs, outputs)
-        model.compile(
-            optimizer='adam',
-            loss=loss,
-            metrics=metrics
-        )
-        
-        return model, analysis
-
-# Use the smart builder
-builder = SmartModelBuilder()
-model, analysis = builder.build_model("data/my_dataset.csv", task_type="classification")
-
-print("Automatically built model!")
-print("Used layers:", analysis.get_layer_recommendations())
-model.summary()
-```
-
-## 📈 Analysis Results Interpretation
-
-### Understanding Recommendations
-
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
-
-analyzer = DataAnalyzer()
-results = analyzer.analyze_file("data/my_dataset.csv")
-
-# Get detailed analysis
-recommendations = results.get_layer_recommendations()
-insights = results.get_data_insights()
-statistics = results.get_statistics()
-
-print("=== ANALYSIS RESULTS ===")
-print(f"Dataset: {insights['file_name']}")
-print(f"Shape: {insights['shape']}")
-print(f"Data type: {insights['data_type']}")
-print(f"Missing values: {insights['missing_percentage']:.2f}%")
-
-print("\n=== RECOMMENDED LAYERS ===")
-for layer in recommendations:
-    print(f"✓ {layer}")
-
-print("\n=== DATA CHARACTERISTICS ===")
-print(f"Numerical features: {statistics['numerical_features']}")
-print(f"Categorical features: {statistics['categorical_features']}")
-print(f"High correlation pairs: {statistics['high_correlations']}")
-
-# Get specific recommendations by category
-attention_layers = [l for l in recommendations if 'attention' in l.lower()]
-embedding_layers = [l for l in recommendations if 'embedding' in l.lower()]
-feature_layers = [l for l in recommendations if any(x in l.lower() for x in ['feature', 'selection', 'transform'])]
-
-print(f"\nAttention layers: {attention_layers}")
-print(f"Embedding layers: {embedding_layers}")
-print(f"Feature engineering layers: {feature_layers}")
-```
-
-## 🎯 Best Practices
-
-### 1. Data Preprocessing Before Analysis
+### Basic Data Analysis
 
 ```python
 import pandas as pd
-from kmr.utils.data_analyzer import DataAnalyzer
-
-# Clean your data before analysis
-def preprocess_data(file_path):
-    df = pd.read_csv(file_path)
-    
-    # Remove completely empty columns
-    df = df.dropna(axis=1, how='all')
-    
-    # Handle obvious data type issues
-    for col in df.columns:
-        if df[col].dtype == 'object':
-            # Try to convert to numeric
-            try:
-                df[col] = pd.to_numeric(df[col], errors='ignore')
-            except:
-                pass
-    
-    return df
-
-# Preprocess and analyze
-df = preprocess_data("data/raw_dataset.csv")
-df.to_csv("data/cleaned_dataset.csv", index=False)
-
-analyzer = DataAnalyzer()
-results = analyzer.analyze_file("data/cleaned_dataset.csv")
-```
-
-### 2. Iterative Analysis
-
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
-
-def iterative_analysis(csv_file, iterations=3):
-    """Perform iterative analysis with different parameters."""
-    
-    analyzer = DataAnalyzer()
-    all_results = []
-    
-    for i in range(iterations):
-        # Vary analysis parameters
-        sample_size = 1000 * (i + 1)
-        correlation_threshold = 0.5 + (i * 0.1)
-        
-        results = analyzer.analyze_file(
-            csv_file,
-            sample_size=sample_size,
-            correlation_threshold=correlation_threshold
-        )
-        
-        all_results.append({
-            'iteration': i + 1,
-            'sample_size': sample_size,
-            'correlation_threshold': correlation_threshold,
-            'recommendations': results.get_layer_recommendations()
-        })
-    
-    return all_results
-
-# Perform iterative analysis
-results = iterative_analysis("data/my_dataset.csv")
-for result in results:
-    print(f"Iteration {result['iteration']}: {result['recommendations']}")
-```
-
-### 3. Validation and Testing
-
-```python
-from kmr.utils.data_analyzer import DataAnalyzer
 import numpy as np
-
-def validate_recommendations(csv_file, test_size=0.2):
-    """Validate recommendations by testing on held-out data."""
-    
-    analyzer = DataAnalyzer()
-    
-    # Analyze full dataset
-    full_results = analyzer.analyze_file(csv_file)
-    full_recommendations = full_results.get_layer_recommendations()
-    
-    # Analyze sample
-    sample_results = analyzer.analyze_file(csv_file, sample_size=int(1000 * (1 - test_size)))
-    sample_recommendations = sample_results.get_layer_recommendations()
-    
-    # Compare recommendations
-    overlap = set(full_recommendations) & set(sample_recommendations)
-    stability = len(overlap) / len(set(full_recommendations) | set(sample_recommendations))
-    
-    print(f"Recommendation stability: {stability:.2f}")
-    print(f"Full recommendations: {full_recommendations}")
-    print(f"Sample recommendations: {sample_recommendations}")
-    print(f"Overlap: {overlap}")
-    
-    return stability > 0.7  # 70% stability threshold
-
-# Validate recommendations
-is_stable = validate_recommendations("data/my_dataset.csv")
-print(f"Recommendations are stable: {is_stable}")
-```
-
-## 🔧 Troubleshooting
-
-### Common Issues and Solutions
-
-```python
-# Issue 1: Large file analysis
-def analyze_large_file(file_path, chunk_size=10000):
-    """Analyze large files in chunks."""
-    analyzer = DataAnalyzer()
-    
-    # Use sampling for large files
-    results = analyzer.analyze_file(
-        file_path,
-        sample_size=chunk_size,
-        random_sampling=True
-    )
-    
-    return results
-
-# Issue 2: Memory issues
-def memory_efficient_analysis(file_path):
-    """Memory-efficient analysis."""
-    analyzer = DataAnalyzer(
-        sample_size=5000,  # Limit sample size
-        correlation_threshold=0.8,  # Higher threshold to reduce computation
-    )
-    
-    results = analyzer.analyze_file(file_path)
-    return results
-
-# Issue 3: Mixed data types
-def handle_mixed_data(file_path):
-    """Handle files with mixed data types."""
-    import pandas as pd
-    
-    # Read and clean data
-    df = pd.read_csv(file_path)
-    
-    # Convert mixed types
-    for col in df.columns:
-        if df[col].dtype == 'object':
-            # Try numeric conversion
-            numeric_series = pd.to_numeric(df[col], errors='coerce')
-            if not numeric_series.isna().all():
-                df[col] = numeric_series
-    
-    # Save cleaned data
-    cleaned_path = file_path.replace('.csv', '_cleaned.csv')
-    df.to_csv(cleaned_path, index=False)
-    
-    # Analyze cleaned data
-    analyzer = DataAnalyzer()
-    return analyzer.analyze_file(cleaned_path)
-```
-
-## 📚 Integration Examples
-
-### Jupyter Notebook Integration
-
-```python
-# In a Jupyter notebook
-from kmr.utils.data_analyzer import DataAnalyzer
 import matplotlib.pyplot as plt
 import seaborn as sns
+from kmr.layers import DifferentiableTabularPreprocessor
 
-# Analyze data
-analyzer = DataAnalyzer()
-results = analyzer.analyze_file("data/my_dataset.csv")
+def analyze_dataset(X, y, feature_names=None):
+    """Comprehensive dataset analysis."""
+    
+    # Basic statistics
+    print("Dataset Shape:", X.shape)
+    print("Target Distribution:", np.bincount(y))
+    
+    # Missing values
+    missing_values = pd.DataFrame(X).isnull().sum()
+    print("Missing Values:")
+    print(missing_values)
+    
+    # Data types
+    print("Data Types:")
+    print(pd.DataFrame(X).dtypes)
+    
+    # Basic statistics
+    print("Basic Statistics:")
+    print(pd.DataFrame(X).describe())
+    
+    return True
 
-# Create visualizations
-fig, axes = plt.subplots(2, 2, figsize=(15, 10))
-
-# Plot recommendations
-recommendations = results.get_layer_recommendations()
-axes[0, 0].bar(range(len(recommendations)), [1] * len(recommendations))
-axes[0, 0].set_xticks(range(len(recommendations)))
-axes[0, 0].set_xticklabels(recommendations, rotation=45)
-axes[0, 0].set_title("Recommended Layers")
-
-# Plot data insights
-insights = results.get_data_insights()
-axes[0, 1].pie([insights['numerical_features'], insights['categorical_features']], 
-               labels=['Numerical', 'Categorical'], autopct='%1.1f%%')
-axes[0, 1].set_title("Feature Types")
-
-# Plot missing values
-missing_data = insights['missing_percentage']
-axes[1, 0].bar(['Missing %'], [missing_data])
-axes[1, 0].set_title("Missing Values")
-
-# Plot correlations
-correlations = results.get_correlations()
-if correlations:
-    corr_matrix = correlations[:10]  # Top 10 correlations
-    axes[1, 1].barh(range(len(corr_matrix)), [abs(c) for c in corr_matrix])
-    axes[1, 1].set_yticks(range(len(corr_matrix)))
-    axes[1, 1].set_title("Top Correlations")
-
-plt.tight_layout()
-plt.show()
+# Usage
+analyze_dataset(X_train, y_train, feature_names)
 ```
 
-This comprehensive guide shows you how to effectively use the KMR Data Analyzer for intelligent layer recommendations and automated model building!
+### Feature Distribution Analysis
+
+```python
+def analyze_feature_distributions(X, feature_names=None):
+    """Analyze feature distributions."""
+    
+    if feature_names is None:
+        feature_names = [f'feature_{i}' for i in range(X.shape[1])]
+    
+    # Create DataFrame
+    df = pd.DataFrame(X, columns=feature_names)
+    
+    # Plot distributions
+    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+    axes = axes.ravel()
+    
+    for i, feature in enumerate(feature_names[:4]):
+        df[feature].hist(ax=axes[i], bins=30)
+        axes[i].set_title(f'Distribution of {feature}')
+        axes[i].set_xlabel(feature)
+        axes[i].set_ylabel('Frequency')
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # Statistical analysis
+    for feature in feature_names:
+        print(f"\n{feature}:")
+        print(f"  Mean: {df[feature].mean():.4f}")
+        print(f"  Std: {df[feature].std():.4f}")
+        print(f"  Skewness: {df[feature].skew():.4f}")
+        print(f"  Kurtosis: {df[feature].kurtosis():.4f}")
+
+# Usage
+analyze_feature_distributions(X_train, feature_names)
+```
+
+## 🔧 Feature Analysis
+
+### Feature Importance Analysis
+
+```python
+from kmr.layers import VariableSelection, TabularAttention
+
+def analyze_feature_importance(model, X_test, feature_names=None):
+    """Analyze feature importance using model weights."""
+    
+    if feature_names is None:
+        feature_names = [f'feature_{i}' for i in range(X_test.shape[1])]
+    
+    # Get variable selection layer
+    try:
+        selection_layer = model.get_layer('variable_selection')
+        selection_weights = selection_layer.get_weights()
+        
+        # Calculate feature importance
+        feature_importance = np.mean(selection_weights[0], axis=1)
+        
+        # Create importance DataFrame
+        importance_df = pd.DataFrame({
+            'feature': feature_names,
+            'importance': feature_importance
+        }).sort_values('importance', ascending=False)
+        
+        print("Feature Importance:")
+        print(importance_df)
+        
+        # Plot importance
+        plt.figure(figsize=(10, 6))
+        sns.barplot(data=importance_df, x='importance', y='feature')
+        plt.title('Feature Importance')
+        plt.xlabel('Importance Score')
+        plt.tight_layout()
+        plt.show()
+        
+        return importance_df
+        
+    except Exception as e:
+        print(f"Could not analyze feature importance: {e}")
+        return None
+
+# Usage
+importance_df = analyze_feature_importance(model, X_test, feature_names)
+```
+
+### Attention Weight Analysis
+
+```python
+def analyze_attention_weights(model, X_test, feature_names=None):
+    """Analyze attention weights for model interpretation."""
+    
+    if feature_names is None:
+        feature_names = [f'feature_{i}' for i in range(X_test.shape[1])]
+    
+    # Get attention layer
+    try:
+        attention_layer = model.get_layer('tabular_attention')
+        
+        # Create model that outputs attention weights
+        attention_model = keras.Model(
+            inputs=model.input,
+            outputs=attention_layer.output
+        )
+        
+        # Get attention weights
+        attention_weights = attention_model.predict(X_test)
+        
+        # Analyze attention patterns
+        mean_attention = np.mean(attention_weights, axis=0)
+        std_attention = np.std(attention_weights, axis=0)
+        
+        # Create attention DataFrame
+        attention_df = pd.DataFrame({
+            'feature': feature_names,
+            'mean_attention': mean_attention,
+            'std_attention': std_attention
+        }).sort_values('mean_attention', ascending=False)
+        
+        print("Attention Weights Analysis:")
+        print(attention_df)
+        
+        # Plot attention weights
+        plt.figure(figsize=(12, 6))
+        sns.barplot(data=attention_df, x='mean_attention', y='feature')
+        plt.title('Mean Attention Weights')
+        plt.xlabel('Attention Weight')
+        plt.tight_layout()
+        plt.show()
+        
+        return attention_df
+        
+    except Exception as e:
+        print(f"Could not analyze attention weights: {e}")
+        return None
+
+# Usage
+attention_df = analyze_attention_weights(model, X_test, feature_names)
+```
+
+## 🧠 Model Interpretation
+
+### Layer Output Analysis
+
+```python
+def analyze_layer_outputs(model, X_test, layer_names):
+    """Analyze outputs from different model layers."""
+    
+    layer_outputs = {}
+    
+    for layer_name in layer_names:
+        try:
+            # Get layer
+            layer = model.get_layer(layer_name)
+            
+            # Create model that outputs layer activations
+            layer_model = keras.Model(
+                inputs=model.input,
+                outputs=layer.output
+            )
+            
+            # Get layer outputs
+            layer_output = layer_model.predict(X_test)
+            layer_outputs[layer_name] = layer_output
+            
+            print(f"{layer_name} output shape: {layer_output.shape}")
+            
+        except Exception as e:
+            print(f"Could not analyze layer {layer_name}: {e}")
+    
+    return layer_outputs
+
+# Usage
+layer_names = ['variable_selection', 'tabular_attention', 'gated_feature_fusion']
+layer_outputs = analyze_layer_outputs(model, X_test, layer_names)
+```
+
+### Model Decision Analysis
+
+```python
+def analyze_model_decisions(model, X_test, y_test, feature_names=None):
+    """Analyze model decision-making process."""
+    
+    if feature_names is None:
+        feature_names = [f'feature_{i}' for i in range(X_test.shape[1])]
+    
+    # Get predictions
+    predictions = model.predict(X_test)
+    predicted_classes = np.argmax(predictions, axis=1)
+    true_classes = np.argmax(y_test, axis=1)
+    
+    # Analyze prediction confidence
+    prediction_confidence = np.max(predictions, axis=1)
+    
+    print("Prediction Confidence Analysis:")
+    print(f"Mean confidence: {np.mean(prediction_confidence):.4f}")
+    print(f"Std confidence: {np.std(prediction_confidence):.4f}")
+    print(f"Min confidence: {np.min(prediction_confidence):.4f}")
+    print(f"Max confidence: {np.max(prediction_confidence):.4f}")
+    
+    # Analyze misclassifications
+    misclassified = predicted_classes != true_classes
+    misclassified_indices = np.where(misclassified)[0]
+    
+    print(f"\nMisclassified samples: {len(misclassified_indices)}")
+    print(f"Misclassification rate: {len(misclassified_indices) / len(y_test):.4f}")
+    
+    # Analyze confidence of misclassified samples
+    if len(misclassified_indices) > 0:
+        misclassified_confidence = prediction_confidence[misclassified_indices]
+        print(f"Mean confidence of misclassified: {np.mean(misclassified_confidence):.4f}")
+    
+    return {
+        'predictions': predictions,
+        'predicted_classes': predicted_classes,
+        'true_classes': true_classes,
+        'confidence': prediction_confidence,
+        'misclassified_indices': misclassified_indices
+    }
+
+# Usage
+decision_analysis = analyze_model_decisions(model, X_test, y_test, feature_names)
+```
+
+## 📈 Performance Analysis
+
+### Training Performance Analysis
+
+```python
+def analyze_training_performance(history):
+    """Analyze training performance and convergence."""
+    
+    # Plot training curves
+    fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+    
+    # Loss curve
+    axes[0].plot(history.history['loss'], label='Training Loss')
+    axes[0].plot(history.history['val_loss'], label='Validation Loss')
+    axes[0].set_title('Model Loss')
+    axes[0].set_xlabel('Epoch')
+    axes[0].set_ylabel('Loss')
+    axes[0].legend()
+    axes[0].grid(True)
+    
+    # Accuracy curve
+    axes[1].plot(history.history['accuracy'], label='Training Accuracy')
+    axes[1].plot(history.history['val_accuracy'], label='Validation Accuracy')
+    axes[1].set_title('Model Accuracy')
+    axes[1].set_xlabel('Epoch')
+    axes[1].set_ylabel('Accuracy')
+    axes[1].legend()
+    axes[1].grid(True)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    # Analyze convergence
+    final_train_loss = history.history['loss'][-1]
+    final_val_loss = history.history['val_loss'][-1]
+    final_train_acc = history.history['accuracy'][-1]
+    final_val_acc = history.history['val_accuracy'][-1]
+    
+    print("Final Performance:")
+    print(f"Training Loss: {final_train_loss:.4f}")
+    print(f"Validation Loss: {final_val_loss:.4f}")
+    print(f"Training Accuracy: {final_train_acc:.4f}")
+    print(f"Validation Accuracy: {final_val_acc:.4f}")
+    
+    # Check for overfitting
+    if final_val_loss > final_train_loss * 1.1:
+        print("Warning: Possible overfitting detected!")
+    
+    return {
+        'final_train_loss': final_train_loss,
+        'final_val_loss': final_val_loss,
+        'final_train_acc': final_train_acc,
+        'final_val_acc': final_val_acc
+    }
+
+# Usage
+performance_analysis = analyze_training_performance(history)
+```
+
+### Model Comparison Analysis
+
+```python
+def compare_models(models, X_test, y_test, model_names=None):
+    """Compare performance of multiple models."""
+    
+    if model_names is None:
+        model_names = [f'model_{i}' for i in range(len(models))]
+    
+    results = []
+    
+    for model, name in zip(models, model_names):
+        # Evaluate model
+        test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
+        
+        # Get predictions
+        predictions = model.predict(X_test)
+        predicted_classes = np.argmax(predictions, axis=1)
+        true_classes = np.argmax(y_test, axis=1)
+        
+        # Calculate additional metrics
+        from sklearn.metrics import precision_score, recall_score, f1_score
+        
+        precision = precision_score(true_classes, predicted_classes, average='weighted')
+        recall = recall_score(true_classes, predicted_classes, average='weighted')
+        f1 = f1_score(true_classes, predicted_classes, average='weighted')
+        
+        results.append({
+            'model': name,
+            'accuracy': test_accuracy,
+            'loss': test_loss,
+            'precision': precision,
+            'recall': recall,
+            'f1': f1
+        })
+    
+    # Create comparison DataFrame
+    comparison_df = pd.DataFrame(results)
+    
+    print("Model Comparison:")
+    print(comparison_df)
+    
+    # Plot comparison
+    fig, axes = plt.subplots(2, 2, figsize=(15, 10))
+    
+    # Accuracy comparison
+    sns.barplot(data=comparison_df, x='model', y='accuracy', ax=axes[0, 0])
+    axes[0, 0].set_title('Accuracy Comparison')
+    axes[0, 0].tick_params(axis='x', rotation=45)
+    
+    # Loss comparison
+    sns.barplot(data=comparison_df, x='model', y='loss', ax=axes[0, 1])
+    axes[0, 1].set_title('Loss Comparison')
+    axes[0, 1].tick_params(axis='x', rotation=45)
+    
+    # Precision comparison
+    sns.barplot(data=comparison_df, x='model', y='precision', ax=axes[1, 0])
+    axes[1, 0].set_title('Precision Comparison')
+    axes[1, 0].tick_params(axis='x', rotation=45)
+    
+    # F1 comparison
+    sns.barplot(data=comparison_df, x='model', y='f1', ax=axes[1, 1])
+    axes[1, 1].set_title('F1 Score Comparison')
+    axes[1, 1].tick_params(axis='x', rotation=45)
+    
+    plt.tight_layout()
+    plt.show()
+    
+    return comparison_df
+
+# Usage
+models = [model1, model2, model3]
+model_names = ['Attention Model', 'Residual Model', 'Ensemble Model']
+comparison_df = compare_models(models, X_test, y_test, model_names)
+```
+
+## 🔍 Advanced Analysis
+
+### Feature Interaction Analysis
+
+```python
+def analyze_feature_interactions(X, feature_names=None):
+    """Analyze feature interactions and correlations."""
+    
+    if feature_names is None:
+        feature_names = [f'feature_{i}' for i in range(X.shape[1])]
+    
+    # Create DataFrame
+    df = pd.DataFrame(X, columns=feature_names)
+    
+    # Calculate correlation matrix
+    correlation_matrix = df.corr()
+    
+    # Plot correlation heatmap
+    plt.figure(figsize=(12, 10))
+    sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0)
+    plt.title('Feature Correlation Matrix')
+    plt.tight_layout()
+    plt.show()
+    
+    # Find highly correlated features
+    high_corr_pairs = []
+    for i in range(len(correlation_matrix.columns)):
+        for j in range(i+1, len(correlation_matrix.columns)):
+            corr_value = correlation_matrix.iloc[i, j]
+            if abs(corr_value) > 0.7:  # High correlation threshold
+                high_corr_pairs.append({
+                    'feature1': correlation_matrix.columns[i],
+                    'feature2': correlation_matrix.columns[j],
+                    'correlation': corr_value
+                })
+    
+    if high_corr_pairs:
+        print("Highly Correlated Feature Pairs:")
+        for pair in high_corr_pairs:
+            print(f"{pair['feature1']} - {pair['feature2']}: {pair['correlation']:.4f}")
+    
+    return correlation_matrix, high_corr_pairs
+
+# Usage
+correlation_matrix, high_corr_pairs = analyze_feature_interactions(X_train, feature_names)
+```
+
+### Model Robustness Analysis
+
+```python
+def analyze_model_robustness(model, X_test, y_test, noise_levels=[0.01, 0.05, 0.1]):
+    """Analyze model robustness to noise."""
+    
+    results = []
+    
+    for noise_level in noise_levels:
+        # Add noise to test data
+        X_noisy = X_test + np.random.normal(0, noise_level, X_test.shape)
+        
+        # Evaluate model on noisy data
+        test_loss, test_accuracy = model.evaluate(X_noisy, y_test, verbose=0)
+        
+        results.append({
+            'noise_level': noise_level,
+            'accuracy': test_accuracy,
+            'loss': test_loss
+        })
+    
+    # Create results DataFrame
+    robustness_df = pd.DataFrame(results)
+    
+    print("Model Robustness Analysis:")
+    print(robustness_df)
+    
+    # Plot robustness
+    plt.figure(figsize=(10, 6))
+    plt.plot(robustness_df['noise_level'], robustness_df['accuracy'], 'o-', label='Accuracy')
+    plt.plot(robustness_df['noise_level'], robustness_df['loss'], 's-', label='Loss')
+    plt.xlabel('Noise Level')
+    plt.ylabel('Performance')
+    plt.title('Model Robustness to Noise')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    
+    return robustness_df
+
+# Usage
+robustness_df = analyze_model_robustness(model, X_test, y_test)
+```
+
+## 📚 Next Steps
+
+1. **Rich Docstrings Showcase**: See comprehensive examples
+2. **BaseFeedForwardModel Guide**: Learn about feed-forward architectures
+3. **KDP Integration Guide**: Integrate with Keras Data Processor
+4. **API Reference**: Deep dive into layer parameters
+
+---
+
+**Ready for more examples?** Check out the [Rich Docstrings Showcase](rich_docstrings_showcase.md) next!

@@ -2,15 +2,13 @@ name: Deploy PR Pages Preview
 
 on:
   push:
-    branches:
-      - dev
+    branches-ignore:
       - main
     paths:
       - "docs/**"
       - mkdocs.yml
   pull_request:
     branches:
-      - dev
       - main
     paths:
       - "docs/**"

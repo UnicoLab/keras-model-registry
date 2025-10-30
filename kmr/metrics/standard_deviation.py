@@ -43,11 +43,11 @@ class StandardDeviation(Metric):
 
         # Create metric
         std_metric = StandardDeviation(name="prediction_std")
-        
+
         # Update with predictions
         predictions = keras.ops.random.normal((100, 10))
         std_metric.update_state(predictions)
-        
+
         # Get result
         std_value = std_metric.result()
         print(f"Standard deviation: {std_value}")
@@ -63,7 +63,7 @@ class StandardDeviation(Metric):
         """
         super().__init__(name=name, **kwargs)
         self.values = self.add_weight(name="values", initializer="zeros")
-        
+
         logger.debug(f"Initialized StandardDeviation metric with name: {name}")
 
     def update_state(self, y_pred: keras.KerasTensor) -> None:

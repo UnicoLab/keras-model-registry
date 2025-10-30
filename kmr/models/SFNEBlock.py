@@ -86,11 +86,7 @@ class SFNEBlock(BaseModel):
         self.slow_network_units = slow_network_units
 
         # Call parent's __init__ with preprocessing model support
-        super().__init__(
-            preprocessing_model=preprocessing_model,
-            name=name,
-            **kwargs
-        )
+        super().__init__(preprocessing_model=preprocessing_model, name=name, **kwargs)
 
         # Validate parameters
         self._validate_params()
@@ -159,12 +155,12 @@ class SFNEBlock(BaseModel):
         # Use BaseModel's intelligent input processing
         # For SFNEBlock, we need to concatenate multiple inputs into a single tensor
         processed_inputs = self._process_inputs_for_model(
-            inputs, 
+            inputs,
             expected_keys=None,  # No specific feature names for SFNEBlock
-            auto_split=False,    # Don't split single inputs
-            auto_reshape=False   # Don't reshape, let the model handle it
+            auto_split=False,  # Don't split single inputs
+            auto_reshape=False,  # Don't reshape, let the model handle it
         )
-        
+
         # Handle the processed inputs
         if isinstance(processed_inputs, list):
             # Multiple inputs - concatenate them

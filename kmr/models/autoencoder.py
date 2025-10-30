@@ -33,7 +33,6 @@ Example:
 """
 
 from typing import Any
-from collections import OrderedDict
 
 import keras
 from keras import layers, ops
@@ -100,16 +99,17 @@ class Autoencoder(BaseModel):
         self.intermediate_dim = self._intermediate_dim
 
         # Initialize variables
-        self._threshold_var = keras.Variable(threshold, dtype="float32", name="threshold")
-        self._median = keras.Variable(0.0, dtype="float32", trainable=False, name="median")
+        self._threshold_var = keras.Variable(
+            threshold, dtype="float32", name="threshold",
+        )
+        self._median = keras.Variable(
+            0.0, dtype="float32", trainable=False, name="median",
+        )
         self._std = keras.Variable(0.0, dtype="float32", trainable=False, name="std")
 
         # Call parent's __init__ with preprocessing model support
         super().__init__(
-            preprocessing_model=preprocessing_model,
-            inputs=inputs,
-            name=name,
-            **kwargs
+            preprocessing_model=preprocessing_model, inputs=inputs, name=name, **kwargs,
         )
 
         # Build the model architecture
@@ -122,7 +122,9 @@ class Autoencoder(BaseModel):
         if self._encoding_dim <= 0:
             raise ValueError(f"encoding_dim must be positive, got {self._encoding_dim}")
         if self._intermediate_dim <= 0:
-            raise ValueError(f"intermediate_dim must be positive, got {self._intermediate_dim}")
+            raise ValueError(
+                f"intermediate_dim must be positive, got {self._intermediate_dim}",
+            )
         if self._threshold < 0:
             raise ValueError(f"threshold must be non-negative, got {self._threshold}")
 
@@ -130,39 +132,33 @@ class Autoencoder(BaseModel):
         """Build the autoencoder architecture."""
         # Encoder layers
         self.encoder_dense1 = layers.Dense(
-            self.intermediate_dim, 
-            activation="relu", 
-            name="encoder_dense1"
+            self.intermediate_dim, activation="relu", name="encoder_dense1",
         )
         self.encoder_dropout1 = layers.Dropout(0.1, name="encoder_dropout1")
         self.encoder_dense2 = layers.Dense(
-            self.encoding_dim, 
-            activation="relu", 
-            name="encoder_dense2"
+            self.encoding_dim, activation="relu", name="encoder_dense2",
         )
         self.encoder_dropout2 = layers.Dropout(0.1, name="encoder_dropout2")
 
         # Decoder layers
         self.decoder_dense1 = layers.Dense(
-            self.intermediate_dim, 
-            activation="relu", 
-            name="decoder_dense1"
+            self.intermediate_dim, activation="relu", name="decoder_dense1",
         )
         self.decoder_dropout1 = layers.Dropout(0.1, name="decoder_dropout1")
         self.decoder_dense2 = layers.Dense(
-            self.input_dim, 
-            activation="sigmoid", 
-            name="decoder_dense2"
+            self.input_dim, activation="sigmoid", name="decoder_dense2",
         )
         self.decoder_dropout2 = layers.Dropout(0.1, name="decoder_dropout2")
 
         logger.debug(
             f"Autoencoder built with input_dim={self.input_dim}, "
             f"encoding_dim={self.encoding_dim}, intermediate_dim={self.intermediate_dim}, "
-            f"preprocessing_model={'Yes' if self.preprocessing_model else 'No'}"
+            f"preprocessing_model={'Yes' if self.preprocessing_model else 'No'}",
         )
 
-    def call(self, inputs: Any, training: bool | None = None) -> keras.KerasTensor | dict[str, keras.KerasTensor]:
+    def call(
+        self, inputs: Any, training: bool | None = None,
+    ) -> keras.KerasTensor | dict[str, keras.KerasTensor]:
         """Performs the forward pass of the autoencoder with universal input handling.
 
         This method supports various input formats:
@@ -181,12 +177,12 @@ class Autoencoder(BaseModel):
         # Use BaseModel's intelligent input processing
         # For autoencoder, we don't need feature splitting, just concatenation
         processed_inputs = self._process_inputs_for_model(
-            inputs, 
+            inputs,
             expected_keys=None,  # No specific feature names for autoencoder
-            auto_split=False,    # Don't split single inputs
-            auto_reshape=False   # Don't reshape, let the model handle it
+            auto_split=False,  # Don't split single inputs
+            auto_reshape=False,  # Don't reshape, let the model handle it
         )
-        
+
         # Handle the processed inputs
         if isinstance(processed_inputs, list):
             # Multiple inputs - concatenate them
@@ -211,9 +207,11 @@ class Autoencoder(BaseModel):
         if self.preprocessing_model is not None:
             # Calculate anomaly score
             anomaly_score = ops.mean(ops.abs(x - decoded), axis=1)
-            
+
             # Determine if anomaly
-            is_anomaly = ops.greater(anomaly_score, self._median + (self._threshold_var * self._std))
+            is_anomaly = ops.greater(
+                anomaly_score, self._median + (self._threshold_var * self._std),
+            )
 
             return {
                 "reconstruction": decoded,
@@ -223,7 +221,7 @@ class Autoencoder(BaseModel):
                 "std": self._std,
                 "threshold": self._threshold_var,
             }
-        
+
         return decoded
 
     @property
@@ -265,7 +263,7 @@ class Autoencoder(BaseModel):
                 Can be a tensor or a dataset.
         """
         logger.info("Setting up the threshold ...")
-        
+
         # Built-in metrics
         mean_metric = keras.metrics.Mean()
         # Custom metrics
@@ -273,7 +271,12 @@ class Autoencoder(BaseModel):
         std_metric = StandardDeviation()
 
         # Handle both tensor and dataset inputs
-        if hasattr(data, '__iter__') and not isinstance(data, keras.KerasTensor) and hasattr(data, '__class__') and 'Dataset' in str(type(data)):
+        if (
+            hasattr(data, "__iter__")
+            and not isinstance(data, keras.KerasTensor)
+            and hasattr(data, "__class__")
+            and "Dataset" in str(type(data))
+        ):
             # Process dataset batch by batch
             for batch in data:
                 if isinstance(batch, tuple):
@@ -281,11 +284,11 @@ class Autoencoder(BaseModel):
                     x = batch[0]
                 else:
                     x = batch
-                
+
                 # Calculate reconstruction errors
                 reconstructed = self(x, training=False)
                 scores = ops.mean(ops.abs(x - reconstructed), axis=1)
-                
+
                 # Update metrics
                 mean_metric.update_state(scores)
                 std_metric.update_state(scores)
@@ -294,7 +297,7 @@ class Autoencoder(BaseModel):
             # Handle tensor input
             reconstructed = self(data, training=False)
             scores = ops.mean(ops.abs(data - reconstructed), axis=1)
-            
+
             # Update metrics
             mean_metric.update_state(scores)
             std_metric.update_state(scores)
@@ -311,10 +314,10 @@ class Autoencoder(BaseModel):
         logger.debug(f"assigned _std: {self._std}")
 
     def auto_configure_threshold(
-        self, 
+        self,
         data: keras.KerasTensor | Any,
         percentile: float = 0.95,
-        method: str = "iqr"
+        method: str = "iqr",
     ) -> None:
         """Automatically configure threshold using statistical methods.
 
@@ -324,15 +327,20 @@ class Autoencoder(BaseModel):
         Args:
             data (KerasTensor | Any): The data to use for threshold calculation.
             percentile (float, optional): Percentile to use for threshold calculation. Defaults to 0.95.
-            method (str, optional): Method to use for threshold calculation. 
+            method (str, optional): Method to use for threshold calculation.
                 Options: 'iqr' (Interquartile Range), 'percentile', 'zscore'. Defaults to 'iqr'.
         """
         logger.info(f"Auto-configuring threshold using method: {method}")
-        
+
         # Calculate reconstruction errors
         scores = []
-        
-        if hasattr(data, '__iter__') and not isinstance(data, keras.KerasTensor) and hasattr(data, '__class__') and 'Dataset' in str(type(data)):
+
+        if (
+            hasattr(data, "__iter__")
+            and not isinstance(data, keras.KerasTensor)
+            and hasattr(data, "__class__")
+            and "Dataset" in str(type(data))
+        ):
             for batch in data:
                 if isinstance(batch, tuple):
                     x = batch[0]
@@ -343,10 +351,10 @@ class Autoencoder(BaseModel):
         else:
             batch_scores = self.predict_anomaly_scores(data)
             scores.append(batch_scores.numpy())
-        
+
         # Concatenate all scores
         all_scores = ops.concatenate([ops.convert_to_tensor(s) for s in scores])
-        
+
         if method == "iqr":
             # Interquartile Range method
             q1 = ops.quantile(all_scores, 0.25)
@@ -362,15 +370,17 @@ class Autoencoder(BaseModel):
             std_score = ops.std(all_scores)
             threshold_value = mean_score + 3 * std_score
         else:
-            raise ValueError(f"Unknown method: {method}. Use 'iqr', 'percentile', or 'zscore'")
-        
+            raise ValueError(
+                f"Unknown method: {method}. Use 'iqr', 'percentile', or 'zscore'",
+            )
+
         # Update threshold variable
         self._threshold_var.assign(ops.cast(threshold_value, dtype="float32"))
-        
+
         # Also update median and std for consistency
         self._median.assign(ops.cast(ops.median(all_scores), dtype="float32"))
         self._std.assign(ops.cast(ops.std(all_scores), dtype="float32"))
-        
+
         logger.info(f"Auto-configured threshold: {threshold_value.numpy()}")
         logger.debug(f"Updated median: {self._median.numpy()}")
         logger.debug(f"Updated std: {self._std.numpy()}")
@@ -401,7 +411,7 @@ class Autoencoder(BaseModel):
         """
         # Use the base class fit method which handles preprocessing model integration
         history = super().fit(x=x, y=y, epochs=epochs, callbacks=callbacks, **kwargs)
-        
+
         # Automatically setup threshold if requested (autoencoder-specific functionality)
         if auto_setup_threshold and x is not None:
             logger.info("Auto-setting up threshold after training...")
@@ -409,15 +419,15 @@ class Autoencoder(BaseModel):
                 self.auto_configure_threshold(x, method=threshold_method)
             else:
                 self.setup_threshold(x)
-        
+
         return history
 
     def create_functional_model(self) -> keras.Model | None:
         """Create a functional model that combines preprocessing and autoencoder.
-        
+
         This method creates a functional Keras model that integrates the preprocessing
         model (if provided) with the autoencoder for end-to-end inference.
-        
+
         Returns:
             keras.Model: Functional model combining preprocessing and autoencoder, or None if no preprocessing.
         """
@@ -438,7 +448,9 @@ class Autoencoder(BaseModel):
         scores = ops.mean(ops.abs(data - x_pred), axis=1)
         return scores
 
-    def predict(self, data: keras.KerasTensor | dict[str, keras.KerasTensor] | Any, **kwargs) -> keras.KerasTensor | dict[str, keras.KerasTensor]:
+    def predict(
+        self, data: keras.KerasTensor | dict[str, keras.KerasTensor] | Any, **kwargs,
+    ) -> keras.KerasTensor | dict[str, keras.KerasTensor]:
         """Predicts reconstruction or anomaly detection results.
 
         This method provides a unified interface for both reconstruction prediction
@@ -452,7 +464,13 @@ class Autoencoder(BaseModel):
             KerasTensor | dict: Reconstruction results or anomaly detection results.
         """
         # Handle dataset inputs
-        if hasattr(data, '__iter__') and not isinstance(data, keras.KerasTensor) and not isinstance(data, dict) and hasattr(data, '__class__') and 'Dataset' in str(type(data)):
+        if (
+            hasattr(data, "__iter__")
+            and not isinstance(data, keras.KerasTensor)
+            and not isinstance(data, dict)
+            and hasattr(data, "__class__")
+            and "Dataset" in str(type(data))
+        ):
             # Process dataset batch by batch
             predictions = []
             for batch in data:
@@ -485,17 +503,23 @@ class Autoencoder(BaseModel):
         Returns:
             dict[str, Any]: A dictionary containing anomaly scores, flags, and threshold information.
         """
-        if hasattr(data, '__iter__') and not isinstance(data, keras.KerasTensor) and not isinstance(data, dict) and hasattr(data, '__class__') and 'Dataset' in str(type(data)):
+        if (
+            hasattr(data, "__iter__")
+            and not isinstance(data, keras.KerasTensor)
+            and not isinstance(data, dict)
+            and hasattr(data, "__class__")
+            and "Dataset" in str(type(data))
+        ):
             # Handle dataset input
             scores = []
             anomalies = []
-            
+
             for batch in data:
                 if isinstance(batch, tuple):
                     x = batch[0]
                 else:
                     x = batch
-                
+
                 # Calculate scores directly to avoid recursion
                 if self.preprocessing_model is not None:
                     # Use the call method which handles preprocessing and returns anomaly results
@@ -506,15 +530,18 @@ class Autoencoder(BaseModel):
                     # Standard autoencoder mode
                     batch_scores = self.predict_anomaly_scores(x)
                     percentile = getattr(self, percentile_to_use)
-                    batch_anomalies = ops.cast(batch_scores > (percentile + (self.threshold * self.std)), dtype="float32")
-                
+                    batch_anomalies = ops.cast(
+                        batch_scores > (percentile + (self.threshold * self.std)),
+                        dtype="float32",
+                    )
+
                 scores.append(batch_scores)
                 anomalies.append(batch_anomalies)
-            
+
             # Concatenate results
             all_scores = ops.concatenate(scores)
             all_anomalies = ops.concatenate(anomalies)
-            
+
             return {
                 "score": all_scores,
                 "anomaly": all_anomalies,
@@ -522,7 +549,7 @@ class Autoencoder(BaseModel):
                 "threshold": self.threshold,
                 percentile_to_use: getattr(self, percentile_to_use),
             }
-        
+
         if self.preprocessing_model is not None:
             # Use the call method which handles preprocessing and returns anomaly results
             results = self(data, training=False)
@@ -537,8 +564,10 @@ class Autoencoder(BaseModel):
             # Standard autoencoder mode
             scores = self.predict_anomaly_scores(data)
             percentile = getattr(self, percentile_to_use)
-            
-            anomalies = ops.cast(scores > (percentile + (self.threshold * self.std)), dtype="float32")
+
+            anomalies = ops.cast(
+                scores > (percentile + (self.threshold * self.std)), dtype="float32",
+            )
 
             return {
                 "score": scores,
@@ -563,7 +592,9 @@ class Autoencoder(BaseModel):
                 "threshold": self.threshold,
                 "median": self.median,
                 "std": self.std,
-                "preprocessing_model": self.preprocessing_model.to_json() if self.preprocessing_model else None,
+                "preprocessing_model": self.preprocessing_model.to_json()
+                if self.preprocessing_model
+                else None,
                 "inputs": self.inputs,
             },
         )
@@ -581,8 +612,10 @@ class Autoencoder(BaseModel):
         """
         preprocessing_model = None
         if config.get("preprocessing_model"):
-            preprocessing_model = keras.models.model_from_json(config["preprocessing_model"])
-        
+            preprocessing_model = keras.models.model_from_json(
+                config["preprocessing_model"],
+            )
+
         instance = cls(
             input_dim=config["input_dim"],
             encoding_dim=config["encoding_dim"],

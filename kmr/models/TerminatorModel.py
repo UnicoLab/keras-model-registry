@@ -96,11 +96,7 @@ class TerminatorModel(BaseModel):
         self.slow_network_units = slow_network_units
 
         # Call parent's __init__ with preprocessing model support
-        super().__init__(
-            preprocessing_model=preprocessing_model,
-            name=name,
-            **kwargs
-        )
+        super().__init__(preprocessing_model=preprocessing_model, name=name, **kwargs)
 
         # Validate parameters
         self._validate_params()
@@ -173,17 +169,17 @@ class TerminatorModel(BaseModel):
         """
         # Standardize inputs to OrderedDict format
         standardized_inputs = self._standardize_inputs(inputs)
-        
+
         # Extract input and context tensors
         if len(standardized_inputs) >= 2:
             # Multiple inputs - use first two as input and context
             input_tensors = list(standardized_inputs.values())
             x = input_tensors[0]
             context = input_tensors[1]
-        elif 'input' in standardized_inputs and 'context' in standardized_inputs:
+        elif "input" in standardized_inputs and "context" in standardized_inputs:
             # Dictionary with named inputs
-            x = standardized_inputs['input']
-            context = standardized_inputs['context']
+            x = standardized_inputs["input"]
+            context = standardized_inputs["context"]
         elif len(standardized_inputs) == 1:
             # Single input - use zeros for context with correct dimensions
             x = list(standardized_inputs.values())[0]
@@ -194,7 +190,7 @@ class TerminatorModel(BaseModel):
             raise ValueError(
                 "TerminatorModel expects at least one input tensor. "
                 "For context-dependent behavior, provide [input_tensor, context_tensor] or "
-                "a dictionary with 'input' and 'context' keys."
+                "a dictionary with 'input' and 'context' keys.",
             )
 
         # Apply preprocessing if available

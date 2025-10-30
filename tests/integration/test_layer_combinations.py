@@ -264,7 +264,9 @@ class TestLayerCombinations(unittest.TestCase):
 
         # Check that at least some gradients are not None
         non_none_gradients = [grad for grad in gradients if grad is not None]
-        self.assertGreater(len(non_none_gradients), 0, "At least some gradients should be computed")
+        self.assertGreater(
+            len(non_none_gradients), 0, "At least some gradients should be computed",
+        )
 
 
 class TestModelIntegration(unittest.TestCase):

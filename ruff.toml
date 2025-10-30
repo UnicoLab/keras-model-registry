@@ -1,10 +1,11 @@
 line-length = 120
 indent-width = 4
 target-version = "py311"
-extend-unsafe-fixes = ["D"]
+# extend-unsafe-fixes = ["D"]  # Moved to lint section
 
 [lint]
 # List of rules: https://docs.astral.sh/ruff/rules
+extend-unsafe-fixes = ["D"]
 select = [
     # flake8-builtins
     "A",
@@ -104,4 +105,5 @@ line-ending = "auto"
 convention = "google"
 
 [lint.per-file-ignores]
-"**/{test,docs}/*" = ["ALL"]
+"**/test*.py" = ["S101"]
+"**/tests/**/*.py" = ["S101"]

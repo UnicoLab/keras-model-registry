@@ -14,14 +14,14 @@ Example:
         encoding_dim=32,
         intermediate_dim=64
     )
-    
+
     autoencoder.compile(optimizer='adam', loss='mse')
     autoencoder.fit(data, epochs=10)
-    
+
     # Use for anomaly detection
     scores = autoencoder.predict_anomaly_scores(test_data)
     anomalies = autoencoder.is_anomaly(test_data)
-    
+
     # With preprocessing model
     preprocessing_model = keras.Sequential([...])
     autoencoder_with_preprocessing = Autoencoder(

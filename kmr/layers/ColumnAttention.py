@@ -83,9 +83,11 @@ class ColumnAttention(layers.Layer):
         Returns:
             Attention weighted tensor of shape [batch_size, input_dim]
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Compute attention weights with shape [batch_size, input_dim]
-        if self.attention_net is None:
-            raise ValueError("Layer not built. Call build() first.")
         attention_weights = self.attention_net(inputs)
 
         # Apply attention

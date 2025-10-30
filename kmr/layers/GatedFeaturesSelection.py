@@ -116,9 +116,11 @@ class GatedFeatureSelection(layers.Layer):
             Tensor of same shape as input with gated features.
             The output is computed as: inputs * gates + 0.1 * inputs
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Compute feature gates
-        if self.gate_net is None:
-            raise ValueError("Layer not built. Call build() first.")
         gates = self.gate_net(inputs)
 
         # Residual connection with gating

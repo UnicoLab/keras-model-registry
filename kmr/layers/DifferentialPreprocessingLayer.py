@@ -174,19 +174,9 @@ class DifferentialPreprocessingLayer(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.impute,
-                self.gamma,
-                self.beta,
-                self.mlp_hidden,
-                self.mlp_output,
-                self.alpha,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Step 1: Impute missing values
         imputed = ops.where(

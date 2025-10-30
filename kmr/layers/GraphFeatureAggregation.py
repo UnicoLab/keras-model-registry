@@ -171,20 +171,9 @@ class GraphFeatureAggregation(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.num_features,
-                self.projection,
-                self.attention_a,
-                self.attention_bias,
-                self.leaky_relu,
-                self.dropout_layer,
-                self.out_proj,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Get batch size
         batch_size = ops.shape(inputs)[0]

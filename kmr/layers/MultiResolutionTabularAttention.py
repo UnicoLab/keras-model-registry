@@ -240,33 +240,15 @@ class MultiResolutionTabularAttention(BaseLayer):
                 "Input must be a list of two tensors (numerical and categorical features)",
             )
 
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.num_projection,
-                self.num_attention,
-                self.num_layernorm1,
-                self.num_dropout1,
-                self.num_layernorm2,
-                self.num_dropout2,
-                self.cat_projection,
-                self.cat_attention,
-                self.cat_layernorm1,
-                self.cat_dropout1,
-                self.cat_layernorm2,
-                self.cat_dropout2,
-                self.num_cat_attention,
-                self.cat_num_attention,
-                self.cross_num_layernorm,
-                self.cross_num_dropout,
-                self.cross_cat_layernorm,
-                self.cross_cat_dropout,
-                self.ffn_dense1,
-                self.ffn_dense2,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            # Determine input shape for building
+            if isinstance(inputs, list) and len(inputs) >= 2:
+                self.build([inputs[0].shape, inputs[1].shape])
+            else:
+                self.build(
+                    inputs.shape if hasattr(inputs, "shape") else inputs[0].shape,
+                )
 
         numerical, categorical = inputs
 

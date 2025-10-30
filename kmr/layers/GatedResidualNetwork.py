@@ -125,19 +125,9 @@ class GatedResidualNetwork(BaseLayer):
         Returns:
             Output tensor after applying gated residual transformations.
         """
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.elu_dense,
-                self.linear_dense,
-                self.dropout,
-                self.gated_linear_unit,
-                self.project,
-                self.layer_norm,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Cast inputs to float32 at the start
         inputs = ops.cast(inputs, "float32")

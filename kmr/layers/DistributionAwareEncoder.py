@@ -411,16 +411,9 @@ class DistributionAwareEncoder(BaseLayer):
         Returns:
             Encoded tensor
         """
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.distribution_transform,
-                self.projection,
-                self.distribution_embedding,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Ensure inputs are cast to float32
         x = ops.cast(inputs, dtype="float32")

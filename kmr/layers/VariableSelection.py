@@ -228,15 +228,11 @@ class VariableSelection(BaseLayer):
         Returns:
             Tuple of (selected_features, feature_weights)
         """
-        # Check if layer is built
-        if (
-            any(
-                layer is None
-                for layer in [self.feature_grns, self.grn_var, self.softmax]
-            )
-            or not self.feature_grns
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            # Determine input shape for building
+            input_shape = inputs[0].shape if isinstance(inputs, list) else inputs.shape
+            self.build(input_shape)
 
         if self.use_context:
             if not isinstance(inputs, list) or len(inputs) != 2:

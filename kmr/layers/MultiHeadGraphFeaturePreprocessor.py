@@ -172,21 +172,9 @@ class MultiHeadGraphFeaturePreprocessor(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.projection,
-                self.q_dense,
-                self.k_dense,
-                self.v_dense,
-                self.out_proj,
-                self.final_dense,
-                self.num_features,
-                self.depth,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Get batch size and actual number of features
         batch_size = ops.shape(inputs)[0]

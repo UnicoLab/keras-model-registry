@@ -160,9 +160,9 @@ class BoostingEnsembleLayer(BaseLayer):
         Returns:
             Output tensor of same shape as input.
         """
-        # Check if layer is built
-        if self.learners is None or self.alpha is None:
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Get outputs from each learner
         learner_outputs = [

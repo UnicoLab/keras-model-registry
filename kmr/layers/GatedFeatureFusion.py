@@ -127,9 +127,17 @@ class GatedFeatureFusion(BaseLayer):
         # Concatenate the features along the last dimension
         concatenated = ops.concatenate([feat1, feat2], axis=-1)
 
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            # Determine input shape for building
+            feat1_shape = feat1.shape
+            feat2_shape = feat2.shape
+            if len(feat1_shape) == len(feat2_shape):
+                self.build([feat1_shape, feat2_shape])
+            else:
+                self.build(feat1_shape)
+
         # Compute the gate values
-        if self.fusion_gate is None:
-            raise ValueError("Layer not built. Call build() first.")
         gate = self.fusion_gate(concatenated)
 
         # Fuse using the learned gate

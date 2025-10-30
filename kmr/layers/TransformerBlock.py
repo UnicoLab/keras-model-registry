@@ -156,22 +156,9 @@ class TransformerBlock(BaseLayer):
         Returns:
             Output tensor after applying transformer block.
         """
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.multihead_attention,
-                self.dropout1,
-                self.add1,
-                self.layer_norm1,
-                self.ff1,
-                self.dropout2,
-                self.ff2,
-                self.add2,
-                self.layer_norm2,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Store original shape and dimensions
         ops.shape(inputs)

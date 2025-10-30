@@ -257,23 +257,9 @@ class AdvancedNumericalEmbedding(BaseLayer):
             Output tensor with shape (batch_size, num_features, embedding_dim) or
             (batch_size, embedding_dim) if num_features=1.
         """
-        # Check if layer is built
-        if (
-            any(
-                layer is None
-                for layer in [
-                    self.num_features,
-                    self.hidden_layer,
-                    self.output_layer,
-                    self.residual_proj,
-                    self.learned_min,
-                    self.learned_max,
-                    self.gate,
-                ]
-            )
-            or not self.bin_embeddings
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Cast inputs to float32
         inputs = ops.cast(inputs, "float32")

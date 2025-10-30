@@ -88,8 +88,10 @@ class GatedLinearUnit(BaseLayer):
         Returns:
             Output tensor after applying gated linear transformation.
         """
-        if self.linear is None or self.sigmoid is None:
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         return self.linear(inputs) * self.sigmoid(inputs)
 
     def get_config(self) -> dict[str, Any]:

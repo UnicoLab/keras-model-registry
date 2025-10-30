@@ -184,27 +184,9 @@ class TabularAttention(BaseLayer):
                 "Input tensor must be 3-dimensional (batch_size, num_samples, num_features)",
             )
 
-        # Check if layer is built
-        if any(
-            layer is None
-            for layer in [
-                self.input_projection,
-                self.feature_attention,
-                self.feature_layernorm,
-                self.feature_dropout,
-                self.feature_layernorm2,
-                self.feature_dropout2,
-                self.sample_attention,
-                self.sample_layernorm,
-                self.sample_dropout,
-                self.sample_layernorm2,
-                self.sample_dropout2,
-                self.ffn_dense1,
-                self.ffn_dense2,
-                self.output_projection,
-            ]
-        ):
-            raise ValueError("Layer not built. Call build() first.")
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
 
         # Project inputs to d_model dimension
         projected = self.input_projection(inputs)

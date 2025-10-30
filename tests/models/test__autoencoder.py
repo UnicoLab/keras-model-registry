@@ -173,7 +173,10 @@ class TestAutoencoder(BaseModelTest):
 
         # Fit with auto threshold setup
         history = model.fit(
-            self.dataset, epochs=1, verbose=0, auto_setup_threshold=True,
+            self.dataset,
+            epochs=1,
+            verbose=0,
+            auto_setup_threshold=True,
         )
 
         # Check that threshold was automatically set
@@ -250,7 +253,7 @@ class TestAutoencoder(BaseModelTest):
                 self.final_dense = keras.layers.Dense(32, activation="relu")
                 self.dropout = keras.layers.Dropout(0.1)
 
-            def call(self, inputs):
+            def call(self, inputs) -> tf.Tensor:
                 # Process each input separately
                 feat1 = self.dense1(inputs["feature1"])
                 feat2 = self.dense2(inputs["feature2"])
@@ -335,7 +338,8 @@ class TestAutoencoder(BaseModelTest):
         self.assertEqual(original_model.input_dim, restored_model.input_dim)
         self.assertEqual(original_model.encoding_dim, restored_model.encoding_dim)
         self.assertEqual(
-            original_model.intermediate_dim, restored_model.intermediate_dim,
+            original_model.intermediate_dim,
+            restored_model.intermediate_dim,
         )
         self.assertEqual(original_model.threshold, restored_model.threshold)
 

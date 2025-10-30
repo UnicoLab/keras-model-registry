@@ -579,7 +579,7 @@ def add_feature_moe_to_model(
     # Create new outputs with optional residual connections
     new_outputs = []
     for i, (feature_name, original_output) in enumerate(
-        zip(feature_names, feature_outputs),
+        zip(feature_names, feature_outputs, strict=False),
     ):
         expert_output = unstacked_outputs[i]
 

@@ -350,7 +350,7 @@ class WiserModel(tf.keras.Model):
         gradients, _ = tf.clip_by_global_norm(gradients, clip_norm=1.0)
 
         # Update weights
-        self.optimizer.apply_gradients(zip(gradients, trainable_vars))
+        self.optimizer.apply_gradients(zip(gradients, trainable_vars, strict=False))
 
         # Return metrics
         metrics = {**loss_dict, "total_loss": total_loss, "l2_loss": l2_loss}

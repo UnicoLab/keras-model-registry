@@ -294,7 +294,7 @@ class AEKMeans(tf.keras.models.Model):
                     distances = self._compute_distances(X_batch)
                     loss = tf.reduce_sum(tf.reduce_min(distances, axis=1))
                 grads = tape.gradient(loss, [self.clusters])
-                self.optimizer.apply_gradients(zip(grads, [self.clusters]))
+                self.optimizer.apply_gradients(zip(grads, [self.clusters], strict=False))
 
     def predict(self, x):
         """

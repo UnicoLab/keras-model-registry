@@ -110,7 +110,7 @@ class KMRPlotter:
         from collections import Counter
 
         # Create confusion matrix
-        cm = Counter(zip(y_true, y_pred))
+        cm = Counter(zip(y_true, y_pred, strict=False))
         n_classes = len(np.unique(y_true))
 
         if n_classes == 2:
@@ -285,7 +285,10 @@ class KMRPlotter:
         )
 
         fig.update_layout(
-            title=title, xaxis_title="Metrics", yaxis_title="Score", height=height,
+            title=title,
+            xaxis_title="Metrics",
+            yaxis_title="Score",
+            height=height,
         )
 
         return fig
@@ -343,7 +346,10 @@ class KMRPlotter:
         )
 
         fig.update_layout(
-            title=title, xaxis_title="Recall", yaxis_title="Precision", height=height,
+            title=title,
+            xaxis_title="Recall",
+            yaxis_title="Precision",
+            height=height,
         )
 
         return fig
@@ -454,7 +460,7 @@ class KMRPlotter:
         # Plot 2: Confusion Matrix
         from collections import Counter
 
-        cm = Counter(zip(y_true, y_pred))
+        cm = Counter(zip(y_true, y_pred, strict=False))
         cm_matrix = np.array(
             [
                 [cm.get((0, 0), 0), cm.get((0, 1), 0)],
@@ -550,7 +556,9 @@ class KMRPlotter:
         # Plot 3: Score Distribution (if scores provided)
         if y_scores is not None:
             fig.add_trace(
-                go.Histogram(x=y_scores, name="Scores", nbinsx=30), row=2, col=1,
+                go.Histogram(x=y_scores, name="Scores", nbinsx=30),
+                row=2,
+                col=1,
             )
 
         # Plot 4: Precision-Recall Curve (if scores provided)
@@ -564,7 +572,9 @@ class KMRPlotter:
 
     @staticmethod
     def _create_regression_plot(
-        y_true: np.ndarray, y_pred: np.ndarray, title: str = "Regression Results",
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+        title: str = "Regression Results",
     ) -> go.Figure:
         """Create comprehensive regression plot."""
         fig = make_subplots(
@@ -610,7 +620,9 @@ class KMRPlotter:
 
         # Plot 4: Error Distribution
         fig.add_trace(
-            go.Histogram(x=residuals, name="Residuals", nbinsx=30), row=2, col=2,
+            go.Histogram(x=residuals, name="Residuals", nbinsx=30),
+            row=2,
+            col=2,
         )
 
         fig.update_layout(height=800, title_text=title, showlegend=True)

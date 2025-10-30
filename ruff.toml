@@ -105,5 +105,5 @@ line-ending = "auto"
 convention = "google"
 
 [lint.per-file-ignores]
-"**/test*.py" = ["S101"]
-"**/tests/**/*.py" = ["S101"]
+"**/test*.py" = ["S101", "T201"]
+"**/tests/**/*.py" = ["S101", "T201"]

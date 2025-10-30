@@ -57,7 +57,8 @@ class TestBaseFeedForwardKDPIntegration:
 
     @pytest.fixture
     def _kdp_preprocessor(
-        self, dummy_data: tuple[Path, pd.DataFrame],
+        self,
+        dummy_data: tuple[Path, pd.DataFrame],
     ) -> PreprocessingModel:
         """Create and fit KDP preprocessor."""
         csv_path, df = dummy_data
@@ -323,7 +324,8 @@ class TestBaseFeedForwardKDPIntegration:
             "numeric_feature_1": np.random.normal(10, 3, n_samples),
             "numeric_feature_2": np.random.exponential(2, n_samples),
             "categorical_feature": np.random.choice(
-                ["A", "B", "C", "D", "E"], n_samples,
+                ["A", "B", "C", "D", "E"],
+                n_samples,
             ),
             "boolean_feature": np.random.choice([True, False], n_samples),
             "target": np.random.normal(5, 1, n_samples),

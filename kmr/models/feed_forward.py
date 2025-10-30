@@ -199,7 +199,10 @@ class BaseFeedForwardModel(BaseModel):
         """
         # Use BaseModel's intelligent input processing
         processed_inputs = self._process_inputs_for_model(
-            inputs, expected_keys=self.feature_names, auto_split=True, auto_reshape=True,
+            inputs,
+            expected_keys=self.feature_names,
+            auto_split=True,
+            auto_reshape=True,
         )
 
         # Pass through internal model

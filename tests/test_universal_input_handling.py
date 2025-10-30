@@ -12,11 +12,14 @@ from kmr.models import Autoencoder, BaseFeedForwardModel, SFNEBlock, TerminatorM
 class TestUniversalInputHandling:
     """Test universal input handling across all KMR models."""
 
-    def test_autoencoder_universal_inputs(self):
+    def test_autoencoder_universal_inputs(self) -> None:
         """Test Autoencoder with various input formats."""
         # Create model
         model = Autoencoder(
-            input_dim=10, encoding_dim=5, intermediate_dim=8, name="test_autoencoder",
+            input_dim=10,
+            encoding_dim=5,
+            intermediate_dim=8,
+            name="test_autoencoder",
         )
 
         # Test data
@@ -50,7 +53,7 @@ class TestUniversalInputHandling:
         output6 = model({"input_0": input1, "input_1": input2})
         assert output6.shape == (batch_size, input_dim)
 
-    def test_feed_forward_universal_inputs(self):
+    def test_feed_forward_universal_inputs(self) -> None:
         """Test BaseFeedForwardModel with various input formats."""
         # Create model
         model = BaseFeedForwardModel(
@@ -81,12 +84,13 @@ class TestUniversalInputHandling:
 
         # Test 4: Single tensor input (concatenated)
         single_input = np.concatenate(
-            [test_data["feature_1"], test_data["feature_2"]], axis=-1,
+            [test_data["feature_1"], test_data["feature_2"]],
+            axis=-1,
         )
         output4 = model(single_input)
         assert output4.shape == (batch_size, 1)
 
-    def test_sfne_block_universal_inputs(self):
+    def test_sfne_block_universal_inputs(self) -> None:
         """Test SFNEBlock with various input formats."""
         # Create model
         model = SFNEBlock(
@@ -122,7 +126,7 @@ class TestUniversalInputHandling:
         output4 = model([input1, input2])
         assert output4.shape == (batch_size, 5)
 
-    def test_terminator_model_universal_inputs(self):
+    def test_terminator_model_universal_inputs(self) -> None:
         """Test TerminatorModel with various input formats."""
         # Create model
         model = TerminatorModel(
@@ -163,7 +167,7 @@ class TestUniversalInputHandling:
         output5 = model((input_data, context_data))
         assert output5.shape == (batch_size, 5)
 
-    def test_models_with_preprocessing(self):
+    def test_models_with_preprocessing(self) -> None:
         """Test models with preprocessing models."""
         # Create a simple preprocessing model
         preprocessing_input = layers.Input(shape=(5,), name="preprocessing_input")
@@ -171,7 +175,9 @@ class TestUniversalInputHandling:
             preprocessing_input,
         )
         preprocessing_model = keras.Model(
-            inputs=preprocessing_input, outputs=x, name="preprocessing_model",
+            inputs=preprocessing_input,
+            outputs=x,
+            name="preprocessing_model",
         )
 
         # Test Autoencoder with preprocessing
@@ -200,7 +206,7 @@ class TestUniversalInputHandling:
         assert "reconstruction" in output_dict
         assert output_dict["reconstruction"].shape == (batch_size, 10)
 
-    def test_error_handling(self):
+    def test_error_handling(self) -> None:
         """Test error handling for invalid inputs."""
         # Create model
         model = BaseFeedForwardModel(
@@ -216,11 +222,14 @@ class TestUniversalInputHandling:
         with pytest.raises(ValueError, match="incompatible with the layer"):
             model(test_data)
 
-    def test_training_mode(self):
+    def test_training_mode(self) -> None:
         """Test that models work in both training and inference modes."""
         # Create model
         model = Autoencoder(
-            input_dim=10, encoding_dim=5, intermediate_dim=8, name="test_autoencoder",
+            input_dim=10,
+            encoding_dim=5,
+            intermediate_dim=8,
+            name="test_autoencoder",
         )
 
         # Test data

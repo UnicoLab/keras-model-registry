@@ -50,10 +50,12 @@ def create_dummy_data(output_path: Path, n_samples: int = 1000) -> pd.DataFrame:
         "credit_score": np.random.normal(650, 100, n_samples).astype(int),
         # Categorical features
         "education": np.random.choice(
-            ["High School", "Bachelor", "Master", "PhD"], n_samples,
+            ["High School", "Bachelor", "Master", "PhD"],
+            n_samples,
         ),
         "employment_status": np.random.choice(
-            ["Employed", "Unemployed", "Self-employed"], n_samples,
+            ["Employed", "Unemployed", "Self-employed"],
+            n_samples,
         ),
         "city_tier": np.random.choice(["Tier 1", "Tier 2", "Tier 3"], n_samples),
         # Boolean features
@@ -67,12 +69,16 @@ def create_dummy_data(output_path: Path, n_samples: int = 1000) -> pd.DataFrame:
 
     # Add some missing values to test preprocessing capabilities
     missing_indices = np.random.choice(
-        df.index, size=int(0.05 * n_samples), replace=False,
+        df.index,
+        size=int(0.05 * n_samples),
+        replace=False,
     )
     df.loc[missing_indices, "income"] = np.nan
 
     missing_indices = np.random.choice(
-        df.index, size=int(0.03 * n_samples), replace=False,
+        df.index,
+        size=int(0.03 * n_samples),
+        replace=False,
     )
     df.loc[missing_indices, "education"] = None
 
@@ -123,7 +129,8 @@ def create_kdp_preprocessor(csv_path: Path) -> TabularDataProcessor:
 
 
 def create_feed_forward_model(
-    feature_names: list[str], preprocessing_model: tf.keras.Model,
+    feature_names: list[str],
+    preprocessing_model: tf.keras.Model,
 ) -> BaseFeedForwardModel:
     """Create BaseFeedForwardModel with KDP preprocessing.
 
@@ -216,7 +223,9 @@ def train_model(
 
 
 def evaluate_model(
-    model: BaseFeedForwardModel, X_test: dict[str, np.ndarray], y_test: np.ndarray,
+    model: BaseFeedForwardModel,
+    X_test: dict[str, np.ndarray],
+    y_test: np.ndarray,
 ) -> dict[str, float]:
     """Evaluate the model on test data.
 
@@ -249,7 +258,8 @@ def evaluate_model(
 
 
 def test_raw_data_prediction(
-    model: BaseFeedForwardModel, feature_names: list[str],
+    model: BaseFeedForwardModel,
+    feature_names: list[str],
 ) -> None:
     """Test prediction with completely raw data (including missing values).
 

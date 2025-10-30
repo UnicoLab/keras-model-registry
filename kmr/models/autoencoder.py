@@ -100,16 +100,24 @@ class Autoencoder(BaseModel):
 
         # Initialize variables
         self._threshold_var = keras.Variable(
-            threshold, dtype="float32", name="threshold",
+            threshold,
+            dtype="float32",
+            name="threshold",
         )
         self._median = keras.Variable(
-            0.0, dtype="float32", trainable=False, name="median",
+            0.0,
+            dtype="float32",
+            trainable=False,
+            name="median",
         )
         self._std = keras.Variable(0.0, dtype="float32", trainable=False, name="std")
 
         # Call parent's __init__ with preprocessing model support
         super().__init__(
-            preprocessing_model=preprocessing_model, inputs=inputs, name=name, **kwargs,
+            preprocessing_model=preprocessing_model,
+            inputs=inputs,
+            name=name,
+            **kwargs,
         )
 
         # Build the model architecture
@@ -132,21 +140,29 @@ class Autoencoder(BaseModel):
         """Build the autoencoder architecture."""
         # Encoder layers
         self.encoder_dense1 = layers.Dense(
-            self.intermediate_dim, activation="relu", name="encoder_dense1",
+            self.intermediate_dim,
+            activation="relu",
+            name="encoder_dense1",
         )
         self.encoder_dropout1 = layers.Dropout(0.1, name="encoder_dropout1")
         self.encoder_dense2 = layers.Dense(
-            self.encoding_dim, activation="relu", name="encoder_dense2",
+            self.encoding_dim,
+            activation="relu",
+            name="encoder_dense2",
         )
         self.encoder_dropout2 = layers.Dropout(0.1, name="encoder_dropout2")
 
         # Decoder layers
         self.decoder_dense1 = layers.Dense(
-            self.intermediate_dim, activation="relu", name="decoder_dense1",
+            self.intermediate_dim,
+            activation="relu",
+            name="decoder_dense1",
         )
         self.decoder_dropout1 = layers.Dropout(0.1, name="decoder_dropout1")
         self.decoder_dense2 = layers.Dense(
-            self.input_dim, activation="sigmoid", name="decoder_dense2",
+            self.input_dim,
+            activation="sigmoid",
+            name="decoder_dense2",
         )
         self.decoder_dropout2 = layers.Dropout(0.1, name="decoder_dropout2")
 
@@ -157,7 +173,9 @@ class Autoencoder(BaseModel):
         )
 
     def call(
-        self, inputs: Any, training: bool | None = None,
+        self,
+        inputs: Any,
+        training: bool | None = None,
     ) -> keras.KerasTensor | dict[str, keras.KerasTensor]:
         """Performs the forward pass of the autoencoder with universal input handling.
 
@@ -210,7 +228,8 @@ class Autoencoder(BaseModel):
 
             # Determine if anomaly
             is_anomaly = ops.greater(
-                anomaly_score, self._median + (self._threshold_var * self._std),
+                anomaly_score,
+                self._median + (self._threshold_var * self._std),
             )
 
             return {
@@ -449,7 +468,9 @@ class Autoencoder(BaseModel):
         return scores
 
     def predict(
-        self, data: keras.KerasTensor | dict[str, keras.KerasTensor] | Any, **kwargs,
+        self,
+        data: keras.KerasTensor | dict[str, keras.KerasTensor] | Any,
+        **kwargs,
     ) -> keras.KerasTensor | dict[str, keras.KerasTensor]:
         """Predicts reconstruction or anomaly detection results.
 
@@ -532,7 +553,7 @@ class Autoencoder(BaseModel):
                     percentile = getattr(self, percentile_to_use)
                     batch_anomalies = ops.cast(
                         batch_scores > (percentile + (self.threshold * self.std)),
-                        dtype="float32",
+                        dtype="bool",
                     )
 
                 scores.append(batch_scores)
@@ -566,7 +587,8 @@ class Autoencoder(BaseModel):
             percentile = getattr(self, percentile_to_use)
 
             anomalies = ops.cast(
-                scores > (percentile + (self.threshold * self.std)), dtype="float32",
+                scores > (percentile + (self.threshold * self.std)),
+                dtype="bool",
             )
 
             return {

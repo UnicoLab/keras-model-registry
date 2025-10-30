@@ -123,7 +123,8 @@ class KMRDataGenerator:
             # Binary classification
             relevant_features = X[:, sparse_mask] if sparse_features else X
             decision_boundary = np.sum(relevant_features, axis=1) + 0.5 * np.sum(
-                relevant_features**2, axis=1,
+                relevant_features**2,
+                axis=1,
             )
             decision_boundary += noise_level * np.random.normal(0, 1, n_samples)
             y = (decision_boundary > np.median(decision_boundary)).astype(int)
@@ -193,13 +194,17 @@ class KMRDataGenerator:
         elif anomaly_type == "cluster":
             anomaly_center = np.random.normal(0, 5, n_features)
             anomaly_data = np.random.normal(
-                anomaly_center, 0.5, (n_anomalies, n_features),
+                anomaly_center,
+                0.5,
+                (n_anomalies, n_features),
             )
         elif anomaly_type == "drift":
             # Drift: same distribution but shifted
             drift_center = np.random.normal(3, 1, n_features)
             anomaly_data = np.random.normal(
-                drift_center, 1.0, (n_anomalies, n_features),
+                drift_center,
+                1.0,
+                (n_anomalies, n_features),
             )
         else:
             raise ValueError(f"Unknown anomaly type: {anomaly_type}")
@@ -339,7 +344,9 @@ class KMRDataGenerator:
         )
         target_weights = np.random.normal(0, 1, combined_features.shape[1])
         y = np.dot(combined_features, target_weights) + 0.1 * np.random.normal(
-            0, 1, combined_features.shape[0],
+            0,
+            1,
+            combined_features.shape[0],
         )
 
         # Convert to classification if requested

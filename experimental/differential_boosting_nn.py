@@ -586,7 +586,7 @@ class DifferentialBoostingNN(models.Model):
         gradients, _ = tf.clip_by_global_norm(gradients, self.gradient_clip)
 
         # Apply gradients
-        self.optimizer.apply_gradients(zip(gradients, self.trainable_variables))
+        self.optimizer.apply_gradients(zip(gradients, self.trainable_variables, strict=False))
 
         # Update metrics
         self.compiled_metrics.update_state(y, y_pred)

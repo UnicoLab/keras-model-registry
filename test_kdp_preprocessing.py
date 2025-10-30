@@ -113,7 +113,9 @@ def test_basic_terminator_model(X_train, X_test, y_train, y_test):
 
     # Evaluate model
     test_loss, test_accuracy, test_precision, test_recall = model.evaluate(
-        test_data, y_test, verbose=0,
+        test_data,
+        y_test,
+        verbose=0,
     )
 
     print(f"Test Accuracy: {test_accuracy:.4f}")
@@ -156,7 +158,9 @@ def test_simple_preprocessing_model(X_train, X_test, y_train, y_test):
     output_layer = layers.Dense(16, activation="relu")(dense2)
 
     preprocessing_model = Model(
-        inputs=input_layer, outputs=output_layer, name="simple_preprocessor",
+        inputs=input_layer,
+        outputs=output_layer,
+        name="simple_preprocessor",
     )
 
     print("✅ Simple preprocessing model created")
@@ -213,7 +217,9 @@ def test_simple_preprocessing_model(X_train, X_test, y_train, y_test):
 
     # Evaluate model
     test_loss, test_accuracy, test_precision, test_recall = model_with_prep.evaluate(
-        test_data, y_test, verbose=0,
+        test_data,
+        y_test,
+        verbose=0,
     )
 
     print(f"Test Accuracy: {test_accuracy:.4f}")
@@ -345,7 +351,9 @@ def test_kdp_preprocessing_model(X_train, X_test, y_train, y_test):
 
         # Evaluate model
         test_loss, test_accuracy, test_precision, test_recall = model_with_kdp.evaluate(
-            test_data, y_test, verbose=0,
+            test_data,
+            y_test,
+            verbose=0,
         )
 
         print(f"Test Accuracy: {test_accuracy:.4f}")
@@ -512,10 +520,15 @@ def test_improved_kdp_preprocessing(X_train, X_test, y_train, y_test):
             verbose=0,
             callbacks=[
                 keras.callbacks.EarlyStopping(
-                    monitor="val_loss", patience=8, restore_best_weights=True,
+                    monitor="val_loss",
+                    patience=8,
+                    restore_best_weights=True,
                 ),
                 keras.callbacks.ReduceLROnPlateau(
-                    monitor="val_loss", factor=0.5, patience=4, min_lr=1e-7,
+                    monitor="val_loss",
+                    factor=0.5,
+                    patience=4,
+                    min_lr=1e-7,
                 ),
             ],
         )
@@ -577,17 +590,26 @@ def run_all_tests():
 
     # Test 2: Basic TerminatorModel
     basic_model, basic_ok, basic_f1 = test_basic_terminator_model(
-        X_train, X_test, y_train, y_test,
+        X_train,
+        X_test,
+        y_train,
+        y_test,
     )
 
     # Test 3: Simple Preprocessing Model
     simple_model, simple_ok, simple_f1 = test_simple_preprocessing_model(
-        X_train, X_test, y_train, y_test,
+        X_train,
+        X_test,
+        y_train,
+        y_test,
     )
 
     # Test 4: KDP Preprocessing Model
     kdp_model, kdp_ok, kdp_f1 = test_kdp_preprocessing_model(
-        X_train, X_test, y_train, y_test,
+        X_train,
+        X_test,
+        y_train,
+        y_test,
     )
 
     # Test 5: Improved KDP Preprocessing Model

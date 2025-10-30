@@ -94,7 +94,8 @@ class BaseModel(Model):
             if expected_keys is not None:
                 # Use expected keys to maintain order
                 input_tensors = self._get_input_tensors(
-                    standardized_inputs, expected_keys,
+                    standardized_inputs,
+                    expected_keys,
                 )
             else:
                 # Use all available inputs
@@ -127,7 +128,8 @@ class BaseModel(Model):
         """
         # Prepare inputs for preprocessing model
         preprocessed_inputs = self._prepare_inputs_for_preprocessing(
-            standardized_inputs, self._preprocessing_model,
+            standardized_inputs,
+            self._preprocessing_model,
         )
 
         # Apply preprocessing
@@ -159,7 +161,9 @@ class BaseModel(Model):
                     (i + 1) * feature_dim if i < len(expected_keys) - 1 else input_dim
                 )
                 feature_input = keras.ops.slice(
-                    single_input, [0, start_idx], [-1, end_idx - start_idx],
+                    single_input,
+                    [0, start_idx],
+                    [-1, end_idx - start_idx],
                 )
                 features.append(feature_input)
             return features
@@ -185,7 +189,9 @@ class BaseModel(Model):
         return reshaped_inputs
 
     def _get_input_tensors(
-        self, standardized_inputs: OrderedDict, expected_keys: list[str] | None = None,
+        self,
+        standardized_inputs: OrderedDict,
+        expected_keys: list[str] | None = None,
     ) -> list:
         """Extract input tensors from standardized inputs.
 
@@ -222,7 +228,9 @@ class BaseModel(Model):
             return list(standardized_inputs.values())
 
     def _validate_input_shapes(
-        self, inputs: list, expected_shapes: list[tuple] | None = None,
+        self,
+        inputs: list,
+        expected_shapes: list[tuple] | None = None,
     ) -> None:
         """Validate input shapes if expected shapes are provided.
 
@@ -237,7 +245,7 @@ class BaseModel(Model):
                 )
 
             for i, (input_tensor, expected_shape) in enumerate(
-                zip(inputs, expected_shapes),
+                zip(inputs, expected_shapes, strict=False),
             ):
                 if hasattr(input_tensor, "shape"):
                     actual_shape = input_tensor.shape
@@ -247,7 +255,7 @@ class BaseModel(Model):
                         )
                     # Check non-None dimensions
                     for j, (actual_dim, expected_dim) in enumerate(
-                        zip(actual_shape, expected_shape),
+                        zip(actual_shape, expected_shape, strict=False),
                     ):
                         if expected_dim is not None and actual_dim != expected_dim:
                             raise ValueError(
@@ -255,7 +263,9 @@ class BaseModel(Model):
                             )
 
     def _prepare_inputs_for_preprocessing(
-        self, standardized_inputs: OrderedDict, preprocessing_model: Any,
+        self,
+        standardized_inputs: OrderedDict,
+        preprocessing_model: Any,
     ) -> Any:
         """Prepare inputs for preprocessing model based on its expected format.
 
@@ -397,7 +407,8 @@ class BaseModel(Model):
                     "KDP preprocessing model detected - already built and fitted",
                 )
             elif hasattr(self._preprocessing_model, "inputs") and hasattr(
-                self._preprocessing_model, "outputs",
+                self._preprocessing_model,
+                "outputs",
             ):
                 # This is already a built Keras model (like from KDP build_preprocessor result)
                 # Check if it has normalization layers that need fitting
@@ -446,7 +457,10 @@ class BaseModel(Model):
                         self._preprocessing_model.compile(optimizer="adam", loss="mse")
 
                     self._preprocessing_model.fit(
-                        data, dummy_targets, epochs=1, verbose=0,
+                        data,
+                        dummy_targets,
+                        epochs=1,
+                        verbose=0,
                     )
             else:
                 # If it's not a Keras model, we'll just call it to build it

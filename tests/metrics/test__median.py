@@ -68,7 +68,7 @@ class TestMedian(unittest.TestCase):
 
         # Update metric
         self.metric.update_state(y_pred)
-        result1 = self.metric.result()
+        self.metric.result()
 
         # Reset state
         self.metric.reset_state()

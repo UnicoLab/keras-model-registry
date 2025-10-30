@@ -26,7 +26,8 @@ def create_sample_data(file_path: Path) -> pd.DataFrame:
         "numeric_feature_1": np.random.normal(10, 3, n_samples),
         "numeric_feature_2": np.random.exponential(2, n_samples),
         "categorical_feature": np.random.choice(
-            [0, 1, 2, 3], n_samples,
+            [0, 1, 2, 3],
+            n_samples,
         ),  # Encoded as integers
         "boolean_feature": np.random.choice([0, 1], n_samples),  # Encoded as integers
         "target": np.random.normal(5, 1, n_samples),
@@ -59,7 +60,9 @@ def create_preprocessing_model(input_dim: int) -> Model:
     x = layers.Dense(16, activation="relu", name="preprocessing_dense_2")(x)
     x = layers.Dropout(0.1, name="preprocessing_dropout_2")(x)
     preprocessing_model = Model(
-        inputs=preprocessing_input, outputs=x, name="preprocessing_model",
+        inputs=preprocessing_input,
+        outputs=x,
+        name="preprocessing_model",
     )
 
     return preprocessing_model
@@ -127,7 +130,12 @@ def run_feed_forward_example():
         # 5. Train the model
         logger.info("Training the model")
         history = model.fit(
-            X_train, y_train, epochs=10, batch_size=32, validation_split=0.2, verbose=1,
+            X_train,
+            y_train,
+            epochs=10,
+            batch_size=32,
+            validation_split=0.2,
+            verbose=1,
         )
 
         # 6. Evaluate on test data

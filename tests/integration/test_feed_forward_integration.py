@@ -41,10 +41,12 @@ class TestBaseFeedForwardIntegration:
             "numeric_feature_1": np.random.normal(10, 3, n_samples),
             "numeric_feature_2": np.random.exponential(2, n_samples),
             "categorical_feature": np.random.choice(
-                [0, 1, 2, 3], n_samples,
+                [0, 1, 2, 3],
+                n_samples,
             ),  # Encoded as integers
             "boolean_feature": np.random.choice(
-                [0, 1], n_samples,
+                [0, 1],
+                n_samples,
             ),  # Encoded as integers
             "target": np.random.normal(5, 1, n_samples),
         }
@@ -87,14 +89,17 @@ class TestBaseFeedForwardIntegration:
 
         # Create a simple preprocessing model
         preprocessing_input = layers.Input(
-            shape=(len(feature_names),), name="preprocessing_input",
+            shape=(len(feature_names),),
+            name="preprocessing_input",
         )
         x = layers.Dense(16, activation="relu", name="preprocessing_dense")(
             preprocessing_input,
         )
         x = layers.Dropout(0.1, name="preprocessing_dropout")(x)
         preprocessing_model = Model(
-            inputs=preprocessing_input, outputs=x, name="preprocessing_model",
+            inputs=preprocessing_input,
+            outputs=x,
+            name="preprocessing_model",
         )
 
         # Create BaseFeedForwardModel with preprocessing
@@ -191,12 +196,15 @@ class TestBaseFeedForwardIntegration:
 
         for hidden_units in architectures:
             preprocessing_input = layers.Input(
-                shape=(len(feature_names),), name="preprocessing_input",
+                shape=(len(feature_names),),
+                name="preprocessing_input",
             )
             x = layers.Dense(16, activation="relu")(preprocessing_input)
             x = layers.Dropout(0.1)(x)
             preprocessing_model = Model(
-                inputs=preprocessing_input, outputs=x, name="preprocessing_model",
+                inputs=preprocessing_input,
+                outputs=x,
+                name="preprocessing_model",
             )
 
             model = BaseFeedForwardModel(
@@ -237,12 +245,15 @@ class TestBaseFeedForwardIntegration:
         ]
 
         preprocessing_input = layers.Input(
-            shape=(len(feature_names),), name="preprocessing_input",
+            shape=(len(feature_names),),
+            name="preprocessing_input",
         )
         x = layers.Dense(16, activation="relu")(preprocessing_input)
         x = layers.Dropout(0.1)(x)
         preprocessing_model = Model(
-            inputs=preprocessing_input, outputs=x, name="preprocessing_model",
+            inputs=preprocessing_input,
+            outputs=x,
+            name="preprocessing_model",
         )
 
         model = BaseFeedForwardModel(
@@ -279,12 +290,15 @@ class TestBaseFeedForwardIntegration:
         ]
 
         preprocessing_input = layers.Input(
-            shape=(len(feature_names),), name="preprocessing_input",
+            shape=(len(feature_names),),
+            name="preprocessing_input",
         )
         x = layers.Dense(16, activation="relu")(preprocessing_input)
         x = layers.Dropout(0.1)(x)
         preprocessing_model = Model(
-            inputs=preprocessing_input, outputs=x, name="preprocessing_model",
+            inputs=preprocessing_input,
+            outputs=x,
+            name="preprocessing_model",
         )
 
         model = BaseFeedForwardModel(
@@ -349,12 +363,15 @@ class TestBaseFeedForwardIntegration:
         ]
 
         preprocessing_input = layers.Input(
-            shape=(len(feature_names),), name="preprocessing_input",
+            shape=(len(feature_names),),
+            name="preprocessing_input",
         )
         x = layers.Dense(32, activation="relu")(preprocessing_input)
         x = layers.Dropout(0.2)(x)
         preprocessing_model = Model(
-            inputs=preprocessing_input, outputs=x, name="preprocessing_model",
+            inputs=preprocessing_input,
+            outputs=x,
+            name="preprocessing_model",
         )
 
         model = BaseFeedForwardModel(
@@ -444,16 +461,20 @@ class TestBaseFeedForwardIntegration:
         # Define feature specifications for KDP
         features_specs = {
             "numeric_feature_1": NumericalFeature(
-                "numeric_feature_1", FeatureType.FLOAT_NORMALIZED,
+                "numeric_feature_1",
+                FeatureType.FLOAT_NORMALIZED,
             ),
             "numeric_feature_2": NumericalFeature(
-                "numeric_feature_2", FeatureType.FLOAT_NORMALIZED,
+                "numeric_feature_2",
+                FeatureType.FLOAT_NORMALIZED,
             ),
             "numeric_feature_3": NumericalFeature(
-                "numeric_feature_3", FeatureType.FLOAT_NORMALIZED,
+                "numeric_feature_3",
+                FeatureType.FLOAT_NORMALIZED,
             ),
             "numeric_feature_4": NumericalFeature(
-                "numeric_feature_4", FeatureType.FLOAT_NORMALIZED,
+                "numeric_feature_4",
+                FeatureType.FLOAT_NORMALIZED,
             ),
         }
 

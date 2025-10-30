@@ -1,6 +1,5 @@
 """Feed forward neural network model implementation."""
 from typing import Any
-import keras
 from keras import layers, Model
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
@@ -144,7 +143,10 @@ class BaseFeedForwardModel(BaseModel):
         # Apply preprocessing if available
         if self.preprocessing_model is not None:
             # Check if preprocessing model expects multiple inputs (like KDP)
-            if hasattr(self.preprocessing_model, 'inputs') and len(self.preprocessing_model.inputs) > 1:
+            if (
+                hasattr(self.preprocessing_model, "inputs")
+                and len(self.preprocessing_model.inputs) > 1
+            ):
                 # KDP-style preprocessing: pass individual inputs
                 x = self.preprocessing_model(inputs)
             else:
@@ -163,9 +165,11 @@ class BaseFeedForwardModel(BaseModel):
         outputs = self.output_layer(x)
 
         # Create model with appropriate input structure
-        if (self.preprocessing_model is not None and 
-            hasattr(self.preprocessing_model, 'inputs') and 
-            len(self.preprocessing_model.inputs) > 1):
+        if (
+            self.preprocessing_model is not None
+            and hasattr(self.preprocessing_model, "inputs")
+            and len(self.preprocessing_model.inputs) > 1
+        ):
             # For KDP-style preprocessing, create model with named inputs
             input_dict = {name: self.input_layers[name] for name in self.feature_names}
             self._model = Model(inputs=input_dict, outputs=outputs)
@@ -195,23 +199,28 @@ class BaseFeedForwardModel(BaseModel):
         """
         # Use BaseModel's intelligent input processing
         processed_inputs = self._process_inputs_for_model(
-            inputs, 
+            inputs,
             expected_keys=self.feature_names,
             auto_split=True,
-            auto_reshape=True
+            auto_reshape=True,
         )
-        
+
         # Pass through internal model
         if self.preprocessing_model is not None:
             # For preprocessed inputs, we need to check if inputs are already preprocessed
             # If inputs is a single tensor (preprocessed), apply hidden layers directly
-            if isinstance(processed_inputs, (list, tuple)) and len(processed_inputs) == 1:
+            if (
+                isinstance(processed_inputs, (list, tuple))
+                and len(processed_inputs) == 1
+            ):
                 # Single preprocessed tensor
                 x = processed_inputs[0]
                 for layer in self.hidden_layers:
                     x = layer(x)
                 return self.output_layer(x)
-            elif hasattr(processed_inputs, 'shape') and len(processed_inputs.shape) == 2:
+            elif (
+                hasattr(processed_inputs, "shape") and len(processed_inputs.shape) == 2
+            ):
                 # Single preprocessed tensor (not in a list)
                 x = processed_inputs
                 for layer in self.hidden_layers:
@@ -262,10 +271,11 @@ class BaseFeedForwardModel(BaseModel):
         """
         # Extract preprocessing model if present
         preprocessing_model = config.pop("preprocessing_model", None)
-        
+
         # Deserialize preprocessing model if it's a config dict
         if preprocessing_model is not None and isinstance(preprocessing_model, dict):
             from keras.saving import deserialize_keras_object
+
             preprocessing_model = deserialize_keras_object(preprocessing_model)
 
         # Create model instance

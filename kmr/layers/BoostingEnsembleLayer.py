@@ -5,7 +5,7 @@ This is similar in spirit to boosting ensembles but implemented in a differentia
 
 from typing import Any
 from loguru import logger
-from keras import ops
+from keras import layers, ops
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
 from kmr.layers._base_layer import BaseLayer
@@ -104,8 +104,8 @@ class BoostingEnsembleLayer(BaseLayer):
         self.output_activation = self._output_activation
         self.gamma_trainable = self._gamma_trainable
         self.dropout_rate = self._dropout_rate
-        self.learners = None
-        self.alpha = None
+        self.learners: list[BoostingBlock] | None = None
+        self.alpha: layers.Variable | None = None
 
         super().__init__(name=name, **kwargs)
 
@@ -160,6 +160,10 @@ class BoostingEnsembleLayer(BaseLayer):
         Returns:
             Output tensor of same shape as input.
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Get outputs from each learner
         learner_outputs = [
             learner(inputs, training=training) for learner in self.learners

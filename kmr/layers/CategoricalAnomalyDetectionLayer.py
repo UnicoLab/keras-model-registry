@@ -50,7 +50,7 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
             ValueError: If dtype is not 'string' or 'int32'.
         """
         self._dtype = None  # Initialize private attribute
-        self.lookup = None
+        self.lookup: layers.StringLookup | layers.IntegerLookup | None = None
         self.built = False
         super().__init__(**kwargs)
         self.set_dtype(dtype.lower())  # Use setter method
@@ -130,7 +130,7 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
         return {
             "score": (batch_size, 1),
             "proba": (batch_size, 1),
-            "threshold": (1,),
+            "threshold": (1, 1),
             "anomaly": (batch_size, 1),
             "reason": (batch_size, 1),
             "value": input_shape,
@@ -153,6 +153,10 @@ class CategoricalAnomalyDetectionLayer(BaseLayer):
         # Ensure layer is built
         if not self.built:
             self.build(inputs.shape)
+
+        # Check if lookup layer is initialized
+        if self.lookup is None:
+            raise ValueError("Lookup layer not initialized. Call build() first.")
 
         # In this statistical branch we simply check membership using the lookup.
         mapped = self.lookup(inputs)

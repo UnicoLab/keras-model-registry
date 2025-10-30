@@ -71,12 +71,12 @@ class GatedResidualNetwork(BaseLayer):
         self.dropout_rate = self._dropout_rate
 
         # Initialize instance variables
-        self.elu_dense = None
-        self.linear_dense = None
-        self.dropout = None
-        self.gated_linear_unit = None
-        self.project = None
-        self.layer_norm = None
+        self.elu_dense: layers.Dense | None = None
+        self.linear_dense: layers.Dense | None = None
+        self.dropout: layers.Dropout | None = None
+        self.gated_linear_unit: GatedLinearUnit | None = None
+        self.project: layers.Dense | None = None
+        self.layer_norm: layers.LayerNormalization | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -125,6 +125,10 @@ class GatedResidualNetwork(BaseLayer):
         Returns:
             Output tensor after applying gated residual transformations.
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Cast inputs to float32 at the start
         inputs = ops.cast(inputs, "float32")
 

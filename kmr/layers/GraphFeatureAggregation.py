@@ -77,13 +77,13 @@ class GraphFeatureAggregation(BaseLayer):
         self.leaky_relu_alpha = leaky_relu_alpha
 
         # Initialize instance variables
-        self.num_features = None
-        self.projection = None
-        self.attention_a = None
-        self.attention_bias = None
-        self.leaky_relu = None
-        self.dropout_layer = None
-        self.out_proj = None
+        self.num_features: int | None = None
+        self.projection: layers.Dense | None = None
+        self.attention_a: layers.Dense | None = None
+        self.attention_bias: layers.Dense | None = None
+        self.leaky_relu: layers.LeakyReLU | None = None
+        self.dropout_layer: layers.Dropout | None = None
+        self.out_proj: layers.Dense | None = None
 
         # Validate parameters during initialization
         self._validate_params()
@@ -171,6 +171,10 @@ class GraphFeatureAggregation(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Get batch size
         batch_size = ops.shape(inputs)[0]
 

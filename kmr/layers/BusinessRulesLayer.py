@@ -187,7 +187,23 @@ class BusinessRulesLayer(BaseLayer):
         reasons = []
 
         for (op, value), weight in zip(self.rules, self.rule_weights, strict=False):
-            value_t = convert_to_tensor(float(value), dtype="float32")
+            # Handle both numeric and string values
+            if isinstance(value, int | float):
+                value_t = convert_to_tensor(float(value), dtype="float32")
+            elif isinstance(value, list):
+                # For list values, try to convert the first element to float
+                try:
+                    value_t = convert_to_tensor(float(value[0]), dtype="float32")
+                except (ValueError, TypeError, IndexError):
+                    # Skip this rule if value cannot be converted to float
+                    continue
+            else:
+                # For string values, try to convert to float
+                try:
+                    value_t = convert_to_tensor(float(value), dtype="float32")
+                except (ValueError, TypeError):
+                    # Skip this rule if value cannot be converted to float
+                    continue
 
             if op == ">":
                 violation = ops.less(x, value_t)
@@ -249,9 +265,12 @@ class BusinessRulesLayer(BaseLayer):
         reasons = []
 
         for (op, values), weight in zip(self.rules, self.rule_weights, strict=False):
-            # Ensure values is a list
-            if not isinstance(values, list):
-                values = [values]
+            # Ensure values is a list of strings
+            values = (
+                [str(values)]
+                if not isinstance(values, list)
+                else [str(v) for v in values]
+            )
 
             # Convert values to tensor
             values_t = convert_to_tensor(values, dtype="string")

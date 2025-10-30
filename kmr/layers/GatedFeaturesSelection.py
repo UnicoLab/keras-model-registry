@@ -2,6 +2,7 @@ from keras import layers, models
 from keras import KerasTensor
 from typing import Any
 from keras.saving import register_keras_serializable
+from keras.models import Sequential
 
 
 @register_keras_serializable(package="kmr.layers")
@@ -65,7 +66,7 @@ class GatedFeatureSelection(layers.Layer):
         super().__init__(**kwargs)
         self.input_dim = input_dim
         self.reduction_ratio = reduction_ratio
-        self.gate_net = None
+        self.gate_net: Sequential | None = None
 
     def build(self, input_shape: tuple) -> None:
         """Build the gating network.
@@ -115,6 +116,10 @@ class GatedFeatureSelection(layers.Layer):
             Tensor of same shape as input with gated features.
             The output is computed as: inputs * gates + 0.1 * inputs
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Compute feature gates
         gates = self.gate_net(inputs)
 

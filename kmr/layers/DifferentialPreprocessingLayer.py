@@ -82,12 +82,12 @@ class DifferentialPreprocessingLayer(BaseLayer):
         self.num_candidates = 4  # We have 4 candidate branches
 
         # Initialize instance variables
-        self.impute = None
-        self.gamma = None
-        self.beta = None
-        self.mlp_hidden = None
-        self.mlp_output = None
-        self.alpha = None
+        self.impute: layers.Embedding | None = None
+        self.gamma: layers.Embedding | None = None
+        self.beta: layers.Embedding | None = None
+        self.mlp_hidden: layers.Dense | None = None
+        self.mlp_output: layers.Dense | None = None
+        self.alpha: layers.Embedding | None = None
 
         # Validate parameters during initialization
         self._validate_params()
@@ -174,6 +174,10 @@ class DifferentialPreprocessingLayer(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Step 1: Impute missing values
         imputed = ops.where(
             ops.isnan(inputs),

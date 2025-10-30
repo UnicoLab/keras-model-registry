@@ -169,7 +169,7 @@ class TestExpertBlock(unittest.TestCase):
         # Verify weights changed (model trained)
         self.assertFalse(
             all(
-                np.array_equal(w1, w2) for w1, w2 in zip(initial_weights, final_weights)
+                np.array_equal(w1, w2) for w1, w2 in zip(initial_weights, final_weights, strict=False)
             ),
         )
 

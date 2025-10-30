@@ -1,5 +1,4 @@
 """Unit tests for autoencoder models."""
-import unittest
 from pathlib import Path
 
 import keras
@@ -8,7 +7,6 @@ import tensorflow as tf
 from loguru import logger
 
 from kmr.models.autoencoder import Autoencoder
-from kmr.metrics import StandardDeviation, Median
 from ._base import BaseModelTest
 
 
@@ -172,9 +170,14 @@ class TestAutoencoder(BaseModelTest):
         )
 
         model.compile(optimizer="adam", loss="mse")
-        
+
         # Fit with auto threshold setup
-        history = model.fit(self.dataset, epochs=1, verbose=0, auto_setup_threshold=True)
+        history = model.fit(
+            self.dataset,
+            epochs=1,
+            verbose=0,
+            auto_setup_threshold=True,
+        )
 
         # Check that threshold was automatically set
         self.assertGreater(model.median, 0)
@@ -243,19 +246,19 @@ class TestAutoencoder(BaseModelTest):
         class MultiInputPreprocessingModel(keras.Model):
             def __init__(self):
                 super().__init__()
-                self.dense1 = keras.layers.Dense(16, activation='relu')
-                self.dense2 = keras.layers.Dense(16, activation='relu')
-                self.dense3 = keras.layers.Dense(16, activation='relu')
+                self.dense1 = keras.layers.Dense(16, activation="relu")
+                self.dense2 = keras.layers.Dense(16, activation="relu")
+                self.dense3 = keras.layers.Dense(16, activation="relu")
                 self.concat = keras.layers.Concatenate()
-                self.final_dense = keras.layers.Dense(32, activation='relu')
+                self.final_dense = keras.layers.Dense(32, activation="relu")
                 self.dropout = keras.layers.Dropout(0.1)
-            
-            def call(self, inputs):
+
+            def call(self, inputs) -> tf.Tensor:
                 # Process each input separately
-                feat1 = self.dense1(inputs['feature1'])
-                feat2 = self.dense2(inputs['feature2'])
-                feat3 = self.dense3(inputs['feature3'])
-                
+                feat1 = self.dense1(inputs["feature1"])
+                feat2 = self.dense2(inputs["feature2"])
+                feat3 = self.dense3(inputs["feature3"])
+
                 # Concatenate and final processing
                 combined = self.concat([feat1, feat2, feat3])
                 output = self.final_dense(combined)
@@ -270,14 +273,14 @@ class TestAutoencoder(BaseModelTest):
             encoding_dim=self.encoding_dim,
             intermediate_dim=self.intermediate_dim,
             preprocessing_model=preprocessing_model,
-            inputs={'feature1': (10,), 'feature2': (15,), 'feature3': (25,)}
+            inputs={"feature1": (10,), "feature2": (15,), "feature3": (25,)},
         )
 
         # Test with dictionary inputs
         test_inputs = {
-            'feature1': tf.random.normal((10, 10)),
-            'feature2': tf.random.normal((10, 15)),
-            'feature3': tf.random.normal((10, 25)),
+            "feature1": tf.random.normal((10, 10)),
+            "feature2": tf.random.normal((10, 15)),
+            "feature3": tf.random.normal((10, 25)),
         }
 
         # Test forward pass
@@ -334,7 +337,10 @@ class TestAutoencoder(BaseModelTest):
         # Verify configurations match
         self.assertEqual(original_model.input_dim, restored_model.input_dim)
         self.assertEqual(original_model.encoding_dim, restored_model.encoding_dim)
-        self.assertEqual(original_model.intermediate_dim, restored_model.intermediate_dim)
+        self.assertEqual(
+            original_model.intermediate_dim,
+            restored_model.intermediate_dim,
+        )
         self.assertEqual(original_model.threshold, restored_model.threshold)
 
     def test_model_save_and_load_keras(self) -> None:
@@ -422,5 +428,3 @@ class TestAutoencoder(BaseModelTest):
             rtol=1e-5,
             atol=1e-5,
         )
-
-

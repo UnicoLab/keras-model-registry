@@ -129,10 +129,11 @@ class DistributionAwareEncoder(BaseLayer):
         self.add_distribution_embedding = self._add_distribution_embedding
 
         # Initialize instance variables
-        self.distribution_transform = None
-        self.distribution_embedding = None
-        self.projection = None
-        self.detected_distribution = None
+        self.distribution_transform: DistributionTransformLayer | None = None
+        self.distribution_embedding: layers.Embedding | None = None
+        self.projection: layers.Dense | None = None
+        self.detected_distribution: layers.Variable | None = None
+        self._is_initialized: bool = False
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -410,21 +411,21 @@ class DistributionAwareEncoder(BaseLayer):
         Returns:
             Encoded tensor
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Ensure inputs are cast to float32
         x = ops.cast(inputs, dtype="float32")
 
         # Detect distribution type if auto_detect is True
         if self.auto_detect:
-            if (
-                training
-                or not hasattr(self, "_is_initialized")
-                or not self._is_initialized
-            ):
+            if training or not self._is_initialized:
                 # During training or first call, detect the distribution
                 distribution_idx = self._detect_distribution(x)
 
                 # Store the detected distribution
-                if hasattr(self, "detected_distribution"):
+                if self.detected_distribution is not None:
                     self.detected_distribution.assign(ops.array([distribution_idx]))
 
                 # Set the distribution type for this forward pass
@@ -434,10 +435,11 @@ class DistributionAwareEncoder(BaseLayer):
                 self._is_initialized = True
             else:
                 # During inference, use the stored distribution
-                distribution_idx = int(
-                    ops.convert_to_numpy(self.detected_distribution)[0],
-                )
-                self.distribution_type = self._valid_distributions[distribution_idx]
+                if self.detected_distribution is not None:
+                    distribution_idx = int(
+                        ops.convert_to_numpy(self.detected_distribution)[0],
+                    )
+                    self.distribution_type = self._valid_distributions[distribution_idx]
 
         # Apply distribution transform
         transformed = self.distribution_transform(x, training=training)

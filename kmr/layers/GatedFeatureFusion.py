@@ -65,7 +65,7 @@ class GatedFeatureFusion(BaseLayer):
 
         # Set public attributes BEFORE calling parent's __init__
         self.activation = self._activation
-        self.fusion_gate = None
+        self.fusion_gate: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -126,6 +126,16 @@ class GatedFeatureFusion(BaseLayer):
 
         # Concatenate the features along the last dimension
         concatenated = ops.concatenate([feat1, feat2], axis=-1)
+
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            # Determine input shape for building
+            feat1_shape = feat1.shape
+            feat2_shape = feat2.shape
+            if len(feat1_shape) == len(feat2_shape):
+                self.build([feat1_shape, feat2_shape])
+            else:
+                self.build(feat1_shape)
 
         # Compute the gate values
         gate = self.fusion_gate(concatenated)

@@ -1,10 +1,11 @@
 line-length = 120
 indent-width = 4
 target-version = "py311"
-extend-unsafe-fixes = ["D"]
+# extend-unsafe-fixes = ["D"]  # Moved to lint section
 
 [lint]
 # List of rules: https://docs.astral.sh/ruff/rules
+extend-unsafe-fixes = ["D"]
 select = [
     # flake8-builtins
     "A",
@@ -104,4 +105,12 @@ line-ending = "auto"
 convention = "google"
 
 [lint.per-file-ignores]
-"**/{test,docs}/*" = ["ALL"]
+"**/test*.py" = ["S101", "T201", "N999", "ANN201", "ANN202", "N806", "N803", "F841", "ARG002", "ARG005", "ARG001", "E402", "D212", "D417", "B007", "SIM114", "SIM117", "S603", "S607", "S110", "E722", "C408", "UP038", "UP007", "SIM108", "SIM118", "PTH110", "PTH108", "PTH107", "PTH123", "PTH118", "PTH120", "PTH100", "PTH103", "PD011", "PD003", "F401", "N807", "C416", "E501", "D200", "D202", "D410", "D411", "A001", "C4", "ISC", "RET", "ERA", "ASYNC", "UP", "SIM", "ARG", "PTH", "PD", "B", "S", "T20", "ANN", "N", "E", "F", "C", "A"]
+"**/tests/**/*.py" = ["S101", "T201", "N999", "ANN201", "ANN202", "N806", "N803", "F841", "ARG002", "ARG005", "ARG001", "E402", "D212", "D417", "B007", "SIM114", "SIM117", "S603", "S607", "S110", "E722", "C408", "UP038", "UP007", "SIM108", "SIM118", "PTH110", "PTH108", "PTH107", "PTH123", "PTH118", "PTH120", "PTH100", "PTH103", "PD011", "PD003", "F401", "N807", "C416", "E501", "D200", "D202", "D410", "D411", "A001", "C4", "ISC", "RET", "ERA", "ASYNC", "UP", "SIM", "ARG", "PTH", "PD", "B", "S", "T20", "ANN", "N", "E", "F", "C", "A"]
+"**/examples/**/*.py" = ["T201", "ANN201", "N806", "N803", "F841", "D212", "B007", "SIM114", "PTH110", "PTH108", "PTH107", "PTH123", "PD011", "PD003"]
+"**/scripts/**/*.py" = ["ANN201", "PTH120", "PTH100", "PTH118", "PTH123", "PTH110", "PTH107", "PTH103", "S603", "S607", "S110", "E722"]
+"**/experimental/**/*.py" = ["ALL"]
+"**/kmr/layers/*.py" = ["N999", "ARG005"]
+"**/kmr/models/*.py" = ["N999", "ANN002", "UP038", "UP007", "SIM118", "E501", "F841", "C416", "E722", "S110", "ARG002", "SIM108"]
+"**/kmr/utils/*.py" = ["T201", "N806", "N803", "SIM118", "SIM108", "UP007", "N807", "C408", "UP038"]
+"**/kmr/metrics/*.py" = ["SIM108"]

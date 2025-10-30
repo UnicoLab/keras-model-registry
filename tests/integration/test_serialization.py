@@ -6,10 +6,10 @@ and deserialized using Keras serialization mechanisms.
 
 import unittest
 import tempfile
-import os
 import numpy as np
 import keras
 from keras import Model, layers
+from pathlib import Path
 
 from kmr.layers import (
     TabularAttention,
@@ -18,7 +18,6 @@ from kmr.layers import (
     VariableSelection,
     TransformerBlock,
     BoostingBlock,
-    StochasticDepth,
 )
 from kmr.models import TerminatorModel, BaseFeedForwardModel
 
@@ -162,7 +161,7 @@ class TestLayerSerialization(unittest.TestCase):
 
         # Create input with correct dimensions for TransformerBlock
         x_transformer = keras.random.normal((self.batch_size, self.embed_dim))
-        
+
         # Test forward pass
         output = layer(x_transformer)
 
@@ -335,8 +334,8 @@ class TestModelSaving(unittest.TestCase):
 
         finally:
             # Clean up
-            if os.path.exists(model_path):
-                os.unlink(model_path)
+            if Path(model_path).exists():
+                Path(model_path).unlink()
 
     def test_model_save_load_tf_format(self) -> None:
         """Test saving and loading model in TensorFlow format."""
@@ -354,11 +353,11 @@ class TestModelSaving(unittest.TestCase):
 
         # Save model
         with tempfile.TemporaryDirectory() as temp_dir:
-            model_path = os.path.join(temp_dir, "model")
+            model_path = Path(temp_dir, "model")
             model.export(model_path)
 
             # Load model using TFSMLayer (Keras 3 approach for SavedModel)
-            loaded_model = keras.layers.TFSMLayer(model_path, call_endpoint='serve')
+            loaded_model = keras.layers.TFSMLayer(model_path, call_endpoint="serve")
 
             # Test loaded model
             loaded_output = loaded_model(self.x)
@@ -401,8 +400,8 @@ class TestModelSaving(unittest.TestCase):
 
         finally:
             # Clean up
-            if os.path.exists(model_path):
-                os.unlink(model_path)
+            if Path(model_path).exists():
+                Path(model_path).unlink()
 
 
 if __name__ == "__main__":

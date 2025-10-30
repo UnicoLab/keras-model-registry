@@ -3,6 +3,7 @@ from keras import layers, models
 from keras import KerasTensor
 from typing import Any
 from keras.saving import register_keras_serializable
+from keras.models import Sequential
 
 
 @register_keras_serializable(package="kmr.layers")
@@ -47,7 +48,7 @@ class ColumnAttention(layers.Layer):
         self.hidden_dim = hidden_dim or max(input_dim // 2, 1)
 
         # Initialize layer weights to None
-        self.attention_net = None
+        self.attention_net: Sequential | None = None
 
     def build(self, input_shape: tuple[int, ...]) -> None:
         """Build the layer.
@@ -82,6 +83,10 @@ class ColumnAttention(layers.Layer):
         Returns:
             Attention weighted tensor of shape [batch_size, input_dim]
         """
+        # Ensure layer is built (Keras will auto-build on first call)
+        if not self.built:
+            self.build(inputs.shape)
+
         # Compute attention weights with shape [batch_size, input_dim]
         attention_weights = self.attention_net(inputs)
 

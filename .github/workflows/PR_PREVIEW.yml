@@ -2,15 +2,13 @@ name: Deploy PR Pages Preview
 
 on:
   push:
-    branches:
-      - dev
+    branches-ignore:
       - main
     paths:
       - "docs/**"
       - mkdocs.yml
   pull_request:
     branches:
-      - dev
       - main
     paths:
       - "docs/**"
@@ -22,6 +20,12 @@ on:
       - synchronize
 
 concurrency: preview-${{ github.ref }}
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+  id-token: write
 
 jobs:
   deploy-pr-preview:

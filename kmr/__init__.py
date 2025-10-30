@@ -14,7 +14,7 @@ Example:
     # Create and use models
     autoencoder = Autoencoder(input_dim=100, encoding_dim=32)
     feed_forward = BaseFeedForwardModel(feature_names=['feat1', 'feat2'])
-    
+
     # Use custom metrics
     std_metric = StandardDeviation()
     median_metric = Median()

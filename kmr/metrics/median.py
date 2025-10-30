@@ -44,11 +44,11 @@ class Median(Metric):
 
         # Create metric
         median_metric = Median(name="prediction_median")
-        
+
         # Update with predictions
         predictions = keras.ops.random.normal((100, 10))
         median_metric.update_state(predictions)
-        
+
         # Get result
         median_value = median_metric.result()
         print(f"Median: {median_value}")
@@ -64,7 +64,7 @@ class Median(Metric):
         """
         super().__init__(name=name, **kwargs)
         self.values = self.add_weight(name="values", initializer="zeros")
-        
+
         logger.debug(f"Initialized Median metric with name: {name}")
 
     def update_state(self, y_pred: keras.KerasTensor) -> None:
@@ -77,17 +77,17 @@ class Median(Metric):
         sorted_values = ops.sort(y_pred, axis=0)
         n = ops.shape(sorted_values)[0]
         mid = n // 2
-        
+
         if n % 2 == 0:
             median = (sorted_values[mid - 1] + sorted_values[mid]) / 2
         else:
             median = sorted_values[mid]
-            
+
         # Ensure median is a scalar
         median = ops.cast(median, dtype="float32")
         if median.shape != ():
             median = ops.mean(median)  # Take mean if it's not a scalar
-            
+
         self.values.assign(median)
 
     def result(self) -> keras.KerasTensor:

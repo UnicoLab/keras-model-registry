@@ -455,7 +455,8 @@ class TestTerminatorModelE2E:
         # The model handles wrong input shapes gracefully, so we just test it doesn't crash
         try:
             predictions = model.predict(
-                [wrong_input_shape, correct_context_shape], verbose=0,
+                [wrong_input_shape, correct_context_shape],
+                verbose=0,
             )
             # If it succeeds, verify the output shape is still correct
             assert predictions.shape == (10, 1)

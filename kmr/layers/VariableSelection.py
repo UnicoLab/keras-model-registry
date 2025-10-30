@@ -96,9 +96,9 @@ class VariableSelection(BaseLayer):
         self.use_context = self._use_context
 
         # Initialize layers
-        self.feature_grns = None
-        self.grn_var = None
-        self.softmax = None
+        self.feature_grns: list[GatedResidualNetwork] | None = None
+        self.grn_var: GatedResidualNetwork | None = None
+        self.softmax: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -228,6 +228,16 @@ class VariableSelection(BaseLayer):
         Returns:
             Tuple of (selected_features, feature_weights)
         """
+        # Check if layer is built
+        if (
+            any(
+                layer is None
+                for layer in [self.feature_grns, self.grn_var, self.softmax]
+            )
+            or not self.feature_grns
+        ):
+            raise ValueError("Layer not built. Call build() first.")
+
         if self.use_context:
             if not isinstance(inputs, list) or len(inputs) != 2:
                 raise ValueError(
@@ -306,9 +316,19 @@ class VariableSelection(BaseLayer):
         """
         features_shape = input_shape[0] if self.use_context else input_shape
 
+        # Handle different input shape types
+        if isinstance(features_shape, list | tuple) and len(features_shape) > 0:
+            batch_size = (
+                int(features_shape[0])
+                if isinstance(features_shape[0], int | float)
+                else 1
+            )
+        else:
+            batch_size = 1  # Default fallback
+
         return [
-            (features_shape[0], self.units),  # Selected features
-            (features_shape[0], self.nr_features),  # Feature weights
+            (batch_size, self.units),  # Selected features
+            (batch_size, self.nr_features),  # Feature weights
         ]
 
     def get_config(self) -> dict[str, Any]:

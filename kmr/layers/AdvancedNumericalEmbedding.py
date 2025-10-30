@@ -108,16 +108,16 @@ class AdvancedNumericalEmbedding(BaseLayer):
         self.use_batch_norm = self._use_batch_norm
 
         # Initialize instance variables
-        self.num_features = None
-        self.hidden_layer = None
-        self.output_layer = None
-        self.dropout_layer = None
-        self.batch_norm = None
-        self.residual_proj = None
-        self.bin_embeddings = []
-        self.learned_min = None
-        self.learned_max = None
-        self.gate = None
+        self.num_features: int | None = None
+        self.hidden_layer: layers.Dense | None = None
+        self.output_layer: layers.Dense | None = None
+        self.dropout_layer: layers.Dropout | None = None
+        self.batch_norm: layers.BatchNormalization | None = None
+        self.residual_proj: layers.Dense | None = None
+        self.bin_embeddings: list[layers.Embedding] = []
+        self.learned_min: layers.Embedding | None = None
+        self.learned_max: layers.Embedding | None = None
+        self.gate: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -257,6 +257,24 @@ class AdvancedNumericalEmbedding(BaseLayer):
             Output tensor with shape (batch_size, num_features, embedding_dim) or
             (batch_size, embedding_dim) if num_features=1.
         """
+        # Check if layer is built
+        if (
+            any(
+                layer is None
+                for layer in [
+                    self.num_features,
+                    self.hidden_layer,
+                    self.output_layer,
+                    self.residual_proj,
+                    self.learned_min,
+                    self.learned_max,
+                    self.gate,
+                ]
+            )
+            or not self.bin_embeddings
+        ):
+            raise ValueError("Layer not built. Call build() first.")
+
         # Cast inputs to float32
         inputs = ops.cast(inputs, "float32")
 

@@ -84,32 +84,32 @@ class MultiResolutionTabularAttention(BaseLayer):
 
         # Initialize layers
         # Numerical features
-        self.num_projection = None
-        self.num_attention = None
-        self.num_layernorm1 = None
-        self.num_dropout1 = None
-        self.num_layernorm2 = None
-        self.num_dropout2 = None
+        self.num_projection: layers.Dense | None = None
+        self.num_attention: layers.MultiHeadAttention | None = None
+        self.num_layernorm1: layers.LayerNormalization | None = None
+        self.num_dropout1: layers.Dropout | None = None
+        self.num_layernorm2: layers.LayerNormalization | None = None
+        self.num_dropout2: layers.Dropout | None = None
 
         # Categorical features
-        self.cat_projection = None
-        self.cat_attention = None
-        self.cat_layernorm1 = None
-        self.cat_dropout1 = None
-        self.cat_layernorm2 = None
-        self.cat_dropout2 = None
+        self.cat_projection: layers.Dense | None = None
+        self.cat_attention: layers.MultiHeadAttention | None = None
+        self.cat_layernorm1: layers.LayerNormalization | None = None
+        self.cat_dropout1: layers.Dropout | None = None
+        self.cat_layernorm2: layers.LayerNormalization | None = None
+        self.cat_dropout2: layers.Dropout | None = None
 
         # Cross-attention
-        self.num_cat_attention = None
-        self.cat_num_attention = None
-        self.cross_num_layernorm = None
-        self.cross_num_dropout = None
-        self.cross_cat_layernorm = None
-        self.cross_cat_dropout = None
+        self.num_cat_attention: layers.MultiHeadAttention | None = None
+        self.cat_num_attention: layers.MultiHeadAttention | None = None
+        self.cross_num_layernorm: layers.LayerNormalization | None = None
+        self.cross_num_dropout: layers.Dropout | None = None
+        self.cross_cat_layernorm: layers.LayerNormalization | None = None
+        self.cross_cat_dropout: layers.Dropout | None = None
 
         # Feed-forward networks
-        self.ffn_dense1 = None
-        self.ffn_dense2 = None
+        self.ffn_dense1: layers.Dense | None = None
+        self.ffn_dense2: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -239,6 +239,34 @@ class MultiResolutionTabularAttention(BaseLayer):
             raise ValueError(
                 "Input must be a list of two tensors (numerical and categorical features)",
             )
+
+        # Check if layer is built
+        if any(
+            layer is None
+            for layer in [
+                self.num_projection,
+                self.num_attention,
+                self.num_layernorm1,
+                self.num_dropout1,
+                self.num_layernorm2,
+                self.num_dropout2,
+                self.cat_projection,
+                self.cat_attention,
+                self.cat_layernorm1,
+                self.cat_dropout1,
+                self.cat_layernorm2,
+                self.cat_dropout2,
+                self.num_cat_attention,
+                self.cat_num_attention,
+                self.cross_num_layernorm,
+                self.cross_num_dropout,
+                self.cross_cat_layernorm,
+                self.cross_cat_dropout,
+                self.ffn_dense1,
+                self.ffn_dense2,
+            ]
+        ):
+            raise ValueError("Layer not built. Call build() first.")
 
         numerical, categorical = inputs
 

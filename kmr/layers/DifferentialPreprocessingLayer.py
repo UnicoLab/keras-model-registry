@@ -82,12 +82,12 @@ class DifferentialPreprocessingLayer(BaseLayer):
         self.num_candidates = 4  # We have 4 candidate branches
 
         # Initialize instance variables
-        self.impute = None
-        self.gamma = None
-        self.beta = None
-        self.mlp_hidden = None
-        self.mlp_output = None
-        self.alpha = None
+        self.impute: layers.Embedding | None = None
+        self.gamma: layers.Embedding | None = None
+        self.beta: layers.Embedding | None = None
+        self.mlp_hidden: layers.Dense | None = None
+        self.mlp_output: layers.Dense | None = None
+        self.alpha: layers.Embedding | None = None
 
         # Validate parameters during initialization
         self._validate_params()
@@ -174,6 +174,20 @@ class DifferentialPreprocessingLayer(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
+        # Check if layer is built
+        if any(
+            layer is None
+            for layer in [
+                self.impute,
+                self.gamma,
+                self.beta,
+                self.mlp_hidden,
+                self.mlp_output,
+                self.alpha,
+            ]
+        ):
+            raise ValueError("Layer not built. Call build() first.")
+
         # Step 1: Impute missing values
         imputed = ops.where(
             ops.isnan(inputs),

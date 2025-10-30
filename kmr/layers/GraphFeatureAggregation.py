@@ -77,13 +77,13 @@ class GraphFeatureAggregation(BaseLayer):
         self.leaky_relu_alpha = leaky_relu_alpha
 
         # Initialize instance variables
-        self.num_features = None
-        self.projection = None
-        self.attention_a = None
-        self.attention_bias = None
-        self.leaky_relu = None
-        self.dropout_layer = None
-        self.out_proj = None
+        self.num_features: int | None = None
+        self.projection: layers.Dense | None = None
+        self.attention_a: layers.Dense | None = None
+        self.attention_bias: layers.Dense | None = None
+        self.leaky_relu: layers.LeakyReLU | None = None
+        self.dropout_layer: layers.Dropout | None = None
+        self.out_proj: layers.Dense | None = None
 
         # Validate parameters during initialization
         self._validate_params()
@@ -171,6 +171,21 @@ class GraphFeatureAggregation(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
+        # Check if layer is built
+        if any(
+            layer is None
+            for layer in [
+                self.num_features,
+                self.projection,
+                self.attention_a,
+                self.attention_bias,
+                self.leaky_relu,
+                self.dropout_layer,
+                self.out_proj,
+            ]
+        ):
+            raise ValueError("Layer not built. Call build() first.")
+
         # Get batch size
         batch_size = ops.shape(inputs)[0]
 

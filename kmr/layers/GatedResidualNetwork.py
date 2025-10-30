@@ -71,12 +71,12 @@ class GatedResidualNetwork(BaseLayer):
         self.dropout_rate = self._dropout_rate
 
         # Initialize instance variables
-        self.elu_dense = None
-        self.linear_dense = None
-        self.dropout = None
-        self.gated_linear_unit = None
-        self.project = None
-        self.layer_norm = None
+        self.elu_dense: layers.Dense | None = None
+        self.linear_dense: layers.Dense | None = None
+        self.dropout: layers.Dropout | None = None
+        self.gated_linear_unit: GatedLinearUnit | None = None
+        self.project: layers.Dense | None = None
+        self.layer_norm: layers.LayerNormalization | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -125,6 +125,20 @@ class GatedResidualNetwork(BaseLayer):
         Returns:
             Output tensor after applying gated residual transformations.
         """
+        # Check if layer is built
+        if any(
+            layer is None
+            for layer in [
+                self.elu_dense,
+                self.linear_dense,
+                self.dropout,
+                self.gated_linear_unit,
+                self.project,
+                self.layer_norm,
+            ]
+        ):
+            raise ValueError("Layer not built. Call build() first.")
+
         # Cast inputs to float32 at the start
         inputs = ops.cast(inputs, "float32")
 

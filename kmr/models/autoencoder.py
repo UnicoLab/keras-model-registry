@@ -406,12 +406,12 @@ class Autoencoder(BaseModel):
 
     def fit(
         self,
-        x: keras.KerasTensor | Any = None,
+        x: Any = None,
         y: Any = None,
         epochs: int = 1,
+        callbacks: list | None = None,
         auto_setup_threshold: bool = True,
         threshold_method: str = "iqr",
-        callbacks: list | None = None,
         **kwargs: Any,
     ) -> keras.callbacks.History:
         """Fits the model to the given data with optional automatic threshold setup.

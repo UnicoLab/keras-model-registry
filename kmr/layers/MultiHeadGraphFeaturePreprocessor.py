@@ -80,15 +80,15 @@ class MultiHeadGraphFeaturePreprocessor(BaseLayer):
         self.dropout_rate = dropout_rate
 
         # Initialize instance variables
-        self.projection = None
-        self.q_dense = None
-        self.k_dense = None
-        self.v_dense = None
-        self.out_proj = None
-        self.final_dense = None
-        self.dropout_layer = None
-        self.num_features = None
-        self.depth = None
+        self.projection: layers.Dense | None = None
+        self.q_dense: layers.Dense | None = None
+        self.k_dense: layers.Dense | None = None
+        self.v_dense: layers.Dense | None = None
+        self.out_proj: layers.Dense | None = None
+        self.final_dense: layers.Dense | None = None
+        self.dropout_layer: layers.Dropout | None = None
+        self.num_features: int | None = None
+        self.depth: int | None = None
 
         # Validate parameters
         self._validate_params()
@@ -172,6 +172,22 @@ class MultiHeadGraphFeaturePreprocessor(BaseLayer):
         Returns:
             Output tensor with the same shape as input.
         """
+        # Check if layer is built
+        if any(
+            layer is None
+            for layer in [
+                self.projection,
+                self.q_dense,
+                self.k_dense,
+                self.v_dense,
+                self.out_proj,
+                self.final_dense,
+                self.num_features,
+                self.depth,
+            ]
+        ):
+            raise ValueError("Layer not built. Call build() first.")
+
         # Get batch size and actual number of features
         batch_size = ops.shape(inputs)[0]
         actual_num_features = ops.shape(inputs)[1]

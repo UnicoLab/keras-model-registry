@@ -65,7 +65,7 @@ class GatedFeatureFusion(BaseLayer):
 
         # Set public attributes BEFORE calling parent's __init__
         self.activation = self._activation
-        self.fusion_gate = None
+        self.fusion_gate: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -128,6 +128,8 @@ class GatedFeatureFusion(BaseLayer):
         concatenated = ops.concatenate([feat1, feat2], axis=-1)
 
         # Compute the gate values
+        if self.fusion_gate is None:
+            raise ValueError("Layer not built. Call build() first.")
         gate = self.fusion_gate(concatenated)
 
         # Fuse using the learned gate

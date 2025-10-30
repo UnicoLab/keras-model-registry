@@ -377,7 +377,7 @@ class KMRPlotter:
         if isinstance(context_values[0], (int, float)):
             x_labels = [f"Bin {i+1}" for i in range(len(context_values))]
         else:
-            x_labels = context_values
+            x_labels = list(context_values)
 
         fig.add_trace(go.Bar(x=x_labels, y=accuracies, marker_color="lightblue"))
 

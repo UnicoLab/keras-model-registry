@@ -83,15 +83,15 @@ class TransformerBlock(BaseLayer):
         self.dropout_rate = self._dropout_rate
 
         # Initialize layers
-        self.multihead_attention = None
-        self.dropout1 = None
-        self.add1 = None
-        self.layer_norm1 = None
-        self.ff1 = None
-        self.dropout2 = None
-        self.ff2 = None
-        self.add2 = None
-        self.layer_norm2 = None
+        self.multihead_attention: layers.MultiHeadAttention | None = None
+        self.dropout1: layers.Dropout | None = None
+        self.add1: layers.Add | None = None
+        self.layer_norm1: layers.LayerNormalization | None = None
+        self.ff1: layers.Dense | None = None
+        self.dropout2: layers.Dropout | None = None
+        self.ff2: layers.Dense | None = None
+        self.add2: layers.Add | None = None
+        self.layer_norm2: layers.LayerNormalization | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -156,6 +156,23 @@ class TransformerBlock(BaseLayer):
         Returns:
             Output tensor after applying transformer block.
         """
+        # Check if layer is built
+        if any(
+            layer is None
+            for layer in [
+                self.multihead_attention,
+                self.dropout1,
+                self.add1,
+                self.layer_norm1,
+                self.ff1,
+                self.dropout2,
+                self.ff2,
+                self.add2,
+                self.layer_norm2,
+            ]
+        ):
+            raise ValueError("Layer not built. Call build() first.")
+
         # Store original shape and dimensions
         ops.shape(inputs)
         original_rank = len(inputs.shape)

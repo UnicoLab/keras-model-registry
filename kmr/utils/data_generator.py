@@ -186,7 +186,11 @@ class KMRDataGenerator:
             remaining_data = np.random.normal(last_center, 1.0, (remaining, n_features))
             normal_data.append(remaining_data)
 
-        normal_data = np.vstack(normal_data)
+        normal_data_array = (
+            np.vstack(normal_data)
+            if normal_data
+            else np.array([]).reshape(0, n_features)
+        )
 
         # Generate anomaly data
         if anomaly_type == "outlier":
@@ -210,7 +214,7 @@ class KMRDataGenerator:
             raise ValueError(f"Unknown anomaly type: {anomaly_type}")
 
         # Combine data
-        all_data = np.vstack([normal_data, anomaly_data])
+        all_data = np.vstack([normal_data_array, anomaly_data])
         labels = np.hstack([np.zeros(n_normal), np.ones(n_anomalies)])
 
         # Normalize data

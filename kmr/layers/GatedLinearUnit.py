@@ -58,8 +58,8 @@ class GatedLinearUnit(BaseLayer):
 
         # Set public attributes BEFORE calling parent's __init__
         self.units = self._units
-        self.linear = None
-        self.sigmoid = None
+        self.linear: layers.Dense | None = None
+        self.sigmoid: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -88,6 +88,8 @@ class GatedLinearUnit(BaseLayer):
         Returns:
             Output tensor after applying gated linear transformation.
         """
+        if self.linear is None or self.sigmoid is None:
+            raise ValueError("Layer not built. Call build() first.")
         return self.linear(inputs) * self.sigmoid(inputs)
 
     def get_config(self) -> dict[str, Any]:

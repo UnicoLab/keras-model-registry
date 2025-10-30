@@ -98,7 +98,7 @@ class DateParsingLayer(BaseLayer):
         # Convert to 0-based index where 0 is Sunday
         dow = (h + 6) % 7  # Adjust Zeller's output to match expected format
 
-        return [year, month, day, dow]
+        return (year, month, day, dow)
 
     def call(self, inputs) -> Any:
         """Parse date strings into numerical components.
@@ -125,15 +125,15 @@ class DateParsingLayer(BaseLayer):
             ]
 
             # Process each date string
-            components = []
+            components: list[tuple[int, int, int, int]] = []
             for date_str in date_strings:
                 components.append(self._parse_date(date_str))
 
             # Convert to numpy array
-            components = np.array(components, dtype=np.int32)
+            components_array = np.array(components, dtype=np.int32)
 
             # Convert back to tensor
-            result = ops.convert_to_tensor(components, dtype="int32")
+            result = ops.convert_to_tensor(components_array, dtype="int32")
 
             # Reshape to match input shape with additional dimension
             if len(input_shape) > 1:

@@ -80,20 +80,20 @@ class TabularAttention(BaseLayer):
         self.dropout_rate = self._dropout_rate
 
         # Initialize layers
-        self.input_projection = None
-        self.feature_attention = None
-        self.feature_layernorm = None
-        self.feature_dropout = None
-        self.feature_layernorm2 = None
-        self.feature_dropout2 = None
-        self.sample_attention = None
-        self.sample_layernorm = None
-        self.sample_dropout = None
-        self.sample_layernorm2 = None
-        self.sample_dropout2 = None
-        self.ffn_dense1 = None
-        self.ffn_dense2 = None
-        self.output_projection = None
+        self.input_projection: layers.Dense | None = None
+        self.feature_attention: layers.MultiHeadAttention | None = None
+        self.feature_layernorm: layers.LayerNormalization | None = None
+        self.feature_dropout: layers.Dropout | None = None
+        self.feature_layernorm2: layers.LayerNormalization | None = None
+        self.feature_dropout2: layers.Dropout | None = None
+        self.sample_attention: layers.MultiHeadAttention | None = None
+        self.sample_layernorm: layers.LayerNormalization | None = None
+        self.sample_dropout: layers.Dropout | None = None
+        self.sample_layernorm2: layers.LayerNormalization | None = None
+        self.sample_dropout2: layers.Dropout | None = None
+        self.ffn_dense1: layers.Dense | None = None
+        self.ffn_dense2: layers.Dense | None = None
+        self.output_projection: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -183,6 +183,28 @@ class TabularAttention(BaseLayer):
             raise ValueError(
                 "Input tensor must be 3-dimensional (batch_size, num_samples, num_features)",
             )
+
+        # Check if layer is built
+        if any(
+            layer is None
+            for layer in [
+                self.input_projection,
+                self.feature_attention,
+                self.feature_layernorm,
+                self.feature_dropout,
+                self.feature_layernorm2,
+                self.feature_dropout2,
+                self.sample_attention,
+                self.sample_layernorm,
+                self.sample_dropout,
+                self.sample_layernorm2,
+                self.sample_dropout2,
+                self.ffn_dense1,
+                self.ffn_dense2,
+                self.output_projection,
+            ]
+        ):
+            raise ValueError("Layer not built. Call build() first.")
 
         # Project inputs to d_model dimension
         projected = self.input_projection(inputs)

@@ -259,10 +259,10 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
     <h3>🧠 Attention Layers</h3>
     <ul>
       <li><a href="#attention-layers">5 layers for feature relationships</a></li>
-      <li><a href="#tabularattention">TabularAttention</a></li>
-      <li><a href="#multiresolutiontabularattention">MultiResolution</a></li>
-      <li><a href="#columnattention">Column & Row Attention</a></li>
-      <li><a href="#interpretablemultiheadattention">Interpretable Heads</a></li>
+      <li><a href="../../layers/tabular-attention/">TabularAttention</a></li>
+      <li><a href="../../layers/multi-resolution-tabular-attention/">MultiResolution</a></li>
+      <li><a href="../../layers/column-attention/">Column & Row Attention</a></li>
+      <li><a href="../../layers/interpretable-multi-head-attention/">Interpretable Heads</a></li>
     </ul>
   </div>
   
@@ -270,10 +270,10 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
     <h3>🔧 Preprocessing Layers</h3>
     <ul>
       <li><a href="#preprocessing-layers">6 layers for data prep</a></li>
-      <li><a href="#differentiabletabularpreprocessor">Tabular Preprocessor</a></li>
-      <li><a href="#dateencodinglayer">Date Encoding</a></li>
-      <li><a href="#seasonlayer">Season Layer</a></li>
-      <li><a href="#casttofloat32layer">Type Casting</a></li>
+      <li><a href="../../layers/differentiable-tabular-preprocessor/">Tabular Preprocessor</a></li>
+      <li><a href="../../layers/date-encoding-layer/">Date Encoding</a></li>
+      <li><a href="../../layers/season-layer/">Season Layer</a></li>
+      <li><a href="../../layers/cast-to-float32-layer/">Type Casting</a></li>
     </ul>
   </div>
   
@@ -281,10 +281,10 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
     <h3>⚙️ Feature Engineering</h3>
     <ul>
       <li><a href="#feature-engineering-layers">8 layers for features</a></li>
-      <li><a href="#variableselection">Variable Selection</a></li>
-      <li><a href="#advancednumericalembedding">Advanced Embedding</a></li>
-      <li><a href="#distributionawareencoder">Distribution Aware</a></li>
-      <li><a href="#featurecutout">Feature Cutout</a></li>
+      <li><a href="../../layers/variable-selection/">Variable Selection</a></li>
+      <li><a href="../../layers/advanced-numerical-embedding/">Advanced Embedding</a></li>
+      <li><a href="../../layers/distribution-aware-encoder/">Distribution Aware</a></li>
+      <li><a href="../../layers/feature-cutout/">Feature Cutout</a></li>
     </ul>
   </div>
   
@@ -292,10 +292,10 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
     <h3>🏗️ Specialized Architectures</h3>
     <ul>
       <li><a href="#specialized-layers">11 advanced layers</a></li>
-      <li><a href="#gatedresidualnetwork">Gated Residual Network</a></li>
-      <li><a href="#transformerblock">Transformer Block</a></li>
-      <li><a href="#tabularmolayer">Mixture of Experts</a></li>
-      <li><a href="#boostingensemblelayer">Boosting Ensemble</a></li>
+      <li><a href="../../layers/gated-residual-network/">Gated Residual Network</a></li>
+      <li><a href="../../layers/transformer-block/">Transformer Block</a></li>
+      <li><a href="../../layers/tabular-moe-layer/">Mixture of Experts</a></li>
+      <li><a href="../../layers/boosting-ensemble-layer/">Boosting Ensemble</a></li>
     </ul>
   </div>
   
@@ -303,10 +303,10 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
     <h3>🛠️ Utility Layers</h3>
     <ul>
       <li><a href="#utility-layers">8 utility layers</a></li>
-      <li><a href="#advancedgraphfeature">Graph Features</a></li>
-      <li><a href="#numericalanomalydetection">Anomaly Detection</a></li>
-      <li><a href="#textpreprocessinglayer">Text Processing</a></li>
-      <li><a href="#multiheadgraphfeaturepreprocessor">Graph Preprocessing</a></li>
+      <li><a href="../../layers/advanced-graph-feature/">Graph Features</a></li>
+      <li><a href="../../layers/numerical-anomaly-detection/">Anomaly Detection</a></li>
+      <li><a href="../../layers/text-preprocessing-layer/">Text Processing</a></li>
+      <li><a href="../../layers/multi-head-graph-feature-preprocessor/">Graph Preprocessing</a></li>
     </ul>
   </div>
 </div>

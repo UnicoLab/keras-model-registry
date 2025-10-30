@@ -219,7 +219,7 @@ class TerminatorModel(BaseModel):
         logger.debug(f"TerminatorModel context_weights shape: {context_weights.shape}")
 
         # Process context to ensure it affects the output
-        self.context_dense(context)
+        context_processed = self.context_dense(context)
 
         # SFNE blocks
         for i, sfne_block in enumerate(self.sfne_blocks):
@@ -227,7 +227,7 @@ class TerminatorModel(BaseModel):
             logger.debug(f"TerminatorModel SFNEBlock {i} output shape: {x.shape}")
 
         # Combine with context features to ensure context dependency
-        x = x * context_weights
+        x = x * context_weights + context_processed
 
         # Output layer
         output = self.output_layer(x)

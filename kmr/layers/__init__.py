@@ -35,7 +35,6 @@ from kmr.layers.VariableSelection import VariableSelection
 from kmr.layers.AdvancedGraphFeature import AdvancedGraphFeatureLayer
 from kmr.layers.NumericalAnomalyDetection import NumericalAnomalyDetection
 from kmr.layers.CategoricalAnomalyDetectionLayer import CategoricalAnomalyDetectionLayer
-from kmr.layers.TextPreprocessingLayer import TextPreprocessingLayer
 
 __all__ = [
     "GatedFeatureSelection",
@@ -71,5 +70,4 @@ __all__ = [
     "AdvancedGraphFeatureLayer",
     "NumericalAnomalyDetection",
     "CategoricalAnomalyDetectionLayer",
-    "TextPreprocessingLayer",
 ]

@@ -511,3 +511,159 @@ class TestBaseFeedForwardIntegration:
         
         print(f"KDP preprocessing output shape: {preprocessed_output.shape}")
         print(f"KDP preprocessing sample output: {preprocessed_output[0]}")
+
+    def test_end_to_end_without_preprocessing(
+        self, 
+        temp_dir: Path, 
+        dummy_data: tuple[Path, pd.DataFrame]
+    ) -> None:
+        """Test complete end-to-end workflow WITHOUT preprocessing."""
+        csv_path, df = dummy_data
+        
+        # Split data for training and testing
+        train_df = df.iloc[:800].copy()
+        test_df = df.iloc[800:].copy()
+        
+        # Define feature names (excluding target)
+        feature_names = ['numeric_feature_1', 'numeric_feature_2', 'categorical_feature', 'boolean_feature']
+        
+        # Create BaseFeedForwardModel WITHOUT preprocessing
+        model = BaseFeedForwardModel(
+            feature_names=feature_names,
+            hidden_units=[64, 32, 16],
+            output_units=1,
+            dropout_rate=0.2,
+            activation='relu',
+            preprocessing_model=None,  # No preprocessing
+            name='feed_forward_without_preprocessing'
+        )
+        
+        # Compile the model
+        model.compile(
+            optimizer=Adam(learning_rate=0.001),
+            loss=MeanSquaredError(),
+            metrics=[MeanAbsoluteError()]
+        )
+        
+        # Prepare training data
+        X_train = {name: train_df[name].values for name in feature_names}
+        y_train = train_df['target'].values
+        
+        # Train the model
+        history = model.fit(
+            X_train, y_train,
+            epochs=5,
+            batch_size=32,
+            validation_split=0.2,
+            verbose=0
+        )
+        
+        # Verify training completed successfully
+        assert len(history.history['loss']) == 5
+        assert 'val_loss' in history.history
+        
+        # Test prediction with raw data (no preprocessing)
+        X_test = {name: test_df[name].values for name in feature_names}
+        y_test = test_df['target'].values
+        
+        predictions = model.predict(X_test, verbose=0)
+        
+        # Verify predictions shape
+        assert predictions.shape == (len(test_df), 1)
+        assert not np.isnan(predictions).any()
+        
+        # Test model saving and loading
+        model_path = temp_dir / "saved_model_no_preprocessing.keras"
+        model.save(model_path)
+        
+        # Load the model
+        loaded_model = tf.keras.models.load_model(model_path, safe_mode=False)
+        
+        # Test prediction with loaded model
+        loaded_predictions = loaded_model.predict(X_test, verbose=0)
+        
+        # Verify predictions are similar (allowing for small numerical differences)
+        np.testing.assert_allclose(predictions, loaded_predictions, rtol=1e-5)
+        
+        # Test with completely raw data
+        raw_test_data = {
+            'numeric_feature_1': np.array([10.5, 12.5, 8.3]),
+            'numeric_feature_2': np.array([1.2, 2.1, 3.7]),
+            'categorical_feature': np.array([0, 1, 2]),
+            'boolean_feature': np.array([1, 0, 1])
+        }
+        
+        # Should handle raw data directly (no preprocessing)
+        raw_predictions = loaded_model.predict(raw_test_data, verbose=0)
+        assert raw_predictions.shape == (3, 1)
+        assert not np.isnan(raw_predictions).any()
+
+    def test_model_without_preprocessing_different_architectures(
+        self, 
+        temp_dir: Path, 
+        dummy_data: tuple[Path, pd.DataFrame]
+    ) -> None:
+        """Test BaseFeedForwardModel without preprocessing with different architectures."""
+        csv_path, df = dummy_data
+        feature_names = ['numeric_feature_1', 'numeric_feature_2', 'categorical_feature', 'boolean_feature']
+        
+        # Test different architectures without preprocessing
+        architectures = [
+            [32],  # Single hidden layer
+            [64, 32],  # Two hidden layers
+            [128, 64, 32, 16],  # Deep network
+        ]
+        
+        for hidden_units in architectures:
+            model = BaseFeedForwardModel(
+                feature_names=feature_names,
+                hidden_units=hidden_units,
+                output_units=1,
+                dropout_rate=0.1,
+                activation='relu',
+                preprocessing_model=None,  # No preprocessing
+                name=f'feed_forward_{len(hidden_units)}_layers_no_preprocessing'
+            )
+            
+            model.compile(
+                optimizer=Adam(learning_rate=0.001),
+                loss=MeanSquaredError(),
+                metrics=[MeanAbsoluteError()]
+            )
+            
+            # Quick training test
+            X_train = {name: df[name].values[:100] for name in feature_names}
+            y_train = df['target'].values[:100]
+            
+            history = model.fit(X_train, y_train, epochs=2, verbose=0)
+            assert len(history.history['loss']) == 2
+
+    def test_model_without_preprocessing_serialization(
+        self, 
+        temp_dir: Path, 
+        dummy_data: tuple[Path, pd.DataFrame]
+    ) -> None:
+        """Test model serialization without preprocessing."""
+        csv_path, df = dummy_data
+        feature_names = ['numeric_feature_1', 'numeric_feature_2', 'categorical_feature', 'boolean_feature']
+        
+        model = BaseFeedForwardModel(
+            feature_names=feature_names,
+            hidden_units=[32, 16],
+            output_units=1,
+            preprocessing_model=None,  # No preprocessing
+            name='serializable_model_no_preprocessing'
+        )
+        
+        # Test JSON serialization
+        config = model.get_config()
+        assert 'feature_names' in config
+        assert 'hidden_units' in config
+        assert 'preprocessing_model' in config
+        assert config['preprocessing_model'] is None
+        
+        # Test model reconstruction from config
+        reconstructed_model = BaseFeedForwardModel.from_config(config)
+        assert reconstructed_model.feature_names == model.feature_names
+        assert reconstructed_model.hidden_units == model.hidden_units
+        assert reconstructed_model.preprocessing_model is None

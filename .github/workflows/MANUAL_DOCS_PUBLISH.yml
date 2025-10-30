@@ -1,0 +1,134 @@
+name: "Manual Docs Publish"
+
+on:
+  workflow_dispatch:
+    inputs:
+      VERSION:
+        required: false
+        type: string
+        description: 'Version to release (optional, defaults to poetry version)'
+      UPDATE_LATEST:
+        required: false
+        default: true
+        type: boolean
+        description: 'Update the latest alias'
+      FORCE:
+        required: false
+        default: false
+        type: boolean
+        description: 'Force update even if version exists'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish-docs:
+    name: Publish Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: 'pip'
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      
+      - name: Cache Poetry dependencies
+        id: cache-poetry
+        uses: actions/cache@v4
+        with:
+          path: |
+            .venv
+            ~/.cache/pypoetry
+          key: venv-manual-docs-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-manual-docs-${{ runner.os }}-3.11-
+      
+      - name: Cache pip dependencies
+        id: cache-pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-manual-docs-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            pip-manual-docs-${{ runner.os }}-3.11-
+      
+      - name: Install dependencies
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: poetry install --only doc --no-interaction --no-root
+      
+      - name: Install project
+        run: poetry install --only doc --no-interaction
+      
+      - name: Get version
+        id: version
+        run: |
+          if [ -n "${{ inputs.VERSION }}" ]; then
+            VERSION="${{ inputs.VERSION }}"
+            echo "Using specified version: $VERSION"
+          else
+            VERSION=$(poetry version -s)
+            echo "Using poetry version: $VERSION"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Configure Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+      
+      - name: Deploy documentation
+        id: docs-deploy
+        run: |
+          MAX_RETRIES=3
+          RETRY_DELAY=10
+          RETRY_COUNT=0
+          
+          DEPLOY_CMD="mike deploy"
+          if [ "${{ inputs.UPDATE_LATEST }}" == "true" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD --update-aliases"
+          fi
+          if [ "${{ inputs.FORCE }}" == "true" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD --force"
+          fi
+          
+          if [ "${{ inputs.UPDATE_LATEST }}" == "true" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD ${{ steps.version.outputs.version }} latest"
+          else
+            DEPLOY_CMD="$DEPLOY_CMD ${{ steps.version.outputs.version }}"
+          fi
+          
+          DEPLOY_CMD="$DEPLOY_CMD --push"
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if $DEPLOY_CMD; then
+              echo "Docs deployed successfully"
+              exit 0
+            else
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "Docs deployment failed, retrying in ${RETRY_DELAY}s (attempt $RETRY_COUNT/$MAX_RETRIES)..."
+                sleep $RETRY_DELAY
+              else
+                echo "Docs deployment failed after $MAX_RETRIES attempts"
+                exit 1
+              fi
+            fi
+          done
+        continue-on-error: true

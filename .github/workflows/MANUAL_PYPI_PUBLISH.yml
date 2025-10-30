@@ -1,0 +1,111 @@
+name: "Manual PyPI Publish"
+
+on:
+  workflow_dispatch:
+    inputs:
+      VERSION:
+        required: true
+        type: string
+        description: 'Version to publish (e.g., 0.1.0)'
+      DRY_RUN:
+        required: false
+        default: false
+        type: boolean
+        description: 'Dry run mode (no actual publish)'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to PyPI
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          cache: 'pip'
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      
+      - name: Cache Poetry dependencies
+        id: cache-poetry
+        uses: actions/cache@v4
+        with:
+          path: |
+            .venv
+            ~/.cache/pypoetry
+          key: venv-manual-pypi-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-manual-pypi-${{ runner.os }}-3.11-
+      
+      - name: Cache pip dependencies
+        id: cache-pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-manual-pypi-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            pip-manual-pypi-${{ runner.os }}-3.11-
+      
+      - name: Install dependencies
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: poetry install --all-extras --no-interaction --no-root
+      
+      - name: Install project
+        run: poetry install --all-extras --no-interaction
+      
+      - name: Set package version
+        run: poetry version ${{ inputs.VERSION }}
+      
+      - name: Build package
+        run: poetry build
+      
+      - name: Publishing to PyPI
+        if: inputs.DRY_RUN == false
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          # Configuring PyPi
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          
+          # Publishing to PyPi with retry logic
+          MAX_RETRIES=3
+          RETRY_DELAY=10
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if poetry publish --no-interaction; then
+              echo "Published successfully"
+              exit 0
+            else
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "Publish failed, retrying in ${RETRY_DELAY}s (attempt $RETRY_COUNT/$MAX_RETRIES)..."
+                sleep $RETRY_DELAY
+              else
+                echo "Publish failed after $MAX_RETRIES attempts"
+                exit 1
+              fi
+            fi
+          done
+      
+      - name: Dry run check
+        if: inputs.DRY_RUN == true
+        run: |
+          echo "DRY RUN MODE: Package built but not published"
+          echo "Version: ${{ inputs.VERSION }}"
+          ls -la dist/

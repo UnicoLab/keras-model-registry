@@ -148,6 +148,96 @@ clean:
 	find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 
 # ------------------------------------
+# GitHub Actions Local Testing (Act)
+# ------------------------------------
+
+.PHONY: act-install
+## Install act tool for local GitHub Actions testing
+act-install:
+	@echo "Installing act..."
+	@command -v act >/dev/null 2>&1 || { \
+		echo "Installing act via brew (macOS) or script..."; \
+		if command -v brew >/dev/null 2>&1; then \
+			brew install act; \
+		else \
+			curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash; \
+		fi \
+	}
+	@act --version
+
+.PHONY: act-setup
+## Set up act configuration (copy secrets template if needed)
+act-setup:
+	@if [ ! -f .secrets ]; then \
+		echo "Creating .secrets from template..."; \
+		cp .secrets.example .secrets; \
+		echo "Please edit .secrets and add your tokens"; \
+	else \
+		echo ".secrets already exists"; \
+	fi
+
+.PHONY: act-list
+## List all available workflows
+act-list:
+	@act -l
+
+.PHONY: act-test-pr-checks
+## Test PR checks workflow locally
+act-test-pr-checks:
+	@act pull_request -W .github/workflows/pr-checks.yml --eventpath .github/workflows/event-pr.json || echo "Create .github/workflows/event-pr.json for testing"
+
+.PHONY: act-test-tests
+## Test tests workflow locally
+act-test-tests:
+	@act push -W .github/workflows/tests.yml
+
+.PHONY: act-test-docs
+## Test docs workflow locally
+act-test-docs:
+	@act push -W .github/workflows/docs.yml
+
+.PHONY: act-test-pr-preview
+## Test PR preview workflow locally
+act-test-pr-preview:
+	@act pull_request -W .github/workflows/PR_PREVIEW.yml --eventpath .github/workflows/event-pr.json || echo "Create .github/workflows/event-pr.json for testing"
+
+.PHONY: act-test-all
+## Test all workflows (dry-run, list only)
+act-test-all:
+	@echo "Listing all workflows..."
+	@act -l
+
+.PHONY: act-test-workflow
+## Test a specific workflow (usage: make act-test-workflow WORKFLOW=workflow-name.yml [EVENT=push|pull_request])
+act-test-workflow:
+	@if [ -z "$(WORKFLOW)" ]; then \
+		echo "Usage: make act-test-workflow WORKFLOW=workflow-name.yml [EVENT=push]"; \
+		exit 1; \
+	fi
+	@EVENT=$${EVENT:-push}; \
+	echo "Testing workflow $(WORKFLOW) with event $$EVENT..."; \
+	act $$EVENT -W .github/workflows/$(WORKFLOW)
+
+.PHONY: act-test-workflow-dry
+## Test a specific workflow in dry-run mode (no actual execution)
+act-test-workflow-dry:
+	@if [ -z "$(WORKFLOW)" ]; then \
+		echo "Usage: make act-test-workflow-dry WORKFLOW=workflow-name.yml [EVENT=push]"; \
+		exit 1; \
+	fi
+	@EVENT=$${EVENT:-push}; \
+	echo "Dry-running workflow $(WORKFLOW) with event $$EVENT..."; \
+	act $$EVENT -W .github/workflows/$(WORKFLOW) --dryrun
+
+.PHONY: act-clean
+## Clean act containers and volumes
+act-clean:
+	@echo "Cleaning act containers..."
+	@docker ps -a --filter "ancestor=catthehacker/ubuntu:act-latest" --format "{{.ID}}" | xargs -r docker rm -f || true
+	@echo "Cleaning act volumes..."
+	@docker volume ls --filter "label=act" --format "{{.Name}}" | xargs -r docker volume rm || true
+
+# ------------------------------------
 # Default
 # ------------------------------------
 

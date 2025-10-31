@@ -1,0 +1,21 @@
+# Act configuration file
+# See https://github.com/nektos/act for documentation
+
+# Platform: Use ubuntu-latest by default
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+
+# Container daemon socket (uncomment if using different Docker socket)
+# --container-daemon-socket /var/run/docker.sock
+
+# Secrets file location
+--secret-file .secrets
+
+# Environment file (if needed)
+# --env-file .env
+
+# List workflows before running
+# --list
+
+# Verbose output
+-v
+

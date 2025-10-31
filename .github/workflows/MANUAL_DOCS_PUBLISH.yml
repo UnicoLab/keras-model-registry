@@ -1,0 +1,125 @@
+name: "Manual Docs Publish"
+
+on:
+  workflow_dispatch:
+    inputs:
+      VERSION:
+        required: false
+        type: string
+        description: 'Version to release (optional, defaults to poetry version)'
+      UPDATE_LATEST:
+        required: false
+        default: true
+        type: boolean
+        description: 'Update the latest alias'
+      FORCE:
+        required: false
+        default: false
+        type: boolean
+        description: 'Force update even if version exists'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  publish-docs:
+    name: Publish Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      
+      - name: Install dependencies
+        run: poetry install --only doc --no-interaction
+      
+      - name: Get version
+        id: version
+        run: |
+          if [ -n "${{ inputs.VERSION }}" ]; then
+            VERSION="${{ inputs.VERSION }}"
+            echo "Using specified version: $VERSION"
+          elif [ -f .github/recovery/last_release_version.txt ]; then
+            VERSION=$(cat .github/recovery/last_release_version.txt)
+            echo "Using recovery file version: $VERSION"
+          else
+            VERSION=$(poetry version -s)
+            echo "Using poetry version: $VERSION"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Configure Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+      
+      - name: Deploy documentation
+        id: docs-deploy
+        run: |
+          MAX_RETRIES=3
+          RETRY_DELAY=10
+          RETRY_COUNT=0
+          
+          DEPLOY_CMD="mike deploy"
+          if [ "${{ inputs.UPDATE_LATEST }}" == "true" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD --update-aliases"
+          fi
+          if [ "${{ inputs.FORCE }}" == "true" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD --force"
+          fi
+          
+          if [ "${{ inputs.UPDATE_LATEST }}" == "true" ]; then
+            DEPLOY_CMD="$DEPLOY_CMD ${{ steps.version.outputs.version }} latest"
+          else
+            DEPLOY_CMD="$DEPLOY_CMD ${{ steps.version.outputs.version }}"
+          fi
+          
+          DEPLOY_CMD="$DEPLOY_CMD --push"
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if $DEPLOY_CMD; then
+              echo "Docs deployed successfully"
+              echo "Version: ${{ steps.version.outputs.version }}"
+              exit 0
+            else
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "Docs deployment failed, retrying in ${RETRY_DELAY}s (attempt $RETRY_COUNT/$MAX_RETRIES)..."
+                sleep $RETRY_DELAY
+              else
+                echo "ERROR: Docs deployment failed after $MAX_RETRIES attempts"
+                echo "Version: ${{ steps.version.outputs.version }}"
+                exit 1
+              fi
+            fi
+          done
+      
+      - name: Cleanup recovery file on success
+        if: success()
+        run: |
+          if [ -f .github/recovery/last_release_version.txt ]; then
+            rm .github/recovery/last_release_version.txt
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .github/recovery/last_release_version.txt
+            git commit -m "chore: remove recovery file after successful manual docs publish" || exit 0
+            git push || exit 0
+          fi
+        continue-on-error: true

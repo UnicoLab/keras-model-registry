@@ -31,160 +31,51 @@ on:
           - "3.11"
           - "3.12"
 
-permissions:
-  contents: read
-  pull-requests: write
-
 concurrency:
   group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
   cancel-in-progress: true
 
 jobs:
-  lint:
-    name: Lint (Python ${{ matrix.python-version }})
+  python-ci-cd:
+    name: Python CI/CD Pipeline
+    uses: UnicoLab/ul_cicd-workflows/.github/workflows/python-ci-cd.yml@main
+    with:
+      python-versions: '["3.11", "3.12"]'
+      dependencies-manager: 'poetry'
+      run-tests: true
+      run-lint: true
+      run-type-check: true
+      run-docs-build: false
+      create-release: false
+      test-command: 'pytest tests/ -v --cov=kmr --cov-report=xml --cov-report=html --cov-report=term --ignore=tests/integration/ --ignore=tests/test_universal_input_handling.py'
+      lint-command: 'ruff check kmr/ tests/ --select F,E,W,C4 --ignore ANN,D,UP,COM,SIM,PTH,S,B,N,ARG,ISC,E402,F401 && black --check kmr/ tests/'
+      type-check-command: 'mypy kmr/ --ignore-missing-imports --no-strict-optional'
+    secrets: inherit
+
+  integration-tests:
+    name: Integration Tests
+    uses: UnicoLab/ul_cicd-workflows/.github/workflows/python-test.yml@main
+    with:
+      python-versions: '["3.11", "3.12"]'
+      dependencies-manager: 'poetry'
+      test-command: 'pytest tests/integration/ -v --cov=kmr --cov-append --cov-report=xml --cov-report=html --cov-report=term -m "not slow"'
+    secrets: inherit
+
+  coverage-upload:
+    name: Upload Coverage
+    needs: [python-ci-cd, integration-tests]
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12"]
+    if: always() && !cancelled()
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      
-      - name: Cache Poetry dependencies
-        id: cache-poetry
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            venv-${{ runner.os }}-${{ matrix.python-version }}-
-      
-      - name: Install dependencies
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      
-      - name: Install project
-        run: poetry install --no-interaction
-      
-      - name: Run Ruff
-        run: poetry run ruff check kmr/ tests/ --select F,E,W,C4 --ignore ANN,D,UP,COM,SIM,PTH,S,B,N,ARG,ISC,E402,F401
-      
-      - name: Run Black
-        run: poetry run black --check kmr/ tests/
-  
-  type-check:
-    name: Type Check (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12"]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      
-      - name: Cache Poetry dependencies
-        id: cache-poetry
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            venv-${{ runner.os }}-${{ matrix.python-version }}-
-      
-      - name: Install dependencies
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      
-      - name: Install project
-        run: poetry install --no-interaction
-      
-      - name: Run MyPy
-        run: poetry run mypy kmr/ --ignore-missing-imports --no-strict-optional
-  
-  unit-tests:
-    name: Unit Tests (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12"]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      
-      - name: Cache Poetry dependencies
-        id: cache-poetry
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            venv-${{ runner.os }}-${{ matrix.python-version }}-
-      
-      - name: Install dependencies
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      
-      - name: Install project
-        run: poetry install --no-interaction
-      
-      - name: Run unit tests
-        run: |
-          poetry run pytest tests/ \
-            -v \
-            --cov=kmr \
-            --cov-report=xml \
-            --cov-report=html \
-            --cov-report=term \
-            --ignore=tests/integration/ \
-            --ignore=tests/test_universal_input_handling.py
+          pattern: coverage-*
+          merge-multiple: true
+        continue-on-error: true
       
       - name: Upload coverage to Codecov
-        if: matrix.python-version == '3.11'
         uses: codecov/codecov-action@v4
         with:
           file: ./coverage.xml
@@ -192,66 +83,4 @@ jobs:
           name: codecov-umbrella
           fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
-  
-  integration-tests:
-    name: Integration Tests (Python ${{ matrix.python-version }})
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12"]
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      
-      - name: Cache Poetry dependencies
-        id: cache-poetry
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            venv-${{ runner.os }}-${{ matrix.python-version }}-
-      
-      - name: Install dependencies
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      
-      - name: Install project
-        run: poetry install --no-interaction
-      
-      - name: Run integration tests
-        run: |
-          poetry run pytest tests/integration/ \
-            -v \
-            --cov=kmr \
-            --cov-append \
-            --cov-report=xml \
-            --cov-report=html \
-            --cov-report=term \
-            -m "not slow"
-      
-      - name: Upload coverage to Codecov
-        if: matrix.python-version == '3.11'
-        uses: codecov/codecov-action@v4
-        with:
-          file: ./coverage.xml
-          flags: integration
-          name: codecov-umbrella
-          fail_ci_if_error: false
-          token: ${{ secrets.CODECOV_TOKEN }}
-
+        continue-on-error: true

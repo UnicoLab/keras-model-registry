@@ -1,0 +1,125 @@
+name: "Manual PyPI Publish"
+
+on:
+  workflow_dispatch:
+    inputs:
+      VERSION:
+        required: false
+        type: string
+        description: 'Version to publish (e.g., 0.1.0). If not provided, will use recovery file version.'
+      DRY_RUN:
+        required: false
+        default: false
+        type: boolean
+        description: 'Dry run mode (no actual publish)'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  get-version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Get version for publish
+        id: version
+        run: |
+          if [ -z "${{ inputs.VERSION }}" ]; then
+            if [ -f .github/recovery/last_release_version.txt ]; then
+              VERSION=$(cat .github/recovery/last_release_version.txt)
+              echo "version=$VERSION" >> $GITHUB_OUTPUT
+              echo "Using recovery file version: $VERSION"
+            else
+              echo "ERROR: No version provided and no recovery file found"
+              echo "Please provide VERSION input or ensure .github/recovery/last_release_version.txt exists"
+              exit 1
+            fi
+          else
+            VERSION="${{ inputs.VERSION }}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "Using provided version: $VERSION"
+          fi
+
+  publish:
+    name: Publish to PyPI
+    needs: get-version
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+      
+      - name: Install dependencies
+        run: poetry install --all-extras --no-interaction
+      
+      - name: Set package version
+        run: poetry version ${{ needs.get-version.outputs.version }}
+      
+      - name: Build package
+        run: poetry build
+      
+      - name: Publishing to PyPI
+        if: inputs.DRY_RUN == false
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+          
+          MAX_RETRIES=3
+          RETRY_DELAY=10
+          RETRY_COUNT=0
+          
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            if poetry publish --no-interaction; then
+              echo "Published successfully to PyPI"
+              echo "Version: ${{ needs.get-version.outputs.version }}"
+              exit 0
+            else
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+                echo "Publish failed, retrying in ${RETRY_DELAY}s (attempt $RETRY_COUNT/$MAX_RETRIES)..."
+                sleep $RETRY_DELAY
+              else
+                echo "ERROR: Publish failed after $MAX_RETRIES attempts"
+                exit 1
+              fi
+            fi
+          done
+      
+      - name: Cleanup recovery file on success
+        if: success() && inputs.DRY_RUN == false
+        run: |
+          if [ -f .github/recovery/last_release_version.txt ]; then
+            rm .github/recovery/last_release_version.txt
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .github/recovery/last_release_version.txt
+            git commit -m "chore: remove recovery file after successful manual PyPI publish" || exit 0
+            git push || exit 0
+          fi
+        continue-on-error: true
+      
+      - name: Dry run check
+        if: inputs.DRY_RUN == true
+        run: |
+          echo "DRY RUN MODE: Package built but not published"
+          echo "Version: ${{ needs.get-version.outputs.version }}"
+          ls -la dist/

@@ -166,3 +166,10 @@ kdp/data/fake_data.csv
 my_tests/*
 .windsurfrules
 tests/debug.ipynb
+
+# Recovery files (keep directory structure)
+.github/recovery/*.txt
+!.github/recovery/.gitkeep
+
+# Act local testing secrets (never commit this!)
+.secrets

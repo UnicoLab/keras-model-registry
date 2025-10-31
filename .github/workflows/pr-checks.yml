@@ -1,0 +1,33 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - main
+    types:
+      - opened
+      - edited
+      - synchronize
+  workflow_dispatch:
+    branches:
+      - dev
+      - main
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  pr-complete:
+    name: Complete PR Validation
+    uses: UnicoLab/ul_cicd-workflows/.github/workflows/pr-workflow-complete.yml@main
+    with:
+      language: 'python'
+      python-version: '3.11'
+      enable-labeler: true
+      enable-pre-commit: true
+      lint-python: true
+      lint-yaml: true
+      run-codeql: false
+    secrets: inherit

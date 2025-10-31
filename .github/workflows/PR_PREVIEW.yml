@@ -6,13 +6,13 @@ on:
       - main
     paths:
       - "docs/**"
-      - mkdocs.yml
+      - "mkdocs.yml"
   pull_request:
     branches:
       - main
     paths:
       - "docs/**"
-      - mkdocs.yml
+      - "mkdocs.yml"
     types:
       - opened
       - reopened
@@ -29,35 +29,10 @@ permissions:
 
 jobs:
   deploy-pr-preview:
-    runs-on: ["ubuntu-latest"]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install Python dependencies
-        shell: bash
-        run: |
-          python -m pip install --upgrade pip
-          # installing poetry
-          pip install poetry
-          # disable venvs
-          poetry config virtualenvs.create false
-          # assuring we have all extras for testing as well
-          poetry install --all-extras --no-interaction
-
-      - name: Install and Build
-        shell: bash
-        run: |
-          poetry run mkdocs build
-          echo "DOC GENERATED - OK!"
-
-      - name: Deploy preview
-        uses: rossjrw/pr-preview-action@v1
-        with:
-          source-dir: ./site/
-          token: ${{ secrets.GITHUB_TOKEN }}
+    uses: UnicoLab/ul_cicd-workflows/.github/workflows/pr-preview.yml@main
+    with:
+      python-versions: '["3.11"]'
+      dependencies-manager: 'poetry'
+      docs-tool: 'mkdocs'
+      source-dir: './site/'
+    secrets: inherit

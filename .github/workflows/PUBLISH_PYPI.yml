@@ -17,23 +17,61 @@ permissions:
   id-token: write
 
 jobs:
+  get-version:
+    name: Get Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      release-tag: ${{ steps.version.outputs.release-tag }}
+    steps:
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "push" ] && [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            # Extract version from tag (remove 'v' prefix if present)
+            TAG="${{ github.ref_name }}"
+            if [[ "$TAG" == v* ]]; then
+              VERSION="${TAG#v}"
+            else
+              VERSION="$TAG"
+            fi
+            RELEASE_TAG="$TAG"
+            echo "Using tag version: $VERSION (from tag: $RELEASE_TAG)"
+          elif [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ inputs.VERSION }}"
+            # For workflow_dispatch, use the input version as tag
+            RELEASE_TAG="v$VERSION"
+            echo "Using workflow_dispatch input version: $VERSION"
+          else
+            echo "ERROR: Unsupported event type: ${{ github.event_name }}"
+            exit 1
+          fi
+          
+          if [ -z "$VERSION" ]; then
+            echo "ERROR: No version determined"
+            exit 1
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "release-tag=$RELEASE_TAG" >> $GITHUB_OUTPUT
+
   publish:
+    needs: get-version
     uses: UnicoLab/ul_cicd-workflows/.github/workflows/python-build.yml@main
     with:
       python-versions: '["3.11"]'
       dependencies-manager: 'poetry'
       build-command: 'poetry build'
       publish-to-pypi: true
-      pypi-token: ${{ secrets.PYPI_TOKEN }}
-      version: ${{ github.ref_name != '' && github.ref_name || inputs.VERSION }}
+      version: ${{ needs.get-version.outputs.version }}
       run-tests: true
       test-command: 'poetry run pytest tests/ -v'
       create-github-release: true
-      release-tag: ${{ github.ref_name }}
+      release-tag: ${{ needs.get-version.outputs.release-tag }}
     secrets: inherit
 
   deploy-docs:
-    needs: publish
+    needs: [get-version, publish]
     runs-on: ubuntu-latest
     if: success()
     steps:
@@ -65,4 +103,4 @@ jobs:
       - name: Deploy documentation
         continue-on-error: true
         run: |
-          poetry run mike deploy --push --update-aliases ${{ github.ref_name }} latest
+          poetry run mike deploy --push --update-aliases ${{ needs.get-version.outputs.version }} latest

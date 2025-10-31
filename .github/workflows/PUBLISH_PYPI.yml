@@ -17,61 +17,39 @@ permissions:
   id-token: write
 
 jobs:
+  test:
+    name: Run Tests Before Publish
+    uses: UnicoLab/ul_cicd-workflows/.github/workflows/python-test.yml@main
+    with:
+      python-versions: '["3.11"]'
+      dependencies-manager: 'poetry'
+      test-command: 'pytest tests/ -v'
+    secrets: inherit
+
   publish:
+    name: Publish to PyPI
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Setup Poetry
+        uses: UnicoLab/ul_cicd-workflows/.github/actions/setup-poetry@main
         with:
-          python-version: '3.11'
-          cache: 'pip'
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: Cache Poetry dependencies
-        id: cached-poetry-dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            .venv
-            ~/.cache/pypoetry
-          key: venv-publish-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            venv-publish-${{ runner.os }}-3.11-
+          python-version: "3.11"
+          poetry-version: "latest"
+          cache-dependencies: true
       
-      - name: Cache pip dependencies
-        id: cache-pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: pip-publish-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            pip-publish-${{ runner.os }}-3.11-
-
       - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: Install project
-        run: poetry install --no-interaction
-
-      - name: Run tests
-        run: poetry run pytest tests/ -v
+        run: poetry install --all-extras --no-interaction
 
       - name: Build package
         run: poetry build
 
       - name: Publish to PyPI
         env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
         run: poetry publish --no-interaction
 
       - name: Create GitHub Release

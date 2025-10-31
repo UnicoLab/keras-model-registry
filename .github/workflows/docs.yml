@@ -60,7 +60,7 @@ jobs:
       
       - name: Install project
         run: poetry install --no-interaction
-    
+      
       - name: Build documentation
         run: |
           poetry run mkdocs build

@@ -11,7 +11,11 @@ on:
         required: false
         default: false
         type: boolean
-        description: 'Skip release if recovering from a failed publish'
+        description: 'Skip semantic release step (use for recovery from failed publish)'
+      RECOVERY_VERSION:
+        required: false
+        type: string
+        description: 'Version to use for recovery (only if SKIP_RELEASE is true)'
 
 permissions:
   contents: write
@@ -24,9 +28,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     outputs:
-      new_release_version: ${{ steps.semantic-release.outputs.new_release_version }}
+      new_release_version: ${{ steps.get-version.outputs.version }}
       new_release_notes: ${{ steps.semantic-release.outputs.new_release_notes }}
       release_created: ${{ steps.semantic-release.outputs.new_release_version != '' }}
+      should_continue: ${{ steps.get-version.outputs.version != '' }}
     
     steps:
       - name: Checkout code
@@ -34,14 +39,17 @@ jobs:
         with:
           fetch-depth: 0
       
-      - name: Check for recovery
-        id: recovery
+      - name: Check for recovery file
+        id: recovery-check
         run: |
           if [ -f .github/recovery/last_release_version.txt ]; then
-            echo "last_version=$(cat .github/recovery/last_release_version.txt)" >> $GITHUB_OUTPUT
-            echo "recovery=true" >> $GITHUB_OUTPUT
+            RECOVERY_VERSION=$(cat .github/recovery/last_release_version.txt)
+            echo "recovery_version=$RECOVERY_VERSION" >> $GITHUB_OUTPUT
+            echo "has_recovery=true" >> $GITHUB_OUTPUT
+            echo "Found recovery version: $RECOVERY_VERSION"
           else
-            echo "recovery=false" >> $GITHUB_OUTPUT
+            echo "has_recovery=false" >> $GITHUB_OUTPUT
+            echo "No recovery file found"
           fi
         continue-on-error: true
       
@@ -56,24 +64,49 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRY_RUN: ${{ inputs.DRY_RUN }}
       
-      - name: Testing TAG fetch
-        if: steps.semantic-release.outcome == 'success' || steps.semantic-release.outcome == 'skipped'
-        shell: bash
+      - name: Get version for workflow
+        id: get-version
         run: |
-          echo "CURRENT TAG:"
-          echo "${{ steps.semantic-release.outputs.new_release_version }}"
-          echo "CURRENT Notes:"
-          echo "${{ steps.semantic-release.outputs.new_release_notes }}"
+          if [ "${{ inputs.SKIP_RELEASE }}" == "true" ]; then
+            if [ -n "${{ inputs.RECOVERY_VERSION }}" ]; then
+              VERSION="${{ inputs.RECOVERY_VERSION }}"
+              echo "Using provided recovery version: $VERSION"
+            elif [ "${{ steps.recovery-check.outputs.has_recovery }}" == "true" ]; then
+              VERSION="${{ steps.recovery-check.outputs.recovery_version }}"
+              echo "Using recovery file version: $VERSION"
+            else
+              echo "ERROR: SKIP_RELEASE is true but no recovery version found"
+              exit 1
+            fi
+          else
+            VERSION="${{ steps.semantic-release.outputs.new_release_version }}"
+            echo "Using semantic release version: $VERSION"
+          fi
+          
+          if [ -z "$VERSION" ]; then
+            echo "ERROR: No version determined"
+            exit 1
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
       
-      - name: Save release version
-        if: steps.semantic-release.outputs.new_release_version != ''
+      - name: Display version info
+        run: |
+          echo "=== RELEASE VERSION INFO ==="
+          echo "Version: ${{ steps.get-version.outputs.version }}"
+          echo "Release Notes:"
+          echo "${{ steps.semantic-release.outputs.new_release_notes }}"
+          echo "============================="
+      
+      - name: Save release version to recovery file
+        if: steps.get-version.outputs.version != ''
         run: |
           mkdir -p .github/recovery
-          echo "${{ steps.semantic-release.outputs.new_release_version }}" > .github/recovery/last_release_version.txt
+          echo "${{ steps.get-version.outputs.version }}" > .github/recovery/last_release_version.txt
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           git add .github/recovery/last_release_version.txt
-          git commit -m "chore: save release version ${{ steps.semantic-release.outputs.new_release_version }}" || exit 0
+          git commit -m "chore: save release version ${{ steps.get-version.outputs.version }}" || exit 0
           git push || exit 0
         continue-on-error: true
 
@@ -81,8 +114,11 @@ jobs:
     name: Publish to PyPI
     runs-on: ubuntu-latest
     needs: SEMANTIC_RELEASE
-    if: needs.SEMANTIC_RELEASE.outputs.release_created == true || inputs.SKIP_RELEASE == true
+    if: needs.SEMANTIC_RELEASE.outputs.should_continue == true
     timeout-minutes: 30
+    outputs:
+      publish_success: ${{ steps.pypi-publish.outcome == 'success' }}
+      published_version: ${{ needs.SEMANTIC_RELEASE.outputs.new_release_version }}
     
     steps:
       - name: Checkout code
@@ -93,14 +129,18 @@ jobs:
       - name: Get release version
         id: version
         run: |
-          if [ "${{ inputs.SKIP_RELEASE }}" == "true" ] && [ -f .github/recovery/last_release_version.txt ]; then
+          # First try to get from recovery file (most reliable)
+          if [ -f .github/recovery/last_release_version.txt ]; then
             VERSION=$(cat .github/recovery/last_release_version.txt)
             echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "Using recovery version: $VERSION"
-          else
+            echo "Using recovery file version: $VERSION"
+          elif [ -n "${{ needs.SEMANTIC_RELEASE.outputs.new_release_version }}" ]; then
             VERSION="${{ needs.SEMANTIC_RELEASE.outputs.new_release_version }}"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
-            echo "Using new release version: $VERSION"
+            echo "Using semantic release output version: $VERSION"
+          else
+            echo "ERROR: Could not determine version"
+            exit 1
           fi
       
       - name: Set up Python
@@ -109,16 +149,36 @@ jobs:
           python-version: 3.11
           cache: 'pip'
       
-      - name: Install Python dependencies
-        shell: bash
-        run: |
-          python -m pip install --upgrade pip
-          pip install poetry
-          poetry config virtualenvs.create false
-          poetry install --all-extras --no-interaction
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      
+      - name: Cache Poetry dependencies
+        id: cache-poetry
+        uses: actions/cache@v4
+        with:
+          path: |
+            .venv
+            ~/.cache/pypoetry
+          key: venv-release-pypi-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-release-pypi-${{ runner.os }}-3.11-
+      
+      - name: Install dependencies
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: poetry install --all-extras --no-interaction --no-root
+      
+      - name: Install project
+        run: poetry install --all-extras --no-interaction
       
       - name: Publishing to PyPI
         id: pypi-publish
+        env:
+          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
         shell: bash
         run: |
           # Configuring PyPi
@@ -134,7 +194,8 @@ jobs:
           
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             if poetry publish --build; then
-              echo "Published successfully"
+              echo "Published successfully to PyPI"
+              echo "Version: ${{ steps.version.outputs.version }}"
               exit 0
             else
               RETRY_COUNT=$((RETRY_COUNT + 1))
@@ -142,7 +203,9 @@ jobs:
                 echo "Publish failed, retrying in ${RETRY_DELAY}s (attempt $RETRY_COUNT/$MAX_RETRIES)..."
                 sleep $RETRY_DELAY
               else
-                echo "Publish failed after $MAX_RETRIES attempts"
+                echo "ERROR: Publish failed after $MAX_RETRIES attempts"
+                echo "Version ${{ steps.version.outputs.version }} was NOT published"
+                echo "Use MANUAL_PYPI_PUBLISH.yml workflow to retry publishing this version"
                 exit 1
               fi
             fi
@@ -156,7 +219,7 @@ jobs:
             git config user.name "${{ github.actor }}"
             git config user.email "${{ github.actor }}@users.noreply.github.com"
             git add .github/recovery/last_release_version.txt
-            git commit -m "chore: remove recovery file after successful publish" || exit 0
+            git commit -m "chore: remove recovery file after successful PyPI publish" || exit 0
             git push || exit 0
           fi
         continue-on-error: true
@@ -165,7 +228,10 @@ jobs:
     name: Update Documentation
     runs-on: ubuntu-latest
     needs: [SEMANTIC_RELEASE, PYPI_PUBLISH]
-    if: always() && (needs.SEMANTIC_RELEASE.outputs.release_created == true || inputs.SKIP_RELEASE == true) && needs.PYPI_PUBLISH.result == 'success'
+    if: |
+      always() && 
+      needs.SEMANTIC_RELEASE.outputs.should_continue == true &&
+      needs.PYPI_PUBLISH.outputs.publish_success == true
     timeout-minutes: 20
     
     steps:
@@ -177,12 +243,18 @@ jobs:
       - name: Get release version
         id: version
         run: |
-          if [ "${{ inputs.SKIP_RELEASE }}" == "true" ] && [ -f .github/recovery/last_release_version.txt ]; then
+          # First try to get from recovery file (most reliable)
+          if [ -f .github/recovery/last_release_version.txt ]; then
             VERSION=$(cat .github/recovery/last_release_version.txt)
             echo "version=$VERSION" >> $GITHUB_OUTPUT
-          else
+            echo "Using recovery file version: $VERSION"
+          elif [ -n "${{ needs.SEMANTIC_RELEASE.outputs.new_release_version }}" ]; then
             VERSION="${{ needs.SEMANTIC_RELEASE.outputs.new_release_version }}"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "Using semantic release output version: $VERSION"
+          else
+            echo "ERROR: Could not determine version"
+            exit 1
           fi
       
       - name: Set up Python
@@ -191,13 +263,31 @@ jobs:
           python-version: 3.11
           cache: 'pip'
       
-      - name: Install Python dependencies
-        shell: bash
-        run: |
-          python -m pip install --upgrade pip
-          pip install poetry
-          poetry config virtualenvs.create false
-          poetry install --only doc --no-interaction
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: latest
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      
+      - name: Cache Poetry dependencies
+        id: cache-poetry
+        uses: actions/cache@v4
+        with:
+          path: |
+            .venv
+            ~/.cache/pypoetry
+          key: venv-release-docs-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            venv-release-docs-${{ runner.os }}-3.11-
+      
+      - name: Install dependencies
+        if: steps.cache-poetry.outputs.cache-hit != 'true'
+        run: poetry install --only doc --no-interaction --no-root
+      
+      - name: Install project
+        run: poetry install --only doc --no-interaction
       
       - name: Configure Git
         run: |
@@ -215,6 +305,7 @@ jobs:
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             if mike deploy --push --update-aliases ${{ steps.version.outputs.version }} latest; then
               echo "Docs deployed successfully"
+              echo "Version: ${{ steps.version.outputs.version }}"
               exit 0
             else
               RETRY_COUNT=$((RETRY_COUNT + 1))
@@ -222,9 +313,23 @@ jobs:
                 echo "Docs deployment failed, retrying in ${RETRY_DELAY}s (attempt $RETRY_COUNT/$MAX_RETRIES)..."
                 sleep $RETRY_DELAY
               else
-                echo "Docs deployment failed after $MAX_RETRIES attempts"
+                echo "ERROR: Docs deployment failed after $MAX_RETRIES attempts"
+                echo "Version: ${{ steps.version.outputs.version }}"
+                echo "Use MANUAL_DOCS_PUBLISH.yml workflow to retry deploying docs for this version"
                 exit 1
               fi
             fi
           done
+      
+      - name: Cleanup recovery file on complete success
+        if: success()
+        run: |
+          if [ -f .github/recovery/last_release_version.txt ]; then
+            rm .github/recovery/last_release_version.txt
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .github/recovery/last_release_version.txt
+            git commit -m "chore: remove recovery file after successful release completion" || exit 0
+            git push || exit 0
+          fi
         continue-on-error: true

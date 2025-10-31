@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       VERSION:
-        required: true
+        required: false
         type: string
-        description: 'Version to publish (e.g., 0.1.0)'
+        description: 'Version to publish (e.g., 0.1.0). If not provided, will use recovery file version.'
       DRY_RUN:
         required: false
         default: false
@@ -68,8 +68,27 @@ jobs:
       - name: Install project
         run: poetry install --all-extras --no-interaction
       
+      - name: Get version for publish
+        id: version
+        run: |
+          if [ -z "${{ inputs.VERSION }}" ]; then
+            if [ -f .github/recovery/last_release_version.txt ]; then
+              VERSION=$(cat .github/recovery/last_release_version.txt)
+              echo "version=$VERSION" >> $GITHUB_OUTPUT
+              echo "Using recovery file version: $VERSION"
+            else
+              echo "ERROR: No version provided and no recovery file found"
+              echo "Please provide VERSION input or ensure .github/recovery/last_release_version.txt exists"
+              exit 1
+            fi
+          else
+            VERSION="${{ inputs.VERSION }}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "Using provided version: $VERSION"
+          fi
+      
       - name: Set package version
-        run: poetry version ${{ inputs.VERSION }}
+        run: poetry version ${{ steps.version.outputs.version }}
       
       - name: Build package
         run: poetry build
@@ -89,7 +108,8 @@ jobs:
           
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             if poetry publish --no-interaction; then
-              echo "Published successfully"
+              echo "Published successfully to PyPI"
+              echo "Version: ${{ steps.version.outputs.version }}"
               exit 0
             else
               RETRY_COUNT=$((RETRY_COUNT + 1))
@@ -97,15 +117,29 @@ jobs:
                 echo "Publish failed, retrying in ${RETRY_DELAY}s (attempt $RETRY_COUNT/$MAX_RETRIES)..."
                 sleep $RETRY_DELAY
               else
-                echo "Publish failed after $MAX_RETRIES attempts"
+                echo "ERROR: Publish failed after $MAX_RETRIES attempts"
+                echo "Version ${{ steps.version.outputs.version }} was NOT published"
                 exit 1
               fi
             fi
           done
       
+      - name: Cleanup recovery file on success
+        if: success() && inputs.DRY_RUN == false
+        run: |
+          if [ -f .github/recovery/last_release_version.txt ]; then
+            rm .github/recovery/last_release_version.txt
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            git add .github/recovery/last_release_version.txt
+            git commit -m "chore: remove recovery file after successful manual PyPI publish" || exit 0
+            git push || exit 0
+          fi
+        continue-on-error: true
+      
       - name: Dry run check
         if: inputs.DRY_RUN == true
         run: |
           echo "DRY RUN MODE: Package built but not published"
-          echo "Version: ${{ inputs.VERSION }}"
+          echo "Version: ${{ steps.version.outputs.version }}"
           ls -la dist/

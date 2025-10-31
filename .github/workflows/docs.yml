@@ -11,71 +11,12 @@ permissions:
 
 jobs:
   docs:
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-          cache: 'pip'
-      
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      
-      - name: Cache Poetry dependencies
-        id: cache-poetry
-        uses: actions/cache@v4
-        with:
-          path: |
-            .venv
-            ~/.cache/pypoetry
-          key: venv-docs-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
-          restore-keys: |
-            venv-docs-${{ runner.os }}-3.11-
-      
-      - name: Cache MkDocs build
-        id: cache-mkdocs
-        uses: actions/cache@v4
-        with:
-          path: site
-          key: mkdocs-${{ runner.os }}-${{ hashFiles('**/*.md', 'mkdocs.yml') }}
-          restore-keys: |
-            mkdocs-${{ runner.os }}-
-      
-      - name: Install dependencies
-        if: steps.cache-poetry.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-      
-      - name: Install project
-        run: poetry install --no-interaction
-      
-      - name: Build documentation
-        run: |
-          poetry run mkdocs build
-      
-      - name: Setup Pages
-        if: github.ref == 'refs/heads/main'
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        if: github.ref == 'refs/heads/main'
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./site
-
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main'
-        id: deployment
-        uses: actions/deploy-pages@v4
+    name: Build and Deploy Docs
+    uses: UnicoLab/ul_cicd-workflows/.github/workflows/python-docs.yml@main
+    with:
+      python-versions: '["3.11"]'
+      dependencies-manager: 'poetry'
+      docs-tool: 'mkdocs'
+      docs-deploy: true
+      deploy-target: 'github-pages'
+    secrets: inherit

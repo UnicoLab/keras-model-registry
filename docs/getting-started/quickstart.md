@@ -5,7 +5,7 @@ Get up and running with KMR in minutes! This guide will walk you through install
 ## 📦 Installation
 
 ```bash
-pip install keras-model-registry
+pip install kmr
 ```
 
 ## 🎯 Your First Model

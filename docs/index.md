@@ -145,13 +145,13 @@ Our documentation is designed to be **developer-friendly** with:
     All layers are battle-tested, well-documented, and designed for production use with comprehensive error handling and validation.
 
 !!! tip "Keras 3 Exclusive"
-    Built exclusively for Keras 3 with no TensorFlow dependencies in production code, ensuring compatibility and performance.
+    Built exclusively for Keras 3 with no TensorFlow dependencies in production code, ensuring compatibility and performance with several possible backends.
 
 !!! example "Rich Documentation"
     Every layer includes comprehensive examples, best practices, performance notes, and usage guidance.
 
 !!! note "Modular Design"
-    Mix and match layers to build custom architectures that fit your specific use case.
+    Mix and match layers to build custom architectures that fit your specific use case and needs.
 
 ## 🎯 Perfect For
 

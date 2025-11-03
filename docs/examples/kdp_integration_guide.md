@@ -1,4 +1,4 @@
-# 🔗 KDP Integration Guide
+<!-- # 🔗 KDP Integration Guide
 
 Learn how to integrate KMR layers with Keras Data Processor (KDP) for comprehensive tabular data processing workflows.
 
@@ -26,7 +26,7 @@ Keras Data Processor (KDP) provides powerful data preprocessing capabilities tha
 import keras
 import numpy as np
 from kmr.layers import TabularAttention, VariableSelection
-from keras_data_processor import DataProcessor
+from kdp import DataProcessor
 
 def create_kdp_kmr_pipeline(input_dim, num_classes):
     """Create a pipeline combining KDP preprocessing with KMR layers."""
@@ -394,4 +394,4 @@ predictions = memory_efficient_processing(processor, model, data_generator)
 
 ---
 
-**Ready for more examples?** Check out the [Data Analyzer Examples](data_analyzer_examples.md) next!
+**Ready for more examples?** Check out the [Data Analyzer Examples](data_analyzer_examples.md) next! -->

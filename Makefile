@@ -3,7 +3,6 @@
 # ------------------------------------
 
 HAS_POETRY := $(shell command -v poetry 2> /dev/null)
-POETRY_VERSION := $(shell poetry version $(shell git describe --tags --abbrev=0))
 
 # ------------------------------------
 # Test
@@ -70,7 +69,9 @@ data_analyzer_coverage_detailed:
 .PHONY: data_analyzer_missing_coverage
 ## Find and report on missing coverage in data analyzer
 data_analyzer_missing_coverage:
-	poetry run python scripts/run_missing_coverage.py
+	@echo "Warning: scripts/run_missing_coverage.py not found. Use data_analyzer_coverage_detailed instead."
+	@echo "Running detailed coverage report instead..."
+	@$(MAKE) data_analyzer_coverage_detailed
 
 # ------------------------------------
 # Build package
@@ -81,7 +82,7 @@ data_analyzer_missing_coverage:
 build_pkg:
 	@echo "Start to build pkg"
 ifdef HAS_POETRY
-	@$(POETRY_VERSION)
+	@echo "Current version: $$(poetry version -s)"
 	poetry build
 else
 	@echo "To build the package, you need to have poetry first"
@@ -108,7 +109,6 @@ docs_deploy:
 	@echo "Starting to build docs"
 	@echo "more info: https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/"
 ifdef HAS_POETRY
-	@$(POETRY_VERSION)
 	poetry version -s | xargs -I {} sh -c 'echo Deploying version {} && mike deploy --push --update-aliases {} latest'
 else
 	@echo "To build the docs, you need to have poetry first"
@@ -126,7 +126,7 @@ docs_version_serve:
 	@echo "Start to serve versioned docs"
 	poetry run mike serve
 
-.PHONY: docs
+.PHONY: deploy_doc
 ## Create or Deploy MkDocs based documentation to GitHub pages.
 deploy_doc:
 	poetry run mkdocs gh-deploy

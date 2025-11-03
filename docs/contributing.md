@@ -41,7 +41,7 @@ Thank you for your interest in contributing to the Keras Model Registry (KMR)! T
 New layers are the core of KMR. Follow these guidelines:
 
 #### Layer Requirements
-- **Keras 3 Only**: No TensorFlow dependencies in production code
+- **Keras 3 Only**: No TensorFlow dependencies in production code (Tensorflow only for testing)
 - **Inherit from BaseLayer**: All layers must inherit from `kmr.layers._base_layer.BaseLayer`
 - **Full Serialization**: Implement `get_config()` and `from_config()` methods
 - **Type Annotations**: Use Python 3.12+ type hints
@@ -99,7 +99,7 @@ make coverage
 ```
 
 ### 4. Documentation
-Documentation is automatically generated from docstrings using MkDocs and mkdocstrings. Simply ensure your docstrings follow Google style format and the documentation will be updated automatically when the site is built.
+Documentation is automatically generated from docstrings using MkDocs and mkdocstrings. Simply ensure your docstrings follow Google style format and the documentation will be updated automatically when the site is built. If you are adding new code, you will have to reference it in a dedicated docuemntation file to fetche the correct docstring.
 
 ### 5. Commit Changes
 Use conventional commit messages:

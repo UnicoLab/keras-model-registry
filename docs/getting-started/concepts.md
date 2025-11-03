@@ -1,10 +1,10 @@
 # 🧠 Core Concepts
 
-Understand the fundamental concepts behind KMR and how to effectively use its layers for tabular data modeling.
+Understand the fundamental concepts behind KMR and how to effectively use its layers for modeling.
 
 ## 🎯 What is KMR?
 
-KMR (Keras Model Registry) is a comprehensive collection of specialized layers designed exclusively for tabular data. Unlike traditional neural network layers that were designed for images or sequences, KMR layers understand the unique characteristics of tabular data.
+KMR (Keras Model Registry) is a comprehensive collection of specialized layers designed exclusively for tabular data (but not only !!!). Unlike traditional neural network layers that were designed for images or sequences, KMR layers understand the unique characteristics of tabular data.
 
 ### Key Principles
 

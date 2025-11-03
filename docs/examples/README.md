@@ -18,7 +18,7 @@ import keras
 from kmr.layers import TabularAttention, VariableSelection
 
 # Simple classification model
-def create_classifier(input_dim, num_classes):
+def create_classifier(input_dim: int, num_classes: int) -> keras.Model:
     inputs = keras.Input(shape=(input_dim,))
     x = VariableSelection(hidden_dim=64)(inputs)
     x = TabularAttention(num_heads=8, key_dim=64)(x)
@@ -26,8 +26,15 @@ def create_classifier(input_dim, num_classes):
     return keras.Model(inputs, outputs)
 
 # Usage
-model = create_classifier(input_dim=20, num_classes=3)
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+model = create_classifier(
+    input_dim=20,
+    num_classes=3,
+)
+model.compile(
+    optimizer='adam',
+    loss='categorical_crossentropy',
+    metrics=['accuracy'],
+)
 ```
 
 ### 2. **Regression with Feature Engineering**
@@ -39,17 +46,26 @@ from kmr.layers import (
     GatedFeatureFusion
 )
 
-def create_regressor(input_dim):
+def create_regressor(input_dim: int) -> keras.Model:
     inputs = keras.Input(shape=(input_dim,))
+
     x = DifferentiableTabularPreprocessor()(inputs)
     x = AdvancedNumericalEmbedding(embedding_dim=64)(x)
     x = GatedFeatureFusion(hidden_dim=128)(x)
+
     outputs = keras.layers.Dense(1)(x)
+
     return keras.Model(inputs, outputs)
 
 # Usage
-model = create_regressor(input_dim=20)
-model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+model = create_regressor(
+    input_dim=20,
+)
+model.compile(
+    optimizer='adam',
+    loss='mse',
+    metrics=['mae'],
+)
 ```
 
 ## 🏗️ Architecture Examples
@@ -70,13 +86,13 @@ def create_attention_model(input_dim, num_classes):
     x = MultiResolutionTabularAttention(
         num_heads=8,
         numerical_heads=4,
-        categorical_heads=4
+        categorical_heads=4,
     )(inputs)
     
     # Interpretable attention
     x = InterpretableMultiHeadAttention(
         num_heads=8,
-        key_dim=64
+        key_dim=64,
     )(x)
     
     # Feature fusion
@@ -91,7 +107,7 @@ def create_attention_model(input_dim, num_classes):
 ```python
 from kmr.layers import GatedResidualNetwork, GatedLinearUnit
 
-def create_residual_model(input_dim, num_classes):
+def create_residual_model(input_dim: int, num_classes: int) -> keras.Model:
     inputs = keras.Input(shape=(input_dim,))
     
     # Residual blocks
@@ -111,7 +127,7 @@ def create_residual_model(input_dim, num_classes):
 ```python
 from kmr.layers import TabularMoELayer, BoostingEnsembleLayer
 
-def create_ensemble_model(input_dim, num_classes):
+def create_ensemble_model(input_dim: int, num_classes: int) -> keras.Model:
     inputs = keras.Input(shape=(input_dim,))
     
     # Mixture of experts
@@ -140,7 +156,7 @@ from kmr.layers import (
     SparseAttentionWeighting
 )
 
-def create_feature_pipeline(input_dim):
+def create_feature_pipeline(input_dim: int) -> keras.Model:
     inputs = keras.Input(shape=(input_dim,))
     
     # Preprocessing
@@ -170,7 +186,7 @@ from kmr.layers import (
     SeasonLayer
 )
 
-def create_temporal_pipeline():
+def create_temporal_pipeline() -> keras.Model:
     # Date parsing
     date_parser = DateParsingLayer()
     
@@ -191,7 +207,7 @@ date_parser, date_encoder, season_layer = create_temporal_pipeline()
 ### 1. **Financial Modeling**
 
 ```python
-def create_financial_model(input_dim, num_classes):
+def create_financial_model(input_dim: int , num_classes: int) -> keras.Model:
     """Model for financial risk assessment."""
     
     inputs = keras.Input(shape=(input_dim,))
@@ -211,7 +227,7 @@ def create_financial_model(input_dim, num_classes):
             {'feature': 'credit_score', 'operator': '>', 'value': 600, 'weight': 1.0},
             {'feature': 'debt_ratio', 'operator': '<', 'value': 0.4, 'weight': 0.8}
         ],
-        feature_type='numerical'
+        feature_type='numerical',
     )(x)
     
     outputs = keras.layers.Dense(num_classes, activation='softmax')(x)
@@ -221,7 +237,7 @@ def create_financial_model(input_dim, num_classes):
 ### 2. **Healthcare Analytics**
 
 ```python
-def create_healthcare_model(input_dim, num_classes):
+def create_healthcare_model(input_dim: int, num_classes: int) -> keras.Model:
     """Model for healthcare outcome prediction."""
     
     inputs = keras.Input(shape=(input_dim,))
@@ -248,7 +264,7 @@ def create_healthcare_model(input_dim, num_classes):
 ### 3. **E-commerce Recommendation**
 
 ```python
-def create_recommendation_model(input_dim, num_classes):
+def create_recommendation_model(input_dim: int, num_classes: int) -> keras.Model:
     """Model for e-commerce product recommendation."""
     
     inputs = keras.Input(shape=(input_dim,))
@@ -278,7 +294,7 @@ def create_recommendation_model(input_dim, num_classes):
 ### 1. **Memory-Efficient Model**
 
 ```python
-def create_memory_efficient_model(input_dim, num_classes):
+def create_memory_efficient_model(input_dim: int, num_classes: int) -> keras.Model:
     """Memory-efficient model for large datasets."""
     
     inputs = keras.Input(shape=(input_dim,))
@@ -295,7 +311,7 @@ def create_memory_efficient_model(input_dim, num_classes):
 ### 2. **Speed-Optimized Model**
 
 ```python
-def create_speed_optimized_model(input_dim, num_classes):
+def create_speed_optimized_model(input_dim: int, num_classes: int) -> keras.Model:
     """Speed-optimized model for real-time inference."""
     
     inputs = keras.Input(shape=(input_dim,))
@@ -319,7 +335,7 @@ def interpret_model(model, X_test, layer_name='tabular_attention'):
     # Get attention weights
     attention_model = keras.Model(
         inputs=model.input,
-        outputs=model.get_layer(layer_name).output
+        outputs=model.get_layer(layer_name).output,
     )
     
     attention_weights = attention_model.predict(X_test)

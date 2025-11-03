@@ -5,7 +5,7 @@ Install KMR and get your development environment ready for tabular modeling with
 ## 🎯 Quick Install
 
 ```bash
-pip install keras-model-registry
+pip install kmr
 ```
 
 ## 🔧 Requirements
@@ -14,9 +14,9 @@ pip install keras-model-registry
 - **Python 3.8+** (recommended: Python 3.10+)
 
 ### Core Dependencies
-- **Keras 3.0+** (TensorFlow backend recommended)
+- **Keras 3.0+** (TensorFlow backend recommended for testing)
 - **NumPy 1.21+**
-- **Pandas 1.3+** (for data handling)
+- **Pandas 1.3+** (for data handling or tf.DataSet if you have tensorflow)
 
 ### Optional Dependencies
 - **Matplotlib** (for visualization)
@@ -28,13 +28,13 @@ pip install keras-model-registry
 ### 1. **Pip Install (Recommended)**
 ```bash
 # Latest stable release
-pip install keras-model-registry
+pip install kmr
 
 # With optional dependencies
-pip install keras-model-registry[full]
+pip install kmr[full]
 
 # Specific version
-pip install keras-model-registry==1.0.0
+pip install kmr==1.0.0
 ```
 
 ### 2. **Development Install**
@@ -57,7 +57,7 @@ conda create -n kmr python=3.10
 conda activate kmr
 
 # Install KMR
-pip install keras-model-registry
+pip install kmr
 ```
 
 ## 🔍 Verify Installation
@@ -143,7 +143,7 @@ os.environ['KERAS_BACKEND'] = 'torch'
 
 ```bash
 # Update to latest version
-pip install --upgrade keras-model-registry
+pip install --upgrade kmr
 
 # Check current version
 python -c "import kmr; print(kmr.__version__)"

@@ -1,3 +1,17 @@
+from kmr.layers.DynamicBatchIndexGenerator import DynamicBatchIndexGenerator
+from kmr.layers.TensorDimensionExpander import TensorDimensionExpander
+from kmr.layers.ThresholdBasedMasking import ThresholdBasedMasking
+from kmr.layers.TopKRecommendationSelector import TopKRecommendationSelector
+from kmr.layers.HaversineGeospatialDistance import HaversineGeospatialDistance
+from kmr.layers.SpatialFeatureClustering import SpatialFeatureClustering
+from kmr.layers.GeospatialScoreRanking import GeospatialScoreRanking
+from kmr.layers.CollaborativeUserItemEmbedding import CollaborativeUserItemEmbedding
+from kmr.layers.DeepFeatureTower import DeepFeatureTower
+from kmr.layers.NormalizedDotProductSimilarity import NormalizedDotProductSimilarity
+from kmr.layers.DeepFeatureRanking import DeepFeatureRanking
+from kmr.layers.LearnableWeightedCombination import LearnableWeightedCombination
+from kmr.layers.CosineSimilarityExplainer import CosineSimilarityExplainer
+from kmr.layers.FeedbackAdjustmentLayer import FeedbackAdjustmentLayer
 from kmr.layers.GatedFeaturesSelection import GatedFeatureSelection
 from kmr.layers.SparseAttentionWeighting import SparseAttentionWeighting
 from kmr.layers.ColumnAttention import ColumnAttention
@@ -63,29 +77,41 @@ __all__ = [
     "BusinessRulesLayer",
     "CastToFloat32Layer",
     "CategoricalAnomalyDetectionLayer",
+    "CollaborativeUserItemEmbedding",
     "ColumnAttention",
+    "CosineSimilarityExplainer",
     "DataEmbeddingWithoutPosition",
     "DateEncodingLayer",
     "DateParsingLayer",
+    "DeepFeatureRanking",
+    "DeepFeatureTower",
     "DFTSeriesDecomposition",
     "DifferentiableTabularPreprocessor",
     "DifferentialPreprocessingLayer",
     "DistributionAwareEncoder",
     "DistributionTransformLayer",
+    "DynamicBatchIndexGenerator",
+    "FeedbackAdjustmentLayer",
     "FeatureCutout",
+    "FeatureMixing",
     "FixedEmbedding",
     "GatedFeatureFusion",
     "GatedFeatureSelection",
     "GatedLinearUnit",
     "GatedResidualNetwork",
+    "GeospatialScoreRanking",
     "GraphFeatureAggregation",
+    "HaversineGeospatialDistance",
     "HyperZZWOperator",
     "InterpretableMultiHeadAttention",
+    "LearnableWeightedCombination",
+    "MixingLayer",
     "MultiHeadGraphFeaturePreprocessor",
     "MultiResolutionTabularAttention",
     "MultiScaleSeasonMixing",
     "MultiScaleTrendMixing",
     "MovingAverage",
+    "NormalizedDotProductSimilarity",
     "NumericalAnomalyDetection",
     "PastDecomposableMixing",
     "PositionalEmbedding",
@@ -96,14 +122,16 @@ __all__ = [
     "SeriesDecomposition",
     "SlowNetwork",
     "SparseAttentionWeighting",
+    "SpatialFeatureClustering",
     "StochasticDepth",
     "TabularAttention",
     "TabularMoELayer",
+    "TensorDimensionExpander",
     "TemporalEmbedding",
     "TemporalMixing",
+    "ThresholdBasedMasking",
     "TokenEmbedding",
+    "TopKRecommendationSelector",
     "TransformerBlock",
     "VariableSelection",
-    "FeatureMixing",
-    "MixingLayer",
 ]

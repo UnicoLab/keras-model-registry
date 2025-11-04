@@ -628,3 +628,388 @@ class KMRPlotter:
         fig.update_layout(height=800, title_text=title, showlegend=True)
 
         return fig
+
+    @staticmethod
+    def plot_timeseries(
+        X: np.ndarray,
+        y_true: np.ndarray = None,
+        y_pred: np.ndarray = None,
+        n_samples_to_plot: int = 5,
+        feature_idx: int = 0,
+        title: str = "Time Series Forecast",
+        height: int = 500,
+    ) -> go.Figure:
+        """Plot time series data with optional predictions.
+
+        Args:
+            X: Input sequences of shape (n_samples, seq_len, n_features).
+            y_true: True target sequences of shape (n_samples, pred_len, n_features).
+            y_pred: Predicted sequences of shape (n_samples, pred_len, n_features).
+            n_samples_to_plot: Number of samples to visualize.
+            feature_idx: Which feature to plot.
+            title: Plot title.
+            height: Plot height.
+
+        Returns:
+            Plotly figure.
+        """
+        fig = make_subplots(
+            rows=n_samples_to_plot,
+            cols=1,
+            subplot_titles=[f"Sample {i+1}" for i in range(n_samples_to_plot)],
+            vertical_spacing=0.05,
+        )
+
+        seq_len = X.shape[1]
+
+        for sample_idx in range(min(n_samples_to_plot, len(X))):
+            row = sample_idx + 1
+
+            # Plot input sequence
+            x_vals = list(range(seq_len))
+            fig.add_trace(
+                go.Scatter(
+                    x=x_vals,
+                    y=X[sample_idx, :, feature_idx],
+                    mode="lines",
+                    name="Input",
+                    line=dict(color="blue", width=2),
+                ),
+                row=row,
+                col=1,
+            )
+
+            # Plot true target
+            if y_true is not None:
+                pred_len = y_true.shape[1]
+                y_vals = list(range(seq_len, seq_len + pred_len))
+                fig.add_trace(
+                    go.Scatter(
+                        x=y_vals,
+                        y=y_true[sample_idx, :, feature_idx],
+                        mode="lines",
+                        name="True",
+                        line=dict(color="green", width=2),
+                    ),
+                    row=row,
+                    col=1,
+                )
+
+            # Plot predictions
+            if y_pred is not None:
+                pred_len = y_pred.shape[1]
+                y_vals = list(range(seq_len, seq_len + pred_len))
+                fig.add_trace(
+                    go.Scatter(
+                        x=y_vals,
+                        y=y_pred[sample_idx, :, feature_idx],
+                        mode="lines",
+                        name="Predicted",
+                        line=dict(color="red", width=2, dash="dash"),
+                    ),
+                    row=row,
+                    col=1,
+                )
+
+        fig.update_layout(title=title, height=height, showlegend=True)
+        fig.update_xaxes(title_text="Time Steps", row=n_samples_to_plot, col=1)
+        fig.update_yaxes(
+            title_text="Value",
+            row=int((n_samples_to_plot + 1) / 2),
+            col=1,
+        )
+
+        return fig
+
+    @staticmethod
+    def plot_timeseries_comparison(
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+        sample_idx: int = 0,
+        title: str = "Forecast Comparison",
+        height: int = 400,
+    ) -> go.Figure:
+        """Plot single time series forecast comparison.
+
+        Args:
+            y_true: True sequences of shape (n_samples, pred_len, n_features) or (pred_len, n_features).
+            y_pred: Predicted sequences of shape (n_samples, pred_len, n_features) or (pred_len, n_features).
+            sample_idx: Index of sample to plot (if 3D arrays).
+            title: Plot title.
+            height: Plot height.
+
+        Returns:
+            Plotly figure.
+        """
+        if len(y_true.shape) == 3:
+            y_true = y_true[sample_idx]
+        if len(y_pred.shape) == 3:
+            y_pred = y_pred[sample_idx]
+
+        fig = go.Figure()
+
+        x_vals = list(range(len(y_true)))
+
+        # For multivariate, plot first feature
+        if len(y_true.shape) > 1:
+            y_true_vals = y_true[:, 0]
+            y_pred_vals = y_pred[:, 0]
+        else:
+            y_true_vals = y_true
+            y_pred_vals = y_pred
+
+        fig.add_trace(
+            go.Scatter(
+                x=x_vals,
+                y=y_true_vals,
+                mode="lines+markers",
+                name="True",
+                line=dict(color="green", width=2),
+            ),
+        )
+
+        fig.add_trace(
+            go.Scatter(
+                x=x_vals,
+                y=y_pred_vals,
+                mode="lines+markers",
+                name="Predicted",
+                line=dict(color="red", width=2, dash="dash"),
+            ),
+        )
+
+        fig.update_layout(
+            title=title,
+            xaxis_title="Time Steps",
+            yaxis_title="Value",
+            height=height,
+        )
+
+        return fig
+
+    @staticmethod
+    def plot_decomposition(
+        original: np.ndarray,
+        trend: np.ndarray = None,
+        seasonal: np.ndarray = None,
+        residual: np.ndarray = None,
+        title: str = "Time Series Decomposition",
+        height: int = 600,
+    ) -> go.Figure:
+        """Plot time series decomposition into components.
+
+        Args:
+            original: Original time series.
+            trend: Trend component.
+            seasonal: Seasonal component.
+            residual: Residual component.
+            title: Plot title.
+            height: Plot height.
+
+        Returns:
+            Plotly figure.
+        """
+        components = {"Original": original}
+        if trend is not None:
+            components["Trend"] = trend
+        if seasonal is not None:
+            components["Seasonal"] = seasonal
+        if residual is not None:
+            components["Residual"] = residual
+
+        n_components = len(components)
+        fig = make_subplots(
+            rows=n_components,
+            cols=1,
+            subplot_titles=list(components.keys()),
+            vertical_spacing=0.08,
+        )
+
+        x_vals = list(range(len(original)))
+
+        for i, (name, component) in enumerate(components.items()):
+            row = i + 1
+            fig.add_trace(
+                go.Scatter(
+                    x=x_vals,
+                    y=component,
+                    mode="lines",
+                    name=name,
+                    line=dict(color=["blue", "green", "orange", "red"][i]),
+                ),
+                row=row,
+                col=1,
+            )
+
+        fig.update_layout(title=title, height=height, showlegend=False)
+        fig.update_yaxes(title_text="Value", row=int((n_components + 1) / 2), col=1)
+        fig.update_xaxes(title_text="Time Steps", row=n_components, col=1)
+
+        return fig
+
+    @staticmethod
+    def plot_forecasting_metrics(
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+        title: str = "Forecasting Metrics",
+        height: int = 400,
+    ) -> go.Figure:
+        """Calculate and plot forecasting error metrics.
+
+        Args:
+            y_true: True values.
+            y_pred: Predicted values.
+            title: Plot title.
+            height: Plot height.
+
+        Returns:
+            Plotly figure with metrics.
+        """
+        # Calculate errors
+        mae = np.mean(np.abs(y_true - y_pred))
+        rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
+        mape = np.mean(np.abs((y_true - y_pred) / (np.abs(y_true) + 1e-8))) * 100
+
+        metrics_dict = {"MAE": mae, "RMSE": rmse, "MAPE (%)": mape}
+
+        return KMRPlotter.plot_performance_metrics(metrics_dict, title, height)
+
+    @staticmethod
+    def plot_forecast_horizon_analysis(
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+        title: str = "Forecast Error by Horizon",
+        height: int = 400,
+    ) -> go.Figure:
+        """Analyze forecast error across different forecast horizons.
+
+        Args:
+            y_true: True sequences of shape (n_samples, pred_len) or (n_samples, pred_len, n_features).
+            y_pred: Predicted sequences of same shape.
+            title: Plot title.
+            height: Plot height.
+
+        Returns:
+            Plotly figure.
+        """
+        # Handle multivariate by taking first feature
+        if len(y_true.shape) > 2:
+            y_true = y_true[:, :, 0]
+        if len(y_pred.shape) > 2:
+            y_pred = y_pred[:, :, 0]
+
+        pred_len = y_true.shape[1]
+        mae_by_horizon = []
+
+        for t in range(pred_len):
+            mae = np.mean(np.abs(y_true[:, t] - y_pred[:, t]))
+            mae_by_horizon.append(mae)
+
+        fig = go.Figure()
+
+        fig.add_trace(
+            go.Scatter(
+                x=list(range(1, pred_len + 1)),
+                y=mae_by_horizon,
+                mode="lines+markers",
+                name="MAE",
+                line=dict(color="blue", width=2),
+            ),
+        )
+
+        fig.update_layout(
+            title=title,
+            xaxis_title="Forecast Horizon (steps ahead)",
+            yaxis_title="Mean Absolute Error",
+            height=height,
+        )
+
+        return fig
+
+    @staticmethod
+    def plot_multiple_features_forecast(
+        X: np.ndarray,
+        y_true: np.ndarray,
+        y_pred: np.ndarray,
+        sample_idx: int = 0,
+        n_features_to_plot: int = None,
+        title: str = "Multi-Feature Forecast",
+        height: int = 500,
+    ) -> go.Figure:
+        """Plot forecasts for multiple features side-by-side.
+
+        Args:
+            X: Input sequences.
+            y_true: True target sequences.
+            y_pred: Predicted sequences.
+            sample_idx: Which sample to plot.
+            n_features_to_plot: Number of features to plot (default: all).
+            title: Plot title.
+            height: Plot height.
+
+        Returns:
+            Plotly figure.
+        """
+        n_features = X.shape[2]
+        if n_features_to_plot is None:
+            n_features_to_plot = min(n_features, 4)
+
+        seq_len = X.shape[1]
+        pred_len = y_true.shape[1]
+
+        fig = make_subplots(
+            rows=1,
+            cols=n_features_to_plot,
+            subplot_titles=[f"Feature {i}" for i in range(n_features_to_plot)],
+        )
+
+        for feat_idx in range(n_features_to_plot):
+            col = feat_idx + 1
+
+            # Input
+            x_vals = list(range(seq_len))
+            fig.add_trace(
+                go.Scatter(
+                    x=x_vals,
+                    y=X[sample_idx, :, feat_idx],
+                    mode="lines",
+                    name="Input",
+                    line=dict(color="blue"),
+                    showlegend=(feat_idx == 0),
+                ),
+                row=1,
+                col=col,
+            )
+
+            # True target
+            y_vals = list(range(seq_len, seq_len + pred_len))
+            fig.add_trace(
+                go.Scatter(
+                    x=y_vals,
+                    y=y_true[sample_idx, :, feat_idx],
+                    mode="lines",
+                    name="True",
+                    line=dict(color="green"),
+                    showlegend=(feat_idx == 0),
+                ),
+                row=1,
+                col=col,
+            )
+
+            # Predicted
+            fig.add_trace(
+                go.Scatter(
+                    x=y_vals,
+                    y=y_pred[sample_idx, :, feat_idx],
+                    mode="lines",
+                    name="Predicted",
+                    line=dict(color="red", dash="dash"),
+                    showlegend=(feat_idx == 0),
+                ),
+                row=1,
+                col=col,
+            )
+
+        fig.update_layout(title=title, height=height, showlegend=True)
+
+        return fig

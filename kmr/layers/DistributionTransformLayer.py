@@ -212,14 +212,14 @@ class DistributionTransformLayer(BaseLayer):
     def _compute_statistics(
         self,
         x: KerasTensor,
-    ) -> tuple[KerasTensor, KerasTensor, KerasTensor, KerasTensor]:
+    ) -> tuple:
         """Compute statistics for the input tensor.
 
         Args:
             x: Input tensor
 
         Returns:
-            tuple of (min, max, median, interquartile_range)
+            Tuple containing (min, max, median, interquartile_range) tensors
         """
         # Compute min and max along each feature dimension
         x_min = ops.min(x, axis=0, keepdims=True)
@@ -340,7 +340,7 @@ class DistributionTransformLayer(BaseLayer):
 
         return min_gt_zero & max_lt_one  # Using & operator for element-wise logical AND
 
-    def _select_best_transformation(self, x: KerasTensor) -> tuple[str, float]:
+    def _select_best_transformation(self, x: KerasTensor) -> tuple:
         """Select the best transformation based on data characteristics.
 
         Args:

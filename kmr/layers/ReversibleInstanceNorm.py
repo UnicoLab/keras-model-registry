@@ -118,7 +118,7 @@ class ReversibleInstanceNorm(BaseLayer):
     def _normalize(
         self,
         x: KerasTensor,
-    ) -> tuple[KerasTensor, KerasTensor, KerasTensor]:
+    ) -> tuple:
         """Normalize the input and return statistics for denormalization.
 
         Args:

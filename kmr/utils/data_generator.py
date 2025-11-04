@@ -17,7 +17,7 @@ class KMRDataGenerator:
         random_state: int = 42,
         include_interactions: bool = True,
         include_nonlinear: bool = True,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate synthetic regression data.
 
         Args:
@@ -76,7 +76,7 @@ class KMRDataGenerator:
         random_state: int = 42,
         sparse_features: bool = True,
         sparse_ratio: float = 0.3,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate synthetic classification data.
 
         Args:
@@ -157,7 +157,7 @@ class KMRDataGenerator:
         n_features: int = 50,
         random_state: int = 42,
         anomaly_type: str = "outlier",
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate synthetic anomaly detection data.
 
         Args:
@@ -238,7 +238,7 @@ class KMRDataGenerator:
         n_context: int = 8,
         random_state: int = 42,
         context_effect: float = 0.3,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate synthetic data with context information.
 
         Args:
@@ -249,7 +249,7 @@ class KMRDataGenerator:
             context_effect: Strength of context effect
 
         Returns:
-            Tuple of (X_train, X_test, context_train, context_test, y_train, y_test)
+            Tuple containing (X_train, X_test, context_train, context_test, y_train, y_test)
         """
         np.random.seed(random_state)
 
@@ -298,7 +298,7 @@ class KMRDataGenerator:
         feature_shapes: dict[str, tuple[int, ...]] = None,
         random_state: int = 42,
         task_type: str = "regression",
-    ) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate multi-input data for preprocessing model testing.
 
         Args:
@@ -308,7 +308,7 @@ class KMRDataGenerator:
             task_type: Type of task - "regression" or "classification"
 
         Returns:
-            Tuple of (X_train_dict, X_test_dict, y_train, y_test)
+            Tuple containing (X_train_dict, X_test_dict, y_train, y_test)
         """
         if feature_shapes is None:
             feature_shapes = {"feature1": (20,), "feature2": (15,), "feature3": (10,)}
@@ -461,7 +461,7 @@ class KMRDataGenerator:
         trend_direction: str = "up",
         noise_level: float = 0.1,
         scale: float = 1.0,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate synthetic multivariate time series data for forecasting.
 
         This method generates realistic time series data with optional trend and
@@ -553,7 +553,7 @@ class KMRDataGenerator:
         n_features: int = 7,
         correlation_strength: float = 0.5,
         random_state: int = 42,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate correlated multivariate time series data.
 
         Creates time series where features have dependencies on each other,
@@ -615,7 +615,7 @@ class KMRDataGenerator:
         n_features: int = 7,
         seasonal_period: int = 12,
         random_state: int = 42,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate strongly seasonal time series data.
 
         Ideal for testing decomposition-based models like TimeMixer that
@@ -672,7 +672,7 @@ class KMRDataGenerator:
         anomaly_ratio: float = 0.1,
         anomaly_magnitude: float = 3.0,
         random_state: int = 42,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate time series with anomalies for anomaly detection testing.
 
         Args:
@@ -746,7 +746,7 @@ class KMRDataGenerator:
         n_features: int = 7,
         scales: list[int] | None = None,
         random_state: int = 42,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate multi-scale time series with components at different frequencies.
 
         Useful for testing models that use multi-scale mixing like TimeMixer.
@@ -799,7 +799,7 @@ class KMRDataGenerator:
         pred_len: int = 336,
         n_features: int = 7,
         random_state: int = 42,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate long-horizon time series for testing long-term forecasting.
 
         Useful for benchmarking models on challenging long-range forecasting tasks.
@@ -851,7 +851,7 @@ class KMRDataGenerator:
         pred_len: int = 24,
         n_features: int = 3,
         random_state: int = 42,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple:
         """Generate synthetic energy demand time series.
 
         Simulates realistic energy consumption patterns with daily and weekly

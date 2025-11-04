@@ -31,7 +31,7 @@ class SeasonLayer(keras.layers.Layer):
         """Initialize the layer."""
         super().__init__(**kwargs)
 
-    def call(self, inputs) -> tuple[Any, Any]:
+    def call(self, inputs) -> tuple:
         """Apply the layer to the inputs.
 
         Args:

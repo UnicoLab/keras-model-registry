@@ -84,7 +84,7 @@ class SeriesDecomposition(BaseLayer):
         self.moving_avg = MovingAverage(kernel_size=self.kernel_size)
         super().build(input_shape)
 
-    def call(self, inputs: KerasTensor) -> tuple[KerasTensor, KerasTensor]:
+    def call(self, inputs: KerasTensor) -> tuple:
         """Decompose input into seasonal and trend components.
 
         Args:

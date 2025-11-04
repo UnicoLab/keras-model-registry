@@ -179,8 +179,7 @@ def add_serialization(cls: T) -> T:
 
         Args:
             cls: The class being instantiated.
-            config: Configuration dictionary.
-            config (dict): deserialized config for the class instantiation.
+            config: Configuration dictionary for deserialization.
         """
         return cls(**config)
 

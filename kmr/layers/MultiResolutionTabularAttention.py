@@ -224,7 +224,7 @@ class MultiResolutionTabularAttention(BaseLayer):
         self,
         inputs: list[KerasTensor],
         training: bool = False,
-    ) -> tuple[KerasTensor, KerasTensor]:
+    ) -> tuple:
         """Forward pass of the layer.
 
         Args:

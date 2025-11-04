@@ -73,7 +73,7 @@ class DFTSeriesDecomposition(BaseLayer):
         if not isinstance(self._top_k, int) or self._top_k <= 0:
             raise ValueError(f"top_k must be a positive integer, got {self._top_k}")
 
-    def call(self, inputs: KerasTensor) -> tuple[KerasTensor, KerasTensor]:
+    def call(self, inputs: KerasTensor) -> tuple:
         """Decompose input using frequency analysis approach.
 
         Args:

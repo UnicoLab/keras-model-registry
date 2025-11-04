@@ -19,7 +19,7 @@ class KMRPlotter:
         """Create training history plots.
 
         Args:
-            history: Keras training history object
+            history: Keras training history object or dict with history data
             metrics: List of metrics to plot (default: ['loss', 'accuracy'])
             title: Plot title
             height: Plot height
@@ -29,6 +29,12 @@ class KMRPlotter:
         """
         if metrics is None:
             metrics = ["loss", "accuracy"]
+
+        # Handle both History objects and dicts
+        if isinstance(history, dict):
+            hist_dict = history
+        else:
+            hist_dict = history.history
 
         # Determine subplot layout
         n_metrics = len(metrics)
@@ -50,15 +56,15 @@ class KMRPlotter:
         colors = ["blue", "red", "green", "orange", "purple", "brown"]
 
         for i, metric in enumerate(metrics):
-            if metric in history.history:
+            if metric in hist_dict:
                 row = (i // cols) + 1
                 col = (i % cols) + 1
 
                 # Training metric
                 fig.add_trace(
                     go.Scatter(
-                        x=list(range(1, len(history.history[metric]) + 1)),
-                        y=history.history[metric],
+                        x=list(range(1, len(hist_dict[metric]) + 1)),
+                        y=hist_dict[metric],
                         mode="lines",
                         name=f"Training {metric.title()}",
                         line=dict(color=colors[0]),
@@ -69,11 +75,11 @@ class KMRPlotter:
 
                 # Validation metric
                 val_metric = f"val_{metric}"
-                if val_metric in history.history:
+                if val_metric in hist_dict:
                     fig.add_trace(
                         go.Scatter(
-                            x=list(range(1, len(history.history[val_metric]) + 1)),
-                            y=history.history[val_metric],
+                            x=list(range(1, len(hist_dict[val_metric]) + 1)),
+                            y=hist_dict[val_metric],
                             mode="lines",
                             name=f"Validation {metric.title()}",
                             line=dict(color=colors[1]),
@@ -82,11 +88,7 @@ class KMRPlotter:
                         col=col,
                     )
 
-        fig.update_layout(height=height, title_text=title, showlegend=True)
-
-        fig.update_xaxes(title_text="Epoch")
-        fig.update_yaxes(title_text="Value")
-
+        fig.update_layout(title_text=title, height=height, showlegend=True)
         return fig
 
     @staticmethod

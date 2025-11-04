@@ -1,11 +1,139 @@
-# Layer Implementation Guide for Keras Model Registry (KMR)
+# 🧩 Layer Implementation Guide for Keras Model Registry (KMR)
 
-This document outlines the standard patterns and best practices for implementing new layers in the Keras Model Registry project.
+This guide outlines the complete process and best practices for implementing new layers in the Keras Model Registry project. Follow the checklists to ensure your implementation meets all KMR standards.
+
+## 📋 Layer Implementation Checklist
+
+Use this checklist when implementing a new layer. Check off each item as you complete it.
+
+### Phase 1: Planning & Design
+- [ ] **Define Purpose**: Clearly document what the layer does and when to use it
+- [ ] **Review Existing Layers**: Check if similar functionality already exists in `kmr/layers/`
+- [ ] **Plan Architecture**: Design the layer's interface (parameters, inputs, outputs)
+- [ ] **Review Keras 3 APIs**: Ensure all operations are available in Keras 3
+- [ ] **Check Dependencies**: Verify no TensorFlow-specific code is needed
+
+### Phase 2: Implementation - Core Layer Code
+- [ ] **Create File**: Create `kmr/layers/YourLayerName.py` following naming conventions
+- [ ] **Add Module Docstring**: Document the module's purpose
+- [ ] **Implement Pure Keras 3**: Use only Keras operations (no TensorFlow)
+- [ ] **Apply @register_keras_serializable**: Decorate class with `@register_keras_serializable(package="kmr.layers")`
+- [ ] **Inherit from BaseLayer**: Extend `kmr.layers._base_layer.BaseLayer`
+- [ ] **Implement __init__**: 
+  - [ ] Set private attributes first (`self._param = param`)
+  - [ ] Validate parameters (in __init__ or _validate_params)
+  - [ ] Set public attributes (`self.param = self._param`)
+  - [ ] Call `super().__init__(name=name, **kwargs)` AFTER setting public attributes
+- [ ] **Implement _validate_params**: Add parameter validation logic
+- [ ] **Implement build()**: Initialize weights and sublayers
+- [ ] **Implement call()**: Implement forward pass with Keras operations only
+- [ ] **Implement get_config()**: Return all constructor parameters
+- [ ] **Add Type Hints**: All methods and parameters have proper type annotations
+- [ ] **Add Logging**: Use `loguru` for debug messages
+- [ ] **Add Docstrings**: Comprehensive Google-style docstrings for all methods
+
+### Phase 3: Unit Tests
+- [ ] **Create Test File**: Create `tests/layers/test__YourLayerName.py`
+- [ ] **Test Initialization**: 
+  - [ ] Default parameters
+  - [ ] Custom parameters
+  - [ ] Invalid parameters (should raise errors)
+- [ ] **Test Layer Building**: Build with different input shapes
+- [ ] **Test Output Shape**: Verify output shapes match expected values
+- [ ] **Test Output Type**: Verify output is correct dtype
+- [ ] **Test Different Batch Sizes**: Test with various batch dimensions
+- [ ] **Test Serialization**:
+  - [ ] `get_config()` returns correct dict
+  - [ ] `from_config()` recreates layer correctly
+  - [ ] `keras.saving.serialize_keras_object()` works
+  - [ ] `keras.saving.deserialize_keras_object()` works
+  - [ ] Model with layer can be saved/loaded (`.keras` format)
+  - [ ] Weights can be saved/loaded (`.h5` format)
+- [ ] **Test Deterministic Output**: Same input produces same output
+- [ ] **Test Training Mode**: Layer behaves differently in training vs inference (if applicable)
+- [ ] **All Tests Pass**: Run `pytest tests/layers/test__YourLayerName.py -v`
+
+### Phase 4: Documentation
+- [ ] **Create Documentation File**: Create `docs/layers/your-layer-name.md`
+- [ ] **Follow Template**: Use structure from similar layer in `docs/layers/`
+- [ ] **Include Sections**:
+  - [ ] Overview and purpose
+  - [ ] How it works (with Mermaid diagram if helpful)
+  - [ ] Why use it and use cases
+  - [ ] Quick start example
+  - [ ] Advanced usage
+  - [ ] Parameter guide
+  - [ ] Performance characteristics
+  - [ ] Testing section
+  - [ ] Common issues & troubleshooting
+  - [ ] Related layers
+  - [ ] References
+- [ ] **Add Code Examples**: Real, working examples
+- [ ] **Include Mathematical Details**: If applicable
+- [ ] **Add Visual Aids**: Diagrams, flowcharts, or Mermaid diagrams
+
+### Phase 5: Integration & Updates
+- [ ] **Update Imports**: Add to `kmr/layers/__init__.py`
+  - [ ] Add import statement
+  - [ ] Add layer name to `__all__` list
+- [ ] **Update API Documentation**: Add entry to `docs/api/layers.md`
+  - [ ] Add layer name and description
+  - [ ] Include autodoc reference (`::: kmr.layers.YourLayerName`)
+- [ ] **Update Layers Overview**: Add to `docs/layers_overview.md`
+  - [ ] Add to appropriate category
+  - [ ] Add API reference card
+- [ ] **Update Data Analyzer**: If applicable, add to `kmr/utils/data_analyzer.py`
+  - [ ] Add to appropriate data characteristic
+  - [ ] Update layer recommendations
+- [ ] **Update Contributing Guide**: If introducing new patterns
+
+### Phase 6: Quality Assurance
+- [ ] **Run All Tests**: `pytest tests/ -v` - ensure no regressions
+- [ ] **Pre-commit Hooks**: Run `pre-commit run --all-files`
+  - [ ] Black formatting passes
+  - [ ] Ruff linting passes
+  - [ ] No unused imports or variables
+  - [ ] Proper type hints
+- [ ] **Documentation Build**: `mkdocs serve` builds without errors
+- [ ] **Code Review**: Request code review from team
+- [ ] **Integration Test**: Test layer in a complete model
+
+---
 
 ## Key Requirements
 
-1. **Keras 3 Only**: All layer implementations MUST use only Keras 3 operations. NO TensorFlow dependencies are allowed in layer implementations.
-2. **TensorFlow Usage**: TensorFlow can ONLY be used in test files for validation purposes.
+### ✅ Keras 3 Only
+All layer implementations MUST use only Keras 3 operations. NO TensorFlow dependencies are allowed in layer implementations.
+- **Allowed**: `keras.layers`, `keras.ops`, `keras.activations`
+- **NOT Allowed**: `tensorflow.python.*`, `tf.nn.*` (use `keras.ops.*` instead)
+- **Exception**: TensorFlow can ONLY be used in test files for validation purposes
+
+### ✅ Type Annotations (Python 3.12+)
+Use modern type hints with the union operator:
+```python
+param: int | float = 0.1  # Instead of Union[int, float]
+```
+
+### ✅ Google-Style Docstrings
+Use Google-style docstrings for all classes and methods:
+```python
+def my_method(self, param: str) -> int:
+    """Short description.
+    
+    Longer description if needed.
+    
+    Args:
+        param: Description of parameter.
+        
+    Returns:
+        Description of return value.
+        
+    Raises:
+        ValueError: When something is invalid.
+    """
+```
+
+---
 
 ## Layer Structure
 
@@ -20,17 +148,6 @@ All layers in the KMR project should follow this structure:
    - Input/output shapes
    - Usage examples
 5. **Implementation**: The actual layer implementation using only Keras 3 operations.
-
-## Required Components
-
-Every layer must include:
-
-1. **Keras Serialization**: Use the `@register_keras_serializable(package="kmr.layers")` decorator.
-2. **BaseLayer Inheritance**: Inherit from `kmr.layers._base_layer.BaseLayer`.
-3. **Type Annotations**: Use proper type hints for all methods and parameters.
-4. **Parameter Validation**: Validate input parameters in `__init__` or `_validate_params`.
-5. **Logging**: Use loguru for logging important information.
-6. **Serialization Support**: Implement `get_config()` method properly.
 
 ## Implementation Pattern
 
@@ -50,82 +167,94 @@ from kmr.layers._base_layer import BaseLayer
 
 @register_keras_serializable(package="kmr.layers")
 class MyCustomLayer(BaseLayer):
-    """Detailed class docstring with description, parameters, and examples.
+    """Short description.
+    
+    Longer description of what this layer does and when to use it.
 
     Args:
-        param1: Description of param1.
-        param2: Description of param2.
-        ...
+        param1: Description of param1 with type.
+        param2: Description of param2 with type.
+        name: Optional name for the layer.
 
     Input shape:
-        Description of input shape.
+        `(batch_size, ...)` - Description of input tensor.
 
     Output shape:
-        Description of output shape.
+        `(batch_size, ...)` - Description of output tensor.
 
     Example:
         ```python
         import keras
-        # Usage example with Keras operations only
+        from kmr.layers import MyCustomLayer
+        
+        # Create layer
+        layer = MyCustomLayer(param1=value1, param2=value2)
+        
+        # Use in a model
+        inputs = keras.Input(shape=(10,))
+        outputs = layer(inputs)
+        model = keras.Model(inputs, outputs)
         ```
     """
 
     def __init__(
         self,
-        param1: type = default,
-        param2: type = default,
+        param1: int = 10,
+        param2: float = 0.1,
         name: str | None = None,
         **kwargs: Any
     ) -> None:
-        # Set private attributes before calling parent's __init__
+        # Set private attributes first
         self._param1 = param1
         self._param2 = param2
 
         # Validate parameters
-        if not valid_condition:
-            raise ValueError("Error message")
+        self._validate_params()
 
-        # IMPORTANT: Set public attributes BEFORE calling parent's __init__
-        # This is necessary because BaseLayer._log_initialization() calls get_config()
-        # which accesses these public attributes
+        # Set public attributes BEFORE calling super().__init__()
+        # This is required because BaseLayer._log_initialization() calls get_config()
         self.param1 = self._param1
         self.param2 = self._param2
-        
+
         # Initialize any other instance variables
         self.some_variable = None
 
-        # Call parent's __init__ after setting public attributes
+        # Call parent's __init__ last
         super().__init__(name=name, **kwargs)
 
     def _validate_params(self) -> None:
         """Validate layer parameters."""
-        if not valid_condition:
-            raise ValueError("Error message")
+        if self._param1 < 0:
+            raise ValueError(f"param1 must be non-negative, got {self._param1}")
+        if not (0 <= self._param2 <= 1):
+            raise ValueError(f"param2 must be in [0, 1], got {self._param2}")
 
     def build(self, input_shape: tuple[int, ...]) -> None:
-        """Builds the layer with the given input shape.
+        """Build layer with given input shape.
 
         Args:
             input_shape: Tuple of integers defining the input shape.
         """
-        # Create weights and sublayers
+        # Create weights and sublayers here
+        # Example:
+        # self.dense = layers.Dense(self._param1)
         
-        logger.debug(f"Layer built with params: {self.param1}, {self.param2}")
+        logger.debug(f"Building {self.__class__.__name__} with params: param1={self.param1}, param2={self.param2}")
         super().build(input_shape)
 
     def call(self, inputs: KerasTensor, training: bool | None = None) -> KerasTensor:
-        """Forward pass of the layer.
+        """Forward pass.
 
         Args:
             inputs: Input tensor.
-            training: Boolean indicating whether the layer should behave in
-                training mode or inference mode.
+            training: Boolean or None, whether the layer should behave in training mode or inference mode.
 
         Returns:
             Output tensor.
         """
         # Implement forward pass using ONLY Keras operations
-        # Use ops.xxx instead of tf.xxx
+        # Use keras.ops.* instead of tf.*
+        output = inputs  # Replace with actual implementation
         return output
 
     def get_config(self) -> dict[str, Any]:
@@ -142,65 +271,123 @@ class MyCustomLayer(BaseLayer):
         return config
 ```
 
-## Attribute Initialization Order
-
-Pay special attention to the order of operations in the `__init__` method:
-
-1. Set private attributes first (`self._param1 = param1`)
-2. Validate parameters
-3. Set public attributes (`self.param1 = self._param1`)
-4. Initialize any other instance variables
-5. Call `super().__init__(name=name, **kwargs)`
-
-This order is critical because `BaseLayer._log_initialization()` is called during `super().__init__()` and it calls `get_config()`, which accesses the public attributes. If the public attributes are not set before calling `super().__init__()`, you'll get an `AttributeError`.
-
 ## Keras 3 Operations Reference
 
 When implementing layers, use Keras 3 operations instead of TensorFlow operations:
 
-| TensorFlow | Keras 3 |
-|------------|---------|
-| tf.stack | keras.ops.stack |
-| tf.reshape | keras.ops.reshape |
-| tf.reduce_sum | keras.ops.sum |
-| tf.reduce_mean | keras.ops.mean |
-| tf.reduce_max | keras.ops.max |
-| tf.reduce_min | keras.ops.min |
-| tf.nn.softmax | keras.ops.softmax |
-| tf.concat | keras.ops.concatenate |
-| tf.math.pow | keras.ops.power |
-| tf.abs | keras.ops.absolute |
+| Operation | TensorFlow | Keras 3 |
+|-----------|------------|---------|
+| Stacking | `tf.stack` | `keras.ops.stack` |
+| Reshape | `tf.reshape` | `keras.ops.reshape` |
+| Sum | `tf.reduce_sum` | `keras.ops.sum` |
+| Mean | `tf.reduce_mean` | `keras.ops.mean` |
+| Max | `tf.reduce_max` | `keras.ops.max` |
+| Min | `tf.reduce_min` | `keras.ops.min` |
+| Softmax | `tf.nn.softmax` | `keras.ops.softmax` |
+| Concatenate | `tf.concat` | `keras.ops.concatenate` |
+| Power | `tf.math.pow` | `keras.ops.power` |
+| Absolute | `tf.abs` | `keras.ops.absolute` |
+| Cast | `tf.cast` | `keras.ops.cast` |
+| Transpose | `tf.transpose` | `keras.ops.transpose` |
+| Squeeze | `tf.squeeze` | `keras.ops.squeeze` |
+| Expand dims | `tf.expand_dims` | `keras.ops.expand_dims` |
+| Gather | `tf.gather` | `keras.ops.take` |
+| Slice | `tf.slice` | `keras.ops.slice` |
+| Pad | `tf.pad` | `keras.ops.pad` |
 
-For a more comprehensive list, refer to the KERAS_DICT.md file.
+## Common Pitfalls & Solutions
 
-## Testing
+| Pitfall | Problem | Solution |
+|---------|---------|----------|
+| TensorFlow Dependencies | Using `tf.*` operations | Use `keras.ops.*` instead |
+| Wrong Attribute Order | `AttributeError` during initialization | Set public attributes BEFORE `super().__init__()` |
+| Missing Imports | `ImportError` | Check all imports are included |
+| Incomplete Serialization | Layer cannot be loaded | Include all parameters in `get_config()` |
+| Missing Type Hints | Code quality issues | Add type annotations to all methods |
+| Insufficient Documentation | Users can't use the layer | Write comprehensive docstrings |
+| Improper Validation | Invalid parameters accepted | Validate in `__init__()` or `_validate_params()` |
+| No Pre-commit Checks | Code style issues | Run `pre-commit run --all-files` |
+| Untested Code | Bugs in production | Write comprehensive unit tests |
+| Missing Tests | Serialization breaks | Add serialization tests |
 
-Each layer should have a corresponding test file in `tests/layers/` with the naming pattern `test__LayerName.py`. Tests should include:
+---
 
-1. **Initialization Tests**: Test default and custom initialization.
-2. **Invalid Parameter Tests**: Test error handling for invalid parameters.
-3. **Build Tests**: Test layer building with different configurations.
-4. **Output Shape Tests**: Test that output shape matches expectations.
-5. **Training Mode Tests**: Test behavior in training vs inference modes.
-6. **Serialization Tests**: Test serialization and deserialization.
-7. **Functional Tests**: Test specific functionality of the layer.
-8. **Integration Tests**: Test integration with a simple model.
+## Testing Template
 
-Note: TensorFlow can be used in test files for validation purposes, but should be clearly marked as such.
+Create comprehensive tests following this template:
 
-## Registration
+```python
+import unittest
+import numpy as np
+import tensorflow as tf
+import keras
 
-After implementing a new layer:
+from kmr.layers import MyCustomLayer
 
-1. Add an import statement in `kmr/layers/__init__.py`
-2. Add the layer name to the `__all__` list in the same file.
+class TestMyCustomLayer(unittest.TestCase):
+    """Test suite for MyCustomLayer."""
 
-## Common Pitfalls
+    def setUp(self) -> None:
+        """Set up test fixtures."""
+        self.layer = MyCustomLayer(param1=10, param2=0.1)
+        self.input_shape = (32, 20)  # batch_size, feature_dim
+        self.input_data = np.random.randn(*self.input_shape).astype(np.float32)
 
-1. **TensorFlow Dependencies**: NEVER use TensorFlow operations in layer implementations.
-2. **Incorrect Attribute Initialization Order**: Always set public attributes BEFORE calling `super().__init__()`.
-3. **Missing Imports**: Ensure all necessary imports are included.
-4. **Incomplete Serialization**: Make sure all parameters are included in `get_config()`.
-5. **Missing Type Hints**: Always include proper type annotations.
-6. **Insufficient Documentation**: Always provide comprehensive docstrings.
-7. **Improper Validation**: Always validate input parameters. 
+    def test_initialization(self) -> None:
+        """Test layer initialization."""
+        self.assertEqual(self.layer.param1, 10)
+        self.assertEqual(self.layer.param2, 0.1)
+
+    def test_invalid_parameters(self) -> None:
+        """Test invalid parameter handling."""
+        with self.assertRaises(ValueError):
+            MyCustomLayer(param1=-1)
+
+    def test_output_shape(self) -> None:
+        """Test output shape."""
+        output = self.layer(self.input_data)
+        self.assertEqual(output.shape, self.input_shape)
+
+    def test_serialization(self) -> None:
+        """Test layer serialization."""
+        config = self.layer.get_config()
+        new_layer = MyCustomLayer.from_config(config)
+        
+        output1 = self.layer(self.input_data)
+        output2 = new_layer(self.input_data)
+        
+        np.testing.assert_allclose(output1, output2, rtol=1e-5)
+
+    def test_model_save_load(self) -> None:
+        """Test model with layer can be saved and loaded."""
+        import tempfile
+        
+        inputs = keras.Input(shape=(20,))
+        outputs = self.layer(inputs)
+        model = keras.Model(inputs, outputs)
+        
+        with tempfile.TemporaryDirectory() as tmpdir:
+            model_path = f"{tmpdir}/model.keras"
+            model.save(model_path)
+            loaded_model = keras.models.load_model(model_path)
+            
+            pred1 = model.predict(self.input_data, verbose=0)
+            pred2 = loaded_model.predict(self.input_data, verbose=0)
+            
+            np.testing.assert_allclose(pred1, pred2, rtol=1e-5)
+
+if __name__ == "__main__":
+    unittest.main()
+```
+
+---
+
+## Next Steps
+
+After implementing and testing your layer:
+
+1. **Submit for Review**: Create a pull request with your implementation
+2. **Address Feedback**: Update based on review comments
+3. **Merge**: Once approved, merge to main branch
+4. **Announce**: Notify team about new layer availability
+5. **Update README**: If it's a major layer, update main README 

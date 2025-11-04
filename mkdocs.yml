@@ -125,6 +125,7 @@ nav:
   - 🤝 Contributing:
     - Contributing Guide: contributing.md
     - Layer Implementation Guide: layers_implementation_guide.md
+    - Model Implementation Guide: models_implementation_guide.md
     - Data Analyzer: data_analyzer.md
 
 repo_name: Keras Model Registry

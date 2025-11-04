@@ -551,6 +551,27 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
 
 ## 📚 All Layers by Category
 
+### ⏱️ Time Series & Forecasting (16 layers)
+
+**Specialized layers for time series forecasting, decomposition, and feature extraction with multi-scale pattern recognition.**
+
+- **PositionalEmbedding** - Sinusoidal positional encoding for sequence models
+- **FixedEmbedding** - Non-trainable embeddings for temporal indices (months, days, hours)
+- **TokenEmbedding** - 1D convolution-based embedding for time series values
+- **TemporalEmbedding** - Embedding layer for temporal features (month, day, weekday, hour, minute)
+- **DataEmbeddingWithoutPosition** - Combined token and temporal embedding for comprehensive features
+- **MovingAverage** - Trend extraction using moving average filtering
+- **SeriesDecomposition** - Trend-seasonal decomposition using moving average
+- **DFTSeriesDecomposition** - Frequency-based decomposition using Discrete Fourier Transform
+- **ReversibleInstanceNorm** - Reversible instance normalization with optional denormalization
+- **ReversibleInstanceNormMultivariate** - Multivariate reversible instance normalization
+- **MultiScaleSeasonMixing** - Bottom-up multi-scale seasonal pattern mixing
+- **MultiScaleTrendMixing** - Top-down multi-scale trend pattern mixing
+- **PastDecomposableMixing** - Decomposable mixing encoder combining decomposition and multi-scale mixing
+- **TemporalMixing** - MLP-based temporal mixing for TSMixer architecture
+- **FeatureMixing** - Feed-forward feature mixing for cross-series correlations
+- **MixingLayer** - Core mixing block combining temporal and feature mixing
+
 ### 🧠 Attention Mechanisms (6 layers)
 
 **Advanced attention layers for capturing complex feature relationships and dependencies in tabular data.**
@@ -613,6 +634,127 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
 ---
 
 ## 📋 Complete API Reference
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>⏱️ Time Series & Forecasting (16 layers)</h2>
+    <p>Specialized layers for time series analysis, forecasting, and pattern recognition with advanced decomposition and mixing strategies.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>📍 PositionalEmbedding</h4>
+      <div class="api-signature">PositionalEmbedding(max_len, embedding_dim)</div>
+      <p>Sinusoidal positional encoding for sequence models and transformers.</p>
+      <p><strong>Use when:</strong> You need position information in transformer models</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔧 FixedEmbedding</h4>
+      <div class="api-signature">FixedEmbedding(num_embeddings, embedding_dim)</div>
+      <p>Non-trainable sinusoidal embeddings for temporal indices (months, days, hours).</p>
+      <p><strong>Use when:</strong> You want fixed cyclical embeddings for temporal features</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎫 TokenEmbedding</h4>
+      <div class="api-signature">TokenEmbedding(c_in, d_model, conv_kernel_size)</div>
+      <p>1D convolution-based embedding for time series values.</p>
+      <p><strong>Use when:</strong> You need learnable embeddings for raw time series values</p>
+    </div>
+
+    <div class="api-card">
+      <h4>⏰ TemporalEmbedding</h4>
+      <div class="api-signature">TemporalEmbedding(d_model, embed_type, freq)</div>
+      <p>Embedding layer for temporal features like month, day, weekday, hour, minute.</p>
+      <p><strong>Use when:</strong> You have temporal feature information to encode</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎯 DataEmbeddingWithoutPosition</h4>
+      <div class="api-signature">DataEmbeddingWithoutPosition(c_in, d_model, embedding_type, freq, dropout)</div>
+      <p>Combined token and temporal embedding for comprehensive feature representation.</p>
+      <p><strong>Use when:</strong> You want unified embeddings for both values and temporal features</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🏃 MovingAverage</h4>
+      <div class="api-signature">MovingAverage(kernel_size)</div>
+      <p>Trend extraction using moving average filtering for time series.</p>
+      <p><strong>Use when:</strong> You need to separate trends from seasonal components</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 SeriesDecomposition</h4>
+      <div class="api-signature">SeriesDecomposition(kernel_size)</div>
+      <p>Trend-seasonal decomposition using moving average filtering.</p>
+      <p><strong>Use when:</strong> You want explicit decomposition of time series components</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📊 DFTSeriesDecomposition</h4>
+      <div class="api-signature">DFTSeriesDecomposition()</div>
+      <p>Frequency-based series decomposition using Discrete Fourier Transform.</p>
+      <p><strong>Use when:</strong> You prefer frequency-domain decomposition</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔄 ReversibleInstanceNorm</h4>
+      <div class="api-signature">ReversibleInstanceNorm(eps, subtract_last)</div>
+      <p>Reversible instance normalization with optional denormalization for time series.</p>
+      <p><strong>Use when:</strong> You need reversible normalization for stable training</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🏗️ ReversibleInstanceNormMultivariate</h4>
+      <div class="api-signature">ReversibleInstanceNormMultivariate(eps)</div>
+      <p>Multivariate version of reversible instance normalization.</p>
+      <p><strong>Use when:</strong> You have multivariate time series data</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🌊 MultiScaleSeasonMixing</h4>
+      <div class="api-signature">MultiScaleSeasonMixing(seq_len, down_sampling_window, d_model)</div>
+      <p>Bottom-up multi-scale seasonal pattern mixing with hierarchical aggregation.</p>
+      <p><strong>Use when:</strong> You want to capture seasonal patterns at multiple scales</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📈 MultiScaleTrendMixing</h4>
+      <div class="api-signature">MultiScaleTrendMixing(seq_len, down_sampling_window, d_model)</div>
+      <p>Top-down multi-scale trend pattern mixing with hierarchical decomposition.</p>
+      <p><strong>Use when:</strong> You want to capture trend patterns at multiple scales</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 PastDecomposableMixing</h4>
+      <div class="api-signature">PastDecomposableMixing(seq_len, pred_len, d_model, decomp_method, down_sampling_window)</div>
+      <p>Past decomposable mixing encoder combining decomposition and multi-scale mixing.</p>
+      <p><strong>Use when:</strong> You need comprehensive decomposition with multi-scale mixing</p>
+    </div>
+
+    <div class="api-card">
+      <h4>⏱️ TemporalMixing</h4>
+      <div class="api-signature">TemporalMixing(seq_len, d_model, hidden_dim, dropout)</div>
+      <p>MLP-based temporal mixing for TSMixer that applies transformations across time.</p>
+      <p><strong>Use when:</strong> You want lightweight temporal pattern learning</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 FeatureMixing</h4>
+      <div class="api-signature">FeatureMixing(d_model, ff_dim, dropout)</div>
+      <p>Feed-forward feature mixing learning cross-series correlations.</p>
+      <p><strong>Use when:</strong> You want to capture dependencies between time series</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 MixingLayer</h4>
+      <div class="api-signature">MixingLayer(seq_len, d_model, hidden_dim, ff_dim, dropout)</div>
+      <p>Core mixing block combining TemporalMixing and FeatureMixing for TSMixer.</p>
+      <p><strong>Use when:</strong> You need dual-perspective temporal and feature learning</p>
+    </div>
+  </div>
+</div>
 
 <div class="api-reference-section">
   <div class="section-header">

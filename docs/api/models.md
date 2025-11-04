@@ -43,6 +43,37 @@ A state-of-the-art time series forecasting model that uses decomposable componen
 **References:**
 - Wang, S., et al. (2023). "TimeMixer: Decomposable Multiscale Mixing For Time Series Forecasting"
 
+### 🔀 TSMixer
+TSMixer: All-MLP Architecture for Multivariate Time Series Forecasting.
+
+An efficient all-MLP model that jointly learns temporal and cross-sectional representations through alternating temporal and feature mixing layers without attention mechanisms.
+
+::: kmr.models.TSMixer
+
+**Key Features:**
+- Temporal and feature mixing for dual-perspective learning
+- Optional reversible instance normalization for training stability
+- Configurable stacking of mixing layers (n_blocks parameter)
+- Linear time complexity O(B × T × D²) vs attention O(B × T²)
+- Multivariate time series forecasting support
+- No attention mechanisms - simple, efficient, interpretable
+
+**Architecture:**
+- Instance normalization (optional reversible normalization)
+- Stacked mixing layers (temporal + feature mixing per block)
+- Output projection layer mapping seq_len → pred_len
+- Reverse instance denormalization (optional)
+
+**When to Use:**
+- Large batch sizes or long sequences where efficiency matters
+- Interpretability is important (no attention black box)
+- Limited GPU memory - MLP-based is more memory efficient
+- Multi-scale temporal and feature interactions needed
+- Long-term forecasting with multiple related time series
+
+**References:**
+- Chen, Si-An, et al. (2023). "TSMixer: An All-MLP Architecture for Time Series Forecasting." arXiv:2303.06053
+
 ## 🏗️ Core Models
 
 ### 🚀 BaseFeedForwardModel

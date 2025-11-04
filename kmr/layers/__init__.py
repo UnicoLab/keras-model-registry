@@ -51,6 +51,9 @@ from kmr.layers.DataEmbeddingWithoutPosition import DataEmbeddingWithoutPosition
 from kmr.layers.MultiScaleSeasonMixing import MultiScaleSeasonMixing
 from kmr.layers.MultiScaleTrendMixing import MultiScaleTrendMixing
 from kmr.layers.PastDecomposableMixing import PastDecomposableMixing
+from kmr.layers.TemporalMixing import TemporalMixing
+from kmr.layers.FeatureMixing import FeatureMixing
+from kmr.layers.MixingLayer import MixingLayer
 
 __all__ = [
     "AdvancedGraphFeatureLayer",
@@ -97,7 +100,10 @@ __all__ = [
     "TabularAttention",
     "TabularMoELayer",
     "TemporalEmbedding",
+    "TemporalMixing",
     "TokenEmbedding",
     "TransformerBlock",
     "VariableSelection",
+    "FeatureMixing",
+    "MixingLayer",
 ]

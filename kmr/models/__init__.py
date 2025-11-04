@@ -5,6 +5,7 @@ from kmr.models.TerminatorModel import TerminatorModel
 from kmr.models.feed_forward import BaseFeedForwardModel
 from kmr.models.autoencoder import Autoencoder
 from kmr.models.TimeMixer import TimeMixer
+from kmr.models.TSMixer import TSMixer
 
 __all__ = [
     "SFNEBlock",
@@ -12,4 +13,5 @@ __all__ = [
     "BaseFeedForwardModel",
     "Autoencoder",
     "TimeMixer",
+    "TSMixer",
 ]

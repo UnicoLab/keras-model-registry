@@ -83,6 +83,21 @@ Past decomposable mixing encoder block combining decomposition and multi-scale m
 
 ::: kmr.layers.PastDecomposableMixing
 
+### ⏱️ TemporalMixing
+MLP-based temporal mixing layer for TSMixer that applies transformations across the time dimension.
+
+::: kmr.layers.TemporalMixing
+
+### 🔀 FeatureMixing
+Feed-forward network mixing layer for TSMixer that learns cross-series correlations across feature dimension.
+
+::: kmr.layers.FeatureMixing
+
+### 🔀 MixingLayer
+Core mixing block combining TemporalMixing and FeatureMixing for the TSMixer architecture.
+
+::: kmr.layers.MixingLayer
+
 ## 🎯 Feature Selection & Gating
 
 ### 🔀 VariableSelection

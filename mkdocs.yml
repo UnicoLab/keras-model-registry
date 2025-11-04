@@ -88,7 +88,6 @@ nav:
       - StochasticDepth: layers/stochastic-depth.md
       - SlowNetwork: layers/slow-network.md
       - HyperZZWOperator: layers/hyper-zzw-operator.md
-      - TextPreprocessingLayer: layers/text-preprocessing-layer.md
     - 🛠️ Utility:
       - AdvancedGraphFeature: layers/advanced-graph-feature.md
       - GraphFeatureAggregation: layers/graph-feature-aggregation.md

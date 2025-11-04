@@ -169,7 +169,7 @@ pytest tests/
 
 1. **Quick Start**: Follow the [Quick Start Guide](quickstart.md)
 2. **Explore Layers**: Check out the [Layer Explorer](../layers_overview.md)
-3. **Read Documentation**: Browse the [Layers section](../layers/)
+3. **Read Documentation**: Browse the [Layers section](../layers_overview.md)
 4. **Try Examples**: Run through the [Examples](../examples/README.md)
 
 ---

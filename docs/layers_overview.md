@@ -943,5 +943,5 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
 
 - **[API Reference](api/layers.md)** - Detailed API documentation with autodoc references
 - **[Contributing](contributing.md)** - How to contribute new layers
-- **[Examples](examples/)** - Real-world usage examples
-- **[Tutorials](tutorials/)** - Step-by-step guides
+- **[Examples](../examples/README.md)** - Real-world usage examples
+- **[Tutorials](../tutorials/basic-workflows.md)** - Step-by-step guides

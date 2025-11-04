@@ -1,6 +1,6 @@
 # 🧩 Layers API Reference
 
-Welcome to the KMR Layers documentation! All layers are designed to work exclusively with **Keras 3** and provide specialized implementations for advanced tabular data processing, feature engineering, and attention mechanisms.
+Welcome to the KMR Layers documentation! All layers are designed to work exclusively with **Keras 3** and provide specialized implementations for advanced tabular data processing, feature engineering, attention mechanisms, and time series forecasting.
 
 !!! tip "What You'll Find Here"
     Each layer includes detailed documentation with:
@@ -15,6 +15,73 @@ Welcome to the KMR Layers documentation! All layers are designed to work exclusi
 
 !!! note "Keras 3 Compatible"
     All layers are built on top of Keras base classes and are fully compatible with Keras 3.
+
+## ⏱️ Time Series & Forecasting
+
+### 📍 PositionalEmbedding
+Fixed sinusoidal positional encoding for transformers and sequence models.
+
+::: kmr.layers.PositionalEmbedding
+
+### 🔧 FixedEmbedding
+Non-trainable sinusoidal embeddings for discrete indices (months, days, hours, etc.).
+
+::: kmr.layers.FixedEmbedding
+
+### 🎫 TokenEmbedding
+1D convolution-based embedding layer for time series values.
+
+::: kmr.layers.TokenEmbedding
+
+### ⏰ TemporalEmbedding
+Embedding layer for temporal features (month, day, weekday, hour, minute).
+
+::: kmr.layers.TemporalEmbedding
+
+### 🎯 DataEmbeddingWithoutPosition
+Combined token and temporal embedding layer for comprehensive feature representation.
+
+::: kmr.layers.DataEmbeddingWithoutPosition
+
+### 🏃 MovingAverage
+Trend extraction layer using moving average filtering for time series.
+
+::: kmr.layers.MovingAverage
+
+### 🔀 SeriesDecomposition
+Trend-seasonal decomposition using moving average.
+
+::: kmr.layers.SeriesDecomposition
+
+### 📊 DFTSeriesDecomposition
+Frequency-based series decomposition using Discrete Fourier Transform.
+
+::: kmr.layers.DFTSeriesDecomposition
+
+### 🔄 ReversibleInstanceNorm
+Reversible instance normalization with optional denormalization for time series.
+
+::: kmr.layers.ReversibleInstanceNorm
+
+### 🏗️ ReversibleInstanceNormMultivariate
+Multivariate version of reversible instance normalization.
+
+::: kmr.layers.ReversibleInstanceNormMultivariate
+
+### 🌊 MultiScaleSeasonMixing
+Bottom-up multi-scale seasonal pattern mixing.
+
+::: kmr.layers.MultiScaleSeasonMixing
+
+### 📈 MultiScaleTrendMixing
+Top-down multi-scale trend pattern mixing.
+
+::: kmr.layers.MultiScaleTrendMixing
+
+### 🔀 PastDecomposableMixing
+Past decomposable mixing encoder block combining decomposition and multi-scale mixing.
+
+::: kmr.layers.PastDecomposableMixing
 
 ## 🎯 Feature Selection & Gating
 

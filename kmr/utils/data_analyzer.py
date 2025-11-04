@@ -47,6 +47,11 @@ class DataAnalyzer:
                     "Applies various normalizations and transformations to numerical features",
                     "Preprocessing of numerical features",
                 ),
+                (
+                    "TokenEmbedding",
+                    "Embeds time series values using 1D convolution with circular padding",
+                    "Time series value embedding",
+                ),
             ],
             # Categorical features
             "categorical_features": [
@@ -77,6 +82,11 @@ class DataAnalyzer:
                     "SeasonLayer",
                     "Extracts seasonal components from dates",
                     "Time series seasonality",
+                ),
+                (
+                    "TemporalEmbedding",
+                    "Embeds temporal features (month, day, weekday, hour, minute)",
+                    "Temporal feature embedding",
                 ),
             ],
             # Text features
@@ -142,12 +152,78 @@ class DataAnalyzer:
                     "Anomaly detection",
                 ),
             ],
-            # Time series
+            # Time series - NEW TimeMixer layers
             "time_series": [
                 (
                     "MultiResolutionTabularAttention",
                     "Attention over multiple time resolutions",
                     "Time series modeling",
+                ),
+                (
+                    "TimeMixer",
+                    "Decomposable multiscale mixing for time series forecasting",
+                    "Time series forecasting with trend-seasonal decomposition",
+                ),
+                (
+                    "SeriesDecomposition",
+                    "Decomposes time series into trend and seasonal components",
+                    "Time series decomposition using moving average",
+                ),
+                (
+                    "DFTSeriesDecomposition",
+                    "FFT-based time series decomposition for seasonal patterns",
+                    "Time series decomposition using Discrete Fourier Transform",
+                ),
+                (
+                    "MovingAverage",
+                    "Extracts trend component using moving average window",
+                    "Local trend extraction from time series",
+                ),
+                (
+                    "MultiScaleSeasonMixing",
+                    "Bottom-up mixing of seasonal patterns across scales",
+                    "Multi-scale seasonal pattern mixing",
+                ),
+                (
+                    "MultiScaleTrendMixing",
+                    "Top-down mixing of trend patterns across scales",
+                    "Multi-scale trend pattern mixing",
+                ),
+                (
+                    "PastDecomposableMixing",
+                    "Core encoder block combining decomposition and multi-scale mixing",
+                    "Time series encoder with decomposition",
+                ),
+            ],
+            # Normalization - NEW TimeMixer layers
+            "normalization": [
+                (
+                    "ReversibleInstanceNorm",
+                    "Per-sample normalization and denormalization for time series",
+                    "Time series normalization with invertibility",
+                ),
+                (
+                    "ReversibleInstanceNormMultivariate",
+                    "Batch-level normalization for multivariate time series",
+                    "Multivariate time series normalization",
+                ),
+            ],
+            # Embeddings - NEW TimeMixer layers
+            "embeddings": [
+                (
+                    "PositionalEmbedding",
+                    "Fixed sinusoidal positional encodings",
+                    "Positional encoding for sequences",
+                ),
+                (
+                    "FixedEmbedding",
+                    "Non-trainable sinusoidal embeddings for discrete indices",
+                    "Fixed sinusoidal embeddings",
+                ),
+                (
+                    "DataEmbeddingWithoutPosition",
+                    "Combines token and temporal embeddings with dropout",
+                    "Data embedding without positional encoding",
                 ),
             ],
         }

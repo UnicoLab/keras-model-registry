@@ -36,6 +36,21 @@ from kmr.layers.NumericalAnomalyDetection import NumericalAnomalyDetection
 from kmr.layers.CategoricalAnomalyDetectionLayer import CategoricalAnomalyDetectionLayer
 from kmr.layers.DifferentialPreprocessingLayer import DifferentialPreprocessingLayer
 from kmr.layers.InterpretableMultiHeadAttention import InterpretableMultiHeadAttention
+from kmr.layers.MovingAverage import MovingAverage
+from kmr.layers.PositionalEmbedding import PositionalEmbedding
+from kmr.layers.FixedEmbedding import FixedEmbedding
+from kmr.layers.SeriesDecomposition import SeriesDecomposition
+from kmr.layers.DFTSeriesDecomposition import DFTSeriesDecomposition
+from kmr.layers.ReversibleInstanceNorm import ReversibleInstanceNorm
+from kmr.layers.ReversibleInstanceNormMultivariate import (
+    ReversibleInstanceNormMultivariate,
+)
+from kmr.layers.TokenEmbedding import TokenEmbedding
+from kmr.layers.TemporalEmbedding import TemporalEmbedding
+from kmr.layers.DataEmbeddingWithoutPosition import DataEmbeddingWithoutPosition
+from kmr.layers.MultiScaleSeasonMixing import MultiScaleSeasonMixing
+from kmr.layers.MultiScaleTrendMixing import MultiScaleTrendMixing
+from kmr.layers.PastDecomposableMixing import PastDecomposableMixing
 
 __all__ = [
     "AdvancedGraphFeatureLayer",
@@ -46,13 +61,16 @@ __all__ = [
     "CastToFloat32Layer",
     "CategoricalAnomalyDetectionLayer",
     "ColumnAttention",
+    "DataEmbeddingWithoutPosition",
     "DateEncodingLayer",
     "DateParsingLayer",
+    "DFTSeriesDecomposition",
     "DifferentiableTabularPreprocessor",
     "DifferentialPreprocessingLayer",
     "DistributionAwareEncoder",
     "DistributionTransformLayer",
     "FeatureCutout",
+    "FixedEmbedding",
     "GatedFeatureFusion",
     "GatedFeatureSelection",
     "GatedLinearUnit",
@@ -62,14 +80,24 @@ __all__ = [
     "InterpretableMultiHeadAttention",
     "MultiHeadGraphFeaturePreprocessor",
     "MultiResolutionTabularAttention",
+    "MultiScaleSeasonMixing",
+    "MultiScaleTrendMixing",
+    "MovingAverage",
     "NumericalAnomalyDetection",
+    "PastDecomposableMixing",
+    "PositionalEmbedding",
+    "ReversibleInstanceNorm",
+    "ReversibleInstanceNormMultivariate",
     "RowAttention",
     "SeasonLayer",
+    "SeriesDecomposition",
     "SlowNetwork",
     "SparseAttentionWeighting",
     "StochasticDepth",
     "TabularAttention",
     "TabularMoELayer",
+    "TemporalEmbedding",
+    "TokenEmbedding",
     "TransformerBlock",
     "VariableSelection",
 ]

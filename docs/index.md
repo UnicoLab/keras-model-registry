@@ -28,102 +28,6 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
 
 ---
 
-## 💡 See It In Action - Build Real Models Now!
-
-### ✨ Example 1: Pre-built Model (Fastest Way to Start)
-
-Get a production-ready model in 3 lines of code:
-
-```python
-import keras
-from kmr.models import SFNEBlock
-
-# Create a state-of-the-art tabular model
-model = SFNEBlock(
-    input_dim=25,           # 25 input features
-    hidden_dim=128,         # Hidden layer size
-    num_blocks=3,           # Number of processing blocks
-    output_dim=10           # 10-class classification
-)
-
-# Compile and train immediately
-model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
-# model.fit(X_train, y_train, epochs=50, validation_split=0.2)
-print("✅ State-of-the-art model ready to train!")
-```
-
-**Why use this?** 🎯 When you want maximum performance with zero architecture design effort.
-
----
-
-### 🎨 Example 2: Mix & Match Layers (Custom Models Made Easy)
-
-Build advanced models by combining specialized layers:
-
-```python
-import keras
-from kmr.layers import (
-    DistributionTransformLayer,    # Smart preprocessing
-    VariableSelection,              # Feature importance learning
-    TabularAttention,               # Feature relationship modeling
-    GatedFeatureFusion,             # Intelligent feature combination
-    GatedLinearUnit                 # Non-linear transformations
-)
-
-# Create your custom pipeline
-inputs = keras.Input(shape=(15,))
-
-# Build your model step by step
-x = DistributionTransformLayer()(inputs)           # Preprocess intelligently
-x = VariableSelection(num_features=15)(x)          # Learn which features matter
-x = TabularAttention(num_heads=4, head_dim=16)(x)  # Model feature relationships
-x = GatedFeatureFusion()([
-    keras.layers.Dense(32, activation='relu')(x),
-    keras.layers.Dense(32, activation='tanh')(x)
-])  # Combine different representations
-x = GatedLinearUnit(units=16)(x)                   # Final non-linear processing
-outputs = keras.layers.Dense(1, activation='sigmoid')(x)
-
-# That's it - sophisticated model ready!
-model = keras.Model(inputs=inputs, outputs=outputs)
-print("✅ Advanced custom model built with KMR layers!")
-```
-
-**Why use this?** 🎯 When you need fine-grained control and want to reuse battle-tested components.
-
----
-
-### 🚀 Example 3: Quick Classification (Most Common Use Case)
-
-Build a complete classification model with all bells and whistles:
-
-```python
-import keras
-from kmr.models import BaseFeedForwardModel
-
-# Create your model with advanced features built-in
-model = BaseFeedForwardModel(
-    input_dim=20,
-    output_dim=1,
-    hidden_layers=[256, 128, 64],
-    activation='relu',
-    dropout_rate=0.2
-)
-
-# Compile with production-ready metrics
-model.compile(
-    optimizer=keras.optimizers.Adam(learning_rate=0.001),
-    loss='binary_crossentropy',
-    metrics=['accuracy', 'precision', 'recall']
-)
-
-print("✅ Production-ready classification model!")
-# Now train: model.fit(X_train, y_train, epochs=50)
-```
-
-**Why use this?** 🎯 When you want a proven architecture that just works for classification tasks.
-
----
 
 ## 🧩 What's Inside KMR?
 
@@ -157,139 +61,222 @@ print("✅ Production-ready classification model!")
 
 ---
 
-## 📚 Why Developers Love KMR
+## 💡 See It In Action - Build Real Models Now!
 
-Our documentation is designed to be **developer-friendly** with:
+=== "⚡ Pre-built Model (Fastest)"
 
-- ✨ **Rich Docstrings** - Every layer includes comprehensive examples, best practices, and performance notes
-- 🎯 **Usage Examples** - Multiple scenarios from basic to advanced use cases
-- ⚡ **Performance Tips** - Memory usage, scalability, and optimization guidance  
-- 🔗 **Cross-references** - Easy navigation between related components
+    Get a production-ready model in 3 lines of code:
+    
+    ```python
+    import keras
+    from kmr.models import SFNEBlock
+    
+    # Create a state-of-the-art tabular model
+    model = SFNEBlock(
+        input_dim=25,              # Number of input features
+        hidden_dim=128,            # Hidden representation size
+        num_blocks=3,              # Number of processing blocks
+        output_dim=10              # Number of output classes
+    )
+    
+    # Compile and train
+    model.compile(
+        optimizer='adam',
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy']
+    )
+    print("✅ State-of-the-art model ready!")
+    ```
+    
+    **When to use:** Maximum performance, zero architecture design effort.
 
-!!! example "Interactive Learning"
-    Check out our [Rich Docstrings Showcase](examples/rich_docstrings_showcase.md) to see comprehensive documentation in action!
+=== "🎨 Custom Layers (Full Control)"
 
----
+    Build advanced models by combining specialized layers:
+    
+    ```python
+    import keras
+    from kmr.layers import (
+        DistributionTransformLayer,    # Intelligent preprocessing
+        VariableSelection,              # Learn feature importance
+        TabularAttention,               # Model feature relationships
+        GatedFeatureFusion              # Combine representations
+    )
+    
+    inputs = keras.Input(shape=(15,))
+    
+    # Build processing pipeline
+    x = DistributionTransformLayer()(inputs)
+    x = VariableSelection(num_features=15)(x)
+    x = TabularAttention(num_heads=4, head_dim=16)(x)
+    
+    # Combine representations
+    linear = keras.layers.Dense(32, activation='relu')(x)
+    nonlinear = keras.layers.Dense(32, activation='tanh')(x)
+    x = GatedFeatureFusion()([linear, nonlinear])
+    
+    outputs = keras.layers.Dense(1, activation='sigmoid')(x)
+    model = keras.Model(inputs=inputs, outputs=outputs)
+    ```
+    
+    **When to use:** Fine-grained control, reuse battle-tested components.
 
-## 🎨 Key Technical Features
+=== "🚀 Classification (Common Use Case)"
 
-### 🧠 Advanced Architecture
-- **Graph-based Processing** - Learn feature relationships dynamically
-- **Multi-head Attention** - Capture complex feature interactions  
-- **Hierarchical Aggregation** - Efficient processing of large feature sets
-- **Residual Connections** - Stable training and better gradients
-
-### ⚡ Performance Optimized
-- **Keras 3 Native** - Latest Keras features and optimizations
-- **Memory Efficient** - Optimized for large-scale tabular data
-- **GPU Ready** - Full GPU acceleration support
-- **Serializable** - Save and load models seamlessly
-
-### 🔧 Developer Friendly
-- **Type Annotations** - Complete type hints for better IDE support
-- **Comprehensive Testing** - Extensive test coverage with 461+ passing tests
-- **Clear Documentation** - Rich docstrings with real-world examples
-- **Modular Design** - Mix and match layers as needed
-
----
-
-## 🚀 Perfect For
-
-### 🏢 Enterprise ML Teams
-
-**Build Production-Ready Systems**
-
-✓ Scalable architecture for large-scale tabular datasets  
-✓ Battle-tested layers with comprehensive testing  
-✓ Clear APIs and consistent interfaces for team collaboration  
-✓ Detailed logging and monitoring support  
-✓ 461+ passing tests ensuring reliability
-
-[Start Building →](getting-started/installation.md){ .md-button }
-
----
-
-### 🔬 Research & Development
-
-**Experiment with Cutting-Edge Techniques**
-
-✓ Latest attention mechanisms and graph processing methods  
-✓ Easy layer composition and modification for experimentation  
-✓ Reproducible results with well-documented implementations  
-✓ Access to state-of-the-art architectures  
-✓ All layers include detailed docstrings with performance notes
-
-[Explore Layers →](api/layers.md){ .md-button }
-
----
-
-### 🎓 Learning & Education
-
-**Master Tabular Deep Learning**
-
-✓ Rich examples from basic to advanced  
-✓ Learn from production-ready implementations  
-✓ Interactive examples and tutorials  
-✓ Best practices embedded in the library  
-✓ Real-world use cases with working code
-
-[Start Learning →](getting-started/quickstart.md){ .md-button }
-
----
-
-### ⚙️ Data Engineering
-
-**Streamline Feature Engineering**
-
-✓ Intelligent feature transformation and selection layers  
-✓ Automatic preprocessing with smart defaults  
-✓ Data quality analysis and recommendations  
-✓ Seamless integration with data pipelines  
-✓ Built-in data analyzer for layer recommendations
-
-[Try Data Analyzer →](data_analyzer.md){ .md-button }
-
----
-
-## 📊 Quick Comparison: Time to Production
-
-| Aspect | Without KMR | With KMR |
-|--------|-------------|----------|
-| **Lines to build attention layer** | 150+ | Use built-in layer |
-| **Feature preprocessing** | Manual implementation | 1-line DistributionTransformLayer |
-| **Feature selection** | Manual logic | VariableSelection layer |
-| **Model training time** | 2-3 weeks | 1-2 hours |
-| **Production readiness** | Additional QA needed | Built-in validation & testing |
-| **Documentation quality** | Your responsibility | Rich docstrings with examples |
-| **Performance optimization** | Trial & error | Best practices included |
-| **Maintenance burden** | High | Low - rely on KMR updates |
+    Production-ready classification with all best practices:
+    
+    ```python
+    import keras
+    from kmr.models import BaseFeedForwardModel
+    
+    # Create robust classification model
+    model = BaseFeedForwardModel(
+        input_dim=20,
+        output_dim=1,
+        hidden_layers=[256, 128, 64],
+        activation='relu',
+        dropout_rate=0.2
+    )
+    
+    # Compile with production metrics
+    model.compile(
+        optimizer=keras.optimizers.Adam(learning_rate=0.001),
+        loss='binary_crossentropy',
+        metrics=['accuracy', 'precision', 'recall']
+    )
+    print("✅ Production model ready!")
+    ```
+    
+    **When to use:** Proven architecture for classification tasks.
 
 ---
 
 ## 🎯 Real-World Use Cases
 
-### Financial Risk Modeling
-```python
-# Predict credit risk with advanced tabular features
-from kmr.models import BaseFeedForwardModel
-model = BaseFeedForwardModel(input_dim=50, output_dim=1, hidden_layers=[256, 128, 64])
-```
+=== "💰 Financial Risk Modeling"
 
-### Healthcare Analytics
-```python
-# Analyze patient data with intelligent preprocessing
-from kmr.layers import DistributionTransformLayer, VariableSelection
-# Automatically handles mixed data types and missing values
-```
+    Predict credit risk with advanced tabular features:
+    
+    ```python
+    from kmr.models import BaseFeedForwardModel
+    
+    # 50+ financial features → Risk prediction
+    model = BaseFeedForwardModel(
+        input_dim=50,
+        output_dim=1,
+        hidden_layers=[256, 128, 64]
+    )
+    model.compile(
+        optimizer='adam',
+        loss='binary_crossentropy',
+        metrics=['auc', 'precision', 'recall']
+    )
+    ```
+    
+    **Use case:** Loan approval, credit scoring, fraud detection
 
-### E-commerce Recommendations
-```python
-# Build recommendation systems with attention mechanisms
-from kmr.layers import TabularAttention, GatedFeatureFusion
-# Model complex user-item interactions effortlessly
-```
+=== "🏥 Healthcare Analytics"
+
+    Intelligent medical diagnosis with mixed data:
+    
+    ```python
+    from kmr.layers import (
+        DistributionTransformLayer,
+        VariableSelection,
+        TabularAttention
+    )
+    
+    inputs = keras.Input(shape=(30,))
+    x = DistributionTransformLayer()(inputs)
+    x = VariableSelection(num_features=30)(x)
+    x = TabularAttention(num_heads=4, head_dim=16)(x)
+    outputs = keras.layers.Dense(1)(x)
+    model = keras.Model(inputs=inputs, outputs=outputs)
+    ```
+    
+    **Use case:** Disease prediction, patient risk assessment, diagnosis support
+
+=== "🛒 E-commerce Recommendations"
+
+    Build user-item interaction models:
+    
+    ```python
+    from kmr.layers import TabularAttention, GatedFeatureFusion
+    
+    user_features = keras.Input(shape=(20,))
+    item_features = keras.Input(shape=(15,))
+    
+    user_repr = TabularAttention(
+        num_heads=4, head_dim=16
+    )(keras.layers.Concatenate()(
+        [user_features, item_features]
+    ))
+    
+    fused = GatedFeatureFusion()([user_repr, item_features])
+    compatibility = keras.layers.Dense(1)(fused)
+    model = keras.Model(
+        inputs=[user_features, item_features],
+        outputs=compatibility
+    )
+    ```
+    
+    **Use case:** Product recommendations, CTR prediction, customer lifetime value
 
 ---
+
+
+## 🎨 Key Technical Features
+
+<div class="grid cards" markdown>
+
+- **🧠 Advanced Architecture**
+
+    Graph-based feature relationships • Multi-head attention mechanisms • Hierarchical aggregation • Residual connections for stable training
+
+- **⚡ Performance Optimized**
+
+    Keras 3 native • Memory efficient • GPU ready • Fully serializable for production deployment
+
+- **🔧 Developer Friendly**
+
+    Complete type annotations • 461+ passing tests • Rich docstrings with examples • Modular design for customization
+
+</div>
+
+---
+
+## 🚀 Perfect For
+
+<div class="grid cards" markdown>
+
+- **🏢 Enterprise ML Teams**
+
+    Build production systems that scale. Battle-tested layers, 461+ passing tests, clear APIs for team collaboration, and detailed monitoring support.
+    
+    [Get Started →](getting-started/installation.md){ .md-button }
+
+- **🔬 Research & Development**
+
+    Experiment with cutting-edge techniques. State-of-the-art architectures, easy composition, reproducible results, and detailed docstrings throughout.
+    
+    [Explore Layers →](api/layers.md){ .md-button }
+
+- **🎓 Learning & Education**
+
+    Master tabular deep learning. Rich examples from basic to advanced, learn from production code, interactive examples, and best practices embedded in the library.
+    
+    [Start Learning →](getting-started/quickstart.md){ .md-button }
+
+- **⚙️ Data Engineering**
+
+    Streamline feature engineering. Intelligent feature layers, automatic preprocessing, data quality analysis, and built-in layer recommendations.
+    
+    [Try Analyzer →](data_analyzer.md){ .md-button }
+
+</div>
+
+---
+
 
 ## 🤝 Contributing
 

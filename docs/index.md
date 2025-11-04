@@ -9,7 +9,7 @@
 </div>
 
 !!! success "🎯 Production-Ready Tabular AI"
-    Build sophisticated tabular models with **38+ specialized layers**, **smart preprocessing**, and **intelligent feature engineering** - all designed exclusively for Keras 3.
+    Build sophisticated tabular models with **50+ specialized layers**, **smart preprocessing**, **intelligent feature engineering**, and **recommendation systems** - all designed exclusively for Keras 3.
 
 ---
 
@@ -20,7 +20,8 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
 - 🧠 **Advanced Attention Mechanisms** for tabular data
 - 🔧 **Feature Engineering Layers** for data preprocessing  
 - 🏗️ **Pre-built Models** for common ML tasks
-- 📊 **Data Analysis Tools** for intelligent layer recommendations
+- 📊 **Recommendation Systems** with collaborative filtering, content-based, and geospatial models
+- 📈 **Data Analysis Tools** for intelligent layer recommendations
 - ⚡ **Keras 3 Native** - No TensorFlow dependencies in production code
 
 !!! tip "Why KMR?"
@@ -33,9 +34,9 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
 
 <div class="grid cards" markdown>
 
-- **38+ Production Layers**
+- **50+ Production Layers**
 
-    Advanced attention mechanisms, feature processing, and specialized architectures ready for production use.
+    Advanced attention mechanisms, feature processing, recommendation systems, and specialized architectures ready for production use.
 
     [Explore All Layers →](api/layers.md){ .md-button .md-button--primary }
 
@@ -198,29 +199,31 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
 
 === "🛒 E-commerce Recommendations"
 
-    Build user-item interaction models:
+    Build recommendation systems with collaborative filtering and content-based features:
     
     ```python
-    from kmr.layers import TabularAttention, GatedFeatureFusion
+    from kmr.models import MatrixFactorizationModel, TwoTowerModel
     
-    user_features = keras.Input(shape=(20,))
-    item_features = keras.Input(shape=(15,))
-    
-    user_repr = TabularAttention(
-        num_heads=4, head_dim=16
-    )(keras.layers.Concatenate()(
-        [user_features, item_features]
-    ))
-    
-    fused = GatedFeatureFusion()([user_repr, item_features])
-    compatibility = keras.layers.Dense(1)(fused)
-    model = keras.Model(
-        inputs=[user_features, item_features],
-        outputs=compatibility
+    # Option 1: Collaborative Filtering
+    model = MatrixFactorizationModel(
+        num_users=10000,
+        num_items=5000,
+        embedding_dim=64,
+        top_k=10
     )
+    
+    # Option 2: Content-Based (Two-Tower)
+    model = TwoTowerModel(
+        user_feature_dim=20,
+        item_feature_dim=15,
+        output_dim=64,
+        top_k=10
+    )
+    
+    model.compile(optimizer='adam', loss='binary_crossentropy')
     ```
     
-    **Use case:** Product recommendations, CTR prediction, customer lifetime value
+    **Use case:** Product recommendations, CTR prediction, customer lifetime value, personalized search
 
 ---
 

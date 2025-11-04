@@ -1,6 +1,6 @@
 ---
 title: 🧩 Layers - Complete Reference & Explorer
-description: Complete reference for 36+ production-ready KMR layers including attention mechanisms, feature engineering, preprocessing, and specialized architectures for tabular data with interactive explorer.
+description: Complete reference for 50+ production-ready KMR layers including attention mechanisms, feature engineering, preprocessing, recommendation systems, and specialized architectures for tabular data with interactive explorer.
 keywords: keras layers, tabular data layers, attention mechanisms, feature engineering, preprocessing layers, neural network layers, layer explorer
 ---
 
@@ -431,17 +431,17 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
 <div class="layers-hero">
   <h1>🧩 Layers - Complete Reference & Explorer</h1>
   <div class="layers-tagline">
-    <strong>36+ production-ready layers</strong> designed exclusively for <strong>Keras 3</strong>.<br>
-    Build sophisticated tabular models with advanced attention, feature engineering, and preprocessing layers.
+    <strong>50+ production-ready layers</strong> designed exclusively for <strong>Keras 3</strong>.<br>
+    Build sophisticated tabular models with advanced attention, feature engineering, preprocessing, and recommendation layers.
   </div>
   
   <div class="layers-stats">
     <div class="stat-box">
-      <span class="stat-number">36+</span>
+      <span class="stat-number">50+</span>
       <span class="stat-text">Production Layers</span>
     </div>
     <div class="stat-box">
-      <span class="stat-number">8</span>
+      <span class="stat-number">9</span>
       <span class="stat-text">Categories</span>
     </div>
     <div class="stat-box">
@@ -544,7 +544,7 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
 </div>
 
 <div class="results-info">
-  <span class="results-count" id="result-count">Showing all 36+ layers</span>
+  <span class="results-count" id="result-count">Showing all 50+ layers</span>
 </div>
 
 ---
@@ -630,6 +630,32 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
 - **NumericalAnomalyDetection** - Statistical anomaly detection for numerical features
 - **CategoricalAnomalyDetectionLayer** - Pattern-based anomaly detection for categorical features
 - **HyperZZWOperator** - Hyperparameter-aware operator for adaptive behavior
+
+### 📊 Recommendation Systems (14 layers)
+
+**Comprehensive layers for building recommendation systems including collaborative filtering, content-based filtering, geospatial recommendations, and explainable recommendations.**
+
+**Core Recommendation:**
+- **CollaborativeUserItemEmbedding** - Dual embedding lookup for users and items in collaborative filtering
+- **DeepFeatureTower** - Dense neural network tower for processing user or item features
+- **NormalizedDotProductSimilarity** - Compute normalized dot product (cosine) similarity between representations
+- **TopKRecommendationSelector** - Select top-K recommendation items based on scores
+
+**Utility & Preprocessing:**
+- **DynamicBatchIndexGenerator** - Generate dynamic batch indices for grouping and indexing operations
+- **TensorDimensionExpander** - Expand tensor dimensions for broadcasting and reshaping operations
+- **ThresholdBasedMasking** - Apply threshold-based masking to filter values
+
+**Geospatial:**
+- **HaversineGeospatialDistance** - Compute Haversine great-circle distance between geographic coordinates
+- **SpatialFeatureClustering** - Cluster spatial features into geographic regions
+- **GeospatialScoreRanking** - Rank recommendations based on geospatial clustering features
+
+**Advanced Recommendation:**
+- **DeepFeatureRanking** - Deep neural network tower for feature-based ranking
+- **LearnableWeightedCombination** - Combine multiple scores with learnable softmax-normalized weights
+- **CosineSimilarityExplainer** - Compute and explain cosine similarity for interpretable recommendations
+- **FeedbackAdjustmentLayer** - Adjust recommendation scores based on user feedback signals
 
 ---
 
@@ -1044,6 +1070,113 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
       <div class="api-signature">CategoricalAnomalyDetectionLayer(method, threshold, min_frequency)</div>
       <p>Pattern-based anomaly detection for categorical features.</p>
       <p><strong>Use when:</strong> You need to detect categorical anomalies</p>
+    </div>
+  </div>
+</div>
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>📊 Recommendation Systems (14 layers)</h2>
+    <p>Comprehensive layers for building recommendation systems including collaborative filtering, content-based filtering, geospatial recommendations, and explainable recommendations.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>👥 CollaborativeUserItemEmbedding</h4>
+      <div class="api-signature">CollaborativeUserItemEmbedding(num_users, num_items, embedding_dim, l2_reg)</div>
+      <p>Dual embedding lookup for users and items in collaborative filtering.</p>
+      <p><strong>Use when:</strong> You need user-item embeddings for matrix factorization</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🏢 DeepFeatureTower</h4>
+      <div class="api-signature">DeepFeatureTower(units, hidden_layers, activation, dropout_rate, l2_reg)</div>
+      <p>Dense neural network tower for processing user or item features.</p>
+      <p><strong>Use when:</strong> You need deep feature processing in two-tower architectures</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📏 NormalizedDotProductSimilarity</h4>
+      <div class="api-signature">NormalizedDotProductSimilarity(epsilon)</div>
+      <p>Compute normalized dot product (cosine) similarity between representations.</p>
+      <p><strong>Use when:</strong> You need similarity scores between user and item embeddings</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🏆 TopKRecommendationSelector</h4>
+      <div class="api-signature">TopKRecommendationSelector(k, score_threshold)</div>
+      <p>Select top-K recommendation items based on scores.</p>
+      <p><strong>Use when:</strong> You need to select the best K recommendations</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔢 DynamicBatchIndexGenerator</h4>
+      <div class="api-signature">DynamicBatchIndexGenerator(batch_size, num_groups)</div>
+      <p>Generate dynamic batch indices for grouping and indexing operations.</p>
+      <p><strong>Use when:</strong> You need dynamic batch indexing in recommendation pipelines</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📐 TensorDimensionExpander</h4>
+      <div class="api-signature">TensorDimensionExpander(axis, num_dims)</div>
+      <p>Expand tensor dimensions for broadcasting and reshaping operations.</p>
+      <p><strong>Use when:</strong> You need to expand dimensions for broadcasting</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎭 ThresholdBasedMasking</h4>
+      <div class="api-signature">ThresholdBasedMasking(threshold, mask_value)</div>
+      <p>Apply threshold-based masking to filter values.</p>
+      <p><strong>Use when:</strong> You need to filter values based on thresholds</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🌍 HaversineGeospatialDistance</h4>
+      <div class="api-signature">HaversineGeospatialDistance(radius_km)</div>
+      <p>Compute Haversine great-circle distance between geographic coordinates.</p>
+      <p><strong>Use when:</strong> You need geographic distance calculations for location-based recommendations</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🗺️ SpatialFeatureClustering</h4>
+      <div class="api-signature">SpatialFeatureClustering(num_clusters, temperature, l2_reg)</div>
+      <p>Cluster spatial features into geographic regions.</p>
+      <p><strong>Use when:</strong> You need to cluster geographic features for location-aware recommendations</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📍 GeospatialScoreRanking</h4>
+      <div class="api-signature">GeospatialScoreRanking(score_scale, temperature)</div>
+      <p>Rank recommendations based on geospatial clustering features.</p>
+      <p><strong>Use when:</strong> You need to rank items based on geographic proximity</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🧠 DeepFeatureRanking</h4>
+      <div class="api-signature">DeepFeatureRanking(units, hidden_layers, activation, dropout_rate, l2_reg)</div>
+      <p>Deep neural network tower for feature-based ranking.</p>
+      <p><strong>Use when:</strong> You need deep ranking models for learning-to-rank</p>
+    </div>
+
+    <div class="api-card">
+      <h4>⚖️ LearnableWeightedCombination</h4>
+      <div class="api-signature">LearnableWeightedCombination(num_scores)</div>
+      <p>Combine multiple scores with learnable softmax-normalized weights.</p>
+      <p><strong>Use when:</strong> You need to combine multiple recommendation scores adaptively</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔍 CosineSimilarityExplainer</h4>
+      <div class="api-signature">CosineSimilarityExplainer(epsilon)</div>
+      <p>Compute and explain cosine similarity for interpretable recommendations.</p>
+      <p><strong>Use when:</strong> You need explainable similarity scores</p>
+    </div>
+
+    <div class="api-card">
+      <h4>💬 FeedbackAdjustmentLayer</h4>
+      <div class="api-signature">FeedbackAdjustmentLayer(feedback_scale)</div>
+      <p>Adjust recommendation scores based on user feedback signals.</p>
+      <p><strong>Use when:</strong> You need to incorporate user feedback into recommendations</p>
     </div>
   </div>
 </div>

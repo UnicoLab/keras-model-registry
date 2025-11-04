@@ -98,6 +98,104 @@ Advanced autoencoder model for anomaly detection with optional preprocessing int
 
 ::: kmr.models.autoencoder.Autoencoder
 
+## 📊 Recommendation Systems
+
+### 🗺️ GeospatialClusteringModel
+Unsupervised geospatial clustering recommendation model using distance-based clustering and spatial ranking.
+
+::: kmr.models.GeospatialClusteringModel
+
+**Key Features:**
+- Haversine distance calculation for geographic coordinates
+- Spatial feature clustering into geographic regions
+- Geospatial score ranking based on proximity
+- Unsupervised learning with entropy and variance losses
+- Configurable training mode (supervised/unsupervised)
+
+### 🌍 GeospatialCollaborativeFilteringModel
+Extended geospatial collaborative filtering model with learnable masking and geographic-aware recommendations.
+
+::: kmr.models.GeospatialCollaborativeFilteringModel
+
+**Key Features:**
+- Geographic distance-based clustering
+- Learnable masking for adaptive filtering
+- Spatial ranking with geographic proximity
+- Mask regularization for optimal feature selection
+- Unsupervised learning capabilities
+
+### 📈 MatrixFactorizationModel
+Matrix factorization recommendation model using collaborative filtering with user and item embeddings.
+
+::: kmr.models.MatrixFactorizationModel
+
+**Key Features:**
+- Dual user-item embedding lookups
+- Normalized dot product similarity computation
+- Top-K recommendation selection
+- L2 regularization on embeddings
+- Scalable to millions of users/items
+
+### 🏗️ TwoTowerModel
+Two-tower recommendation model with separate towers for user and item features.
+
+::: kmr.models.TwoTowerModel
+
+**Key Features:**
+- Separate deep feature towers for users and items
+- Normalized dot product similarity between towers
+- Content-based feature processing
+- Batch normalization and dropout for regularization
+- Efficient similarity computation
+
+### 🧠 DeepRankingModel
+Deep neural network ranking model for learning-to-rank recommendations.
+
+::: kmr.models.DeepRankingModel
+
+**Key Features:**
+- Deep feature ranking with multiple dense layers
+- Combined user-item feature processing
+- Batch normalization and dropout
+- Learning-to-rank optimization
+- Complex non-linear ranking functions
+
+### 🤝 UnifiedRecommendationModel
+Unified recommendation model combining collaborative filtering, content-based, and hybrid approaches.
+
+::: kmr.models.UnifiedRecommendationModel
+
+**Key Features:**
+- Multiple recommendation components (CF, CB, Hybrid)
+- Score combination with learnable weights
+- Flexible architecture for different data types
+- End-to-end learning of optimal combination
+- Production-ready hybrid system
+
+### 🔍 ExplainableRecommendationModel
+Explainable recommendation model with similarity explanations and feedback adjustment.
+
+::: kmr.models.ExplainableRecommendationModel
+
+**Key Features:**
+- Cosine similarity explanations for transparency
+- User feedback integration
+- Interpretable similarity scores
+- Feedback-aware score adjustment
+- Transparent recommendation reasoning
+
+### 🎯 ExplainableUnifiedRecommendationModel
+Explainable unified recommendation model combining multiple approaches with transparency features.
+
+::: kmr.models.ExplainableUnifiedRecommendationModel
+
+**Key Features:**
+- Multiple recommendation components with explanations
+- Component-level similarity scores
+- Transparent weight learning
+- Explainable hybrid recommendations
+- Full interpretability across all components
+
 ## 🔧 Base Classes
 
 ### 🏛️ BaseModel

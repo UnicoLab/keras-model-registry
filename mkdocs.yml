@@ -136,7 +136,10 @@ markdown_extensions:
   - admonition
   - tables
   - pymdownx.details
-  - pymdownx.highlight
+  - pymdownx.highlight:
+      use_pygments: true
+      linenums: true
+      line_spans: __span
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

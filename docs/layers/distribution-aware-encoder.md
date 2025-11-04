@@ -412,5 +412,5 @@ model.compile(
 - [Distribution Detection in Machine Learning](https://en.wikipedia.org/wiki/Goodness_of_fit) - Distribution testing concepts
 - [Feature Encoding Techniques](https://en.wikipedia.org/wiki/Feature_engineering) - Feature encoding approaches
 - [Adaptive Preprocessing](https://en.wikipedia.org/wiki/Data_pre-processing) - Adaptive data preprocessing
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

@@ -333,5 +333,5 @@ model.compile(
 - [Mixture of Experts](https://en.wikipedia.org/wiki/Mixture_of_experts) - MoE concepts
 - [Gating Networks](https://arxiv.org/abs/1701.06538) - Gating mechanism paper
 - [Ensemble Learning](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -329,5 +329,5 @@ def analyze_categorical_frequency():
 - [Categorical Data](https://en.wikipedia.org/wiki/Categorical_variable) - Categorical data concepts
 - [Anomaly Detection](https://en.wikipedia.org/wiki/Anomaly_detection) - Anomaly detection techniques
 - [Frequency Analysis](https://en.wikipedia.org/wiki/Frequency_analysis) - Frequency analysis concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

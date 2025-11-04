@@ -13,7 +13,6 @@ from kmr.layers.TabularMoELayer import TabularMoELayer
 from kmr.layers.DifferentiableTabularPreprocessor import (
     DifferentiableTabularPreprocessor,
 )
-from kmr.layers.DifferentialPreprocessingLayer import DifferentialPreprocessingLayer
 from kmr.layers.SlowNetwork import SlowNetwork
 from kmr.layers.HyperZZWOperator import HyperZZWOperator
 from kmr.layers.MultiHeadGraphFeaturePreprocessor import (
@@ -35,39 +34,42 @@ from kmr.layers.VariableSelection import VariableSelection
 from kmr.layers.AdvancedGraphFeature import AdvancedGraphFeatureLayer
 from kmr.layers.NumericalAnomalyDetection import NumericalAnomalyDetection
 from kmr.layers.CategoricalAnomalyDetectionLayer import CategoricalAnomalyDetectionLayer
+from kmr.layers.DifferentialPreprocessingLayer import DifferentialPreprocssingLayer
+from kmr.layers.InterpretableMultiHeadAttention import InterpretableMultiHeadAttention
 
 __all__ = [
-    "GatedFeatureSelection",
-    "SparseAttentionWeighting",
-    "ColumnAttention",
-    "RowAttention",
-    "FeatureCutout",
-    "StochasticDepth",
+    "AdvancedGraphFeatureLayer",
+    "AdvancedNumericalEmbedding",
     "BoostingBlock",
-    "BusinessRulesLayer",
     "BoostingEnsembleLayer",
-    "GatedFeatureFusion",
-    "GraphFeatureAggregation",
-    "TabularMoELayer",
-    "DifferentiableTabularPreprocessor",
-    "DifferentialPreprocessingLayer",
-    "SlowNetwork",
-    "HyperZZWOperator",
-    "MultiHeadGraphFeaturePreprocessor",
-    "DistributionTransformLayer",
-    "DistributionAwareEncoder",
+    "BusinessRulesLayer",
     "CastToFloat32Layer",
-    "DateParsingLayer",
+    "CategoricalAnomalyDetectionLayer",
+    "ColumnAttention",
     "DateEncodingLayer",
-    "SeasonLayer",
+    "DateParsingLayer",
+    "DifferentiableTabularPreprocessor",
+    "DifferentialPreprocssingLayer",
+    "DistributionAwareEncoder",
+    "DistributionTransformLayer",
+    "FeatureCutout",
+    "GatedFeatureFusion",
+    "GatedFeatureSelection",
     "GatedLinearUnit",
     "GatedResidualNetwork",
-    "AdvancedNumericalEmbedding",
-    "TransformerBlock",
-    "TabularAttention",
+    "GraphFeatureAggregation",
+    "HyperZZWOperator",
+    "InterpretableMultiHeadAttention",
+    "MultiHeadGraphFeaturePreprocessor",
     "MultiResolutionTabularAttention",
-    "VariableSelection",
-    "AdvancedGraphFeatureLayer",
     "NumericalAnomalyDetection",
-    "CategoricalAnomalyDetectionLayer",
+    "RowAttention",
+    "SeasonLayer",
+    "SlowNetwork",
+    "SparseAttentionWeighting",
+    "StochasticDepth",
+    "TabularAttention",
+    "TabularMoELayer",
+    "TransformerBlock",
+    "VariableSelection",
 ]

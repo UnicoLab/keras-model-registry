@@ -348,5 +348,5 @@ def compare_preprocessing_methods():
 - [End-to-End Learning in Deep Learning](https://en.wikipedia.org/wiki/End-to-end_learning) - End-to-end learning concepts
 - [Missing Data Handling](https://en.wikipedia.org/wiki/Missing_data) - Missing data techniques
 - [Feature Normalization](https://en.wikipedia.org/wiki/Feature_scaling) - Feature scaling methods
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

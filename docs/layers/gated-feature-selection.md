@@ -305,5 +305,5 @@ def analyze_feature_selection(model, test_data, feature_names=None):
 - [Attention Mechanisms in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Understanding attention mechanisms
 - [Feature Selection in Machine Learning](https://en.wikipedia.org/wiki/Feature_selection) - Feature selection concepts
 - [Gated Networks](https://arxiv.org/abs/1612.08083) - Gated network architectures
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -342,5 +342,5 @@ def analyze_seasonal_features():
 - [Seasonal Patterns in Time Series](https://en.wikipedia.org/wiki/Seasonality) - Seasonality concepts
 - [One-Hot Encoding](https://en.wikipedia.org/wiki/One-hot) - One-hot encoding techniques
 - [Temporal Feature Engineering](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

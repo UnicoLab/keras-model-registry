@@ -412,5 +412,5 @@ def analyze_graph_behavior():
 - [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network) - Graph neural network concepts
 - [Multi-Head Attention](https://arxiv.org/abs/1706.03762) - Multi-head attention mechanism
 - [Hierarchical Clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) - Hierarchical clustering concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

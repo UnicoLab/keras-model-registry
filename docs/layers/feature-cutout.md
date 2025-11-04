@@ -328,5 +328,5 @@ def analyze_feature_importance(model, test_data, feature_names=None):
 - [Dropout Regularization](https://jmlr.org/papers/v15/srivastava14a.html) - Original dropout paper
 - [Data Augmentation Techniques](https://en.wikipedia.org/wiki/Data_augmentation) - Data augmentation concepts
 - [Regularization in Deep Learning](https://en.wikipedia.org/wiki/Regularization_(mathematics)) - Regularization techniques
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

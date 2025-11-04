@@ -313,5 +313,5 @@ def analyze_context_behavior():
 - [Hyper-Kernels](https://en.wikipedia.org/wiki/Hyperparameter) - Hyper-parameter concepts
 - [Context-Aware Processing](https://en.wikipedia.org/wiki/Context_awareness) - Context awareness concepts
 - [Specialized Transformations](https://en.wikipedia.org/wiki/Transformation_(function)) - Transformation concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

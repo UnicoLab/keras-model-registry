@@ -352,5 +352,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 - [TabNet: Attentive Interpretable Tabular Learning](https://arxiv.org/abs/1908.07442) - Tabular-specific attention mechanisms
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original Transformer architecture
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Mixed-Type Data Tutorial](../tutorials/feature-engineering.md) - Complete guide to mixed-type tabular modeling

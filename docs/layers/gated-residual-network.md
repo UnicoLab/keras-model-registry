@@ -327,5 +327,5 @@ def analyze_gradient_flow():
 - [Residual Networks](https://en.wikipedia.org/wiki/Residual_neural_network) - Residual network concepts
 - [Gated Linear Units](https://arxiv.org/abs/1612.08083) - Gated linear unit paper
 - [Layer Normalization](https://arxiv.org/abs/1607.06450) - Layer normalization paper
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

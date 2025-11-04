@@ -106,7 +106,7 @@ def create_efficient_model(input_dim):
 
 ## 📚 Next Steps
 
-1. **Explore Layers**: Check out the [Layer Explorer](../layers-explorer.md) to see all available layers
+1. **Explore Layers**: Check out the [Layer Explorer](../layers_overview.md) to see all available layers
 2. **Read Documentation**: Dive deep into specific layers in the [Layers section](../layers/)
 3. **Try Examples**: Run through the [Examples](../examples/README.md) to see real-world applications
 4. **API Reference**: Consult the [API Reference](../api/layers.md) for detailed parameter information
@@ -119,4 +119,4 @@ def create_efficient_model(input_dim):
 
 ---
 
-**Ready to build amazing tabular models?** Start with the [Layer Explorer](layers-explorer.md) to discover all available layers!
+**Ready to build amazing tabular models?** Start with the [Layer Explorer](layers_overview.md) to discover all available layers!

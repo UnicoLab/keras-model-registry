@@ -389,5 +389,5 @@ def analyze_rule_violations():
 - [Business Rules](https://en.wikipedia.org/wiki/Business_rule) - Business rule concepts
 - [Anomaly Detection](https://en.wikipedia.org/wiki/Anomaly_detection) - Anomaly detection techniques
 - [Data Validation](https://en.wikipedia.org/wiki/Data_validation) - Data validation concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -326,5 +326,5 @@ def analyze_slow_network():
 - [Multi-Layer Networks](https://en.wikipedia.org/wiki/Multilayer_perceptron) - Multi-layer network concepts
 - [Feature Engineering](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
 - [Deep Learning](https://en.wikipedia.org/wiki/Deep_learning) - Deep learning concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -324,5 +324,5 @@ def validate_type_safety():
 - [Data Type Conversion](https://en.wikipedia.org/wiki/Type_conversion) - Type conversion concepts
 - [Mixed Precision Training](https://en.wikipedia.org/wiki/Mixed_precision) - Mixed precision techniques
 - [Neural Network Data Types](https://en.wikipedia.org/wiki/Floating_point) - Floating point representation
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

@@ -361,5 +361,5 @@ def compare_ensemble_configurations():
 - [Ensemble Learning](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
 - [Boosting Methods](https://en.wikipedia.org/wiki/Boosting_(machine_learning)) - Boosting techniques
 - [Parallel Processing](https://en.wikipedia.org/wiki/Parallel_computing) - Parallel processing concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

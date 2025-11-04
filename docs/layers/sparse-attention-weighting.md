@@ -379,5 +379,5 @@ def analyze_attention_patterns(model, test_data):
 - [Attention Mechanisms in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Understanding attention mechanisms
 - [Ensemble Learning Methods](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
 - [Temperature Scaling in Neural Networks](https://arxiv.org/abs/1706.04599) - Temperature scaling techniques
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

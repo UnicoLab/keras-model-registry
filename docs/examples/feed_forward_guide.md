@@ -16,10 +16,30 @@ Learn how to build feed-forward models using KMR layers. This guide covers the f
 ```python
 import keras
 import numpy as np
+from loguru import logger
+from typing import Optional, Tuple
 from kmr.layers import VariableSelection, GatedFeatureFusion
 
-def create_basic_feedforward(input_dim, num_classes):
-    """Create a basic feed-forward model with KMR layers."""
+def create_basic_feedforward(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a basic feed-forward model with KMR layers.
+    
+    Constructs a simple feed-forward neural network using VariableSelection layer
+    for feature selection followed by dense layers for classification.
+    
+    Args:
+        input_dim: Dimension of input features.
+        num_classes: Number of output classes for classification.
+    
+    Returns:
+        keras.Model: Compiled feed-forward model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_basic_feedforward(input_dim=20, num_classes=3)
+        model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -38,8 +58,8 @@ def create_basic_feedforward(input_dim, num_classes):
     return keras.Model(inputs, outputs)
 
 # Usage
-model = create_basic_feedforward(input_dim=20, num_classes=3)
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+# model = create_basic_feedforward(input_dim=20, num_classes=3)
+# model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 ```
 
 ### Feed-Forward with Feature Engineering
@@ -51,8 +71,25 @@ from kmr.layers import (
     GatedFeatureFusion
 )
 
-def create_engineered_feedforward(input_dim, num_classes):
-    """Create a feed-forward model with feature engineering."""
+def create_engineered_feedforward(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a feed-forward model with feature engineering.
+    
+    Builds a feed-forward network that includes preprocessing, feature embedding,
+    and gated feature fusion for improved feature interactions.
+    
+    Args:
+        input_dim: Dimension of input features.
+        num_classes: Number of output classes for classification.
+    
+    Returns:
+        keras.Model: Feed-forward model with feature engineering layers.
+        
+    Example:
+        ```python
+        import keras
+        model = create_engineered_feedforward(input_dim=20, num_classes=3)
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -81,8 +118,25 @@ def create_engineered_feedforward(input_dim, num_classes):
 ```python
 from kmr.layers import GatedResidualNetwork
 
-def create_residual_feedforward(input_dim, num_classes):
-    """Create a residual feed-forward model."""
+def create_residual_feedforward(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a residual feed-forward model.
+    
+    Constructs a feed-forward network using stacked GatedResidualNetwork layers
+    to enable deeper architectures with improved gradient flow through residual connections.
+    
+    Args:
+        input_dim: Dimension of input features.
+        num_classes: Number of output classes for classification.
+    
+    Returns:
+        keras.Model: Residual feed-forward model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_residual_feedforward(input_dim=20, num_classes=3)
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -100,8 +154,25 @@ def create_residual_feedforward(input_dim, num_classes):
 ### Multi-Branch Feed-Forward
 
 ```python
-def create_multibranch_feedforward(input_dim, num_classes):
-    """Create a multi-branch feed-forward model."""
+def create_multibranch_feedforward(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a multi-branch feed-forward model.
+    
+    Builds a feed-forward network with multiple branches that process input features
+    in different ways and combines their outputs for enhanced feature representation.
+    
+    Args:
+        input_dim: Dimension of input features.
+        num_classes: Number of output classes for classification.
+    
+    Returns:
+        keras.Model: Multi-branch feed-forward model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_multibranch_feedforward(input_dim=20, num_classes=3)
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -128,8 +199,25 @@ def create_multibranch_feedforward(input_dim, num_classes):
 ### Memory-Efficient Feed-Forward
 
 ```python
-def create_memory_efficient_feedforward(input_dim, num_classes):
-    """Create a memory-efficient feed-forward model."""
+def create_memory_efficient_feedforward(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a memory-efficient feed-forward model.
+    
+    Constructs a lightweight feed-forward network with reduced dimensionality
+    for deployment on memory-constrained devices.
+    
+    Args:
+        input_dim: Dimension of input features.
+        num_classes: Number of output classes for classification.
+    
+    Returns:
+        keras.Model: Memory-efficient feed-forward model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_memory_efficient_feedforward(input_dim=20, num_classes=3)
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -148,8 +236,25 @@ def create_memory_efficient_feedforward(input_dim, num_classes):
 ### Speed-Optimized Feed-Forward
 
 ```python
-def create_speed_optimized_feedforward(input_dim, num_classes):
-    """Create a speed-optimized feed-forward model."""
+def create_speed_optimized_feedforward(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a speed-optimized feed-forward model.
+    
+    Builds a minimal feed-forward network designed for fast inference
+    with minimal computational overhead.
+    
+    Args:
+        input_dim: Dimension of input features.
+        num_classes: Number of output classes for classification.
+    
+    Returns:
+        keras.Model: Speed-optimized feed-forward model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_speed_optimized_feedforward(input_dim=20, num_classes=3)
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -168,8 +273,25 @@ def create_speed_optimized_feedforward(input_dim, num_classes):
 ### Financial Risk Assessment
 
 ```python
-def create_financial_risk_model(input_dim, num_classes):
-    """Create a financial risk assessment model."""
+def create_financial_risk_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a financial risk assessment model.
+    
+    Constructs a specialized feed-forward model for financial risk assessment
+    with preprocessing, feature selection, and multiple classification layers.
+    
+    Args:
+        input_dim: Dimension of input features (financial indicators).
+        num_classes: Number of risk classes for classification.
+    
+    Returns:
+        keras.Model: Financial risk assessment model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_financial_risk_model(input_dim=20, num_classes=3)
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -194,8 +316,25 @@ def create_financial_risk_model(input_dim, num_classes):
 ### Healthcare Outcome Prediction
 
 ```python
-def create_healthcare_model(input_dim, num_classes):
-    """Create a healthcare outcome prediction model."""
+def create_healthcare_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a healthcare outcome prediction model.
+    
+    Builds a specialized feed-forward network for healthcare applications
+    using feature embedding and gated fusion for medical outcome prediction.
+    
+    Args:
+        input_dim: Dimension of input features (patient health indicators).
+        num_classes: Number of outcome classes for prediction.
+    
+    Returns:
+        keras.Model: Healthcare outcome prediction model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_healthcare_model(input_dim=20, num_classes=3)
+        ```
+    """
     
     inputs = keras.Input(shape=(input_dim,))
     
@@ -219,8 +358,42 @@ def create_healthcare_model(input_dim, num_classes):
 ### Training Configuration
 
 ```python
-def train_feedforward_model(model, X_train, y_train, X_val, y_val):
-    """Train a feed-forward model with proper configuration."""
+def train_feedforward_model(
+    model: keras.Model,
+    X_train: np.ndarray,
+    y_train: np.ndarray,
+    X_val: np.ndarray,
+    y_val: np.ndarray
+) -> keras.callbacks.History:
+    """Train a feed-forward model with proper configuration.
+    
+    Trains a feed-forward model using Adam optimizer with callbacks for early stopping
+    and learning rate reduction on plateau.
+    
+    Args:
+        model: Compiled Keras model to train.
+        X_train: Training feature array of shape (n_samples, n_features).
+        y_train: Training target array of shape (n_samples, n_classes).
+        X_val: Validation feature array of shape (n_val_samples, n_features).
+        y_val: Validation target array of shape (n_val_samples, n_classes).
+    
+    Returns:
+        keras.callbacks.History: Training history object containing loss and metrics per epoch.
+        
+    Example:
+        ```python
+        import numpy as np
+        import keras
+        X_train = np.random.rand(100, 20)
+        y_train = np.zeros((100, 3))
+        y_train[np.arange(100), np.random.randint(0, 3, 100)] = 1
+        X_val = np.random.rand(20, 20)
+        y_val = np.zeros((20, 3))
+        y_val[np.arange(20), np.random.randint(0, 3, 20)] = 1
+        model = create_basic_feedforward(input_dim=20, num_classes=3)
+        history = train_feedforward_model(model, X_train, y_train, X_val, y_val)
+        ```
+    """
     
     # Compile model
     model.compile(
@@ -243,6 +416,8 @@ def train_feedforward_model(model, X_train, y_train, X_val, y_val):
         )
     ]
     
+    logger.info("Starting model training...")
+    
     # Train
     history = model.fit(
         X_train, y_train,
@@ -253,14 +428,38 @@ def train_feedforward_model(model, X_train, y_train, X_val, y_val):
         verbose=1
     )
     
+    logger.info("Model training completed.")
+    
     return history
 ```
 
 ### Model Evaluation
 
 ```python
-def evaluate_feedforward_model(model, X_test, y_test):
-    """Evaluate a feed-forward model."""
+def evaluate_feedforward_model(model: keras.Model, X_test: np.ndarray, y_test: np.ndarray) -> Tuple[float, float]:
+    """Evaluate a feed-forward model.
+    
+    Evaluates model performance on test data and generates classification report
+    with detailed metrics including precision, recall, and F1-score.
+    
+    Args:
+        model: Trained Keras model to evaluate.
+        X_test: Test feature array of shape (n_samples, n_features).
+        y_test: One-hot encoded test target array of shape (n_samples, n_classes).
+    
+    Returns:
+        Tuple[float, float]: Tuple containing (test_accuracy, test_loss).
+        
+    Example:
+        ```python
+        import numpy as np
+        X_test = np.random.rand(20, 20)
+        y_test = np.zeros((20, 3))
+        y_test[np.arange(20), np.random.randint(0, 3, 20)] = 1
+        model = create_basic_feedforward(input_dim=20, num_classes=3)
+        test_accuracy, test_loss = evaluate_feedforward_model(model, X_test, y_test)
+        ```
+    """
     
     # Basic evaluation
     test_loss, test_accuracy = model.evaluate(X_test, y_test, verbose=0)
@@ -273,10 +472,9 @@ def evaluate_feedforward_model(model, X_test, y_test):
     # Additional metrics
     from sklearn.metrics import classification_report
     
-    print(f"Test Accuracy: {test_accuracy:.4f}")
-    print(f"Test Loss: {test_loss:.4f}")
-    print("\nClassification Report:")
-    print(classification_report(true_classes, predicted_classes))
+    logger.info(f"Test Accuracy: {test_accuracy:.4f}")
+    logger.info(f"Test Loss: {test_loss:.4f}")
+    logger.info(f"\nClassification Report:\n{classification_report(true_classes, predicted_classes)}")
     
     return test_accuracy, test_loss
 ```

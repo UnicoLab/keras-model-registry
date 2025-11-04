@@ -382,5 +382,5 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 - [Deep Networks with Stochastic Depth](https://arxiv.org/abs/1603.09382) - Original stochastic depth paper
 - [Residual Networks](https://arxiv.org/abs/1512.03385) - Residual network paper
 - [Regularization Techniques](https://en.wikipedia.org/wiki/Regularization_(mathematics)) - Regularization concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

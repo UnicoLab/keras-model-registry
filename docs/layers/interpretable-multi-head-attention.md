@@ -335,5 +335,5 @@ def visualize_attention(attention_scores, feature_names=None, head_idx=0):
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original Transformer paper
 - [The Annotated Transformer](http://nlp.seas.harvard.edu/2018/04/03/attention.html) - Detailed attention explanation
 - [Attention Visualization in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Attention visualization techniques
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Model Interpretability Tutorial](../tutorials/feature-engineering.md) - Complete guide to model interpretability

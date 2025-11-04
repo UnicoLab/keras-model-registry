@@ -307,5 +307,5 @@ print(f"Attention-like predictions shape: {predictions.shape}")
 - [Gated Linear Units](https://arxiv.org/abs/1612.08083) - Original GLU paper
 - [Information Flow in Neural Networks](https://en.wikipedia.org/wiki/Information_flow) - Information flow concepts
 - [Attention Mechanisms](https://distill.pub/2016/augmented-rnns/) - Attention mechanism concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

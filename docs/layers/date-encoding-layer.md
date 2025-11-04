@@ -345,5 +345,5 @@ def analyze_cyclical_features():
 - [Cyclical Encoding in Time Series](https://en.wikipedia.org/wiki/Cyclical_encoding) - Cyclical encoding concepts
 - [Sine and Cosine Transformations](https://en.wikipedia.org/wiki/Trigonometric_functions) - Trigonometric functions
 - [Time Series Feature Engineering](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

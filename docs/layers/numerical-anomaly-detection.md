@@ -348,5 +348,5 @@ def analyze_reconstruction():
 - [Anomaly Detection](https://en.wikipedia.org/wiki/Anomaly_detection) - Anomaly detection concepts
 - [Autoencoders](https://en.wikipedia.org/wiki/Autoencoder) - Autoencoder concepts
 - [Outlier Detection](https://en.wikipedia.org/wiki/Outlier) - Outlier detection techniques
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

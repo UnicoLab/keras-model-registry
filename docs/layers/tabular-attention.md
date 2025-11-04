@@ -266,5 +266,5 @@ model.compile(
 
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original Transformer paper
 - [TabNet: Attentive Interpretable Tabular Learning](https://arxiv.org/abs/1908.07442) - Tabular-specific attention mechanisms
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Tabular Data Tutorial](../tutorials/feature-engineering.md) - Complete guide to tabular modeling

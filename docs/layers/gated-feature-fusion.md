@@ -317,5 +317,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 - [Gated Residual Networks](https://arxiv.org/abs/1612.08083) - GRN architecture details
 - [Feature Fusion in Deep Learning](https://en.wikipedia.org/wiki/Feature_fusion) - Feature fusion concepts
 - [Multi-Modal Learning](https://en.wikipedia.org/wiki/Multimodal_learning) - Multi-modal learning approaches
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

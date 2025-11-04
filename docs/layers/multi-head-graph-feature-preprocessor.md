@@ -335,5 +335,5 @@ def analyze_attention_heads():
 - [Multi-Head Attention](https://arxiv.org/abs/1706.03762) - Multi-head attention mechanism
 - [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network) - Graph neural network concepts
 - [Feature Relationships](https://en.wikipedia.org/wiki/Feature_engineering) - Feature relationship concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -383,5 +383,5 @@ def analyze_attention_patterns():
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original transformer paper
 - [Multi-Head Attention](https://arxiv.org/abs/1706.03762) - Multi-head attention mechanism
 - [Transformer Architecture](https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)) - Transformer concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

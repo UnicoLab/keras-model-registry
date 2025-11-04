@@ -19,21 +19,28 @@ This showcase provides in-depth examples of KMR layers with rich documentation, 
 ```python
 import keras
 import numpy as np
+from loguru import logger
+from typing import Tuple, Dict, Any, Optional
 from kmr.layers import TabularAttention
 
-def create_tabular_attention_model(input_dim, num_classes):
-    """
-    Create a model using TabularAttention for dual attention mechanisms.
+def create_tabular_attention_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a model using TabularAttention for dual attention mechanisms.
     
     TabularAttention implements both inter-feature and inter-sample attention,
     making it ideal for capturing complex relationships in tabular data.
     
     Args:
-        input_dim (int): Number of input features
-        num_classes (int): Number of output classes
-        
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
     Returns:
-        keras.Model: Compiled model ready for training
+        keras.Model: Compiled model ready for training.
+        
+    Example:
+        ```python
+        import keras
+        model = create_tabular_attention_model(input_dim=20, num_classes=3)
+        ```
     """
     
     # Input layer
@@ -71,8 +78,20 @@ def create_tabular_attention_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_tabular_attention():
-    """Demonstrate TabularAttention with sample data."""
+def demonstrate_tabular_attention() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate TabularAttention with sample data.
+    
+    Creates and trains a TabularAttention model on random sample data,
+    evaluating its performance and returning the trained model and history.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_tabular_attention()
+        ```
+    """
     
     # Create sample data
     X_train = np.random.random((1000, 20))
@@ -93,12 +112,12 @@ def demonstrate_tabular_attention():
     
     # Evaluate model
     test_loss, test_accuracy = model.evaluate(X_train, y_train, verbose=0)
-    print(f"Model accuracy: {test_accuracy:.4f}")
+    logger.info(f"Model accuracy: {test_accuracy:.4f}")
     
     return model, history
 
 # Run demonstration
-model, history = demonstrate_tabular_attention()
+# model, history = demonstrate_tabular_attention()
 ```
 
 ### MultiResolutionTabularAttention - Multi-Resolution Processing
@@ -106,19 +125,24 @@ model, history = demonstrate_tabular_attention()
 ```python
 from kmr.layers import MultiResolutionTabularAttention
 
-def create_multi_resolution_model(input_dim, num_classes):
-    """
-    Create a model using MultiResolutionTabularAttention for different feature scales.
+def create_multi_resolution_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a model using MultiResolutionTabularAttention for different feature scales.
     
     This layer processes numerical and categorical features separately with different
     attention mechanisms, then combines them with cross-attention.
     
     Args:
-        input_dim (int): Number of input features
-        num_classes (int): Number of output classes
-        
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
     Returns:
-        keras.Model: Compiled model ready for training
+        keras.Model: Compiled model ready for training.
+        
+    Example:
+        ```python
+        import keras
+        model = create_multi_resolution_model(input_dim=20, num_classes=3)
+        ```
     """
     
     inputs = keras.Input(shape=(input_dim,), name='multi_resolution_input')
@@ -155,8 +179,20 @@ def create_multi_resolution_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_multi_resolution():
-    """Demonstrate MultiResolutionTabularAttention with mixed data types."""
+def demonstrate_multi_resolution() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate MultiResolutionTabularAttention with mixed data types.
+    
+    Creates and trains a model that handles mixed numerical and categorical features
+    using multi-resolution attention mechanisms.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_multi_resolution()
+        ```
+    """
     
     # Create sample data with mixed types
     X_numerical = np.random.random((1000, 10))
@@ -181,7 +217,7 @@ def demonstrate_multi_resolution():
     return model, history
 
 # Run demonstration
-model, history = demonstrate_multi_resolution()
+# model, history = demonstrate_multi_resolution()
 ```
 
 ## 🔧 Feature Engineering
@@ -191,19 +227,24 @@ model, history = demonstrate_multi_resolution()
 ```python
 from kmr.layers import VariableSelection
 
-def create_variable_selection_model(input_dim, num_classes):
-    """
-    Create a model using VariableSelection for intelligent feature selection.
+def create_variable_selection_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a model using VariableSelection for intelligent feature selection.
     
     VariableSelection uses gated residual networks to learn feature importance
     and select the most relevant features for the task.
     
     Args:
-        input_dim (int): Number of input features
-        num_classes (int): Number of output classes
-        
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
     Returns:
-        keras.Model: Compiled model ready for training
+        keras.Model: Compiled model ready for training.
+        
+    Example:
+        ```python
+        import keras
+        model = create_variable_selection_model(input_dim=20, num_classes=3)
+        ```
     """
     
     inputs = keras.Input(shape=(input_dim,), name='variable_selection_input')
@@ -244,8 +285,19 @@ def create_variable_selection_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_variable_selection():
-    """Demonstrate VariableSelection with feature importance analysis."""
+def demonstrate_variable_selection() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate VariableSelection with feature importance analysis.
+    
+    Trains a model with VariableSelection layer and analyzes learned feature importance weights.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_variable_selection()
+        ```
+    """
     
     # Create sample data
     X_train = np.random.random((1000, 20))
@@ -268,12 +320,12 @@ def demonstrate_variable_selection():
     selection_layer = model.get_layer('variable_selection')
     feature_weights = selection_layer.get_weights()
     
-    print("Feature selection weights shape:", feature_weights[0].shape)
+    logger.info(f"Feature selection weights shape: {feature_weights[0].shape}")
     
     return model, history
 
 # Run demonstration
-model, history = demonstrate_variable_selection()
+# model, history = demonstrate_variable_selection()
 ```
 
 ### AdvancedNumericalEmbedding - Rich Numerical Representations
@@ -281,19 +333,24 @@ model, history = demonstrate_variable_selection()
 ```python
 from kmr.layers import AdvancedNumericalEmbedding
 
-def create_advanced_embedding_model(input_dim, num_classes):
-    """
-    Create a model using AdvancedNumericalEmbedding for rich numerical representations.
+def create_advanced_embedding_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a model using AdvancedNumericalEmbedding for rich numerical representations.
     
     This layer combines continuous MLP processing with discrete binning/embedding,
     providing a dual-branch architecture for numerical features.
     
     Args:
-        input_dim (int): Number of input features
-        num_classes (int): Number of output classes
-        
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
     Returns:
-        keras.Model: Compiled model ready for training
+        keras.Model: Compiled model ready for training.
+        
+    Example:
+        ```python
+        import keras
+        model = create_advanced_embedding_model(input_dim=20, num_classes=3)
+        ```
     """
     
     inputs = keras.Input(shape=(input_dim,), name='embedding_input')
@@ -334,8 +391,20 @@ def create_advanced_embedding_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_advanced_embedding():
-    """Demonstrate AdvancedNumericalEmbedding with numerical data."""
+def demonstrate_advanced_embedding() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate AdvancedNumericalEmbedding with numerical data.
+    
+    Trains a model using AdvancedNumericalEmbedding layer on numerical data
+    with both continuous and binned representations.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_advanced_embedding()
+        ```
+    """
     
     # Create sample numerical data
     X_train = np.random.normal(0, 1, (1000, 20))
@@ -357,7 +426,7 @@ def demonstrate_advanced_embedding():
     return model, history
 
 # Run demonstration
-model, history = demonstrate_advanced_embedding()
+# model, history = demonstrate_advanced_embedding()
 ```
 
 ## ⚙️ Preprocessing
@@ -367,19 +436,24 @@ model, history = demonstrate_advanced_embedding()
 ```python
 from kmr.layers import DifferentiableTabularPreprocessor
 
-def create_preprocessing_model(input_dim, num_classes):
-    """
-    Create a model using DifferentiableTabularPreprocessor for end-to-end preprocessing.
+def create_preprocessing_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a model using DifferentiableTabularPreprocessor for end-to-end preprocessing.
     
     This layer integrates preprocessing into the model, allowing for learnable
     imputation and normalization strategies.
     
     Args:
-        input_dim (int): Number of input features
-        num_classes (int): Number of output classes
-        
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
     Returns:
-        keras.Model: Compiled model ready for training
+        keras.Model: Compiled model ready for training.
+        
+    Example:
+        ```python
+        import keras
+        model = create_preprocessing_model(input_dim=20, num_classes=3)
+        ```
     """
     
     inputs = keras.Input(shape=(input_dim,), name='preprocessing_input')
@@ -419,8 +493,20 @@ def create_preprocessing_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_preprocessing():
-    """Demonstrate DifferentiableTabularPreprocessor with missing data."""
+def demonstrate_preprocessing() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate DifferentiableTabularPreprocessor with missing data.
+    
+    Creates and trains a model that handles missing values using learnable
+    preprocessing strategies.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_preprocessing()
+        ```
+    """
     
     # Create sample data with missing values
     X_train = np.random.random((1000, 20))
@@ -446,7 +532,7 @@ def demonstrate_preprocessing():
     return model, history
 
 # Run demonstration
-model, history = demonstrate_preprocessing()
+# model, history = demonstrate_preprocessing()
 ```
 
 ## 🏗️ Specialized Architectures
@@ -456,19 +542,24 @@ model, history = demonstrate_preprocessing()
 ```python
 from kmr.layers import GatedResidualNetwork
 
-def create_gated_residual_model(input_dim, num_classes):
-    """
-    Create a model using GatedResidualNetwork for advanced residual processing.
+def create_gated_residual_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a model using GatedResidualNetwork for advanced residual processing.
     
     This layer combines residual connections with gated linear units for
     improved gradient flow and feature transformation.
     
     Args:
-        input_dim (int): Number of input features
-        num_classes (int): Number of output classes
-        
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
     Returns:
-        keras.Model: Compiled model ready for training
+        keras.Model: Compiled model ready for training.
+        
+    Example:
+        ```python
+        import keras
+        model = create_gated_residual_model(input_dim=20, num_classes=3)
+        ```
     """
     
     inputs = keras.Input(shape=(input_dim,), name='gated_residual_input')
@@ -511,8 +602,20 @@ def create_gated_residual_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_gated_residual():
-    """Demonstrate GatedResidualNetwork with deep architecture."""
+def demonstrate_gated_residual() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate GatedResidualNetwork with deep architecture.
+    
+    Creates and trains a deep residual network using GatedResidualNetwork layers
+    for improved gradient flow and feature transformation.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_gated_residual()
+        ```
+    """
     
     # Create sample data
     X_train = np.random.random((1000, 20))
@@ -534,7 +637,7 @@ def demonstrate_gated_residual():
     return model, history
 
 # Run demonstration
-model, history = demonstrate_gated_residual()
+# model, history = demonstrate_gated_residual()
 ```
 
 ### TabularMoELayer - Mixture of Experts
@@ -542,19 +645,24 @@ model, history = demonstrate_gated_residual()
 ```python
 from kmr.layers import TabularMoELayer
 
-def create_moe_model(input_dim, num_classes):
-    """
-    Create a model using TabularMoELayer for mixture of experts architecture.
+def create_moe_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a model using TabularMoELayer for mixture of experts architecture.
     
     This layer routes input features through multiple expert sub-networks
     and aggregates their outputs via a learnable gating mechanism.
     
     Args:
-        input_dim (int): Number of input features
-        num_classes (int): Number of output classes
-        
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
     Returns:
-        keras.Model: Compiled model ready for training
+        keras.Model: Compiled model ready for training.
+        
+    Example:
+        ```python
+        import keras
+        model = create_moe_model(input_dim=20, num_classes=3)
+        ```
     """
     
     inputs = keras.Input(shape=(input_dim,), name='moe_input')
@@ -593,8 +701,20 @@ def create_moe_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_moe():
-    """Demonstrate TabularMoELayer with expert routing."""
+def demonstrate_moe() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate TabularMoELayer with expert routing.
+    
+    Creates and trains a mixture of experts model where multiple expert networks
+    process input features and are combined via learned gating.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_moe()
+        ```
+    """
     
     # Create sample data
     X_train = np.random.random((1000, 20))
@@ -616,7 +736,7 @@ def demonstrate_moe():
     return model, history
 
 # Run demonstration
-model, history = demonstrate_moe()
+# model, history = demonstrate_moe()
 ```
 
 ## 🔍 Model Interpretation and Analysis
@@ -624,17 +744,30 @@ model, history = demonstrate_moe()
 ### Attention Weight Analysis
 
 ```python
-def analyze_attention_weights(model, X_test, layer_name='tabular_attention'):
-    """
-    Analyze attention weights to understand model behavior.
+def analyze_attention_weights(model: keras.Model, X_test: np.ndarray, layer_name: str = 'tabular_attention') -> Dict[str, Any]:
+    """Analyze attention weights to understand model behavior.
+    
+    Extracts attention weights from a specified attention layer and computes
+    statistical measures including mean, standard deviation, and feature importance.
     
     Args:
-        model: Trained model
-        X_test: Test data
-        layer_name: Name of attention layer
-        
+        model: Trained model with attention layer.
+        X_test: Test feature array of shape (n_samples, n_features).
+        layer_name: Name of the attention layer to analyze. Defaults to 'tabular_attention'.
+    
     Returns:
-        dict: Analysis results
+        Dict[str, Any]: Dictionary containing:
+            - 'attention_weights': Raw attention weight matrices
+            - 'mean_attention': Mean attention weights
+            - 'std_attention': Standard deviation of attention weights
+            - 'feature_importance': Computed feature importance scores
+        
+    Example:
+        ```python
+        import numpy as np
+        X_test = np.random.rand(100, 20)
+        analysis = analyze_attention_weights(model, X_test)
+        ```
     """
     
     # Get attention layer
@@ -666,8 +799,19 @@ def analyze_attention_weights(model, X_test, layer_name='tabular_attention'):
     return analysis
 
 # Usage example
-def demonstrate_attention_analysis():
-    """Demonstrate attention weight analysis."""
+def demonstrate_attention_analysis() -> Dict[str, Any]:
+    """Demonstrate attention weight analysis.
+    
+    Analyzes attention weights from a trained model and logs feature importance scores.
+    
+    Returns:
+        Dict[str, Any]: Analysis results containing attention weights and importance scores.
+        
+    Example:
+        ```python
+        analysis = demonstrate_attention_analysis()
+        ```
+    """
     
     # Create sample data
     X_test = np.random.random((100, 20))
@@ -675,14 +819,14 @@ def demonstrate_attention_analysis():
     # Analyze attention weights
     analysis = analyze_attention_weights(model, X_test)
     
-    print("Feature importance scores:")
+    logger.info("Feature importance scores:")
     for i, importance in enumerate(analysis['feature_importance']):
-        print(f"Feature {i}: {importance:.4f}")
+        logger.info(f"Feature {i}: {importance:.4f}")
     
     return analysis
 
 # Run demonstration
-analysis = demonstrate_attention_analysis()
+# analysis = demonstrate_attention_analysis()
 ```
 
 ## 📊 Performance Optimization
@@ -690,12 +834,27 @@ analysis = demonstrate_attention_analysis()
 ### Memory-Efficient Training
 
 ```python
-def create_memory_efficient_model(input_dim, num_classes):
-    """
-    Create a memory-efficient model for large datasets.
+from kmr.layers import GatedFeatureFusion
+
+def create_memory_efficient_model(input_dim: int, num_classes: int) -> keras.Model:
+    """Create a memory-efficient model for large datasets.
     
     This model uses smaller dimensions and fewer parameters to reduce
-    memory usage while maintaining good performance.
+    memory usage while maintaining good performance. Ideal for deployment
+    on memory-constrained devices.
+    
+    Args:
+        input_dim: Number of input features.
+        num_classes: Number of output classes.
+    
+    Returns:
+        keras.Model: Compiled memory-efficient model.
+        
+    Example:
+        ```python
+        import keras
+        model = create_memory_efficient_model(input_dim=50, num_classes=3)
+        ```
     """
     
     inputs = keras.Input(shape=(input_dim,), name='memory_efficient_input')
@@ -724,13 +883,27 @@ def create_memory_efficient_model(input_dim, num_classes):
     return model
 
 # Usage example
-def demonstrate_memory_efficiency():
-    """Demonstrate memory-efficient training."""
+def demonstrate_memory_efficiency() -> Tuple[keras.Model, keras.callbacks.History]:
+    """Demonstrate memory-efficient training on large datasets.
+    
+    Creates and trains a memory-efficient model on a large dataset,
+    demonstrating reduced memory consumption while maintaining performance.
+    
+    Returns:
+        Tuple[keras.Model, keras.callbacks.History]: Trained model and training history.
+        
+    Example:
+        ```python
+        model, history = demonstrate_memory_efficiency()
+        ```
+    """
     
     # Create large dataset
     X_train = np.random.random((10000, 50))
     y_train = np.random.randint(0, 3, (10000,))
     y_train = keras.utils.to_categorical(y_train, 3)
+    
+    logger.info("Starting memory-efficient training...")
     
     # Create memory-efficient model
     model = create_memory_efficient_model(input_dim=50, num_classes=3)
@@ -744,10 +917,12 @@ def demonstrate_memory_efficiency():
         verbose=1
     )
     
+    logger.info("Memory-efficient training completed.")
+    
     return model, history
 
 # Run demonstration
-model, history = demonstrate_memory_efficiency()
+# model, history = demonstrate_memory_efficiency()
 ```
 
 ## 📚 Next Steps

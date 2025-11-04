@@ -345,5 +345,5 @@ model.compile(
 - [Box-Cox Transformation](https://en.wikipedia.org/wiki/Power_transform#Box%E2%80%93Cox_transformation) - Box-Cox transformation details
 - [Yeo-Johnson Transformation](https://en.wikipedia.org/wiki/Power_transform#Yeo%E2%80%93Johnson_transformation) - Yeo-Johnson transformation
 - [Data Preprocessing in Machine Learning](https://en.wikipedia.org/wiki/Data_pre-processing) - Data preprocessing concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

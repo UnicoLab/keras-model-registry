@@ -346,5 +346,5 @@ def compare_boosting_configurations():
 - [Gradient Boosting](https://en.wikipedia.org/wiki/Gradient_boosting) - Gradient boosting concepts
 - [Residual Learning](https://arxiv.org/abs/1512.03385) - Residual learning paper
 - [Ensemble Methods](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

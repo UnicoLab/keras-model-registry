@@ -299,5 +299,5 @@ model.compile(
 
 - [Attention Mechanisms in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Understanding attention mechanisms
 - [Sample Weighting in Machine Learning](https://en.wikipedia.org/wiki/Instance_weighting) - Sample weighting concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Quality Tutorial](../tutorials/feature-engineering.md) - Complete guide to data quality handling

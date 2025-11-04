@@ -54,7 +54,7 @@ nav:
     - Installation: getting-started/installation.md
     - Core Concepts: getting-started/concepts.md
   - 🧩 Layers:
-    - Layer Explorer: layers-explorer.md
+    - Layer Overview & Explorer: layers_overview.md
     - 🧠 Attention:
       - TabularAttention: layers/tabular-attention.md
       - MultiResolutionTabularAttention: layers/multi-resolution-tabular-attention.md
@@ -146,8 +146,7 @@ markdown_extensions:
 
 plugins:
   - search
-  - autorefs:
-      link_titles: false
+  - autorefs
   - mkdocstrings:
       handlers:
         python:

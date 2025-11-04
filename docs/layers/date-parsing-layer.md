@@ -396,5 +396,5 @@ model.compile(
 - [Date and Time Processing](https://en.wikipedia.org/wiki/Date_and_time_representation_by_country) - Date format standards
 - [Zeller's Congruence](https://en.wikipedia.org/wiki/Zeller%27s_congruence) - Day of week calculation algorithm
 - [Time Series Analysis](https://en.wikipedia.org/wiki/Time_series) - Time series concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

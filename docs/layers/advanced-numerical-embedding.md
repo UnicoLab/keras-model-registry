@@ -377,5 +377,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 - [Deep Learning for Tabular Data](https://arxiv.org/abs/2106.11959) - Tabular deep learning approaches
 - [Feature Embedding in Neural Networks](https://en.wikipedia.org/wiki/Feature_learning) - Feature learning concepts
 - [Numerical Feature Processing](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

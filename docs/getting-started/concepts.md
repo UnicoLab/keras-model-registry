@@ -293,11 +293,11 @@ def selection_model(inputs):
 
 ## 📚 Next Steps
 
-1. **Explore Layers**: Check out the [Layer Explorer](../layers-explorer.md)
+1. **Explore Layers**: Check out the [Layer Explorer](../layers_overview.md)
 2. **Read Documentation**: Dive into specific layer documentation
 3. **Try Examples**: Run through practical examples
 4. **Build Models**: Start creating your own tabular models
 
 ---
 
-**Ready to dive deeper?** Explore the [Layer Explorer](../layers-explorer.md) to see all available layers!
+**Ready to dive deeper?** Explore the [Layer Explorer](../layers_overview.md) to see all available layers!

@@ -369,5 +369,5 @@ def analyze_feature_selection(model, test_data, feature_names=None):
 - [Temporal Fusion Transformers](https://arxiv.org/abs/1912.09363) - Original paper on variable selection
 - [Gated Residual Networks](https://arxiv.org/abs/1612.08083) - GRN architecture details
 - [Feature Selection in Deep Learning](https://en.wikipedia.org/wiki/Feature_selection) - Feature selection concepts
-- [KMR Layer Explorer](../layers-explorer.md) - Browse all available layers
+- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Time Series Tutorial](../tutorials/feature-engineering.md) - Complete guide to time series modeling

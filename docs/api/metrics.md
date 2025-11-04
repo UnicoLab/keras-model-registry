@@ -1,6 +1,6 @@
 # 📊 Metrics API Reference
 
-Welcome to the KMR Metrics documentation! All metrics are designed to work exclusively with **Keras 3** and provide custom implementations for specialized evaluation tasks.
+Welcome to the KMR Metrics documentation! All metrics are designed to work exclusively with **Keras 3** and provide specialized statistical measurements for model analysis and anomaly detection tasks.
 
 !!! tip "What You'll Find Here"
     Each metric includes detailed documentation with:
@@ -11,68 +11,19 @@ Welcome to the KMR Metrics documentation! All metrics are designed to work exclu
     - 🔧 **Implementation notes** for developers
 
 !!! success "Ready-to-Use Metrics"
-    These metrics provide specialized functionality that extends Keras' built-in metrics for advanced use cases.
+    These metrics provide specialized implementations for statistical analysis that you can use out-of-the-box or integrate into your models.
 
-!!! note "Keras 3 Compatibility"
-    All metrics inherit from `keras.metrics.Metric` ensuring full compatibility with Keras 3 and TensorFlow backends.
+!!! note "Keras 3 Compatible"
+    All metrics are built on top of Keras base classes and are fully compatible with Keras 3.
 
-## 📊 Custom Metrics
+## 📊 Statistical Metrics
 
-### 📈 StandardDeviation
-Custom metric for calculating the standard deviation of predictions, useful for anomaly detection and uncertainty quantification.
+### 📈 Median
+Calculates the median of predicted values, providing a robust measure of central tendency less sensitive to outliers.
 
-::: kmr.metrics.standard_deviation.StandardDeviation
+::: kmr.metrics.Median
 
-### 📊 Median
-Custom metric for calculating the median of predictions, providing robust central tendency measures for anomaly detection.
+### 📉 StandardDeviation
+Calculates the standard deviation of predicted values, useful for tracking prediction variability and uncertainty.
 
-::: kmr.metrics.median.Median
-
-## 🔧 Usage Examples
-
-### Basic Usage
-
-```python
-from kmr.metrics import StandardDeviation, Median
-import keras
-
-# Create metrics
-std_metric = StandardDeviation()
-median_metric = Median()
-
-# Update with predictions
-predictions = keras.ops.random.normal((100, 1))
-std_metric.update_state(predictions)
-median_metric.update_state(predictions)
-
-# Get results
-print(f"Standard Deviation: {std_metric.result()}")
-print(f"Median: {median_metric.result()}")
-```
-
-### Integration with Autoencoder
-
-```python
-from kmr.models import Autoencoder
-from kmr.metrics import StandardDeviation, Median
-
-# Create autoencoder
-model = Autoencoder(input_dim=100, encoding_dim=32)
-
-# Metrics are automatically used in threshold setup
-model.fit(data, epochs=10, auto_setup_threshold=True)
-```
-
-## 🎯 Best Practices
-
-1. **Reset State**: Always reset metric state between epochs or evaluation runs
-2. **Batch Processing**: Update metrics with batches for better performance
-3. **Memory Management**: Use `reset_state()` to clear accumulated values
-4. **Integration**: These metrics work seamlessly with Keras training loops
-
-## 🔧 Implementation Notes
-
-- All metrics follow Keras 3 conventions
-- Full serialization support with `get_config()` and `from_config()`
-- Compatible with TensorFlow and other Keras backends
-- Optimized for both eager and graph execution modes
+::: kmr.metrics.StandardDeviation

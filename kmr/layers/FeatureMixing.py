@@ -73,11 +73,11 @@ class FeatureMixing(BaseLayer):
         self.ff_dim = self._ff_dim
 
         # Layer components
-        self.feature_norm = None
-        self.feature_lin_1 = None
-        self.feature_lin_2 = None
-        self.dropout_layer_1 = None
-        self.dropout_layer_2 = None
+        self.feature_norm: layers.BatchNormalization | None = None
+        self.feature_lin_1: layers.Dense | None = None
+        self.feature_lin_2: layers.Dense | None = None
+        self.dropout_layer_1: layers.Dropout | None = None
+        self.dropout_layer_2: layers.Dropout | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -150,6 +150,8 @@ class FeatureMixing(BaseLayer):
 
         # Apply batch normalization
         # [B, L * N] -> [B, L * N]
+        if self.feature_norm is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.feature_norm(x, training=training)
 
         # Reshape back
@@ -158,13 +160,21 @@ class FeatureMixing(BaseLayer):
 
         # First linear layer with ReLU
         # [B, L, N] -> [B, L, ff_dim]
+        if self.feature_lin_1 is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.feature_lin_1(x)
         x = ops.relu(x)
+        if self.dropout_layer_1 is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.dropout_layer_1(x, training=training)
 
         # Second linear layer
         # [B, L, ff_dim] -> [B, L, N]
+        if self.feature_lin_2 is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.feature_lin_2(x)
+        if self.dropout_layer_2 is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.dropout_layer_2(x, training=training)
 
         # Residual connection

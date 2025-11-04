@@ -67,7 +67,7 @@ class MultiScaleTrendMixing(BaseLayer):
         self.seq_len = self._seq_len
         self.down_sampling_window = self._down_sampling_window
         self.down_sampling_layers = self._down_sampling_layers
-        self.up_sampling_layers_list = None
+        self.up_sampling_layers_list: list[dict[str, layers.Layer]] | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -123,6 +123,8 @@ class MultiScaleTrendMixing(BaseLayer):
         Returns:
             Processed tensor.
         """
+        if self.up_sampling_layers_list is None:
+            raise RuntimeError("Layer must be built before calling")
         layer_dict = self.up_sampling_layers_list[layer_idx]
         x = layer_dict["dense1"](x)
         x = layer_dict["dense2"](x)

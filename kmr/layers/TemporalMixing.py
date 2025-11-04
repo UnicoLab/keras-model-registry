@@ -68,9 +68,9 @@ class TemporalMixing(BaseLayer):
         self.dropout_rate = self._dropout
 
         # Layer components
-        self.temporal_norm = None
-        self.temporal_lin = None
-        self.dropout_layer = None
+        self.temporal_norm: layers.BatchNormalization | None = None
+        self.temporal_lin: layers.Dense | None = None
+        self.dropout_layer: layers.Dropout | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -133,6 +133,8 @@ class TemporalMixing(BaseLayer):
 
         # Apply batch normalization
         # [B, N * L] -> [B, N * L]
+        if self.temporal_norm is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.temporal_norm(x, training=training)
 
         # Reshape back
@@ -141,6 +143,8 @@ class TemporalMixing(BaseLayer):
 
         # Apply linear transformation across time
         # [B, N, L] -> [B, N, L]
+        if self.temporal_lin is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.temporal_lin(x)
         x = ops.relu(x)
 
@@ -149,6 +153,8 @@ class TemporalMixing(BaseLayer):
         x = ops.transpose(x, (0, 2, 1))
 
         # Apply dropout
+        if self.dropout_layer is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.dropout_layer(x, training=training)
 
         # Residual connection

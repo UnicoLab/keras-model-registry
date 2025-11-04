@@ -115,9 +115,9 @@ class TSMixer(BaseModel):
         self.norm_affine = self._norm_affine
 
         # Model components
-        self.norm_layer = None
-        self.mixing_layers = None
-        self.output_layer = None
+        self.norm_layer: ReversibleInstanceNormMultivariate | None = None
+        self.mixing_layers: list[MixingLayer] | None = None
+        self.output_layer: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -199,9 +199,13 @@ class TSMixer(BaseModel):
         # Apply instance normalization if enabled
         x = inputs
         if self.use_norm:
+            if self.norm_layer is None:
+                raise RuntimeError("Layer must be built before calling")
             x = self.norm_layer(x, training=training, mode="norm")
 
         # Apply stacked mixing layers
+        if self.mixing_layers is None:
+            raise RuntimeError("Layer must be built before calling")
         for mixing_layer in self.mixing_layers:
             x = mixing_layer(x, training=training)
 
@@ -210,6 +214,8 @@ class TSMixer(BaseModel):
         x = ops.transpose(x, (0, 2, 1))
 
         # Apply output layer: [B, N, L] -> [B, N, pred_len]
+        if self.output_layer is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.output_layer(x)
 
         # [B, N, pred_len] -> [B, pred_len, N]
@@ -217,6 +223,8 @@ class TSMixer(BaseModel):
 
         # Reverse instance normalization if enabled
         if self.use_norm:
+            if self.norm_layer is None:
+                raise RuntimeError("Layer must be built before calling")
             x = self.norm_layer(x, training=training, mode="denorm")
 
         return x

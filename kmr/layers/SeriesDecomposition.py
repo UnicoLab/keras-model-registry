@@ -63,7 +63,7 @@ class SeriesDecomposition(BaseLayer):
 
         # Set public attributes BEFORE calling parent's __init__
         self.kernel_size = self._kernel_size
-        self.moving_avg = None
+        self.moving_avg: MovingAverage | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -94,6 +94,8 @@ class SeriesDecomposition(BaseLayer):
             Tuple of (seasonal, trend) tensors.
         """
         # Extract trend using moving average
+        if self.moving_avg is None:
+            raise RuntimeError("Layer must be built before calling")
         trend = self.moving_avg(inputs)
 
         # Seasonal is the residual

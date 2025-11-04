@@ -65,7 +65,7 @@ class TokenEmbedding(BaseLayer):
         # Set public attributes BEFORE calling parent's __init__
         self.c_in = self._c_in
         self.d_model = self._d_model
-        self.conv = None
+        self.conv: layers.Conv1D | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -106,6 +106,8 @@ class TokenEmbedding(BaseLayer):
         """
         # Keras Conv1D expects (batch, time, channels) format (channels_last)
         # So we can apply directly without transposition
+        if self.conv is None:
+            raise RuntimeError("Layer must be built before calling")
         output = self.conv(inputs)
 
         return output

@@ -64,7 +64,7 @@ class FixedEmbedding(BaseLayer):
         # Set public attributes BEFORE calling parent's __init__
         self.n_features = self._n_features
         self.d_model = self._d_model
-        self.embedding_layer = None
+        self.embedding_layer: layers.Embedding | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -122,6 +122,8 @@ class FixedEmbedding(BaseLayer):
         )
 
         # Set the weights
+        if self.embedding_layer is None:
+            raise RuntimeError("Layer must be built before calling")
         self.embedding_layer.build(input_shape)
         self.embedding_layer.set_weights([weights])
 
@@ -136,6 +138,8 @@ class FixedEmbedding(BaseLayer):
         Returns:
             Embedding tensor of shape (batch, seq_len, d_model).
         """
+        if self.embedding_layer is None:
+            raise RuntimeError("Layer must be built before calling")
         return self.embedding_layer(inputs)
 
     def get_config(self) -> dict[str, Any]:

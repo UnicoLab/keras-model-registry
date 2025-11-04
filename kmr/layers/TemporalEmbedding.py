@@ -73,11 +73,11 @@ class TemporalEmbedding(BaseLayer):
         self.freq = self._freq
 
         # Embedding layers
-        self.minute_embed = None
-        self.hour_embed = None
-        self.weekday_embed = None
-        self.day_embed = None
-        self.month_embed = None
+        self.minute_embed: FixedEmbedding | layers.Embedding | None = None
+        self.hour_embed: FixedEmbedding | layers.Embedding | None = None
+        self.weekday_embed: FixedEmbedding | layers.Embedding | None = None
+        self.day_embed: FixedEmbedding | layers.Embedding | None = None
+        self.month_embed: FixedEmbedding | layers.Embedding | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -149,6 +149,14 @@ class TemporalEmbedding(BaseLayer):
 
         # Extract temporal components
         # inputs expected to be (..., [month, day, weekday, hour, minute])
+        if self.month_embed is None:
+            raise RuntimeError("Layer must be built before calling")
+        if self.day_embed is None:
+            raise RuntimeError("Layer must be built before calling")
+        if self.weekday_embed is None:
+            raise RuntimeError("Layer must be built before calling")
+        if self.hour_embed is None:
+            raise RuntimeError("Layer must be built before calling")
         month_x = self.month_embed(inputs[..., 0])
         day_x = self.day_embed(inputs[..., 1])
         weekday_x = self.weekday_embed(inputs[..., 2])

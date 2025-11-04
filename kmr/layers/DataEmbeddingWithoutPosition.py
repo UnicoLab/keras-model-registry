@@ -80,9 +80,9 @@ class DataEmbeddingWithoutPosition(BaseLayer):
         self.dropout_rate = self._dropout
 
         # Embedding layers
-        self.value_embedding = None
-        self.temporal_embedding = None
-        self.dropout = None
+        self.value_embedding: TokenEmbedding | None = None
+        self.temporal_embedding: TemporalEmbedding | None = None
+        self.dropout: layers.Dropout | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -139,14 +139,20 @@ class DataEmbeddingWithoutPosition(BaseLayer):
             x_mark = None
 
         # Embed values
+        if self.value_embedding is None:
+            raise RuntimeError("Layer must be built before calling")
         x_emb = self.value_embedding(x)
 
         # Add temporal embedding if provided
         if x_mark is not None:
+            if self.temporal_embedding is None:
+                raise RuntimeError("Layer must be built before calling")
             x_mark_emb = self.temporal_embedding(x_mark)
             x_emb = x_emb + x_mark_emb
 
         # Apply dropout
+        if self.dropout is None:
+            raise RuntimeError("Layer must be built before calling")
         x_emb = self.dropout(x_emb, training=training)
 
         return x_emb

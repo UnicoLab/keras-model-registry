@@ -64,7 +64,7 @@ class PositionalEmbedding(BaseLayer):
         # Set public attributes BEFORE calling parent's __init__
         self.d_model = self._d_model
         self.max_len = self._max_len
-        self.pe = None
+        self.pe: KerasTensor | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -122,6 +122,8 @@ class PositionalEmbedding(BaseLayer):
         Returns:
             Positional encodings of shape (1, seq_len, d_model).
         """
+        if self.pe is None:
+            raise RuntimeError("Layer must be built before calling")
         seq_len = ops.shape(inputs)[1]
         return self.pe[:, :seq_len, :]
 

@@ -74,8 +74,8 @@ class MixingLayer(BaseLayer):
         self.ff_dim = self._ff_dim
 
         # Layer components
-        self.temporal_mixer = None
-        self.feature_mixer = None
+        self.temporal_mixer: TemporalMixing | None = None
+        self.feature_mixer: FeatureMixing | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -128,9 +128,13 @@ class MixingLayer(BaseLayer):
             Output tensor of shape (batch_size, input_size, n_series).
         """
         # Apply temporal mixing first
+        if self.temporal_mixer is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.temporal_mixer(inputs, training=training)
 
         # Then apply feature mixing
+        if self.feature_mixer is None:
+            raise RuntimeError("Layer must be built before calling")
         x = self.feature_mixer(x, training=training)
 
         return x

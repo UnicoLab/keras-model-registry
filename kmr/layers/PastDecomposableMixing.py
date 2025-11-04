@@ -95,10 +95,11 @@ class PastDecomposableMixing(BaseLayer):
         self.top_k = self._top_k
 
         # Components
-        self.decomposition = None
-        self.season_mixing = None
-        self.trend_mixing = None
-        self.cross_layer = None
+        self.decomposition: SeriesDecomposition | DFTSeriesDecomposition | None = None
+        self.season_mixing: MultiScaleSeasonMixing | None = None
+        self.trend_mixing: MultiScaleTrendMixing | None = None
+        self.dense1: layers.Dense | None = None
+        self.dense2: layers.Dense | None = None
 
         # Call parent's __init__ after setting public attributes
         super().__init__(name=name, **kwargs)
@@ -154,11 +155,17 @@ class PastDecomposableMixing(BaseLayer):
         trend_list = []
 
         # Decompose each scale
+        if self.decomposition is None:
+            raise RuntimeError("Layer must be built before calling")
         for x in inputs:
             season, trend = self.decomposition(x)
 
             if self.channel_independence == 0:
                 # Apply cross-layer (dense1 -> dense2)
+                if self.dense1 is None:
+                    raise RuntimeError("Layer must be built before calling")
+                if self.dense2 is None:
+                    raise RuntimeError("Layer must be built before calling")
                 season = self.dense1(season)
                 season = self.dense2(season)
                 trend = self.dense1(trend)
@@ -169,6 +176,10 @@ class PastDecomposableMixing(BaseLayer):
             trend_list.append(ops.transpose(trend, (0, 2, 1)))
 
         # Apply multi-scale mixing
+        if self.season_mixing is None:
+            raise RuntimeError("Layer must be built before calling")
+        if self.trend_mixing is None:
+            raise RuntimeError("Layer must be built before calling")
         out_season_list = self.season_mixing(season_list)
         out_trend_list = self.trend_mixing(trend_list)
 

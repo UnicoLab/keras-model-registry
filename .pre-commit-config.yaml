@@ -1,14 +1,4 @@
 repos:
-  - repo: local
-    hooks:
-      - id: update-docs
-        name: Update documentation
-        entry: bash -c 'if command -v poetry >/dev/null 2>&1; then poetry run mkdocs build; else echo "Poetry not found, skipping documentation update"; fi'
-        language: system
-        files: ^kmr/(layers|models)/.*\.py$
-        pass_filenames: false
-        always_run: false
-
   - repo: https://github.com/psf/black
     rev: 23.12.1
     hooks:
@@ -29,3 +19,6 @@ repos:
   #   hooks:
   #     - id: mypy
   #       args: [--ignore-missing-imports, --no-strict-optional, --disable-error-code=assignment]
+
+# Disabled documentation update hook: griffe parsing issue in utils.md (unrelated to code quality)
+# Documentation can be built manually with: make serve_doc or make deploy_doc

@@ -52,6 +52,16 @@ class DataAnalyzer:
                     "Embeds time series values using 1D convolution with circular padding",
                     "Time series value embedding",
                 ),
+                (
+                    "DifferentiableTabularPreprocessor",
+                    "Differentiable preprocessing layer for tabular data with learnable transformations",
+                    "End-to-end learnable numerical feature preprocessing",
+                ),
+                (
+                    "CastToFloat32Layer",
+                    "Casts numerical features to float32 for numerical stability",
+                    "Numerical precision management",
+                ),
             ],
             # Categorical features
             "categorical_features": [
@@ -62,8 +72,23 @@ class DataAnalyzer:
                 ),
                 (
                     "GatedFeatureSelection",
-                    "Selects important categorical features",
+                    "Selects important categorical features using gating mechanisms",
                     "Feature selection",
+                ),
+                (
+                    "GatedFeatureFusion",
+                    "Fuses categorical features using gated mechanisms",
+                    "Feature fusion and combination",
+                ),
+                (
+                    "ColumnAttention",
+                    "Applies attention mechanisms across feature/column dimension",
+                    "Cross-feature attention modeling",
+                ),
+                (
+                    "InterpretableMultiHeadAttention",
+                    "Interpretable multi-head attention for understanding feature importance",
+                    "Explainable feature interactions",
                 ),
             ],
             # Date features
@@ -104,6 +129,11 @@ class DataAnalyzer:
                     "Encodes high-cardinality categorical features with distribution awareness",
                     "High-cardinality categorical encoding",
                 ),
+                (
+                    "MultiHeadGraphFeaturePreprocessor",
+                    "Multi-head graph-based preprocessing for high-cardinality features",
+                    "Complex high-cardinality feature relationships",
+                ),
             ],
             # Features with many missing values
             "high_missing_value_features": [
@@ -125,18 +155,15 @@ class DataAnalyzer:
                     "Mixture of experts for tabular data",
                     "Complex feature interactions",
                 ),
-            ],
-            # General
-            "general_tabular": [
                 (
                     "GatedResidualNetwork",
-                    "Basic building block for tabular networks",
-                    "Network backbone",
+                    "Flexible gated architecture for feature interactions",
+                    "Non-linear feature interaction modeling",
                 ),
                 (
-                    "TransformerBlock",
-                    "Self-attention based transformer block for tabular data",
-                    "Advanced feature interactions",
+                    "FeatureMixing",
+                    "Mixes information between different features using MLPs",
+                    "Cross-feature mixing and transformation",
                 ),
             ],
             # Anomaly detection
@@ -151,8 +178,13 @@ class DataAnalyzer:
                     "Detects anomalies in categorical features",
                     "Anomaly detection",
                 ),
+                (
+                    "BusinessRulesLayer",
+                    "Evaluates business-defined rules for anomaly detection",
+                    "Rule-based anomaly detection",
+                ),
             ],
-            # Time series - NEW TimeMixer layers
+            # Time series - TimeMixer and related layers
             "time_series": [
                 (
                     "MultiResolutionTabularAttention",
@@ -194,8 +226,13 @@ class DataAnalyzer:
                     "Core encoder block combining decomposition and multi-scale mixing",
                     "Time series encoder with decomposition",
                 ),
+                (
+                    "TemporalMixing",
+                    "Mixes information across time dimension for time series",
+                    "Temporal information mixing",
+                ),
             ],
-            # Normalization - NEW TimeMixer layers
+            # Normalization layers
             "normalization": [
                 (
                     "ReversibleInstanceNorm",
@@ -208,7 +245,7 @@ class DataAnalyzer:
                     "Multivariate time series normalization",
                 ),
             ],
-            # Embeddings - NEW TimeMixer layers
+            # Embeddings layers
             "embeddings": [
                 (
                     "PositionalEmbedding",
@@ -224,6 +261,124 @@ class DataAnalyzer:
                     "DataEmbeddingWithoutPosition",
                     "Combines token and temporal embeddings with dropout",
                     "Data embedding without positional encoding",
+                ),
+            ],
+            # Attention mechanisms
+            "attention_mechanisms": [
+                (
+                    "TabularAttention",
+                    "Applies attention over tabular features for interaction modeling",
+                    "Feature-level attention",
+                ),
+                (
+                    "ColumnAttention",
+                    "Column-wise attention mechanism across features",
+                    "Cross-feature attention",
+                ),
+                (
+                    "RowAttention",
+                    "Row-wise attention mechanism across samples",
+                    "Sample-level attention",
+                ),
+                (
+                    "InterpretableMultiHeadAttention",
+                    "Interpretable multi-head attention with feature importance tracking",
+                    "Explainable attention mechanisms",
+                ),
+                (
+                    "MultiResolutionTabularAttention",
+                    "Attention at multiple time resolutions",
+                    "Multi-scale attention",
+                ),
+            ],
+            # Graph-based layers
+            "graph_features": [
+                (
+                    "AdvancedGraphFeatureLayer",
+                    "Advanced graph-based feature representation",
+                    "Graph neural network features",
+                ),
+                (
+                    "GraphFeatureAggregation",
+                    "Aggregates graph features using learned mechanisms",
+                    "Feature aggregation from graphs",
+                ),
+                (
+                    "MultiHeadGraphFeaturePreprocessor",
+                    "Multi-head graph preprocessing for complex relationships",
+                    "Complex graph-based feature engineering",
+                ),
+            ],
+            # Boosting and ensemble layers
+            "ensemble_methods": [
+                (
+                    "BoostingBlock",
+                    "Building block for gradient boosting integration",
+                    "Boosting-inspired layer design",
+                ),
+                (
+                    "BoostingEnsembleLayer",
+                    "Ensemble layer using boosting principles",
+                    "Boosting-based ensemble learning",
+                ),
+                (
+                    "TabularMoELayer",
+                    "Mixture of experts for ensemble learning on tabular data",
+                    "Expert mixture ensemble",
+                ),
+            ],
+            # Regularization and robustness
+            "regularization": [
+                (
+                    "FeatureCutout",
+                    "Stochastic feature cutout for regularization",
+                    "Feature-level dropout regularization",
+                ),
+                (
+                    "StochasticDepth",
+                    "Stochastic depth regularization technique",
+                    "Probabilistic layer skipping",
+                ),
+            ],
+            # Advanced preprocessing
+            "advanced_preprocessing": [
+                (
+                    "DifferentiableTabularPreprocessor",
+                    "End-to-end learnable preprocessing pipeline",
+                    "Learnable feature engineering",
+                ),
+                (
+                    "HyperZZWOperator",
+                    "Advanced hyperbolic operator for feature transformation",
+                    "Non-Euclidean feature transformations",
+                ),
+                (
+                    "SlowNetwork",
+                    "Slow learning network for stable feature extraction",
+                    "Stable feature learning",
+                ),
+            ],
+            # General
+            "general_tabular": [
+                (
+                    "GatedResidualNetwork",
+                    "Basic building block for tabular networks",
+                    "Network backbone",
+                ),
+                (
+                    "TransformerBlock",
+                    "Self-attention based transformer block for tabular data",
+                    "Advanced feature interactions",
+                ),
+                (
+                    "GatedLinearUnit",
+                    "Linear units with gating for non-linear transformations",
+                    "Gated linear transformations",
+                ),
+                (
+                    "MixingLayer",
+                    "Generic layer for mixing information across dimensions",
+                    "Flexible information mixing",
                 ),
             ],
         }

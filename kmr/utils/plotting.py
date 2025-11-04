@@ -357,6 +357,84 @@ class KMRPlotter:
         return fig
 
     @staticmethod
+    def plot_roc_curve(
+        y_true: np.ndarray,
+        y_scores: np.ndarray,
+        title: str = "ROC Curve",
+        height: int = 400,
+    ) -> go.Figure:
+        """Create ROC (Receiver Operating Characteristic) curve.
+
+        Args:
+            y_true: True labels (binary: 0 or 1)
+            y_scores: Prediction scores or probabilities
+            title: Plot title
+            height: Plot height
+
+        Returns:
+            Plotly figure
+        """
+        # Calculate ROC curve for different thresholds
+        thresholds = np.linspace(y_scores.max(), y_scores.min(), 100)
+        tpr_list = []
+        fpr_list = []
+
+        for thresh in thresholds:
+            y_pred = (y_scores > thresh).astype(int)
+
+            # Calculate true positive rate and false positive rate
+            tp = np.sum((y_pred == 1) & (y_true == 1))
+            fp = np.sum((y_pred == 1) & (y_true == 0))
+            fn = np.sum((y_pred == 0) & (y_true == 1))
+            tn = np.sum((y_pred == 0) & (y_true == 0))
+
+            tpr = tp / (tp + fn) if (tp + fn) > 0 else 0
+            fpr = fp / (fp + tn) if (fp + tn) > 0 else 0
+
+            tpr_list.append(tpr)
+            fpr_list.append(fpr)
+
+        # Calculate AUC (Area Under the Curve) using trapezoidal rule
+        fpr_array = np.array(fpr_list)
+        tpr_array = np.array(tpr_list)
+        auc = np.trapz(tpr_array, fpr_array)
+
+        fig = go.Figure()
+
+        # Add ROC curve
+        fig.add_trace(
+            go.Scatter(
+                x=fpr_list,
+                y=tpr_list,
+                mode="lines",
+                name=f"ROC Curve (AUC = {auc:.3f})",
+                line=dict(color="blue", width=3),
+            ),
+        )
+
+        # Add diagonal reference line (random classifier)
+        fig.add_trace(
+            go.Scatter(
+                x=[0, 1],
+                y=[0, 1],
+                mode="lines",
+                name="Random Classifier",
+                line=dict(color="red", dash="dash", width=2),
+            ),
+        )
+
+        fig.update_layout(
+            title=title,
+            xaxis_title="False Positive Rate",
+            yaxis_title="True Positive Rate",
+            height=height,
+            xaxis=dict(range=[0, 1]),
+            yaxis=dict(range=[0, 1]),
+        )
+
+        return fig
+
+    @staticmethod
     def plot_context_dependency(
         context_values: np.ndarray,
         accuracies: list[float],

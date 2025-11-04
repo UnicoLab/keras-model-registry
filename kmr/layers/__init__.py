@@ -34,7 +34,7 @@ from kmr.layers.VariableSelection import VariableSelection
 from kmr.layers.AdvancedGraphFeature import AdvancedGraphFeatureLayer
 from kmr.layers.NumericalAnomalyDetection import NumericalAnomalyDetection
 from kmr.layers.CategoricalAnomalyDetectionLayer import CategoricalAnomalyDetectionLayer
-from kmr.layers.DifferentialPreprocessingLayer import DifferentialPreprocssingLayer
+from kmr.layers.DifferentialPreprocessingLayer import DifferentialPreprocessingLayer
 from kmr.layers.InterpretableMultiHeadAttention import InterpretableMultiHeadAttention
 
 __all__ = [
@@ -49,7 +49,7 @@ __all__ = [
     "DateEncodingLayer",
     "DateParsingLayer",
     "DifferentiableTabularPreprocessor",
-    "DifferentialPreprocssingLayer",
+    "DifferentialPreprocessingLayer",
     "DistributionAwareEncoder",
     "DistributionTransformLayer",
     "FeatureCutout",

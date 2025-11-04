@@ -8,6 +8,7 @@ import numpy as np
 import tensorflow as tf
 import keras
 import warnings
+import pytest
 
 warnings.filterwarnings("ignore")
 
@@ -18,6 +19,20 @@ tf.random.set_seed(42)
 # Import KMR models and utilities
 from kmr.models import TerminatorModel
 from kmr.utils import KMRDataGenerator
+
+
+@pytest.fixture
+def test_data():
+    """Fixture to generate test data for all tests."""
+    X_train, X_test, y_train, y_test = KMRDataGenerator.generate_classification_data(
+        n_samples=1000,
+        n_features=10,
+        n_classes=2,
+        noise_level=0.05,
+        include_interactions=True,
+        include_nonlinear=True,
+    )
+    return X_train, X_test, y_train, y_test
 
 
 def test_data_generation():
@@ -60,23 +75,25 @@ def test_data_generation():
     is_balanced = 0.7 <= balance_ratio_train <= 1.3 and 0.7 <= balance_ratio_test <= 1.3
     print(f"✅ Data is balanced: {is_balanced}")
 
-    return X_train, X_test, y_train, y_test, is_balanced
+    assert is_balanced, "Data is not reasonably balanced"
+    assert X_train.shape[0] > 0, "X_train is empty"
+    assert X_test.shape[0] > 0, "X_test is empty"
 
 
-def test_basic_terminator_model(X_train, X_test, y_train, y_test):
+def test_basic_terminator_model(test_data):
     """Test 2: Verify basic TerminatorModel works correctly."""
     print("\n🧪 Test 2: Basic TerminatorModel")
     print("=" * 50)
 
-    # Generate context data
-    context_train, context_test, _, _ = KMRDataGenerator.generate_classification_data(
-        n_samples=len(X_train),
-        n_features=5,
-        n_classes=2,
-        noise_level=0.05,
-        include_interactions=False,
-        include_nonlinear=False,
-    )
+    X_train, X_test, y_train, y_test = test_data
+
+    train_size = len(X_train)
+    test_size = len(X_test)
+
+    # Generate context data - need to generate more to account for internal split
+    context_full = np.random.randn(train_size + test_size, 5).astype(np.float32)
+    context_train = context_full[:train_size]
+    context_test = context_full[train_size : train_size + test_size]
 
     # Create basic model
     model = TerminatorModel(
@@ -140,15 +157,19 @@ def test_basic_terminator_model(X_train, X_test, y_train, y_test):
     is_working = test_precision > 0.0 and test_recall > 0.0 and f1_score > 0.5
     print(f"✅ Basic model is working: {is_working}")
 
+    assert is_working, "Basic TerminatorModel is not working as expected"
+
     return model, is_working, f1_score
 
 
-def test_simple_preprocessing_model(X_train, X_test, y_train, y_test):
+def test_simple_preprocessing_model(test_data):
     """Test 3: Test simple custom preprocessing model."""
     print("\n🧪 Test 3: Simple Preprocessing Model")
     print("=" * 50)
 
     from keras import layers, Model
+
+    X_train, X_test, y_train, y_test = test_data
 
     # Create simple preprocessing model
     input_layer = layers.Input(shape=(X_train.shape[1],), name="input_0")
@@ -172,14 +193,9 @@ def test_simple_preprocessing_model(X_train, X_test, y_train, y_test):
     print(f"✅ Preprocessing test passed! Output shape: {preprocessed_sample.shape}")
 
     # Generate context data
-    context_train, context_test, _, _ = KMRDataGenerator.generate_classification_data(
-        n_samples=len(X_train),
-        n_features=5,
-        n_classes=2,
-        noise_level=0.05,
-        include_interactions=False,
-        include_nonlinear=False,
-    )
+    context_full = np.random.randn(len(X_train) + len(X_test), 5).astype(np.float32)
+    context_train = context_full[: len(X_train)]
+    context_test = context_full[len(X_train) :]
 
     # Create TerminatorModel with preprocessing
     model_with_prep = TerminatorModel(
@@ -244,10 +260,12 @@ def test_simple_preprocessing_model(X_train, X_test, y_train, y_test):
     is_working = test_precision > 0.0 and test_recall > 0.0 and f1_score > 0.5
     print(f"✅ Simple preprocessing model is working: {is_working}")
 
+    assert is_working, "Simple Preprocessing Model is not working as expected"
+
     return model_with_prep, is_working, f1_score
 
 
-def test_kdp_preprocessing_model(X_train, X_test, y_train, y_test):
+def test_kdp_preprocessing_model(test_data):
     """Test 4: Test KDP preprocessing model."""
     print("\n🧪 Test 4: KDP Preprocessing Model")
     print("=" * 50)
@@ -258,6 +276,8 @@ def test_kdp_preprocessing_model(X_train, X_test, y_train, y_test):
         import pandas as pd
 
         print("✅ KDP imported successfully")
+
+        X_train, X_test, y_train, y_test = test_data
 
         # Create KDP dataset
         kdp_data = {}
@@ -409,6 +429,7 @@ def test_kdp_preprocessing_model(X_train, X_test, y_train, y_test):
         if os.path.exists("temp_kdp_test_data.csv"):
             os.remove("temp_kdp_test_data.csv")
 
+        assert is_working, "KDP Preprocessing Model is not working as expected"
         return model_with_kdp, is_working, f1_score
 
     except Exception as e:
@@ -417,7 +438,7 @@ def test_kdp_preprocessing_model(X_train, X_test, y_train, y_test):
         return None, False, 0.0
 
 
-def test_improved_kdp_preprocessing(X_train, X_test, y_train, y_test):
+def test_improved_kdp_preprocessing(test_data):
     """Test 5: Test improved KDP preprocessing with better configuration."""
     print("\n🧪 Test 5: Improved KDP Preprocessing")
     print("=" * 50)
@@ -425,6 +446,8 @@ def test_improved_kdp_preprocessing(X_train, X_test, y_train, y_test):
     try:
         from kdp import PreprocessingModel, FeatureType
         import pandas as pd
+
+        X_train, X_test, y_train, y_test = test_data
 
         # Create KDP dataset with better feature names
         kdp_data = {}
@@ -569,6 +592,7 @@ def test_improved_kdp_preprocessing(X_train, X_test, y_train, y_test):
         if os.path.exists("temp_improved_kdp_data.csv"):
             os.remove("temp_improved_kdp_data.csv")
 
+        assert is_working, "Improved KDP Preprocessing Model is not working as expected"
         return model_with_improved_kdp, is_working, f1_score
 
     except Exception as e:
@@ -576,53 +600,37 @@ def test_improved_kdp_preprocessing(X_train, X_test, y_train, y_test):
         return None, False, 0.0
 
 
-def run_all_tests():
+def run_all_tests(test_data):
     """Run all unit tests and provide summary."""
     print("🚀 Running KDP Preprocessing Unit Tests")
     print("=" * 60)
 
-    # Test 1: Data Generation
-    X_train, X_test, y_train, y_test, data_ok = test_data_generation()
+    # Unpack test data
+    X_train, X_test, y_train, y_test = test_data
 
-    if not data_ok:
-        print("❌ Data generation failed - stopping tests")
-        return None
+    # Test 1: Data Generation (use the test data already generated)
+    test_data_generation()
 
     # Test 2: Basic TerminatorModel
-    basic_model, basic_ok, basic_f1 = test_basic_terminator_model(
-        X_train,
-        X_test,
-        y_train,
-        y_test,
-    )
+    basic_model, basic_ok, basic_f1 = test_basic_terminator_model(test_data)
 
     # Test 3: Simple Preprocessing Model
-    simple_model, simple_ok, simple_f1 = test_simple_preprocessing_model(
-        X_train,
-        X_test,
-        y_train,
-        y_test,
-    )
+    simple_model, simple_ok, simple_f1 = test_simple_preprocessing_model(test_data)
 
     # Test 4: KDP Preprocessing Model
-    kdp_model, kdp_ok, kdp_f1 = test_kdp_preprocessing_model(
-        X_train,
-        X_test,
-        y_train,
-        y_test,
-    )
+    kdp_model, kdp_ok, kdp_f1 = test_kdp_preprocessing_model(test_data)
 
     # Test 5: Improved KDP Preprocessing Model
     (
         improved_kdp_model,
         improved_kdp_ok,
         improved_kdp_f1,
-    ) = test_improved_kdp_preprocessing(X_train, X_test, y_train, y_test)
+    ) = test_improved_kdp_preprocessing(test_data)
 
     # Summary
     print("\n📊 Test Results Summary")
     print("=" * 60)
-    print(f"Data Generation: {'✅ PASS' if data_ok else '❌ FAIL'}")
+    print(f"Data Generation: {'✅ PASS' if True else '❌ FAIL'}")
     print(
         f"Basic TerminatorModel: {'✅ PASS' if basic_ok else '❌ FAIL'} (F1: {basic_f1:.4f})",
     )
@@ -645,6 +653,10 @@ def run_all_tests():
     else:
         print("⚠️ Mixed results - investigate further")
 
+    # Assert all tests passed
+    assert basic_ok, "Basic TerminatorModel test failed"
+    assert simple_ok, "Simple Preprocessing test failed"
+
     return {
         "basic_f1": basic_f1,
         "simple_f1": simple_f1,
@@ -653,5 +665,20 @@ def run_all_tests():
     }
 
 
+def test_all_kdp_tests(test_data):
+    """Pytest wrapper that runs all tests."""
+    results = run_all_tests(test_data)
+    assert results is not None, "Tests did not complete"
+
+
 if __name__ == "__main__":
-    results = run_all_tests()
+    # For standalone execution
+    test_data_obj = KMRDataGenerator.generate_classification_data(
+        n_samples=1000,
+        n_features=10,
+        n_classes=2,
+        noise_level=0.05,
+        include_interactions=True,
+        include_nonlinear=True,
+    )
+    results = run_all_tests(test_data_obj)

@@ -99,6 +99,7 @@ class DeepRankingModel(BaseModel):
         self.batch_norm = batch_norm
         self.l2_reg = l2_reg
         self.top_k = top_k
+        self._custom_metrics = []  # Initialize for custom recommendation metrics
 
         self._validate_params()
 
@@ -220,6 +221,176 @@ class DeepRankingModel(BaseModel):
         rec_indices, rec_scores = self.selector_layer(scores)
 
         return rec_indices, rec_scores
+
+    def compute_similarities(
+        self,
+        inputs: tuple,
+        training: bool | None = None,
+    ) -> Any:
+        """Compute similarity scores for all items (before top-K selection).
+
+        Args:
+            inputs: Tuple of (user_features, item_features)
+            training: Whether in training mode.
+
+        Returns:
+            Similarity scores of shape (batch_size, num_items)
+        """
+        user_features, item_features = inputs
+
+        batch_size = ops.shape(item_features)[0]
+        num_items_actual = ops.shape(item_features)[1]
+
+        # Expand user features to match items
+        user_features_exp = ops.expand_dims(user_features, axis=1)
+        user_features_repeated = ops.tile(user_features_exp, (1, num_items_actual, 1))
+
+        # Concatenate user and item features
+        combined_features = ops.concatenate(
+            [user_features_repeated, item_features],
+            axis=-1,
+        )
+
+        # Reshape for processing
+        combined_flat = ops.reshape(
+            combined_features,
+            (-1, self.user_feature_dim + self.item_feature_dim),
+        )
+
+        # Process through ranking tower
+        scores_flat = self.ranking_tower(combined_flat, training=training)
+
+        # Process through additional dense layers
+        x = scores_flat
+        for layer_module in self.dense_layers:
+            x = layer_module(x, training=training)
+
+        # Final output
+        scores_flat = self.output_layer(x)
+
+        # Reshape back to (batch_size, num_items, 1)
+        scores = ops.reshape(scores_flat, (batch_size, num_items_actual, 1))
+
+        # Squeeze to (batch_size, num_items)
+        scores = ops.squeeze(scores, axis=-1)
+
+        return scores
+
+    def compile(  # noqa: A003
+        self,
+        metrics=None,
+        **kwargs,
+    ) -> None:
+        """Compile the model and store custom recommendation metrics.
+
+        Args:
+            metrics: List of metrics. Custom recommendation metrics (AccuracyAtK, etc.)
+                    will be stored separately for train_step and tracked manually.
+            **kwargs: Additional arguments passed to super().compile()
+        """
+        # Extract custom recommendation metrics (those with 'k' attribute)
+        if metrics:
+            custom_metrics_list = [
+                m for m in metrics if hasattr(m, "k") and hasattr(m, "update_state")
+            ]
+            self._custom_metrics = custom_metrics_list
+            metrics_to_compile = metrics
+        else:
+            self._custom_metrics = []
+            metrics_to_compile = metrics
+
+        # Call parent compile
+        super().compile(metrics=metrics_to_compile, **kwargs)
+
+        # Ensure compiled_metrics is built
+        if hasattr(self, "compiled_metrics") and self.compiled_metrics:
+            try:
+                dummy_y_true = ops.zeros((1, 1), dtype="float32")
+                dummy_y_pred = ops.zeros((1, 1), dtype="float32")
+                self.compiled_metrics.update_state(dummy_y_true, dummy_y_pred)
+            except Exception:
+                pass
+
+    def train_step(self, data: tuple) -> dict:
+        """Custom training step for recommendation learning with ranking loss.
+
+        Args:
+            data: Tuple of (inputs, targets) where:
+                - inputs: (user_features, item_features)
+                - targets: Binary labels (batch_size, num_items) indicating positive items
+
+        Returns:
+            Dictionary of loss and metrics
+        """
+        inputs, targets = data
+        user_features, item_features = inputs
+
+        # Compute similarity scores for all items
+        similarities = self.compute_similarities(inputs, training=True)
+        # similarities shape: (batch_size, num_items)
+
+        # Compute loss
+        if targets is not None:
+            # Supervised learning: margin ranking loss
+            positive_mask = targets > 0.5
+            negative_mask = targets < 0.5
+
+            n_positive = ops.sum(
+                ops.cast(positive_mask, dtype="float32"),
+                axis=-1,
+                keepdims=True,
+            )
+            n_negative = ops.sum(
+                ops.cast(negative_mask, dtype="float32"),
+                axis=-1,
+                keepdims=True,
+            )
+
+            positive_scores = ops.where(
+                positive_mask,
+                similarities,
+                ops.zeros_like(similarities),
+            )
+            negative_scores = ops.where(
+                negative_mask,
+                similarities,
+                ops.zeros_like(similarities),
+            )
+
+            avg_positive = ops.sum(positive_scores, axis=-1, keepdims=True) / (
+                n_positive + 1e-8
+            )
+            avg_negative = ops.sum(negative_scores, axis=-1, keepdims=True) / (
+                n_negative + 1e-8
+            )
+
+            # Margin ranking loss
+            margin = 1.0
+            loss = ops.mean(
+                ops.maximum(0.0, margin - (avg_positive - avg_negative)),
+            )
+        else:
+            # Unsupervised learning: encourage diverse similarity distributions
+            loss = -ops.mean(ops.var(similarities, axis=-1))
+
+        # Add regularization losses
+        if self.losses:
+            loss += ops.sum(self.losses)
+
+        # Prepare metrics output
+        metrics_output = {"loss": loss}
+
+        # Compute metrics if targets are provided and custom metrics are configured
+        if targets is not None and self._custom_metrics:
+            top_k_indices, _ = self.selector_layer(similarities, training=False)
+
+            for metric in self._custom_metrics:
+                metric.update_state(targets, top_k_indices)
+                metric_result = metric.result()
+                metric_name = metric.name if hasattr(metric, "name") else str(metric)
+                metrics_output[metric_name] = metric_result
+
+        return metrics_output
 
     def get_config(self) -> dict:
         """Get model configuration for serialization."""

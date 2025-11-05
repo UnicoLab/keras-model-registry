@@ -381,6 +381,139 @@ class DataAnalyzer:
                     "Flexible information mixing",
                 ),
             ],
+            # Recommendation Systems - Core Layers
+            "recommendation_systems": [
+                (
+                    "CollaborativeUserItemEmbedding",
+                    "Dual embedding lookup for users and items in collaborative filtering",
+                    "User-item embedding for matrix factorization",
+                ),
+                (
+                    "DeepFeatureTower",
+                    "Dense neural network tower for processing user or item features",
+                    "Deep feature processing in two-tower architectures",
+                ),
+                (
+                    "NormalizedDotProductSimilarity",
+                    "Compute normalized dot product (cosine) similarity between representations",
+                    "Similarity computation between user and item embeddings",
+                ),
+                (
+                    "TopKRecommendationSelector",
+                    "Select top-K recommendation items based on scores",
+                    "Top-K recommendation selection",
+                ),
+            ],
+            # Recommendation Systems - Collaborative Filtering
+            "collaborative_filtering": [
+                (
+                    "CollaborativeUserItemEmbedding",
+                    "Dual embedding lookup for users and items in collaborative filtering",
+                    "User-item embedding for matrix factorization",
+                ),
+                (
+                    "NormalizedDotProductSimilarity",
+                    "Compute normalized dot product (cosine) similarity between representations",
+                    "Similarity computation between user and item embeddings",
+                ),
+                (
+                    "TopKRecommendationSelector",
+                    "Select top-K recommendation items based on scores",
+                    "Top-K recommendation selection",
+                ),
+                (
+                    "CosineSimilarityExplainer",
+                    "Compute and explain cosine similarity for interpretable recommendations",
+                    "Explainable similarity scores",
+                ),
+            ],
+            # Recommendation Systems - Content-Based
+            "content_based_recommendation": [
+                (
+                    "DeepFeatureTower",
+                    "Dense neural network tower for processing user or item features",
+                    "Deep feature processing in two-tower architectures",
+                ),
+                (
+                    "NormalizedDotProductSimilarity",
+                    "Compute normalized dot product (cosine) similarity between representations",
+                    "Similarity computation between user and item features",
+                ),
+                (
+                    "DeepFeatureRanking",
+                    "Deep neural network tower for feature-based ranking",
+                    "Deep ranking models for learning-to-rank",
+                ),
+                (
+                    "TopKRecommendationSelector",
+                    "Select top-K recommendation items based on scores",
+                    "Top-K recommendation selection",
+                ),
+            ],
+            # Recommendation Systems - Geospatial
+            "geospatial_recommendation": [
+                (
+                    "HaversineGeospatialDistance",
+                    "Compute Haversine great-circle distance between geographic coordinates",
+                    "Geographic distance calculations for location-based recommendations",
+                ),
+                (
+                    "SpatialFeatureClustering",
+                    "Cluster spatial features into geographic regions",
+                    "Geographic feature clustering for location-aware recommendations",
+                ),
+                (
+                    "GeospatialScoreRanking",
+                    "Rank recommendations based on geospatial clustering features",
+                    "Ranking items based on geographic proximity",
+                ),
+                (
+                    "ThresholdBasedMasking",
+                    "Apply threshold-based masking to filter values",
+                    "Filtering recommendations based on distance thresholds",
+                ),
+            ],
+            # Recommendation Systems - Advanced
+            "advanced_recommendation": [
+                (
+                    "LearnableWeightedCombination",
+                    "Combine multiple scores with learnable softmax-normalized weights",
+                    "Adaptive combination of multiple recommendation scores",
+                ),
+                (
+                    "DeepFeatureRanking",
+                    "Deep neural network tower for feature-based ranking",
+                    "Deep ranking models for learning-to-rank",
+                ),
+                (
+                    "CosineSimilarityExplainer",
+                    "Compute and explain cosine similarity for interpretable recommendations",
+                    "Explainable similarity scores",
+                ),
+                (
+                    "FeedbackAdjustmentLayer",
+                    "Adjust recommendation scores based on user feedback signals",
+                    "Incorporating user feedback into recommendations",
+                ),
+            ],
+            # Recommendation Systems - Utility Layers
+            "recommendation_utility": [
+                (
+                    "DynamicBatchIndexGenerator",
+                    "Generate dynamic batch indices for grouping and indexing operations",
+                    "Dynamic batch indexing in recommendation pipelines",
+                ),
+                (
+                    "TensorDimensionExpander",
+                    "Expand tensor dimensions for broadcasting and reshaping operations",
+                    "Dimension expansion for broadcasting in recommendation systems",
+                ),
+                (
+                    "ThresholdBasedMasking",
+                    "Apply threshold-based masking to filter values",
+                    "Filtering values based on thresholds in recommendations",
+                ),
+            ],
         }
 
     def register_recommendation(
@@ -747,6 +880,88 @@ class DataAnalyzer:
         # Check if this might be a time series dataset
         if len(date_features) > 0 and len(continuous_features) > 0:
             stats["characteristics"]["time_series"] = date_features
+
+        # Detect recommendation system characteristics
+        user_item_keywords = [
+            "user_id",
+            "item_id",
+            "user",
+            "item",
+            "customer_id",
+            "product_id",
+            "customer",
+            "product",
+            "member_id",
+            "article_id",
+        ]
+        rating_keywords = [
+            "rating",
+            "score",
+            "interaction",
+            "click",
+            "view",
+            "purchase",
+            "preference",
+            "feedback",
+            "relevance",
+            "engagement",
+        ]
+        geospatial_keywords = [
+            "lat",
+            "lon",
+            "latitude",
+            "longitude",
+            "geo_lat",
+            "geo_lon",
+            "location_lat",
+            "location_lon",
+            "coord_lat",
+            "coord_lon",
+        ]
+
+        user_item_cols = []
+        rating_cols = []
+        geospatial_cols = []
+
+        for col in df.columns:
+            col_lower = col.lower()
+            # Check for user/item IDs
+            if any(keyword in col_lower for keyword in user_item_keywords):
+                user_item_cols.append(col)
+            # Check for rating/interaction columns
+            if any(
+                keyword in col_lower for keyword in rating_keywords
+            ) and pd.api.types.is_numeric_dtype(df[col].dtype):
+                rating_cols.append(col)
+            # Check for geospatial coordinates
+            if any(
+                keyword in col_lower for keyword in geospatial_keywords
+            ) and pd.api.types.is_numeric_dtype(df[col].dtype):
+                geospatial_cols.append(col)
+
+        # Detect collaborative filtering scenario
+        if len(user_item_cols) >= 2 and len(rating_cols) > 0:
+            stats["characteristics"]["collaborative_filtering"] = user_item_cols
+            stats["characteristics"]["recommendation_systems"] = ["detected"]
+            # If we have content features in addition, suggest content-based too
+            if len(continuous_features) > 0 or len(categorical_features) > 0:
+                stats["characteristics"]["content_based_recommendation"] = [
+                    "content_features_detected",
+                ]
+                stats["characteristics"]["advanced_recommendation"] = ["detected"]
+        elif len(user_item_cols) >= 1:
+            # If we have at least one user/item column, suggest recommendation systems
+            stats["characteristics"]["recommendation_systems"] = ["detected"]
+            if len(continuous_features) > 0 or len(categorical_features) > 0:
+                stats["characteristics"]["content_based_recommendation"] = [
+                    "content_features_detected",
+                ]
+
+        # Detect geospatial recommendation scenario
+        if len(geospatial_cols) >= 2:
+            stats["characteristics"]["geospatial_recommendation"] = geospatial_cols
+            stats["characteristics"]["recommendation_systems"] = ["detected"]
+            stats["characteristics"]["recommendation_utility"] = ["detected"]
 
         # Always add general_tabular characteristic
         stats["characteristics"]["general_tabular"] = ["all"]

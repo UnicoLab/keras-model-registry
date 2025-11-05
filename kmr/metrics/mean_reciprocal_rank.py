@@ -109,13 +109,17 @@ class MeanReciprocalRank(Metric):
             # Check if any positive was found
             has_positive = ops.maximum(ops.max(positive_flags), 0.0)
 
-            if has_positive > 0.5:
-                # First positive found at rank (first_positive_idx + 1) in 1-indexed
-                rank = ops.cast(first_positive_idx + 1, dtype="float32")
-                reciprocal_rank = 1.0 / (rank + 1e-8)
-            else:
-                # No positive found, reciprocal rank is 0
-                reciprocal_rank = ops.cast(0.0, dtype="float32")
+            # Compute reciprocal rank: 1/rank if positive found, else 0
+            # First positive found at rank (first_positive_idx + 1) in 1-indexed
+            rank = ops.cast(first_positive_idx + 1, dtype="float32")
+            reciprocal_rank_when_found = 1.0 / (rank + 1e-8)
+
+            # Use ops.where to handle case when no positive found
+            reciprocal_rank = ops.where(
+                has_positive > 0.5,
+                reciprocal_rank_when_found,
+                ops.cast(0.0, dtype="float32"),
+            )
 
             rr_sum = rr_sum + reciprocal_rank
 

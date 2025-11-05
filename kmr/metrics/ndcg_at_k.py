@@ -150,12 +150,12 @@ class NDCGAtK(Metric):
             n_relevant = ops.sum(user_positives)
             idcg = self._compute_idcg(n_relevant, k_actual)
 
-            # Compute NDCG
-            if idcg > 0:
-                ndcg = dcg / (idcg + 1e-8)
-            else:
-                # No relevant items, NDCG is 0
-                ndcg = ops.cast(0.0, dtype="float32")
+            # Compute NDCG: dcg / idcg if idcg > 0, else 0
+            ndcg = ops.where(
+                idcg > 0,
+                dcg / (idcg + 1e-8),
+                ops.cast(0.0, dtype="float32"),
+            )
 
             ndcg_sum = ndcg_sum + ndcg
 

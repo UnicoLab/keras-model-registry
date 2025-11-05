@@ -86,6 +86,9 @@ class MatrixFactorizationModel(BaseModel):
         self.top_k = top_k
         self.l2_reg = l2_reg
 
+        # Store custom recommendation metrics for train_step
+        self._custom_metrics = []
+
         self._validate_params()
 
         # User and item embedding layer
@@ -106,6 +109,53 @@ class MatrixFactorizationModel(BaseModel):
             f"Initialized {name} with num_users={num_users}, "
             f"num_items={num_items}, embedding_dim={embedding_dim}, top_k={top_k}",
         )
+
+    def compile(  # noqa: A003
+        self,
+        metrics=None,
+        **kwargs,
+    ) -> None:
+        """Compile the model and store custom recommendation metrics.
+
+        Args:
+            metrics: List of metrics. Custom recommendation metrics (AccuracyAtK, etc.)
+                    will be stored separately for train_step and tracked manually.
+            **kwargs: Additional arguments passed to super().compile()
+        """
+        # Extract custom recommendation metrics (those with 'k' attribute)
+        if metrics:
+            custom_metrics_list = [
+                m for m in metrics if hasattr(m, "k") and hasattr(m, "update_state")
+            ]
+            standard_metrics = [
+                m
+                for m in metrics
+                if not (hasattr(m, "k") and hasattr(m, "update_state"))
+            ]
+            self._custom_metrics = custom_metrics_list
+            # Include all metrics in compile to ensure compiled_metrics is built
+            # Custom metrics will be updated manually in train_step with correct format
+            metrics_to_compile = metrics
+        else:
+            self._custom_metrics = []
+            metrics_to_compile = metrics
+
+        # Call parent compile (all metrics included so compiled_metrics is built)
+        super().compile(metrics=metrics_to_compile, **kwargs)
+
+        # Ensure compiled_metrics is built by updating it once with dummy data
+        # This prevents "metric has not yet been built" errors during fit()
+        # Keras tries to get results from compiled_metrics before train_step runs
+        if hasattr(self, "compiled_metrics") and self.compiled_metrics:
+            try:
+                # Build compiled_metrics with dummy data to mark it as built
+                # Always update once to ensure it's built, regardless of built attribute
+                dummy_y_true = ops.zeros((1, 1), dtype="float32")
+                dummy_y_pred = ops.zeros((1, 1), dtype="float32")
+                self.compiled_metrics.update_state(dummy_y_true, dummy_y_pred)
+            except Exception:
+                # If building fails, it will be handled during training
+                pass
 
     def _validate_params(self) -> None:
         """Validate model parameters."""
@@ -292,13 +342,31 @@ class MatrixFactorizationModel(BaseModel):
         if self.losses:
             loss += ops.sum(self.losses)
 
-        # Note: We don't update metrics here because:
-        # 1. Standard metrics (like accuracy) need y_pred and y_true, which we don't have
-        # 2. The loss metric is handled automatically by Keras
-        # 3. For recommendation ranking, custom metrics would need the full similarity scores
+        # Prepare metrics output
+        metrics_output = {"loss": loss}
 
-        # Return loss (Keras will handle gradient computation and conversion automatically)
-        return {"loss": loss}
+        # Compute metrics if targets are provided and custom metrics are configured
+        if targets is not None and self._custom_metrics:
+            # Get top-K recommendations for metrics
+            # similarities shape: (batch_size, num_items)
+            # Get top-K indices
+            top_k_indices, _ = self.selector_layer(similarities, training=False)
+            # top_k_indices shape: (batch_size, top_k)
+
+            # Update custom recommendation metrics manually
+            # These metrics need special inputs: (y_true as binary labels, y_pred as top-K indices)
+            for metric in self._custom_metrics:
+                # Custom recommendation metrics expect (y_true, y_pred)
+                # where y_true is (batch_size, num_items) and y_pred is (batch_size, k)
+                metric.update_state(targets, top_k_indices)
+
+                # Get metric result to include in training output
+                metric_result = metric.result()
+                metric_name = metric.name if hasattr(metric, "name") else str(metric)
+                metrics_output[metric_name] = metric_result
+
+        # Return loss and metrics (Keras will handle gradient computation automatically)
+        return metrics_output
 
     def get_config(self) -> dict:
         """Get model configuration for serialization."""

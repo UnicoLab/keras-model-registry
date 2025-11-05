@@ -98,18 +98,21 @@ class RecallAtK(Metric):
             # Count total positive items for this user
             n_total_positive = ops.sum(user_positives)
 
-            if n_total_positive > 0:
-                # Count how many positive items are in top-K
-                positive_flags = ops.take(
-                    user_positives,
-                    user_top_k_indices,
-                    axis=0,
-                )  # (k,)
-                n_relevant_in_top_k = ops.sum(positive_flags)
-                recall = n_relevant_in_top_k / (n_total_positive + 1e-8)
-            else:
-                # No positive items, recall is undefined (set to 0)
-                recall = ops.cast(0.0, dtype="float32")
+            # Count how many positive items are in top-K
+            positive_flags = ops.take(
+                user_positives,
+                user_top_k_indices,
+                axis=0,
+            )  # (k,)
+            n_relevant_in_top_k = ops.sum(positive_flags)
+
+            # Compute recall: n_relevant_in_top_k / n_total_positive
+            # Use ops.where to handle case when n_total_positive = 0
+            recall = ops.where(
+                n_total_positive > 0,
+                n_relevant_in_top_k / (n_total_positive + 1e-8),
+                ops.cast(0.0, dtype="float32"),
+            )
 
             recall_sum = recall_sum + recall
 

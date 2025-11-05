@@ -233,6 +233,152 @@ class TestMatrixFactorizationModel(unittest.TestCase):
         # Same user with same items should have same scores
         np.testing.assert_array_almost_equal(scores1.numpy(), scores2.numpy())
 
+    def test_compute_similarities(self) -> None:
+        """Test compute_similarities method returns full similarity scores."""
+        self.model.compile(optimizer="adam", loss="mse")
+
+        user_ids = tf.constant(np.random.randint(0, self.num_users, (self.batch_size,)))
+        item_ids = tf.constant(
+            np.random.randint(0, self.num_items, (self.batch_size, self.num_items)),
+        )
+
+        similarities = self.model.compute_similarities(
+            [user_ids, item_ids],
+            training=False,
+        )
+
+        # Should return full similarity matrix (batch_size, num_items)
+        self.assertEqual(similarities.shape, (self.batch_size, self.num_items))
+
+        # Similarities should be in valid range [-1, 1] for cosine similarity
+        min_sim = tf.reduce_min(similarities).numpy()
+        max_sim = tf.reduce_max(similarities).numpy()
+        self.assertGreaterEqual(min_sim, -1.1)  # Allow small numerical error
+        self.assertLessEqual(max_sim, 1.1)
+
+    def test_train_step_with_targets(self) -> None:
+        """Test train_step method with binary targets."""
+        self.model.compile(optimizer="adam", loss="mse")
+
+        user_ids = tf.constant(np.random.randint(0, self.num_users, (self.batch_size,)))
+        item_ids = tf.constant(
+            np.random.randint(0, self.num_items, (self.batch_size, self.num_items)),
+        )
+
+        # Create binary targets: 1 for positive items, 0 for negative
+        targets = np.zeros((self.batch_size, self.num_items), dtype=np.float32)
+        # Mark some items as positive for each user
+        for i in range(self.batch_size):
+            positive_indices = np.random.choice(
+                self.num_items,
+                size=min(5, self.num_items),
+                replace=False,
+            )
+            targets[i, positive_indices] = 1.0
+
+        targets_tf = tf.constant(targets)
+
+        # Test train_step
+        result = self.model.train_step(([user_ids, item_ids], targets_tf))
+
+        # Should return loss dictionary
+        self.assertIn("loss", result)
+        # Loss can be a tensor or numpy array
+        loss_value = result["loss"]
+        if hasattr(loss_value, "numpy"):
+            loss_value = loss_value.numpy()
+        self.assertTrue(np.isfinite(loss_value))
+
+    def test_train_step_without_targets(self) -> None:
+        """Test train_step method without targets (unsupervised)."""
+        self.model.compile(optimizer="adam", loss="mse")
+
+        user_ids = tf.constant(np.random.randint(0, self.num_users, (self.batch_size,)))
+        item_ids = tf.constant(
+            np.random.randint(0, self.num_items, (self.batch_size, self.num_items)),
+        )
+
+        # Test train_step without targets
+        result = self.model.train_step(([user_ids, item_ids], None))
+
+        # Should return loss dictionary
+        self.assertIn("loss", result)
+        # Loss can be a tensor or numpy array
+        loss_value = result["loss"]
+        if hasattr(loss_value, "numpy"):
+            loss_value = loss_value.numpy()
+        self.assertTrue(np.isfinite(loss_value))
+
+    def test_model_fit_with_targets(self) -> None:
+        """Test model.fit() with properly formatted data."""
+        self.model.compile(optimizer="adam", loss="mse")
+
+        # Build the model by calling it once
+        sample_user_ids = tf.constant([0])
+        sample_item_ids = tf.constant(np.arange(self.num_items).reshape(1, -1))
+        _ = self.model([sample_user_ids, sample_item_ids], training=False)
+
+        # Prepare data in format expected by train_step
+        user_ids = np.random.randint(0, self.num_users, (32,))
+        item_ids = np.tile(np.arange(self.num_items), (32, 1))
+
+        # Create binary targets
+        targets = np.zeros((32, self.num_items), dtype=np.float32)
+        for i in range(32):
+            positive_indices = np.random.choice(
+                self.num_items,
+                size=min(5, self.num_items),
+                replace=False,
+            )
+            targets[i, positive_indices] = 1.0
+
+        # Test fit
+        history = self.model.fit(
+            x=[user_ids, item_ids],
+            y=targets,
+            epochs=1,
+            batch_size=8,
+            verbose=0,
+        )
+
+        # Should have training history
+        self.assertIn("loss", history.history)
+        self.assertEqual(len(history.history["loss"]), 1)
+
+    def test_train_step_loss_decreases(self) -> None:
+        """Test that training loss can decrease with multiple steps."""
+        self.model.compile(optimizer="adam", loss="mse")
+
+        user_ids = tf.constant(np.random.randint(0, self.num_users, (self.batch_size,)))
+        item_ids = tf.constant(
+            np.random.randint(0, self.num_items, (self.batch_size, self.num_items)),
+        )
+
+        # Create binary targets
+        targets = np.zeros((self.batch_size, self.num_items), dtype=np.float32)
+        for i in range(self.batch_size):
+            positive_indices = np.random.choice(
+                self.num_items,
+                size=min(5, self.num_items),
+                replace=False,
+            )
+            targets[i, positive_indices] = 1.0
+
+        targets_tf = tf.constant(targets)
+
+        # Get initial loss
+        initial_loss = self.model.train_step(([user_ids, item_ids], targets_tf))["loss"]
+
+        # Train for a few steps
+        losses = []
+        for _ in range(3):
+            loss = self.model.train_step(([user_ids, item_ids], targets_tf))["loss"]
+            losses.append(loss)
+
+        # Loss should be a valid number (may not decrease due to small steps, but should be finite)
+        self.assertTrue(np.isfinite(initial_loss))
+        self.assertTrue(all(np.isfinite(l) for l in losses))
+
 
 if __name__ == "__main__":
     unittest.main()

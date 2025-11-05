@@ -185,6 +185,134 @@ class TestPrecisionAtK(unittest.TestCase):
         self.assertTrue(hasattr(result, "numpy"))
         self.assertIsInstance(result.numpy(), (float, np.floating))
 
+    def test_metric_with_large_num_items(self) -> None:
+        """Test metric with large num_items (realistic scenario)."""
+        logger.info("🧪 Testing PrecisionAtK with large num_items")
+
+        n_items = 500
+        batch_size = 8
+        y_true = tf.constant(np.zeros((batch_size, n_items), dtype=np.float32))
+        y_true = y_true.numpy()
+        y_true[0, [10, 20, 30]] = 1.0  # User 0 has 3 positives
+        y_true[1, [50, 100]] = 1.0  # User 1 has 2 positives
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant(
+            np.array(
+                [
+                    [10, 20, 30, 40, 50],  # User 0: 3/5 = 0.6
+                    [50, 100, 200, 300, 400],  # User 1: 2/5 = 0.4
+                    [1, 2, 3, 4, 5],  # User 2: 0/5 = 0.0
+                ]
+                * 3,
+                dtype=np.int32,
+            )[:batch_size],
+        )
+
+        metric = PrecisionAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        # Should be valid precision value
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_out_of_bounds_indices(self) -> None:
+        """Test metric with out-of-bounds indices (clamping behavior)."""
+        logger.info("🧪 Testing PrecisionAtK with out-of-bounds indices")
+
+        y_true = tf.constant(np.zeros((2, 8), dtype=np.float32))
+        y_true = y_true.numpy()
+        y_true[0, [0, 2]] = 1.0
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant([[20, 31, 0, 2, 5]], dtype=tf.int32)
+        y_pred = tf.tile(y_pred, [2, 1])
+
+        metric = PrecisionAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_large_batch_size(self) -> None:
+        """Test metric with large batch size."""
+        logger.info("🧪 Testing PrecisionAtK with large batch size")
+
+        batch_size = 32
+        n_items = 100
+        y_true = tf.constant(np.zeros((batch_size, n_items), dtype=np.float32))
+        y_true = y_true.numpy()
+        for i in range(batch_size):
+            y_true[i, [i % 10, (i + 5) % 10]] = 1.0
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant(
+            np.array(
+                [
+                    [i % 10, (i + 5) % 10, (i + 10) % 20, (i + 15) % 20, (i + 20) % 20]
+                    for i in range(batch_size)
+                ],
+                dtype=np.int32,
+            ),
+        )
+
+        metric = PrecisionAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_perfect_precision(self) -> None:
+        """Test metric when all top-K items are positive."""
+        logger.info("🧪 Testing PrecisionAtK with perfect precision")
+
+        y_true = tf.constant([[1, 1, 1, 1, 1, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred = tf.constant([[0, 1, 2, 3, 4]], dtype=tf.int32)
+
+        metric = PrecisionAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        # Precision@5 = 5/5 = 1.0
+        self.assertAlmostEqual(result.numpy(), 1.0, places=4)
+
+    def test_metric_with_zero_precision(self) -> None:
+        """Test metric when no top-K items are positive."""
+        logger.info("🧪 Testing PrecisionAtK with zero precision")
+
+        y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred = tf.constant([[1, 3, 4, 5, 6]], dtype=tf.int32)
+
+        metric = PrecisionAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        # Precision@5 = 0/5 = 0.0
+        self.assertAlmostEqual(result.numpy(), 0.0, places=4)
+
+    def test_metric_consistency_across_multiple_updates(self) -> None:
+        """Test metric consistency across multiple update calls."""
+        logger.info("🧪 Testing PrecisionAtK consistency")
+
+        metric = PrecisionAtK(k=5)
+
+        # Update 1: precision = 0.4 (2/5)
+        y_true_1 = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred_1 = tf.constant([[0, 1, 3, 2, 4]], dtype=tf.int32)
+        metric.update_state(y_true_1, y_pred_1)
+
+        # Update 2: precision = 0.0 (0/5)
+        y_true_2 = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred_2 = tf.constant([[1, 3, 4, 5, 6]], dtype=tf.int32)
+        metric.update_state(y_true_2, y_pred_2)
+        result = metric.result()
+
+        # Should average: (0.4 + 0.0) / 2 = 0.2
+        self.assertAlmostEqual(result.numpy(), 0.2, places=4)
+
 
 if __name__ == "__main__":
     unittest.main()

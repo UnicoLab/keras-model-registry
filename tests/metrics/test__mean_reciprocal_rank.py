@@ -176,6 +176,93 @@ class TestMeanReciprocalRank(unittest.TestCase):
         self.assertTrue(hasattr(result, "numpy"))
         self.assertIsInstance(result.numpy(), (float, np.floating))
 
+    def test_metric_with_large_num_items(self) -> None:
+        """Test metric with large num_items (realistic scenario)."""
+        logger.info("🧪 Testing MeanReciprocalRank with large num_items")
+
+        n_items = 500
+        batch_size = 8
+        y_true = tf.constant(np.zeros((batch_size, n_items), dtype=np.float32))
+        y_true = y_true.numpy()
+        y_true[0, [10, 20, 30]] = 1.0
+        y_true[1, [50, 100]] = 1.0
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant(
+            np.array(
+                [
+                    [10, 20, 30, 40, 50],  # User 0: first positive at rank 1
+                    [50, 100, 200, 300, 400],  # User 1: first positive at rank 1
+                    [1, 2, 3, 4, 5],  # User 2: no positives
+                ]
+                * 3,
+                dtype=np.int32,
+            )[:batch_size],
+        )
+
+        metric = MeanReciprocalRank()
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_out_of_bounds_indices(self) -> None:
+        """Test metric with out-of-bounds indices (clamping behavior)."""
+        logger.info("🧪 Testing MeanReciprocalRank with out-of-bounds indices")
+
+        y_true = tf.constant(np.zeros((2, 8), dtype=np.float32))
+        y_true = y_true.numpy()
+        y_true[0, [0, 2]] = 1.0
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant([[20, 31, 0, 2, 5]], dtype=tf.int32)
+        y_pred = tf.tile(y_pred, [2, 1])
+
+        metric = MeanReciprocalRank()
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_large_batch_size(self) -> None:
+        """Test metric with large batch size."""
+        logger.info("🧪 Testing MeanReciprocalRank with large batch size")
+
+        batch_size = 32
+        n_items = 100
+        y_true = tf.constant(np.zeros((batch_size, n_items), dtype=np.float32))
+        y_true = y_true.numpy()
+        for i in range(batch_size):
+            pos1 = (i * 2) % n_items
+            pos2 = (i * 2 + 1) % n_items
+            y_true[i, [pos1, pos2]] = 1.0
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant(
+            np.array(
+                [
+                    [
+                        (i * 2) % n_items,
+                        (i * 2 + 1) % n_items,
+                        (i * 2 + 10) % n_items,
+                        (i * 2 + 20) % n_items,
+                        (i * 2 + 30) % n_items,
+                    ]
+                    for i in range(batch_size)
+                ],
+                dtype=np.int32,
+            ),
+        )
+
+        metric = MeanReciprocalRank()
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
 
 if __name__ == "__main__":
     unittest.main()

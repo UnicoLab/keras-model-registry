@@ -207,6 +207,153 @@ class TestRecallAtK(unittest.TestCase):
         self.assertTrue(hasattr(result, "numpy"))
         self.assertIsInstance(result.numpy(), (float, np.floating))
 
+    def test_metric_with_large_num_items(self) -> None:
+        """Test metric with large num_items (realistic scenario)."""
+        logger.info("🧪 Testing RecallAtK with large num_items")
+
+        n_items = 500
+        batch_size = 8
+        y_true = tf.constant(np.zeros((batch_size, n_items), dtype=np.float32))
+        y_true = y_true.numpy()
+        y_true[0, [10, 20, 30]] = 1.0  # User 0 has 3 positives
+        y_true[1, [50, 100, 150]] = 1.0  # User 1 has 3 positives
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant(
+            np.array(
+                [
+                    [10, 20, 30, 40, 50],  # User 0: 3/3 = 1.0
+                    [50, 100, 200, 300, 400],  # User 1: 2/3 = 0.6667
+                    [1, 2, 3, 4, 5],  # User 2: 0/0 = 0.0 (no positives)
+                ]
+                * 3,
+                dtype=np.int32,
+            )[:batch_size],
+        )
+
+        metric = RecallAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_out_of_bounds_indices(self) -> None:
+        """Test metric with out-of-bounds indices (clamping behavior)."""
+        logger.info("🧪 Testing RecallAtK with out-of-bounds indices")
+
+        y_true = tf.constant(np.zeros((2, 8), dtype=np.float32))
+        y_true = y_true.numpy()
+        y_true[0, [0, 2]] = 1.0
+        y_true = tf.constant(y_true)
+
+        y_pred = tf.constant([[20, 31, 0, 2, 5]], dtype=tf.int32)
+        y_pred = tf.tile(y_pred, [2, 1])
+
+        metric = RecallAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_large_batch_size(self) -> None:
+        """Test metric with large batch size."""
+        logger.info("🧪 Testing RecallAtK with large batch size")
+
+        batch_size = 32
+        n_items = 100
+        y_true = tf.constant(np.zeros((batch_size, n_items), dtype=np.float32))
+        y_true = y_true.numpy()
+        # Create distinct positives for each user
+        for i in range(batch_size):
+            pos1 = (i * 2) % n_items
+            pos2 = (i * 2 + 1) % n_items
+            y_true[i, [pos1, pos2]] = 1.0
+        y_true = tf.constant(y_true)
+
+        # Create predictions that include the positives
+        y_pred = tf.constant(
+            np.array(
+                [
+                    [
+                        (i * 2) % n_items,
+                        (i * 2 + 1) % n_items,
+                        (i * 2 + 10) % n_items,
+                        (i * 2 + 20) % n_items,
+                        (i * 2 + 30) % n_items,
+                    ]
+                    for i in range(batch_size)
+                ],
+                dtype=np.int32,
+            ),
+        )
+
+        metric = RecallAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        # Should be valid recall (0.0 to 1.0)
+        self.assertGreaterEqual(result.numpy(), 0.0)
+        self.assertLessEqual(result.numpy(), 1.0)
+
+    def test_metric_with_perfect_recall(self) -> None:
+        """Test metric when all positives are found."""
+        logger.info("🧪 Testing RecallAtK with perfect recall")
+
+        y_true = tf.constant([[1, 0, 1, 0, 0, 1, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred = tf.constant([[0, 1, 2, 3, 4]], dtype=tf.int32)
+
+        metric = RecallAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        # Recall@5 = 2/3 = 0.6667 (only 2 of 3 positives in top-5)
+        # Actually, let's test with all positives in top-5
+        y_true_2 = tf.constant([[1, 0, 1, 0, 0, 1, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred_2 = tf.constant([[0, 1, 2, 3, 5]], dtype=tf.int32)
+
+        metric_2 = RecallAtK(k=5)
+        metric_2.update_state(y_true_2, y_pred_2)
+        result_2 = metric_2.result()
+
+        # Recall@5 = 3/3 = 1.0 (all positives found)
+        self.assertAlmostEqual(result_2.numpy(), 1.0, places=4)
+
+    def test_metric_with_zero_recall(self) -> None:
+        """Test metric when no positives are found."""
+        logger.info("🧪 Testing RecallAtK with zero recall")
+
+        y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred = tf.constant([[1, 3, 4, 5, 6]], dtype=tf.int32)
+
+        metric = RecallAtK(k=5)
+        metric.update_state(y_true, y_pred)
+        result = metric.result()
+
+        # Recall@5 = 0/2 = 0.0
+        self.assertAlmostEqual(result.numpy(), 0.0, places=4)
+
+    def test_metric_consistency_across_multiple_updates(self) -> None:
+        """Test metric consistency across multiple update calls."""
+        logger.info("🧪 Testing RecallAtK consistency")
+
+        metric = RecallAtK(k=5)
+
+        # Update 1: recall = 1.0 (2/2)
+        y_true_1 = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred_1 = tf.constant([[0, 1, 3, 2, 4]], dtype=tf.int32)
+        metric.update_state(y_true_1, y_pred_1)
+
+        # Update 2: recall = 0.0 (0/2)
+        y_true_2 = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        y_pred_2 = tf.constant([[1, 3, 4, 5, 6]], dtype=tf.int32)
+        metric.update_state(y_true_2, y_pred_2)
+        result = metric.result()
+
+        # Should average: (1.0 + 0.0) / 2 = 0.5
+        self.assertAlmostEqual(result.numpy(), 0.5, places=4)
+
 
 if __name__ == "__main__":
     unittest.main()

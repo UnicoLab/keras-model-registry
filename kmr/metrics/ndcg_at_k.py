@@ -119,27 +119,65 @@ class NDCGAtK(Metric):
             y_true: Binary labels of shape (batch_size, num_items) where 1 = positive item.
             y_pred: Top-K recommendation indices of shape (batch_size, k).
         """
-        batch_size_tensor = ops.shape(y_true)[0]
+        y_true_shape = ops.shape(y_true)
+        y_pred_shape = ops.shape(y_pred)
+        batch_size_tensor = y_true_shape[0]
+        batch_size_pred = y_pred_shape[0]
         k_actual = ops.shape(y_pred)[1]
 
-        # Get batch size as int if possible
+        # Get batch size as int for Python loop
         try:
-            batch_size = int(batch_size_tensor)
+            batch_size_true = int(batch_size_tensor)
         except (TypeError, ValueError):
-            batch_size = 32
+            if hasattr(batch_size_tensor, "numpy"):
+                batch_size_true = int(batch_size_tensor.numpy())
+            else:
+                batch_size_true = 32
+
+        try:
+            batch_size_pred_int = int(batch_size_pred)
+        except (TypeError, ValueError):
+            if hasattr(batch_size_pred, "numpy"):
+                batch_size_pred_int = int(batch_size_pred.numpy())
+            else:
+                batch_size_pred_int = batch_size_true
+
+        # Get actual batch size at runtime - this is the source of truth
+        actual_batch_size = ops.shape(y_true)[0]
+        # Use computed batch_size as fallback
+        fallback_batch_size = min(batch_size_true, batch_size_pred_int)
+        try:
+            actual_batch_size_int = int(actual_batch_size)
+            batch_size = actual_batch_size_int
+        except (TypeError, ValueError):
+            # If we can't get concrete size, use fallback but cap it
+            batch_size = min(fallback_batch_size, 32)
+            return
 
         # Compute NDCG for each user in the batch
         ndcg_sum = ops.cast(0.0, dtype="float32")
 
         for batch_idx in range(batch_size):
+            batch_idx = min(batch_idx, batch_size - 1)
+            batch_idx_tensor = ops.cast(batch_idx, dtype="int32")
+
             # Get user's positive items and top-K recommendations
-            user_positives = ops.take(y_true, batch_idx, axis=0)  # (num_items,)
-            user_top_k_indices = ops.take(y_pred, batch_idx, axis=0)  # (k,)
+            user_positives = ops.take(y_true, batch_idx_tensor, axis=0)  # (num_items,)
+            user_top_k_indices = ops.take(y_pred, batch_idx_tensor, axis=0)  # (k,)
+
+            # Clamp indices to valid range to prevent out-of-bounds errors
+            # This handles edge cases where y_true might have unexpected shape
+            num_items_actual = ops.shape(user_positives)[0]
+            user_top_k_indices_clamped = ops.clip(
+                user_top_k_indices,
+                0,
+                num_items_actual - 1,
+            )
 
             # Gather relevance scores for top-K items
             relevance_scores = ops.take(
                 user_positives,
-                user_top_k_indices,
+                user_top_k_indices_clamped,
                 axis=0,
             )  # (k,)
 

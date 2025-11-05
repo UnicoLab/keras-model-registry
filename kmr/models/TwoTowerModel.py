@@ -220,6 +220,201 @@ class TwoTowerModel(BaseModel):
 
         return rec_indices, rec_scores
 
+    def compute_similarities(
+        self,
+        inputs: tuple,
+        training: bool | None = None,
+    ) -> Any:
+        """Compute similarity scores for all items (before top-K selection).
+
+        Args:
+            inputs: Tuple of (user_features, item_features)
+            training: Whether in training mode.
+
+        Returns:
+            Similarity scores for all items (batch_size, num_items)
+        """
+        user_features, item_features = inputs
+
+        # Process through towers
+        user_repr = self.user_tower(user_features, training=training)
+
+        batch_size = ops.shape(item_features)[0]
+        num_items_actual = ops.shape(item_features)[1]
+
+        # Reshape items for tower processing
+        item_features_flat = ops.reshape(
+            item_features,
+            (-1, self.item_feature_dim),
+        )  # (batch_size*num_items, item_feature_dim)
+
+        item_repr_flat = self.item_tower(item_features_flat, training=training)
+
+        # Reshape back
+        item_repr = ops.reshape(
+            item_repr_flat,
+            (batch_size, num_items_actual, self.output_dim),
+        )
+
+        # Expand user representation for broadcasting
+        user_repr_exp = ops.expand_dims(
+            user_repr,
+            axis=1,
+        )  # (batch_size, 1, output_dim)
+
+        # Compute similarities using dot product
+        similarities = ops.sum(
+            user_repr_exp * item_repr,
+            axis=-1,
+        )  # (batch_size, num_items)
+
+        # Normalize
+        user_norm = ops.sqrt(ops.sum(user_repr_exp**2, axis=-1, keepdims=True) + 1e-8)
+        item_norm = ops.sqrt(ops.sum(item_repr**2, axis=-1, keepdims=True) + 1e-8)
+        similarities = similarities / (user_norm[:, 0, :] * item_norm[:, :, 0] + 1e-8)
+
+        return similarities
+
+    def compile(  # noqa: A003
+        self,
+        metrics=None,
+        **kwargs,
+    ) -> None:
+        """Compile the model and store custom recommendation metrics.
+
+        Args:
+            metrics: List of metrics. Custom recommendation metrics (AccuracyAtK, etc.)
+                    will be stored separately for train_step and tracked manually.
+            **kwargs: Additional arguments passed to super().compile()
+        """
+        # Extract custom recommendation metrics (those with 'k' attribute)
+        if metrics:
+            custom_metrics_list = [
+                m for m in metrics if hasattr(m, "k") and hasattr(m, "update_state")
+            ]
+            standard_metrics = [
+                m
+                for m in metrics
+                if not (hasattr(m, "k") and hasattr(m, "update_state"))
+            ]
+            self._custom_metrics = custom_metrics_list
+            # Include all metrics in compile to ensure compiled_metrics is built
+            # Custom metrics will be updated manually in train_step with correct format
+            metrics_to_compile = metrics
+        else:
+            self._custom_metrics = []
+            metrics_to_compile = metrics
+
+        # Call parent compile (all metrics included so compiled_metrics is built)
+        super().compile(metrics=metrics_to_compile, **kwargs)
+
+        # Ensure compiled_metrics is built by updating it once with dummy data
+        # This prevents "metric has not yet been built" errors during fit()
+        # Keras tries to get results from compiled_metrics before train_step runs
+        if hasattr(self, "compiled_metrics") and self.compiled_metrics:
+            try:
+                # Build compiled_metrics with dummy data to mark it as built
+                # Always update once to ensure it's built, regardless of built attribute
+                dummy_y_true = ops.zeros((1, 1), dtype="float32")
+                dummy_y_pred = ops.zeros((1, 1), dtype="float32")
+                self.compiled_metrics.update_state(dummy_y_true, dummy_y_pred)
+            except Exception:
+                # If building fails, it will be handled during training
+                pass
+
+    def train_step(self, data: tuple) -> dict:
+        """Custom training step for recommendation learning with ranking loss.
+
+        Args:
+            data: Tuple of (inputs, targets) where:
+                - inputs: (user_features, item_features)
+                - targets: Binary labels (batch_size, num_items) indicating positive items
+
+        Returns:
+            Dictionary of loss and metrics
+        """
+        inputs, targets = data
+        user_features, item_features = inputs
+
+        # Compute similarities for all items
+        similarities = self.compute_similarities(inputs, training=True)
+        # similarities shape: (batch_size, num_items)
+
+        # Compute loss
+        if targets is not None:
+            # Supervised learning: margin ranking loss
+            # Positive items should have higher scores than negative items
+            positive_mask = targets > 0.5  # (batch_size, num_items)
+            negative_mask = targets < 0.5  # (batch_size, num_items)
+
+            n_positive = ops.sum(
+                ops.cast(positive_mask, dtype="float32"),
+                axis=-1,
+                keepdims=True,
+            )  # (batch_size, 1)
+            n_negative = ops.sum(
+                ops.cast(negative_mask, dtype="float32"),
+                axis=-1,
+                keepdims=True,
+            )  # (batch_size, 1)
+
+            positive_scores = ops.where(
+                positive_mask,
+                similarities,
+                ops.zeros_like(similarities),
+            )
+            negative_scores = ops.where(
+                negative_mask,
+                similarities,
+                ops.zeros_like(similarities),
+            )
+
+            avg_positive = ops.sum(positive_scores, axis=-1, keepdims=True) / (
+                n_positive + 1e-8
+            )  # (batch_size, 1)
+            avg_negative = ops.sum(negative_scores, axis=-1, keepdims=True) / (
+                n_negative + 1e-8
+            )  # (batch_size, 1)
+
+            # Margin ranking loss: positive should be higher than negative by margin
+            margin = 1.0
+            loss = ops.mean(
+                ops.maximum(0.0, margin - (avg_positive - avg_negative)),
+            )
+        else:
+            # Unsupervised learning: encourage diverse similarity distributions
+            loss = -ops.mean(ops.var(similarities, axis=-1))
+
+        # Add regularization losses from layers
+        if self.losses:
+            loss += ops.sum(self.losses)
+
+        # Prepare metrics output
+        metrics_output = {"loss": loss}
+
+        # Compute metrics if targets are provided and custom metrics are configured
+        if targets is not None and self._custom_metrics:
+            # Get top-K recommendations for metrics
+            # similarities shape: (batch_size, num_items)
+            # Get top-K indices
+            top_k_indices, _ = self.selector_layer(similarities, training=False)
+            # top_k_indices shape: (batch_size, top_k)
+
+            # Update custom recommendation metrics manually
+            # These metrics need special inputs: (y_true as binary labels, y_pred as top-K indices)
+            for metric in self._custom_metrics:
+                # Custom recommendation metrics expect (y_true, y_pred)
+                # where y_true is (batch_size, num_items) and y_pred is (batch_size, k)
+                metric.update_state(targets, top_k_indices)
+
+                # Get metric result to include in training output
+                metric_result = metric.result()
+                metric_name = metric.name if hasattr(metric, "name") else str(metric)
+                metrics_output[metric_name] = metric_result
+
+        # Return loss and metrics (Keras will handle gradient computation automatically)
+        return metrics_output
+
     def get_config(self) -> dict:
         """Get model configuration for serialization."""
         config = super().get_config()

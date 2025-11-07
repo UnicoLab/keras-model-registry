@@ -73,95 +73,79 @@ class AccuracyAtK(Metric):
     def update_state(
         self,
         y_true: keras.KerasTensor,
-        y_pred: keras.KerasTensor,
+        y_pred: keras.KerasTensor | dict,
+        sample_weight=None,  # noqa: ARG002
     ) -> None:
-        """Updates the metric state with new predictions.
+        """Updates the metric state with new predictions using vectorized operations.
 
         Args:
             y_true: Binary labels of shape (batch_size, num_items) where 1 = positive item.
-            y_pred: Top-K recommendation indices of shape (batch_size, k).
+            y_pred: Can be:
+                - Dictionary with 'rec_indices' key (from model.call() dict output)
+                - Top-K recommendation indices of shape (batch_size, k)
+                - Tuple of (similarities, indices, scores) from unified model output
+                - Full similarity matrix (batch_size, num_items) - will extract top-K internally
+            sample_weight: Not used, for compatibility with Keras metric interface.
         """
-        # Get actual batch size from tensor shape
-        # This is the most reliable way to get the batch size
-        y_true_shape = ops.shape(y_true)
-        y_pred_shape = ops.shape(y_pred)
-        batch_size_tensor = y_true_shape[0]
-        batch_size_pred = y_pred_shape[0]
+        # Smart input detection and conversion
+        if isinstance(y_pred, dict):
+            # Extract indices from dictionary
+            y_pred = y_pred["rec_indices"]
+        elif isinstance(y_pred, tuple | list):
+            # Extract indices from tuple (similarities, indices, scores)
+            y_pred = y_pred[1]
+        else:
+            # Check if it's a full similarity matrix instead of indices
+            pred_shape = ops.shape(y_pred)
+            if len(y_pred.shape) == 2 and pred_shape[1] > self.k:
+                # Full similarity matrix - extract top-K indices
+                y_pred = ops.argsort(y_pred, axis=1)[:, -self.k :]
 
-        # Get batch size as int for Python loop
-        # During metric updates, batch_size is typically concrete
-        try:
-            batch_size_true = int(batch_size_tensor)
-        except (TypeError, ValueError):
-            # If symbolic, try to get value from tensor
-            if hasattr(batch_size_tensor, "numpy"):
-                batch_size_true = int(batch_size_tensor.numpy())
-            else:
-                batch_size_true = 32  # Fallback
+        batch_size = ops.shape(y_true)[0]
+        num_items = ops.cast(ops.shape(y_true)[1], dtype="int32")
+        k = ops.shape(y_pred)[1]
 
-        try:
-            batch_size_pred_int = int(batch_size_pred)
-        except (TypeError, ValueError):
-            if hasattr(batch_size_pred, "numpy"):
-                batch_size_pred_int = int(batch_size_pred.numpy())
-            else:
-                batch_size_pred_int = batch_size_true  # Fallback
+        # Clamp indices to valid range [0, num_items-1]
+        y_pred_int = ops.cast(y_pred, dtype="int32")
+        y_pred_clamped = ops.clip(y_pred_int, 0, num_items - 1)
 
-        # Use the minimum to ensure we don't exceed either tensor
-        batch_size = min(batch_size_true, batch_size_pred_int)
+        # Create batch indices for gathering: (batch_size, k)
+        # We need to gather from y_true using indices from y_pred
+        batch_indices = ops.arange(0, batch_size, dtype="int32")  # (batch_size,)
+        batch_indices = ops.expand_dims(batch_indices, axis=1)  # (batch_size, 1)
+        batch_indices = ops.tile(batch_indices, [1, k])  # (batch_size, k)
 
-        # Initialize accumulator
-        hits_sum = ops.cast(0.0, dtype="float32")
+        # Gather positive flags for all users' top-K items
+        # We need to use advanced indexing: for each (batch_idx, item_idx) pair,
+        # get y_true[batch_idx, item_idx]
+        # Since ops.gather doesn't support 2D indexing directly, we'll flatten and reshape
 
-        # Get actual batch size at runtime - this is the source of truth
-        actual_batch_size = ops.shape(y_true)[0]
-        # Use computed batch_size as fallback
-        fallback_batch_size = min(batch_size_true, batch_size_pred_int)
-        try:
-            actual_batch_size_int = int(actual_batch_size)
-            # Use the actual tensor size, not computed batch_size
-            batch_size = actual_batch_size_int
-        except (TypeError, ValueError):
-            # If we can't get concrete size, use fallback but ensure it's reasonable
-            batch_size = min(fallback_batch_size, 32)  # Cap at reasonable default
-            # We can't safely loop if we don't know the actual size
-            # Return early to avoid errors
-            return
+        # Flatten y_true and create flat indices
+        y_true_flat = ops.reshape(y_true, [-1])  # (batch_size * num_items,)
 
-        # For each user in batch, compute if they have a hit
-        # Use the actual batch size from the tensor
-        for batch_idx in range(batch_size):
-            # Double-check: ensure batch_idx doesn't exceed tensor size
-            batch_idx = min(batch_idx, batch_size - 1)
-            batch_idx_tensor = ops.cast(batch_idx, dtype="int32")
+        # Create flat indices: batch_idx * num_items + item_idx for each (batch_idx, item_idx)
+        flat_indices = batch_indices * num_items + y_pred_clamped  # (batch_size, k)
+        flat_indices = ops.reshape(flat_indices, [-1])  # (batch_size * k,)
 
-            # Get user's positive items and top-K recommendations
-            user_positives = ops.take(y_true, batch_idx_tensor, axis=0)  # (num_items,)
-            user_top_k_indices = ops.take(y_pred, batch_idx_tensor, axis=0)  # (k,)
+        # Gather positive flags
+        positive_flags = ops.take(
+            y_true_flat,
+            flat_indices,
+            axis=0,
+        )  # (batch_size * k,)
+        positive_flags = ops.reshape(positive_flags, [batch_size, k])  # (batch_size, k)
 
-            # Clamp indices to valid range to prevent out-of-bounds errors
-            # This handles edge cases where y_true might have unexpected shape
-            num_items_actual = ops.shape(user_positives)[0]
-            user_top_k_indices_clamped = ops.clip(
-                user_top_k_indices,
-                0,
-                num_items_actual - 1,
-            )
+        # For each user, check if any item in top-K is positive
+        # has_hit = 1 if max(positive_flags for that user) > 0, else 0
+        max_per_user = ops.max(positive_flags, axis=1)  # (batch_size,)
+        has_hit = ops.maximum(max_per_user, 0.0)  # (batch_size,)
 
-            # Gather positive flags for top-K items
-            positive_flags = ops.take(
-                user_positives,
-                user_top_k_indices_clamped,
-                axis=0,
-            )  # (k,)
-
-            # Check if any item in top-K is positive (has_hit = 1 if any is 1, else 0)
-            has_hit = ops.maximum(ops.max(positive_flags), 0.0)
-            hits_sum = hits_sum + has_hit
+        # Sum hits across batch
+        hits_sum = ops.sum(has_hit)  # scalar
 
         # Update running totals
-        self.total.assign_add(hits_sum)
-        self.count.assign_add(ops.cast(batch_size_tensor, dtype="float32"))
+        self.total.assign_add(ops.cast(hits_sum, dtype="float32"))
+        self.count.assign_add(ops.cast(batch_size, dtype="float32"))
 
     def result(self) -> keras.KerasTensor:
         """Returns the current Accuracy@K value.

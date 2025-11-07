@@ -111,14 +111,32 @@ class NDCGAtK(Metric):
     def update_state(
         self,
         y_true: keras.KerasTensor,
-        y_pred: keras.KerasTensor,
+        y_pred: keras.KerasTensor | dict,
     ) -> None:
         """Updates the metric state with new predictions.
 
         Args:
             y_true: Binary labels of shape (batch_size, num_items) where 1 = positive item.
-            y_pred: Top-K recommendation indices of shape (batch_size, k).
+            y_pred: Can be:
+                - Dictionary with 'rec_indices' key (from model.call() dict output)
+                - Top-K recommendation indices of shape (batch_size, k)
+                - Tuple of (similarities, indices, scores) from unified model output
+                - Full similarity matrix (batch_size, num_items) - will extract top-K internally
         """
+        # Smart input detection and conversion
+        if isinstance(y_pred, dict):
+            # Extract indices from dictionary
+            y_pred = y_pred["rec_indices"]
+        elif isinstance(y_pred, tuple | list):
+            # Extract indices from tuple (similarities, indices, scores)
+            y_pred = y_pred[1]
+        else:
+            # Check if it's a full similarity matrix instead of indices
+            pred_shape = ops.shape(y_pred)
+            if len(y_pred.shape) == 2 and pred_shape[1] > self.k:
+                # Full similarity matrix - extract top-K indices
+                y_pred = ops.argsort(y_pred, axis=1)[:, -self.k :]
+
         y_true_shape = ops.shape(y_true)
         y_pred_shape = ops.shape(y_pred)
         batch_size_tensor = y_true_shape[0]

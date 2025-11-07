@@ -7,9 +7,6 @@ from kmr.models.autoencoder import Autoencoder
 from kmr.models.TimeMixer import TimeMixer
 from kmr.models.TSMixer import TSMixer
 from kmr.models.GeospatialClusteringModel import GeospatialClusteringModel
-from kmr.models.GeospatialCollaborativeFilteringModel import (
-    GeospatialCollaborativeFilteringModel,
-)
 from kmr.models.MatrixFactorizationModel import MatrixFactorizationModel
 from kmr.models.TwoTowerModel import TwoTowerModel
 from kmr.models.DeepRankingModel import DeepRankingModel
@@ -27,7 +24,6 @@ __all__ = [
     "TimeMixer",
     "TSMixer",
     "GeospatialClusteringModel",
-    "GeospatialCollaborativeFilteringModel",
     "MatrixFactorizationModel",
     "TwoTowerModel",
     "DeepRankingModel",

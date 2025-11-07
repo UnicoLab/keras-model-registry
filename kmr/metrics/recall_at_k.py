@@ -71,92 +71,82 @@ class RecallAtK(Metric):
     def update_state(
         self,
         y_true: keras.KerasTensor,
-        y_pred: keras.KerasTensor,
+        y_pred: keras.KerasTensor | dict,
+        sample_weight=None,  # noqa: ARG002
     ) -> None:
-        """Updates the metric state with new predictions.
+        """Updates the metric state with new predictions using vectorized operations.
 
         Args:
             y_true: Binary labels of shape (batch_size, num_items) where 1 = positive item.
-            y_pred: Top-K recommendation indices of shape (batch_size, k).
+            y_pred: Can be:
+                - Dictionary with 'rec_indices' key (from model.call() dict output)
+                - Top-K recommendation indices of shape (batch_size, k)
+                - Tuple of (similarities, indices, scores) from unified model output
+                - Full similarity matrix (batch_size, num_items) - will extract top-K internally
+            sample_weight: Not used, for compatibility with Keras metric interface.
         """
-        y_true_shape = ops.shape(y_true)
-        y_pred_shape = ops.shape(y_pred)
-        batch_size_tensor = y_true_shape[0]
-        batch_size_pred = y_pred_shape[0]
+        # Smart input detection and conversion
+        if isinstance(y_pred, dict):
+            # Extract indices from dictionary
+            y_pred = y_pred["rec_indices"]
+        elif isinstance(y_pred, tuple | list):
+            # Extract indices from tuple (similarities, indices, scores)
+            y_pred = y_pred[1]
+        else:
+            # Check if it's a full similarity matrix instead of indices
+            pred_shape = ops.shape(y_pred)
+            if len(y_pred.shape) == 2 and pred_shape[1] > self.k:
+                # Full similarity matrix - extract top-K indices
+                y_pred = ops.argsort(y_pred, axis=1)[:, -self.k :]
 
-        # Get batch size as int for Python loop
-        try:
-            batch_size_true = int(batch_size_tensor)
-        except (TypeError, ValueError):
-            if hasattr(batch_size_tensor, "numpy"):
-                batch_size_true = int(batch_size_tensor.numpy())
-            else:
-                batch_size_true = 32
+        batch_size = ops.shape(y_true)[0]
+        num_items = ops.cast(ops.shape(y_true)[1], dtype="int32")
+        k = ops.shape(y_pred)[1]
 
-        try:
-            batch_size_pred_int = int(batch_size_pred)
-        except (TypeError, ValueError):
-            if hasattr(batch_size_pred, "numpy"):
-                batch_size_pred_int = int(batch_size_pred.numpy())
-            else:
-                batch_size_pred_int = batch_size_true
+        # Clamp indices to valid range [0, num_items-1]
+        y_pred_int = ops.cast(y_pred, dtype="int32")
+        y_pred_clamped = ops.clip(y_pred_int, 0, num_items - 1)
 
-        # Get actual batch size at runtime - this is the source of truth
-        actual_batch_size = ops.shape(y_true)[0]
-        # Use computed batch_size as fallback
-        fallback_batch_size = min(batch_size_true, batch_size_pred_int)
-        try:
-            actual_batch_size_int = int(actual_batch_size)
-            batch_size = actual_batch_size_int
-        except (TypeError, ValueError):
-            # If we can't get concrete size, use fallback but cap it
-            batch_size = min(fallback_batch_size, 32)
-            return
+        # Create batch indices for gathering: (batch_size, k)
+        batch_indices = ops.arange(0, batch_size, dtype="int32")  # (batch_size,)
+        batch_indices = ops.expand_dims(batch_indices, axis=1)  # (batch_size, 1)
+        batch_indices = ops.tile(batch_indices, [1, k])  # (batch_size, k)
 
-        # Compute recall@K for each user in the batch
-        recall_sum = ops.cast(0.0, dtype="float32")
+        # Flatten y_true and create flat indices
+        y_true_flat = ops.reshape(y_true, [-1])  # (batch_size * num_items,)
 
-        for batch_idx in range(batch_size):
-            batch_idx = min(batch_idx, batch_size - 1)
-            batch_idx_tensor = ops.cast(batch_idx, dtype="int32")
+        # Create flat indices: batch_idx * num_items + item_idx for each (batch_idx, item_idx)
+        flat_indices = batch_indices * num_items + y_pred_clamped  # (batch_size, k)
+        flat_indices = ops.reshape(flat_indices, [-1])  # (batch_size * k,)
 
-            # Get user's positive items and top-K recommendations
-            user_positives = ops.take(y_true, batch_idx_tensor, axis=0)  # (num_items,)
-            user_top_k_indices = ops.take(y_pred, batch_idx_tensor, axis=0)  # (k,)
+        # Gather positive flags
+        positive_flags = ops.take(
+            y_true_flat,
+            flat_indices,
+            axis=0,
+        )  # (batch_size * k,)
+        positive_flags = ops.reshape(positive_flags, [batch_size, k])  # (batch_size, k)
 
-            # Clamp indices to valid range to prevent out-of-bounds errors
-            # This handles edge cases where y_true might have unexpected shape
-            num_items_actual = ops.shape(user_positives)[0]
-            user_top_k_indices_clamped = ops.clip(
-                user_top_k_indices,
-                0,
-                num_items_actual - 1,
-            )
+        # Count total positive items per user
+        n_total_positive_per_user = ops.sum(y_true, axis=1)  # (batch_size,)
 
-            # Count total positive items for this user
-            n_total_positive = ops.sum(user_positives)
+        # Count how many positive items are in top-K for each user
+        n_relevant_in_top_k_per_user = ops.sum(positive_flags, axis=1)  # (batch_size,)
 
-            # Count how many positive items are in top-K
-            positive_flags = ops.take(
-                user_positives,
-                user_top_k_indices_clamped,
-                axis=0,
-            )  # (k,)
-            n_relevant_in_top_k = ops.sum(positive_flags)
+        # Compute recall per user: n_relevant_in_top_k / n_total_positive
+        # Handle case when n_total_positive = 0 (use 0.0 for recall)
+        recall_per_user = ops.where(
+            n_total_positive_per_user > 0,
+            n_relevant_in_top_k_per_user / (n_total_positive_per_user + 1e-8),
+            ops.cast(0.0, dtype="float32"),
+        )  # (batch_size,)
 
-            # Compute recall: n_relevant_in_top_k / n_total_positive
-            # Use ops.where to handle case when n_total_positive = 0
-            recall = ops.where(
-                n_total_positive > 0,
-                n_relevant_in_top_k / (n_total_positive + 1e-8),
-                ops.cast(0.0, dtype="float32"),
-            )
-
-            recall_sum = recall_sum + recall
+        # Sum recall across batch
+        recall_sum = ops.sum(recall_per_user)  # scalar
 
         # Update running totals
-        self.total_recall.assign_add(recall_sum)
-        self.count.assign_add(ops.cast(batch_size_tensor, dtype="float32"))
+        self.total_recall.assign_add(ops.cast(recall_sum, dtype="float32"))
+        self.count.assign_add(ops.cast(batch_size, dtype="float32"))
 
     def result(self) -> keras.KerasTensor:
         """Returns the current Recall@K value.

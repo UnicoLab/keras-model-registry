@@ -397,6 +397,65 @@ class TestAccuracyAtK(unittest.TestCase):
         # Should be 1.0 (at least one positive in top-5, actually all are positive)
         self.assertAlmostEqual(result.numpy(), 1.0, places=4)
 
+    def test_metric_with_tuple_input(self) -> None:
+        """Test metric handles tuple input from unified model output."""
+        logger.info("🧪 Testing AccuracyAtK with tuple input")
+
+        y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        similarities = tf.constant(
+            [[0.9, 0.1, 0.8, 0.2, 0.0, 0.3, 0.4, 0.5, 0.2, 0.1]],
+            dtype=tf.float32,
+        )
+        indices = tf.constant([[0, 2, 5, 6, 7]], dtype=tf.int32)
+        scores = tf.constant([[0.9, 0.8, 0.5, 0.4, 0.3]], dtype=tf.float32)
+
+        # Create tuple output format (similarities, indices, scores)
+        y_pred_tuple = (similarities, indices, scores)
+
+        metric = AccuracyAtK(k=5)
+        # Metric should extract indices from tuple
+        metric.update_state(y_true, y_pred_tuple)
+        result_tuple = metric.result()
+
+        # Reset and compute directly with indices
+        metric.reset_state()
+        metric.update_state(y_true, indices)
+        result_direct = metric.result()
+
+        # Both should be equivalent
+        self.assertAlmostEqual(result_tuple.numpy(), result_direct.numpy(), places=5)
+        logger.info(
+            f"   Tuple result: {result_tuple.numpy()}, Direct result: {result_direct.numpy()}",
+        )
+
+    def test_metric_with_similarity_matrix_input(self) -> None:
+        """Test metric extracts top-K from full similarity matrix."""
+        logger.info("🧪 Testing AccuracyAtK with full similarity matrix")
+
+        y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
+        # Full similarity matrix (batch_size=1, num_items=10)
+        similarities = tf.constant(
+            [[0.9, 0.1, 0.8, 0.2, 0.0, 0.3, 0.4, 0.5, 0.2, 0.1]],
+            dtype=tf.float32,
+        )
+
+        metric = AccuracyAtK(k=5)
+        # Metric should extract top-5 indices from similarity matrix
+        metric.update_state(y_true, similarities)
+        result_matrix = metric.result()
+
+        # Expected top-5 indices: [0, 2, 7, 6, 5] (sorted by descending similarity)
+        expected_indices = tf.constant([[0, 2, 7, 6, 5]], dtype=tf.int32)
+        metric.reset_state()
+        metric.update_state(y_true, expected_indices)
+        result_direct = metric.result()
+
+        # Results should be equivalent
+        self.assertAlmostEqual(result_matrix.numpy(), result_direct.numpy(), places=4)
+        logger.info(
+            f"   Matrix result: {result_matrix.numpy()}, Direct result: {result_direct.numpy()}",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

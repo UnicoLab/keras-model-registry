@@ -21,11 +21,22 @@ from kmr.layers import (
 
 @register_keras_serializable(package="kmr.models")
 class ExplainableRecommendationModel(BaseModel):
-    """Explainable Recommendation model with interpretability features.
+    """Explainable Recommendation model with full Keras compatibility.
 
     Provides transparent recommendation generation with cosine similarity-based
     explanations. Users can understand recommendations through similarity scores
     and feedback-based adjustments.
+
+    This model implements the standard Keras API:
+    - compile(): Use standard Keras optimizer and custom ImprovedMarginRankingLoss
+    - fit(): Use standard Keras training loop with recommendation metrics
+    - predict(): Generate recommendations for inference
+
+    Architecture:
+        - Collaborative user and item embeddings with cosine similarity
+        - Cosine similarity explainer for interpretable explanations
+        - Feedback adjustment layer for personalization
+        - Top-K recommendation selection via TopKRecommendationSelector
 
     Args:
         num_users: Number of unique users.
@@ -43,17 +54,21 @@ class ExplainableRecommendationModel(BaseModel):
         - user_feedback: Optional user feedback signals (batch_size, num_items)
 
     Outputs:
-        Tuple of:
-        - recommendation_indices: Top-K item indices (batch_size, top_k)
-        - recommendation_scores: Top-K scores with explanations (batch_size, top_k)
-        - similarity_matrix: User-item similarity matrix for explanation (batch_size, num_items)
+        - During training: Ranking scores (batch_size, num_items) for loss computation
+        - During inference: Tuple of (recommendation_indices, recommendation_scores, similarity_matrix)
+            - recommendation_indices: Top-K item indices (batch_size, top_k)
+            - recommendation_scores: Top-K scores with explanations (batch_size, top_k)
+            - similarity_matrix: User-item similarity matrix for explanation (batch_size, num_items)
 
     Example:
         ```python
         import keras
         import numpy as np
         from kmr.models import ExplainableRecommendationModel
+        from kmr.losses import ImprovedMarginRankingLoss
+        from kmr.metrics import AccuracyAtK, PrecisionAtK, RecallAtK
 
+        # Create model
         model = ExplainableRecommendationModel(
             num_users=1000,
             num_items=500,
@@ -61,17 +76,43 @@ class ExplainableRecommendationModel(BaseModel):
             top_k=10
         )
 
-        # Sample data
+        # Compile with custom loss and metrics
+        model.compile(
+            optimizer=keras.optimizers.Adam(learning_rate=0.001),
+            loss=ImprovedMarginRankingLoss(margin=1.0),
+            metrics=[
+                AccuracyAtK(k=5, name='acc@5'),
+                AccuracyAtK(k=10, name='acc@10'),
+                PrecisionAtK(k=10, name='prec@10'),
+                RecallAtK(k=10, name='recall@10'),
+            ]
+        )
+
+        # Train with binary labels (1=positive, 0=negative)
         user_ids = np.random.randint(0, 1000, (32,))
         item_ids = np.random.randint(0, 500, (32, 500))
         user_feedback = np.random.uniform(0, 1, (32, 500))
+        labels = np.random.randint(0, 2, (32, 500)).astype(np.float32)
 
-        # Get recommendations with explanations
-        indices, scores, similarities = model([user_ids, item_ids, user_feedback])
+        history = model.fit(
+            x=[user_ids, item_ids, user_feedback],
+            y=labels,
+            epochs=10,
+            batch_size=32
+        )
+
+        # Generate recommendations for inference
+        indices, scores, similarities = model.predict([user_ids, item_ids, user_feedback])
         print("Recommendation indices:", indices.shape)  # (32, 10)
         print("Recommendation scores:", scores.shape)    # (32, 10)
         print("Similarity matrix:", similarities.shape)  # (32, 500)
         ```
+
+    Keras Compatibility:
+        ✅ Standard compile() - Works with standard optimizers and loss functions
+        ✅ Standard fit() - Uses default Keras training loop
+        ✅ Standard predict() - Generates predictions without custom code
+        ✅ Serializable - Full save/load support via get_config()
     """
 
     def __init__(
@@ -153,48 +194,50 @@ class ExplainableRecommendationModel(BaseModel):
             training: Whether in training mode.
 
         Returns:
-            Tuple of (recommendation_indices, recommendation_scores, similarity_matrix)
+            Tuple of (scores, rec_indices, rec_scores, similarity_matrix, feedback_adjusted_scores)
+            where:
+            - scores: Ranking scores (batch_size, num_items) for loss computation
+            - rec_indices: Top-K item indices (batch_size, top_k)
+            - rec_scores: Top-K ranking scores (batch_size, top_k)
+            - similarity_matrix: User-item similarity matrix for explanations (batch_size, num_items)
+            - feedback_adjusted_scores: Scores adjusted by user feedback (batch_size, num_items)
+
+            This tuple is returned consistently for both training and inference modes,
+            following Keras 3 best practices for pure functional architecture.
         """
-        # Handle optional feedback
+        # Handle variable input formats
         if len(inputs) == 3:
             user_ids, item_ids, user_feedback = inputs
         else:
             user_ids, item_ids = inputs
             user_feedback = None
 
-        # Get embeddings
+        # Compute base ranking scores
         user_emb, item_emb = self.embedding_layer(
             [user_ids, item_ids],
             training=training,
         )
-
-        # Compute cosine similarity for explainability
-        # user_emb: (batch_size, embedding_dim)
-        # item_emb: (batch_size, num_items, embedding_dim)
         similarity_matrix = self.explainer([user_emb, item_emb])
+        scores = (
+            ops.squeeze(similarity_matrix, axis=-1)
+            if len(similarity_matrix.shape) > 2
+            else similarity_matrix
+        )
 
         # Apply feedback adjustment if provided
         if user_feedback is not None:
-            # Reshape feedback for adjustment layer
-            # user_feedback: (batch_size, num_items) -> (batch_size, num_items, 1)
-            feedback_exp = ops.expand_dims(user_feedback, axis=-1)
-            similarity_adj = self.feedback_adjuster(feedback_exp)
-
-            # Combine original similarity with feedback-adjusted similarity
-            # feedback_adj: (batch_size, num_items, 1) -> (batch_size, num_items)
-            feedback_adj = ops.squeeze(similarity_adj, axis=-1)
-
-            # Weight-adjusted combination
-            scores = (
-                1 - self.feedback_weight
-            ) * similarity_matrix + self.feedback_weight * feedback_adj
+            feedback_adjusted = self.feedback_layer(
+                [scores, user_feedback],
+                training=training,
+            )
         else:
-            scores = similarity_matrix
+            feedback_adjusted = scores
 
         # Select top-K
         rec_indices, rec_scores = self.selector_layer(scores)
 
-        return rec_indices, rec_scores, similarity_matrix
+        # Return tuple - all components available for both training and inference
+        return (scores, rec_indices, rec_scores, similarity_matrix, feedback_adjusted)
 
     def get_config(self) -> dict:
         """Get model configuration for serialization."""

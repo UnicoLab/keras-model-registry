@@ -112,18 +112,6 @@ Unsupervised geospatial clustering recommendation model using distance-based clu
 - Unsupervised learning with entropy and variance losses
 - Configurable training mode (supervised/unsupervised)
 
-### 🌍 GeospatialCollaborativeFilteringModel
-Extended geospatial collaborative filtering model with learnable masking and geographic-aware recommendations.
-
-::: kmr.models.GeospatialCollaborativeFilteringModel
-
-**Key Features:**
-- Geographic distance-based clustering
-- Learnable masking for adaptive filtering
-- Spatial ranking with geographic proximity
-- Mask regularization for optimal feature selection
-- Unsupervised learning capabilities
-
 ### 📈 MatrixFactorizationModel
 Matrix factorization recommendation model using collaborative filtering with user and item embeddings.
 

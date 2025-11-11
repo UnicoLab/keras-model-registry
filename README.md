@@ -279,12 +279,11 @@ KMR is optimized for performance with:
 - **Memory Optimization**: Careful memory management in complex layers
 - **Batch Processing**: Optimized for batch operations
 
-## 🔮 Roadmap
+## 💬 Join Our Community
 
-- [ ] **v0.3.0**: Additional model architectures and pre-trained models
-- [ ] **v0.4.0**: Integration with popular ML frameworks
-- [ ] **v0.5.0**: Model zoo with pre-trained weights
-- [ ] **v1.0.0**: Production-ready with comprehensive benchmarks
+Have questions or want to connect with other KDP users? Join us on Discord:
+
+[![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/bhvGunkF)
 
 ## 📄 License
 
@@ -301,6 +300,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Issues**: [GitHub Issues](https://github.com/UnicoLab/keras-model-registry/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/UnicoLab/keras-model-registry/discussions)
 - **Documentation**: [Online Docs](https://unicolab.github.io/keras-model-registry/)
+- **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/bhvGunkF)
 
 ---
 

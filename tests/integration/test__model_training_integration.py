@@ -51,10 +51,11 @@ class TestModelTrainingIntegration:
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None],
             metrics=[
-                AccuracyAtK(k=5, name="acc@5"),
-                PrecisionAtK(k=5, name="prec@5"),
+                [AccuracyAtK(k=5, name="acc@5"), PrecisionAtK(k=5, name="prec@5")],
+                None,
+                None,
             ],
         )
 
@@ -80,23 +81,37 @@ class TestModelTrainingIntegration:
     def test_matrix_factorization_full_pipeline(self, train_data, val_data):
         """Test MatrixFactorizationModel through complete training pipeline."""
         model = MatrixFactorizationModel(
+            num_users=100,
             num_items=50,
             embedding_dim=16,
         )
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[RecallAtK(k=5, name="recall@5")],
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[RecallAtK(k=5, name="recall@5")], None, None],
         )
 
-        train_inputs, train_labels = train_data
-        val_inputs, val_labels = val_data
+        # MatrixFactorizationModel expects (user_ids, item_ids) not (user_features, item_features)
+        batch_size = 32
+        num_items = 50
+        train_user_ids = np.random.randint(0, 100, batch_size)
+        train_item_ids = np.random.randint(0, 50, (batch_size, num_items))
+        train_labels = np.random.randint(0, 2, (batch_size, num_items)).astype(
+            np.float32,
+        )
+
+        val_batch_size = 16
+        val_user_ids = np.random.randint(0, 100, val_batch_size)
+        val_item_ids = np.random.randint(0, 50, (val_batch_size, num_items))
+        val_labels = np.random.randint(0, 2, (val_batch_size, num_items)).astype(
+            np.float32,
+        )
 
         history = model.fit(
-            x=train_inputs,
+            x=[train_user_ids, train_item_ids],
             y=train_labels,
-            validation_data=(val_inputs, val_labels),
+            validation_data=([val_user_ids, val_item_ids], val_labels),
             epochs=2,
             batch_size=8,
             verbose=0,
@@ -109,14 +124,15 @@ class TestModelTrainingIntegration:
     def test_deep_ranking_full_pipeline(self, train_data, val_data):
         """Test DeepRankingModel through complete training pipeline."""
         model = DeepRankingModel(
+            user_feature_dim=10,
+            item_feature_dim=10,
             num_items=50,
-            embedding_dim=16,
         )
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[AccuracyAtK(k=5, name="acc@5")],
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[AccuracyAtK(k=5, name="acc@5")], None, None],
         )
 
         train_inputs, train_labels = train_data
@@ -144,8 +160,8 @@ class TestModelTrainingIntegration:
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[AccuracyAtK(k=5)],
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[AccuracyAtK(k=5)], None, None],
         )
 
         callback = RecommendationMetricsLogger(verbose=0)
@@ -176,7 +192,7 @@ class TestModelTrainingIntegration:
         )
         model.compile(
             optimizer=keras.optimizers.Adam(),
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None],
         )
 
         # Train briefly
@@ -217,7 +233,7 @@ class TestModelTrainingIntegration:
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None],
         )
 
         train_inputs, train_labels = train_data
@@ -258,8 +274,8 @@ class TestMetricsComputation:
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[AccuracyAtK(k=5, name="acc@5")],
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[AccuracyAtK(k=5, name="acc@5")], None, None],
         )
 
         x, y = simple_data
@@ -278,7 +294,7 @@ class TestMetricsComputation:
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None],
             metrics=[
                 AccuracyAtK(k=5, name="acc@5"),
                 PrecisionAtK(k=5, name="prec@5"),

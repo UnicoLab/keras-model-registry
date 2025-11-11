@@ -170,14 +170,17 @@ class TestDeepRankingModelCallMethod(unittest.TestCase):
 
     def test_call_training_mode_returns_scores(self):
         """Test call() returns scores during training."""
-        scores = self.model([self.user_features, self.item_features], training=True)
+        scores, rec_indices, rec_scores = self.model(
+            [self.user_features, self.item_features],
+            training=True,
+        )
 
         self.assertEqual(scores.shape, (self.batch_size, 50))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(scores)))
 
     def test_call_inference_mode_returns_topk(self):
         """Test call() returns top-K recommendations during inference."""
-        rec_indices, rec_scores = self.model(
+        scores, rec_indices, rec_scores = self.model(
             [self.user_features, self.item_features],
             training=False,
         )
@@ -188,14 +191,16 @@ class TestDeepRankingModelCallMethod(unittest.TestCase):
 
     def test_call_default_training_is_false(self):
         """Test call() defaults to inference mode when training not specified."""
-        rec_indices, rec_scores = self.model([self.user_features, self.item_features])
+        scores, rec_indices, rec_scores = self.model(
+            [self.user_features, self.item_features],
+        )
 
         self.assertEqual(rec_indices.shape, (self.batch_size, 10))
         self.assertEqual(rec_scores.shape, (self.batch_size, 10))
 
     def test_topk_scores_are_sorted(self):
         """Test that returned top-K scores are sorted in descending order."""
-        rec_indices, rec_scores = self.model(
+        scores, rec_indices, rec_scores = self.model(
             [self.user_features, self.item_features],
             training=False,
         )
@@ -207,7 +212,7 @@ class TestDeepRankingModelCallMethod(unittest.TestCase):
 
 
 class TestDeepRankingModelComputeSimilarities(unittest.TestCase):
-    """Test the compute_similarities() helper method."""
+    """Test similarity computation via call() method."""
 
     def setUp(self):
         """Set up test fixtures."""
@@ -225,8 +230,8 @@ class TestDeepRankingModelComputeSimilarities(unittest.TestCase):
         )
 
     def test_compute_similarities_output_shape(self):
-        """Test compute_similarities() returns correct shape."""
-        scores = self.model.compute_similarities(
+        """Test similarity scores have correct shape."""
+        scores, rec_indices, rec_scores = self.model(
             [self.user_features, self.item_features],
         )
 
@@ -234,7 +239,7 @@ class TestDeepRankingModelComputeSimilarities(unittest.TestCase):
 
     def test_compute_similarities_values_bounded(self):
         """Test similarity scores are bounded (sigmoid output)."""
-        scores = self.model.compute_similarities(
+        scores, rec_indices, rec_scores = self.model(
             [self.user_features, self.item_features],
         )
 
@@ -243,22 +248,22 @@ class TestDeepRankingModelComputeSimilarities(unittest.TestCase):
         self.assertTrue(tf.reduce_all(scores <= 1.0))
 
     def test_compute_similarities_training_false(self):
-        """Test compute_similarities() with training=False."""
-        sim1 = self.model.compute_similarities(
+        """Test similarity computation with training=False."""
+        scores1, _, _ = self.model(
             [self.user_features, self.item_features],
             training=False,
         )
-        sim2 = self.model.compute_similarities(
+        scores2, _, _ = self.model(
             [self.user_features, self.item_features],
             training=False,
         )
 
         # Should be deterministic
-        tf.debugging.assert_near(sim1, sim2, atol=1e-5)
+        tf.debugging.assert_near(scores1, scores2, atol=1e-5)
 
     def test_compute_similarities_all_finite(self):
         """Test that all similarity values are finite."""
-        scores = self.model.compute_similarities(
+        scores, rec_indices, rec_scores = self.model(
             [self.user_features, self.item_features],
         )
 
@@ -298,8 +303,8 @@ class TestDeepRankingModelCompilation(unittest.TestCase):
         ]
         self.model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
-            metrics=metrics,
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[metrics, None, None],
         )
 
         # Model should have metrics configured
@@ -319,7 +324,7 @@ class TestDeepRankingModelCompilation(unittest.TestCase):
             )
             model.compile(
                 optimizer=optimizer_name,
-                loss=ImprovedMarginRankingLoss(),
+                loss=[ImprovedMarginRankingLoss(), None, None],
             )
             self.assertIsNotNone(model.optimizer)
 
@@ -338,8 +343,8 @@ class TestDeepRankingModelTraining(unittest.TestCase):
         )
         self.model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.001),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[AccuracyAtK(k=5, name="acc@5")],
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[AccuracyAtK(k=5, name="acc@5")], None, None],
         )
 
         # Generate training data
@@ -410,7 +415,7 @@ class TestDeepRankingModelPrediction(unittest.TestCase):
         result = self.model.predict([user_features, item_features])
 
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)  # (scores, rec_indices, rec_scores)
 
     def test_predict_output_shapes(self):
         """Test that predict returns correct output shapes."""
@@ -418,7 +423,9 @@ class TestDeepRankingModelPrediction(unittest.TestCase):
         user_features = np.random.randn(batch_size, 32).astype(np.float32)
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        rec_indices, rec_scores = self.model.predict([user_features, item_features])
+        scores, rec_indices, rec_scores = self.model.predict(
+            [user_features, item_features],
+        )
 
         self.assertEqual(rec_indices.shape, (batch_size, 10))
         self.assertEqual(rec_scores.shape, (batch_size, 10))
@@ -429,7 +436,9 @@ class TestDeepRankingModelPrediction(unittest.TestCase):
         user_features = np.random.randn(batch_size, 32).astype(np.float32)
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        rec_indices, rec_scores = self.model.predict([user_features, item_features])
+        scores, rec_indices, rec_scores = self.model.predict(
+            [user_features, item_features],
+        )
 
         self.assertTrue(np.all(rec_indices >= 0))
         self.assertTrue(np.all(rec_indices < 50))
@@ -504,7 +513,7 @@ class TestDeepRankingModelEdgeCases(unittest.TestCase):
         user_features = np.random.randn(1, 32).astype(np.float32)
         item_features = np.random.randn(1, 50, 32).astype(np.float32)
 
-        scores = model.compute_similarities([user_features, item_features])
+        scores, rec_indices, rec_scores = model([user_features, item_features])
         self.assertEqual(scores.shape, (1, 50))
 
     def test_large_batch_size(self):
@@ -520,7 +529,7 @@ class TestDeepRankingModelEdgeCases(unittest.TestCase):
         user_features = np.random.randn(batch_size, 32).astype(np.float32)
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        scores = model.compute_similarities([user_features, item_features])
+        scores, rec_indices, rec_scores = model([user_features, item_features])
         self.assertEqual(scores.shape, (batch_size, 50))
 
     def test_top_k_equals_num_items(self):
@@ -536,7 +545,7 @@ class TestDeepRankingModelEdgeCases(unittest.TestCase):
         user_features = np.random.randn(batch_size, 32).astype(np.float32)
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        rec_indices, rec_scores = model.predict([user_features, item_features])
+        scores, rec_indices, rec_scores = model.predict([user_features, item_features])
 
         self.assertEqual(rec_indices.shape, (batch_size, 50))
         self.assertEqual(rec_scores.shape, (batch_size, 50))
@@ -554,7 +563,7 @@ class TestDeepRankingModelEdgeCases(unittest.TestCase):
         user_features = np.random.randn(3, 8).astype(np.float32)
         item_features = np.random.randn(3, 10, 8).astype(np.float32)
 
-        rec_indices, rec_scores = model.predict([user_features, item_features])
+        scores, rec_indices, rec_scores = model.predict([user_features, item_features])
 
         self.assertEqual(rec_indices.shape, (3, 1))
         self.assertEqual(rec_scores.shape, (3, 1))
@@ -572,7 +581,7 @@ class TestDeepRankingModelEdgeCases(unittest.TestCase):
         user_features = np.random.randn(batch_size, 32).astype(np.float32)
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        scores = model.compute_similarities([user_features, item_features])
+        scores, rec_indices, rec_scores = model([user_features, item_features])
         self.assertEqual(scores.shape, (batch_size, 50))
 
 
@@ -630,7 +639,7 @@ class TestDeepRankingModelKerasCompatibility(unittest.TestCase):
         )
         model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None],
         )
 
         batch_size = 16

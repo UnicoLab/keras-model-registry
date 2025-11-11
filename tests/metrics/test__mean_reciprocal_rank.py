@@ -36,7 +36,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
         y_pred = tf.constant([[1, 0, 3, 4, 5]], dtype=tf.int32)
 
-        self.metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true, (None, y_pred, None))
         result = self.metric.result()
 
         # MRR = 1/2 = 0.5 (first positive at rank 2)
@@ -51,7 +52,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
         y_pred = tf.constant([[0, 1, 3, 4, 5]], dtype=tf.int32)
 
-        self.metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true, (None, y_pred, None))
         result = self.metric.result()
 
         # MRR = 1/1 = 1.0
@@ -66,7 +68,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
         y_pred = tf.constant([[1, 3, 4, 5, 6]], dtype=tf.int32)
 
-        self.metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true, (None, y_pred, None))
         result = self.metric.result()
 
         # MRR = 0.0 (no positive found)
@@ -84,8 +87,9 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_true_2 = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
         y_pred_2 = tf.constant([[1, 0, 3, 4, 5]], dtype=tf.int32)
 
-        self.metric.update_state(y_true_1, y_pred_1)
-        self.metric.update_state(y_true_2, y_pred_2)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true_1, (None, y_pred_1, None))
+        self.metric.update_state(y_true_2, (None, y_pred_2, None))
 
         result = self.metric.result()
         # Average: (1.0 + 0.5) / 2 = 0.75
@@ -112,7 +116,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
             dtype=tf.int32,
         )
 
-        self.metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true, (None, y_pred, None))
         result = self.metric.result()
 
         # Average: (1.0 + 1/3) / 2 = (1.0 + 0.3333) / 2 = 0.6667
@@ -125,7 +130,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
         y_pred = tf.constant([[0, 1, 3, 4, 5]], dtype=tf.int32)
 
-        self.metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true, (None, y_pred, None))
         self.metric.result()
 
         # Reset state
@@ -156,7 +162,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_true = tf.constant([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
         y_pred = tf.constant([[0, 1, 2, 3, 4]], dtype=tf.int32)
 
-        self.metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true, (None, y_pred, None))
         result = self.metric.result()
 
         # Should be 0.0 (no positive items to find)
@@ -169,7 +176,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_true = tf.constant([[1, 0, 1, 0, 0, 0, 0, 0, 0, 0]], dtype=tf.float32)
         y_pred = tf.constant([[0, 1, 3, 4, 5]], dtype=tf.int32)
 
-        self.metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        self.metric.update_state(y_true, (None, y_pred, None))
         result = self.metric.result()
 
         # Result should be a tensor (can be converted to numpy)
@@ -201,7 +209,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         )
 
         metric = MeanReciprocalRank()
-        metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        metric.update_state(y_true, (None, y_pred, None))
         result = metric.result()
 
         self.assertGreaterEqual(result.numpy(), 0.0)
@@ -220,7 +229,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         y_pred = tf.tile(y_pred, [2, 1])
 
         metric = MeanReciprocalRank()
-        metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        metric.update_state(y_true, (None, y_pred, None))
         result = metric.result()
 
         self.assertGreaterEqual(result.numpy(), 0.0)
@@ -257,7 +267,8 @@ class TestMeanReciprocalRank(unittest.TestCase):
         )
 
         metric = MeanReciprocalRank()
-        metric.update_state(y_true, y_pred)
+        # Pass as tuple to avoid similarity matrix check (which requires self.k)
+        metric.update_state(y_true, (None, y_pred, None))
         result = metric.result()
 
         self.assertGreaterEqual(result.numpy(), 0.0)

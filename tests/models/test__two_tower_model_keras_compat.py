@@ -42,29 +42,28 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
             (self.batch_size, self.num_items, self.item_feature_dim),
         )
 
-    def test_call_returns_dictionary(self) -> None:
-        """Test that call() returns dictionary with all required keys."""
+    def test_call_returns_tuple(self) -> None:
+        """Test that call() returns tuple with all required values."""
         output = self.model(
             [self.user_features, self.item_features],
             training=True,
         )
 
-        # Should be dictionary with all required keys
-        self.assertIsInstance(output, dict)
-        self.assertIn("similarities", output)
-        self.assertIn("rec_indices", output)
-        self.assertIn("rec_scores", output)
+        # Should be tuple with 3 values
+        self.assertIsInstance(output, tuple)
+        self.assertEqual(len(output), 3)
+        similarities, rec_indices, rec_scores = output
 
         # Check shapes
         self.assertEqual(
-            output["similarities"].shape,
+            similarities.shape,
             (self.batch_size, self.num_items),
         )
-        self.assertEqual(output["rec_indices"].shape, (self.batch_size, self.top_k))
-        self.assertEqual(output["rec_scores"].shape, (self.batch_size, self.top_k))
+        self.assertEqual(rec_indices.shape, (self.batch_size, self.top_k))
+        self.assertEqual(rec_scores.shape, (self.batch_size, self.top_k))
 
-    def test_call_dictionary_consistent_across_modes(self) -> None:
-        """Test that call() returns dictionary consistently for both training and inference."""
+    def test_call_tuple_consistent_across_modes(self) -> None:
+        """Test that call() returns tuple consistently for both training and inference."""
         output_train = self.model(
             [self.user_features, self.item_features],
             training=True,
@@ -74,15 +73,15 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
             training=False,
         )
 
-        # Both should be dictionaries
-        self.assertIsInstance(output_train, dict)
-        self.assertIsInstance(output_infer, dict)
+        # Both should be tuples
+        self.assertIsInstance(output_train, tuple)
+        self.assertIsInstance(output_infer, tuple)
 
-        # Same keys
-        self.assertEqual(set(output_train.keys()), set(output_infer.keys()))
+        # Same length
+        self.assertEqual(len(output_train), len(output_infer))
 
-    def test_predict_returns_dictionary(self) -> None:
-        """Test that predict() returns dictionary output."""
+    def test_predict_returns_tuple(self) -> None:
+        """Test that predict() returns tuple output."""
         # Use numpy arrays for predict
         user_feat_np = np.random.randn(
             self.batch_size,
@@ -100,22 +99,21 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
             verbose=0,
         )
 
-        # Should be dictionary
-        self.assertIsInstance(output, dict)
-        self.assertIn("similarities", output)
-        self.assertIn("rec_indices", output)
-        self.assertIn("rec_scores", output)
+        # Should be tuple
+        self.assertIsInstance(output, tuple)
+        self.assertEqual(len(output), 3)
+        similarities, rec_indices, rec_scores = output
 
         # Shapes should be correct
         self.assertEqual(
-            output["similarities"].shape,
+            similarities.shape,
             (self.batch_size, self.num_items),
         )
-        self.assertEqual(output["rec_indices"].shape, (self.batch_size, self.top_k))
-        self.assertEqual(output["rec_scores"].shape, (self.batch_size, self.top_k))
+        self.assertEqual(rec_indices.shape, (self.batch_size, self.top_k))
+        self.assertEqual(rec_scores.shape, (self.batch_size, self.top_k))
 
-    def test_loss_computation_on_dictionary_output(self) -> None:
-        """Test that loss can be computed on dictionary output."""
+    def test_loss_computation_on_tuple_output(self) -> None:
+        """Test that loss can be computed on tuple output."""
         loss_fn = ImprovedMarginRankingLoss(margin=1.0)
 
         # Create dummy labels
@@ -124,15 +122,16 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
             dtype=tf.float32,
         )
 
-        # Get training output (dictionary)
+        # Get training output (tuple)
         y_pred = self.model(
             [self.user_features, self.item_features],
             training=True,
         )
 
-        # Loss should compute without errors on dictionary
+        # Loss should compute without errors on tuple (extracts first element)
         loss_value = loss_fn(y_true, y_pred)
-        self.assertIsInstance(loss_value, keras.KerasTensor)
+        # Can be either KerasTensor or tf.Tensor
+        self.assertTrue(hasattr(loss_value, "numpy"))
         self.assertGreater(loss_value.numpy(), 0)
 
     def test_compile_with_standard_keras_loss(self) -> None:
@@ -149,8 +148,8 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
         # Should compile without errors
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.001),
-            loss=ImprovedMarginRankingLoss(margin=1.0),
-            metrics=[AccuracyAtK(k=5)],
+            loss=[ImprovedMarginRankingLoss(margin=1.0), None, None],
+            metrics=[[AccuracyAtK(k=5)], None, None],
         )
 
         self.assertIsNotNone(model.optimizer)
@@ -169,7 +168,7 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(margin=1.0),
+            loss=[ImprovedMarginRankingLoss(margin=1.0), None, None],
         )
 
         # Create small training dataset
@@ -204,7 +203,7 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
 
         model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(margin=1.0),
+            loss=[ImprovedMarginRankingLoss(margin=1.0), None, None],
         )
 
         # Create test data
@@ -224,36 +223,33 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
         self.assertIsInstance(loss_value, float)
         self.assertGreater(loss_value, 0)
 
-    def test_training_mode_none_returns_dictionary(self) -> None:
-        """Test that training=None returns dictionary output."""
+    def test_training_mode_none_returns_tuple(self) -> None:
+        """Test that training=None returns tuple output."""
         output = self.model(
             [self.user_features, self.item_features],
             training=None,
         )
 
-        # Should return dictionary
-        self.assertIsInstance(output, dict)
-        self.assertIn("similarities", output)
-        self.assertIn("rec_indices", output)
-        self.assertIn("rec_scores", output)
+        # Should return tuple
+        self.assertIsInstance(output, tuple)
+        self.assertEqual(len(output), 3)
+        similarities, rec_indices, rec_scores = output
 
-    def test_output_consistency_dictionary(self) -> None:
-        """Test that dictionary outputs are consistent and valid."""
+    def test_output_consistency_tuple(self) -> None:
+        """Test that tuple outputs are consistent and valid."""
         output = self.model(
             [self.user_features, self.item_features],
             training=False,
         )
 
-        similarities = output["similarities"]
-        indices = output["rec_indices"]
-        scores = output["rec_scores"]
+        similarities, rec_indices, rec_scores = output
 
         # Similarities should be in reasonable range
         sim_np = similarities.numpy()
         self.assertLessEqual(np.abs(sim_np).max(), 10.0)
 
         # Indices should be valid
-        indices_np = indices.numpy()
+        indices_np = rec_indices.numpy()
         self.assertTrue(np.all(indices_np >= 0))
         self.assertTrue(np.all(indices_np < self.num_items))
 
@@ -261,7 +257,7 @@ class TestTwoTowerModelKerasCompatibility(unittest.TestCase):
         for b in range(self.batch_size):
             for k in range(self.top_k):
                 idx = indices_np[b, k]
-                score = scores.numpy()[b, k]
+                score = rec_scores.numpy()[b, k]
                 sim = sim_np[b, idx]
                 # Allow small floating point differences
                 self.assertAlmostEqual(score, sim, places=5)
@@ -300,8 +296,8 @@ class TestTwoTowerModelKerasWorkflow(unittest.TestCase):
         # 1. Compile
         self.model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.01),
-            loss=ImprovedMarginRankingLoss(margin=1.0),
-            metrics=[AccuracyAtK(k=5)],
+            loss=[ImprovedMarginRankingLoss(margin=1.0), None, None],
+            metrics=[[AccuracyAtK(k=5)], None, None],
         )
 
         # 2. Create data
@@ -319,7 +315,7 @@ class TestTwoTowerModelKerasWorkflow(unittest.TestCase):
         )
 
         # 4. Evaluate
-        eval_loss = self.model.evaluate(
+        eval_result = self.model.evaluate(
             x=[user_feat, item_feat],
             y=labels,
             verbose=0,
@@ -330,6 +326,11 @@ class TestTwoTowerModelKerasWorkflow(unittest.TestCase):
 
         # Verify
         self.assertIsNotNone(history)
+        # evaluate() returns list when multiple outputs, first element is loss
+        if isinstance(eval_result, list):
+            eval_loss = eval_result[0]
+        else:
+            eval_loss = eval_result
         self.assertGreater(eval_loss, 0)
         self.assertIsInstance(predictions, tuple)
         self.assertEqual(len(predictions), 3)

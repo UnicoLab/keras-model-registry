@@ -202,8 +202,8 @@ class TestMatrixFactorizationModelCompilation(unittest.TestCase):
         ]
         self.model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
-            metrics=metrics,
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[metrics, None, None],
         )
 
         # Model should have metrics configured
@@ -219,7 +219,7 @@ class TestMatrixFactorizationModelCompilation(unittest.TestCase):
             model = MatrixFactorizationModel(num_users=100, num_items=50)
             model.compile(
                 optimizer=optimizer_name,
-                loss=ImprovedMarginRankingLoss(),
+                loss=[ImprovedMarginRankingLoss(), None, None],
             )
             self.assertIsNotNone(model.optimizer)
 
@@ -237,8 +237,8 @@ class TestMatrixFactorizationModelTraining(unittest.TestCase):
         )
         self.model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.001),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[AccuracyAtK(k=5, name="acc@5")],
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[AccuracyAtK(k=5, name="acc@5")], None, None],
         )
 
         # Generate training data
@@ -304,7 +304,7 @@ class TestMatrixFactorizationModelPrediction(unittest.TestCase):
         result = self.model.predict([user_ids, item_ids])
 
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)
 
     def test_predict_output_shapes(self):
         """Test that predict returns correct output shapes."""
@@ -312,7 +312,7 @@ class TestMatrixFactorizationModelPrediction(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        rec_indices, rec_scores = self.model.predict([user_ids, item_ids])
+        similarities, rec_indices, rec_scores = self.model.predict([user_ids, item_ids])
 
         self.assertEqual(rec_indices.shape, (batch_size, 10))
         self.assertEqual(rec_scores.shape, (batch_size, 10))
@@ -323,7 +323,7 @@ class TestMatrixFactorizationModelPrediction(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        rec_indices, rec_scores = self.model.predict([user_ids, item_ids])
+        similarities, rec_indices, rec_scores = self.model.predict([user_ids, item_ids])
 
         self.assertTrue(np.all(rec_indices >= 0))
         self.assertTrue(np.all(rec_indices < 50))
@@ -380,6 +380,7 @@ class TestMatrixFactorizationModelSerialization(unittest.TestCase):
         # Should have same shapes
         self.assertEqual(original_pred[0].shape, restored_pred[0].shape)
         self.assertEqual(original_pred[1].shape, restored_pred[1].shape)
+        self.assertEqual(original_pred[2].shape, restored_pred[2].shape)
 
 
 class TestMatrixFactorizationModelEdgeCases(unittest.TestCase):
@@ -447,7 +448,7 @@ class TestMatrixFactorizationModelEdgeCases(unittest.TestCase):
             ],
         )
 
-        similarities = model.compute_similarities([user_ids, item_ids])
+        similarities, rec_indices, rec_scores = model([user_ids, item_ids])
         self.assertEqual(similarities.shape, (1, 50))
 
     def test_large_batch_size(self):
@@ -458,7 +459,7 @@ class TestMatrixFactorizationModelEdgeCases(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        similarities = model.compute_similarities([user_ids, item_ids])
+        similarities, rec_indices, rec_scores = model([user_ids, item_ids])
         self.assertEqual(similarities.shape, (batch_size, 50))
 
     def test_top_k_equals_num_items(self):
@@ -469,7 +470,7 @@ class TestMatrixFactorizationModelEdgeCases(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        rec_indices, rec_scores = model.predict([user_ids, item_ids])
+        similarities, rec_indices, rec_scores = model.predict([user_ids, item_ids])
 
         self.assertEqual(rec_indices.shape, (batch_size, 50))
         self.assertEqual(rec_scores.shape, (batch_size, 50))
@@ -486,7 +487,7 @@ class TestMatrixFactorizationModelEdgeCases(unittest.TestCase):
         user_ids = np.array([0, 1, 2])
         item_ids = np.array([[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]])
 
-        rec_indices, rec_scores = model.predict([user_ids, item_ids])
+        similarities, rec_indices, rec_scores = model.predict([user_ids, item_ids])
 
         self.assertEqual(rec_indices.shape, (3, 1))
         self.assertEqual(rec_scores.shape, (3, 1))
@@ -528,7 +529,7 @@ class TestMatrixFactorizationModelKerasCompatibility(unittest.TestCase):
         model = MatrixFactorizationModel(num_users=100, num_items=50, embedding_dim=8)
         model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None],
         )
 
         batch_size = 32

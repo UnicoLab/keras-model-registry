@@ -48,8 +48,9 @@ class TestTopKRecommendationSelector(unittest.TestCase):
         """Test that output is tuple of indices and scores."""
         scores = keras.random.normal((32, 100))
         indices, top_scores = self.layer(scores)
-        self.assertIsInstance(indices, keras.KerasTensor)
-        self.assertIsInstance(top_scores, keras.KerasTensor)
+        # Output can be KerasTensor or tf.Tensor
+        self.assertTrue(hasattr(indices, "numpy"))
+        self.assertTrue(hasattr(top_scores, "numpy"))
 
     def test_output_shape_k_less_than_items(self) -> None:
         """Test output shape when k < number of items."""
@@ -77,7 +78,7 @@ class TestTopKRecommendationSelector(unittest.TestCase):
 
     def test_top_scores_ordered_descending(self) -> None:
         """Test that returned scores are in descending order."""
-        scores = keras.constant([[5.0, 1.0, 3.0, 4.0, 2.0]])
+        scores = keras.ops.array([[5.0, 1.0, 3.0, 4.0, 2.0]])
         layer = TopKRecommendationSelector(k=5)
         indices, top_scores = layer(scores)
         scores_array = top_scores.numpy()[0]
@@ -86,7 +87,7 @@ class TestTopKRecommendationSelector(unittest.TestCase):
 
     def test_indices_correspond_to_scores(self) -> None:
         """Test that returned indices correspond to original top scores."""
-        scores = keras.constant([[1.0, 5.0, 3.0, 2.0, 4.0]])
+        scores = keras.ops.array([[1.0, 5.0, 3.0, 2.0, 4.0]])
         layer = TopKRecommendationSelector(k=3)
         indices_out, scores_out = layer(scores)
 
@@ -104,7 +105,8 @@ class TestTopKRecommendationSelector(unittest.TestCase):
         scores = keras.random.normal((32, 100), dtype="float32")
         indices, top_scores = self.layer(scores)
         self.assertEqual(top_scores.dtype, scores.dtype)
-        self.assertEqual(indices.dtype, keras.config.floatx())
+        # Indices should be int32, not float
+        self.assertEqual(indices.dtype.name, "int32")
 
     def test_single_batch(self) -> None:
         """Test with batch size of 1."""
@@ -122,7 +124,7 @@ class TestTopKRecommendationSelector(unittest.TestCase):
 
     def test_k_one(self) -> None:
         """Test with k=1 (top 1 prediction)."""
-        scores = keras.constant([[1.0, 5.0, 3.0, 2.0, 4.0]])
+        scores = keras.ops.array([[1.0, 5.0, 3.0, 2.0, 4.0]])
         layer = TopKRecommendationSelector(k=1)
         indices, top_scores = layer(scores)
         # Should return the highest score (5.0 at index 1)

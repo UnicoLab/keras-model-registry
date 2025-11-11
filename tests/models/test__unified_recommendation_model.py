@@ -155,17 +155,17 @@ class TestUnifiedRecommendationModelCallMethod(unittest.TestCase):
 
     def test_call_training_mode_returns_scores(self):
         """Test call() returns scores during training."""
-        scores = self.model(
+        combined_scores, rec_indices, rec_scores = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
             training=True,
         )
 
-        self.assertEqual(scores.shape, (self.batch_size, 50))
-        self.assertTrue(tf.reduce_all(tf.math.is_finite(scores)))
+        self.assertEqual(combined_scores.shape, (self.batch_size, 50))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(combined_scores)))
 
     def test_call_inference_mode_returns_topk(self):
         """Test call() returns top-K recommendations during inference."""
-        rec_indices, rec_scores = self.model(
+        combined_scores, rec_indices, rec_scores = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
             training=False,
         )
@@ -176,7 +176,7 @@ class TestUnifiedRecommendationModelCallMethod(unittest.TestCase):
 
     def test_call_default_training_is_false(self):
         """Test call() defaults to inference mode."""
-        rec_indices, rec_scores = self.model(
+        combined_scores, rec_indices, rec_scores = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
         )
 
@@ -185,7 +185,7 @@ class TestUnifiedRecommendationModelCallMethod(unittest.TestCase):
 
     def test_topk_scores_are_sorted(self):
         """Test that returned top-K scores are sorted."""
-        rec_indices, rec_scores = self.model(
+        combined_scores, rec_indices, rec_scores = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
             training=False,
         )
@@ -196,7 +196,7 @@ class TestUnifiedRecommendationModelCallMethod(unittest.TestCase):
 
 
 class TestUnifiedRecommendationModelComputeSimilarities(unittest.TestCase):
-    """Test the compute_similarities() helper method."""
+    """Test similarity computation via call() method."""
 
     def setUp(self):
         """Set up test fixtures."""
@@ -223,42 +223,42 @@ class TestUnifiedRecommendationModelComputeSimilarities(unittest.TestCase):
         )
 
     def test_compute_similarities_output_shape(self):
-        """Test compute_similarities() returns correct shape."""
-        scores = self.model.compute_similarities(
+        """Test similarity scores have correct shape."""
+        combined_scores, rec_indices, rec_scores = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
         )
 
-        self.assertEqual(scores.shape, (self.batch_size, 50))
+        self.assertEqual(combined_scores.shape, (self.batch_size, 50))
 
     def test_compute_similarities_values_bounded(self):
         """Test that similarity scores are bounded."""
-        scores = self.model.compute_similarities(
+        combined_scores, rec_indices, rec_scores = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
         )
 
-        self.assertTrue(tf.reduce_all(scores >= -2.0))
-        self.assertTrue(tf.reduce_all(scores <= 2.0))
+        self.assertTrue(tf.reduce_all(combined_scores >= -2.0))
+        self.assertTrue(tf.reduce_all(combined_scores <= 2.0))
 
     def test_compute_similarities_deterministic(self):
-        """Test compute_similarities() is deterministic."""
-        sim1 = self.model.compute_similarities(
+        """Test similarity computation is deterministic."""
+        combined_scores1, _, _ = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
             training=False,
         )
-        sim2 = self.model.compute_similarities(
+        combined_scores2, _, _ = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
             training=False,
         )
 
-        tf.debugging.assert_near(sim1, sim2, atol=1e-5)
+        tf.debugging.assert_near(combined_scores1, combined_scores2, atol=1e-5)
 
     def test_compute_similarities_all_finite(self):
         """Test that all similarity values are finite."""
-        scores = self.model.compute_similarities(
+        combined_scores, rec_indices, rec_scores = self.model(
             [self.user_ids, self.user_features, self.item_ids, self.item_features],
         )
 
-        self.assertTrue(tf.reduce_all(tf.math.is_finite(scores)))
+        self.assertTrue(tf.reduce_all(tf.math.is_finite(combined_scores)))
 
 
 class TestUnifiedRecommendationModelCompilation(unittest.TestCase):
@@ -279,7 +279,7 @@ class TestUnifiedRecommendationModelCompilation(unittest.TestCase):
         loss_fn = ImprovedMarginRankingLoss()
         self.model.compile(
             optimizer="adam",
-            loss=loss_fn,
+            loss=[loss_fn, None, None],
         )
 
         self.assertIsNotNone(self.model.optimizer)
@@ -295,8 +295,8 @@ class TestUnifiedRecommendationModelCompilation(unittest.TestCase):
         ]
         self.model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
-            metrics=metrics,
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[metrics, None, None],
         )
 
         self.assertIsNotNone(self.model.metrics)
@@ -315,7 +315,7 @@ class TestUnifiedRecommendationModelCompilation(unittest.TestCase):
             )
             model.compile(
                 optimizer=optimizer_name,
-                loss=ImprovedMarginRankingLoss(),
+                loss=[ImprovedMarginRankingLoss(), None, None],
             )
             self.assertIsNotNone(model.optimizer)
 
@@ -336,8 +336,8 @@ class TestUnifiedRecommendationModelTraining(unittest.TestCase):
         )
         self.model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.001),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[AccuracyAtK(k=5, name="acc@5")],
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[AccuracyAtK(k=5, name="acc@5")], None, None],
         )
 
         self.batch_size = 16
@@ -411,7 +411,7 @@ class TestUnifiedRecommendationModelPrediction(unittest.TestCase):
         result = self.model.predict([user_ids, user_features, item_ids, item_features])
 
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 2)
+        self.assertEqual(len(result), 3)
 
     def test_predict_output_shapes(self):
         """Test that predict returns correct shapes."""
@@ -421,7 +421,7 @@ class TestUnifiedRecommendationModelPrediction(unittest.TestCase):
         item_ids = np.random.randint(0, 50, (batch_size, 50))
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        rec_indices, rec_scores = self.model.predict(
+        combined_scores, rec_indices, rec_scores = self.model.predict(
             [user_ids, user_features, item_ids, item_features],
         )
 
@@ -436,7 +436,7 @@ class TestUnifiedRecommendationModelPrediction(unittest.TestCase):
         item_ids = np.random.randint(0, 50, (batch_size, 50))
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        rec_indices, rec_scores = self.model.predict(
+        combined_scores, rec_indices, rec_scores = self.model.predict(
             [user_ids, user_features, item_ids, item_features],
         )
 
@@ -527,10 +527,10 @@ class TestUnifiedRecommendationModelEdgeCases(unittest.TestCase):
         item_ids = np.random.randint(0, 50, (1, 50))
         item_features = np.random.randn(1, 50, 32).astype(np.float32)
 
-        scores = model.compute_similarities(
+        combined_scores, rec_indices, rec_scores = model(
             [user_ids, user_features, item_ids, item_features],
         )
-        self.assertEqual(scores.shape, (1, 50))
+        self.assertEqual(combined_scores.shape, (1, 50))
 
     def test_large_batch_size(self):
         """Test model with large batch size."""
@@ -549,10 +549,10 @@ class TestUnifiedRecommendationModelEdgeCases(unittest.TestCase):
         item_ids = np.random.randint(0, 50, (batch_size, 50))
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        scores = model.compute_similarities(
+        combined_scores, rec_indices, rec_scores = model(
             [user_ids, user_features, item_ids, item_features],
         )
-        self.assertEqual(scores.shape, (batch_size, 50))
+        self.assertEqual(combined_scores.shape, (batch_size, 50))
 
     def test_top_k_equals_num_items(self):
         """Test when top_k equals num_items."""
@@ -570,7 +570,7 @@ class TestUnifiedRecommendationModelEdgeCases(unittest.TestCase):
         item_ids = np.random.randint(0, 50, (batch_size, 50))
         item_features = np.random.randn(batch_size, 50, 32).astype(np.float32)
 
-        rec_indices, rec_scores = model.predict(
+        combined_scores, rec_indices, rec_scores = model.predict(
             [user_ids, user_features, item_ids, item_features],
         )
 
@@ -594,7 +594,7 @@ class TestUnifiedRecommendationModelEdgeCases(unittest.TestCase):
         item_ids = np.random.randint(0, 5, (3, 5))
         item_features = np.random.randn(3, 5, 4).astype(np.float32)
 
-        rec_indices, rec_scores = model.predict(
+        combined_scores, rec_indices, rec_scores = model.predict(
             [user_ids, user_features, item_ids, item_features],
         )
 
@@ -662,7 +662,7 @@ class TestUnifiedRecommendationModelKerasCompatibility(unittest.TestCase):
         )
         model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None],
         )
 
         batch_size = 16

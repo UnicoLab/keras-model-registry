@@ -145,7 +145,13 @@ class TestExplainableRecommendationModelCallMethod(unittest.TestCase):
 
     def test_call_training_mode_returns_scores(self):
         """Test call() returns scores during training."""
-        scores = self.model([self.user_ids, self.item_ids], training=True)
+        (
+            scores,
+            rec_indices,
+            rec_scores,
+            similarity_matrix,
+            feedback_adjusted,
+        ) = self.model([self.user_ids, self.item_ids], training=True)
 
         self.assertEqual(scores.shape, (self.batch_size, 50))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(scores)))
@@ -155,11 +161,17 @@ class TestExplainableRecommendationModelCallMethod(unittest.TestCase):
         result = self.model([self.user_ids, self.item_ids], training=False)
 
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 3)
+        self.assertEqual(len(result), 5)
 
     def test_call_inference_mode_output_shapes(self):
         """Test call() returns correct shapes during inference."""
-        rec_indices, rec_scores, similarity_matrix = self.model(
+        (
+            scores,
+            rec_indices,
+            rec_scores,
+            similarity_matrix,
+            feedback_adjusted,
+        ) = self.model(
             [self.user_ids, self.item_ids],
             training=False,
         )
@@ -173,11 +185,17 @@ class TestExplainableRecommendationModelCallMethod(unittest.TestCase):
         result = self.model([self.user_ids, self.item_ids])
 
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 3)
+        self.assertEqual(len(result), 5)
 
     def test_topk_scores_are_sorted(self):
         """Test that returned top-K scores are sorted."""
-        rec_indices, rec_scores, _ = self.model(
+        (
+            scores,
+            rec_indices,
+            rec_scores,
+            similarity_matrix,
+            feedback_adjusted,
+        ) = self.model(
             [self.user_ids, self.item_ids],
             training=False,
         )
@@ -210,31 +228,43 @@ class TestExplainableRecommendationModelComputeSimilarities(unittest.TestCase):
         )
 
     def test_compute_similarities_without_feedback(self):
-        """Test compute_similarities() without feedback."""
-        scores = self.model.compute_similarities([self.user_ids, self.item_ids])
+        """Test similarity computation without feedback."""
+        (
+            scores,
+            rec_indices,
+            rec_scores,
+            similarity_matrix,
+            feedback_adjusted,
+        ) = self.model([self.user_ids, self.item_ids])
 
         self.assertEqual(scores.shape, (self.batch_size, 50))
         self.assertTrue(tf.reduce_all(tf.math.is_finite(scores)))
 
     def test_compute_similarities_values_bounded(self):
         """Test that similarity scores are bounded."""
-        scores = self.model.compute_similarities([self.user_ids, self.item_ids])
+        (
+            scores,
+            rec_indices,
+            rec_scores,
+            similarity_matrix,
+            feedback_adjusted,
+        ) = self.model([self.user_ids, self.item_ids])
 
         self.assertTrue(tf.reduce_all(scores >= -1.1))
         self.assertTrue(tf.reduce_all(scores <= 1.1))
 
     def test_compute_similarities_deterministic(self):
-        """Test compute_similarities() is deterministic."""
-        sim1 = self.model.compute_similarities(
+        """Test similarity computation is deterministic."""
+        scores1, _, _, _, _ = self.model(
             [self.user_ids, self.item_ids],
             training=False,
         )
-        sim2 = self.model.compute_similarities(
+        scores2, _, _, _, _ = self.model(
             [self.user_ids, self.item_ids],
             training=False,
         )
 
-        tf.debugging.assert_near(sim1, sim2, atol=1e-5)
+        tf.debugging.assert_near(scores1, scores2, atol=1e-5)
 
 
 class TestExplainableRecommendationModelCompilation(unittest.TestCase):
@@ -269,8 +299,8 @@ class TestExplainableRecommendationModelCompilation(unittest.TestCase):
         ]
         self.model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
-            metrics=metrics,
+            loss=[ImprovedMarginRankingLoss(), None, None, None, None],
+            metrics=[metrics, None, None, None, None],
         )
 
         self.assertIsNotNone(self.model.metrics)
@@ -284,7 +314,7 @@ class TestExplainableRecommendationModelCompilation(unittest.TestCase):
             model = ExplainableRecommendationModel(num_users=100, num_items=50)
             model.compile(
                 optimizer=optimizer_name,
-                loss=ImprovedMarginRankingLoss(),
+                loss=[ImprovedMarginRankingLoss(), None, None, None, None],
             )
             self.assertIsNotNone(model.optimizer)
 
@@ -302,8 +332,8 @@ class TestExplainableRecommendationModelTraining(unittest.TestCase):
         )
         self.model.compile(
             optimizer=keras.optimizers.Adam(learning_rate=0.001),
-            loss=ImprovedMarginRankingLoss(),
-            metrics=[AccuracyAtK(k=5, name="acc@5")],
+            loss=[ImprovedMarginRankingLoss(), None, None, None, None],
+            metrics=[[AccuracyAtK(k=5, name="acc@5")], None, None, None, None],
         )
 
         self.batch_size = 16
@@ -374,7 +404,7 @@ class TestExplainableRecommendationModelPrediction(unittest.TestCase):
         result = self.model.predict([user_ids, item_ids])
 
         self.assertIsInstance(result, tuple)
-        self.assertEqual(len(result), 3)
+        self.assertEqual(len(result), 5)
 
     def test_predict_output_shapes(self):
         """Test predict returns correct output shapes."""
@@ -382,7 +412,13 @@ class TestExplainableRecommendationModelPrediction(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        rec_indices, rec_scores, similarity_matrix = self.model.predict(
+        (
+            scores,
+            rec_indices,
+            rec_scores,
+            similarity_matrix,
+            feedback_adjusted,
+        ) = self.model.predict(
             [user_ids, item_ids],
         )
 
@@ -396,7 +432,13 @@ class TestExplainableRecommendationModelPrediction(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        rec_indices, rec_scores, similarity_matrix = self.model.predict(
+        (
+            scores,
+            rec_indices,
+            rec_scores,
+            similarity_matrix,
+            feedback_adjusted,
+        ) = self.model.predict(
             [user_ids, item_ids],
         )
 
@@ -497,7 +539,9 @@ class TestExplainableRecommendationModelEdgeCases(unittest.TestCase):
         user_ids = np.array([0])
         item_ids = np.random.randint(0, 50, (1, 50))
 
-        scores = model.compute_similarities([user_ids, item_ids])
+        scores, rec_indices, rec_scores, similarity_matrix, feedback_adjusted = model(
+            [user_ids, item_ids],
+        )
         self.assertEqual(scores.shape, (1, 50))
 
     def test_large_batch_size(self):
@@ -512,7 +556,9 @@ class TestExplainableRecommendationModelEdgeCases(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        scores = model.compute_similarities([user_ids, item_ids])
+        scores, rec_indices, rec_scores, similarity_matrix, feedback_adjusted = model(
+            [user_ids, item_ids],
+        )
         self.assertEqual(scores.shape, (batch_size, 50))
 
     def test_top_k_equals_num_items(self):
@@ -527,7 +573,9 @@ class TestExplainableRecommendationModelEdgeCases(unittest.TestCase):
         user_ids = np.random.randint(0, 100, batch_size)
         item_ids = np.random.randint(0, 50, (batch_size, 50))
 
-        rec_indices, rec_scores, sim_matrix = model.predict([user_ids, item_ids])
+        scores, rec_indices, rec_scores, sim_matrix, feedback_adjusted = model.predict(
+            [user_ids, item_ids],
+        )
 
         self.assertEqual(rec_indices.shape, (batch_size, 50))
         self.assertEqual(rec_scores.shape, (batch_size, 50))
@@ -544,7 +592,9 @@ class TestExplainableRecommendationModelEdgeCases(unittest.TestCase):
         user_ids = np.array([0, 1, 2])
         item_ids = np.random.randint(0, 5, (3, 5))
 
-        rec_indices, rec_scores, sim_matrix = model.predict([user_ids, item_ids])
+        scores, rec_indices, rec_scores, sim_matrix, feedback_adjusted = model.predict(
+            [user_ids, item_ids],
+        )
 
         self.assertEqual(rec_indices.shape, (3, 1))
         self.assertEqual(rec_scores.shape, (3, 1))
@@ -601,7 +651,7 @@ class TestExplainableRecommendationModelKerasCompatibility(unittest.TestCase):
         )
         model.compile(
             optimizer="adam",
-            loss=ImprovedMarginRankingLoss(),
+            loss=[ImprovedMarginRankingLoss(), None, None, None, None],
         )
 
         batch_size = 16

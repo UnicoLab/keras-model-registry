@@ -510,8 +510,8 @@ class TestGeospatialMarginLossTupleInput:
         indices = keras.ops.array([[0, 2]], dtype="int32")
         scores = keras.ops.array([[0.8, 0.7]])
 
-        # Create tuple output format (masked_scores, indices, scores, masks)
-        y_pred_tuple = (concatenated, indices, scores, None)
+        # Create tuple output format - loss extracts first element (concatenated)
+        y_pred_tuple = (concatenated, indices, scores)
 
         # Loss should extract concatenated and compute correctly
         loss_value_tuple = loss_fn(y_true, y_pred_tuple)

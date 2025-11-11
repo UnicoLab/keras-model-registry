@@ -281,3 +281,75 @@ Detects anomalies in numerical features using statistical methods.
 Detects anomalies in categorical features.
 
 ::: kmr.layers.CategoricalAnomalyDetectionLayer
+
+## 📊 Recommendation Systems
+
+### 👥 CollaborativeUserItemEmbedding
+Dual embedding lookup layer for collaborative filtering with separate user and item embedding tables.
+
+::: kmr.layers.CollaborativeUserItemEmbedding
+
+### 🏢 DeepFeatureTower
+Dense neural network tower for processing user or item features in two-tower recommendation architectures.
+
+::: kmr.layers.DeepFeatureTower
+
+### 📏 NormalizedDotProductSimilarity
+Compute normalized dot product (cosine) similarity between user and item representations.
+
+::: kmr.layers.NormalizedDotProductSimilarity
+
+### 🏆 TopKRecommendationSelector
+Select top-K recommendation items based on scores with efficient heap-based selection.
+
+::: kmr.layers.TopKRecommendationSelector
+
+### 🔢 DynamicBatchIndexGenerator
+Generate dynamic batch indices for grouping and indexing operations in recommendation systems.
+
+::: kmr.layers.DynamicBatchIndexGenerator
+
+### 📐 TensorDimensionExpander
+Expand tensor dimensions for broadcasting and reshaping operations in recommendation pipelines.
+
+::: kmr.layers.TensorDimensionExpander
+
+### 🎭 ThresholdBasedMasking
+Apply threshold-based masking to filter values in geospatial and recommendation systems.
+
+::: kmr.layers.ThresholdBasedMasking
+
+### 🌍 HaversineGeospatialDistance
+Compute Haversine great-circle distance between geographic coordinates for location-based recommendations.
+
+::: kmr.layers.HaversineGeospatialDistance
+
+### 🗺️ SpatialFeatureClustering
+Cluster spatial features into geographic regions for location-aware recommendation filtering.
+
+::: kmr.layers.SpatialFeatureClustering
+
+### 📍 GeospatialScoreRanking
+Rank recommendations based on geospatial clustering features for location-aware recommendations.
+
+::: kmr.layers.GeospatialScoreRanking
+
+### 🧠 DeepFeatureRanking
+Deep neural network tower for feature-based ranking in learning-to-rank models.
+
+::: kmr.layers.DeepFeatureRanking
+
+### ⚖️ LearnableWeightedCombination
+Combine multiple recommendation scores with learnable softmax-normalized weights for hybrid recommendations.
+
+::: kmr.layers.LearnableWeightedCombination
+
+### 🔍 CosineSimilarityExplainer
+Compute and explain cosine similarity between embeddings for interpretable recommendations.
+
+::: kmr.layers.CosineSimilarityExplainer
+
+### 💬 FeedbackAdjustmentLayer
+Adjust recommendation scores based on user feedback signals for adaptive recommendations.
+
+::: kmr.layers.FeedbackAdjustmentLayer

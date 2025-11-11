@@ -323,6 +323,112 @@ class TestDataAnalyzer(unittest.TestCase):
             self.assertIsNone(result["analysis"])
             self.assertIsNone(result["recommendations"])
 
+    def test_recommendation_system_detection(self) -> None:
+        """Test detection of recommendation system characteristics."""
+        # Create collaborative filtering test data
+        cf_data = pd.DataFrame(
+            {
+                "user_id": [1, 1, 2, 2, 3],
+                "item_id": [101, 102, 101, 103, 102],
+                "rating": [5, 4, 3, 5, 4],
+                "age": [25, 25, 30, 30, 35],
+            },
+        )
+        cf_csv = os.path.join(self.temp_dir.name, "cf_data.csv")
+        cf_data.to_csv(cf_csv, index=False)
+
+        # Analyze collaborative filtering data
+        stats = self.analyzer.analyze_csv(cf_csv)
+        characteristics = stats["characteristics"]
+
+        # Check collaborative filtering detection
+        self.assertIn("collaborative_filtering", characteristics)
+        self.assertIn("recommendation_systems", characteristics)
+        self.assertIn("user_id", characteristics["collaborative_filtering"])
+        self.assertIn("item_id", characteristics["collaborative_filtering"])
+
+        # Check recommendations
+        recommendations = self.analyzer.recommend_layers(stats)
+        self.assertIn("collaborative_filtering", recommendations)
+        self.assertIn("recommendation_systems", recommendations)
+
+        # Verify specific layers are recommended
+        cf_recs = recommendations["collaborative_filtering"]
+        layer_names = [rec[0] for rec in cf_recs]
+        self.assertIn("CollaborativeUserItemEmbedding", layer_names)
+        self.assertIn("NormalizedDotProductSimilarity", layer_names)
+
+    def test_geospatial_recommendation_detection(self) -> None:
+        """Test detection of geospatial recommendation characteristics."""
+        # Create geospatial test data
+        geo_data = pd.DataFrame(
+            {
+                "user_id": [1, 2, 3],
+                "latitude": [40.7128, 34.0522, 37.7749],
+                "longitude": [-74.0060, -118.2437, -122.4194],
+                "rating": [5, 4, 3],
+            },
+        )
+        geo_csv = os.path.join(self.temp_dir.name, "geo_data.csv")
+        geo_data.to_csv(geo_csv, index=False)
+
+        # Analyze geospatial data
+        stats = self.analyzer.analyze_csv(geo_csv)
+        characteristics = stats["characteristics"]
+
+        # Check geospatial detection
+        self.assertIn("geospatial_recommendation", characteristics)
+        self.assertIn("recommendation_systems", characteristics)
+        self.assertIn("latitude", characteristics["geospatial_recommendation"])
+        self.assertIn("longitude", characteristics["geospatial_recommendation"])
+
+        # Check recommendations
+        recommendations = self.analyzer.recommend_layers(stats)
+        self.assertIn("geospatial_recommendation", recommendations)
+
+        # Verify specific layers are recommended
+        geo_recs = recommendations["geospatial_recommendation"]
+        layer_names = [rec[0] for rec in geo_recs]
+        self.assertIn("HaversineGeospatialDistance", layer_names)
+        self.assertIn("SpatialFeatureClustering", layer_names)
+
+    def test_content_based_recommendation_detection(self) -> None:
+        """Test detection of content-based recommendation characteristics."""
+        # Create content-based test data (user/item with features)
+        cb_data = pd.DataFrame(
+            {
+                "user_id": [1, 2, 3],
+                "item_id": [101, 102, 103],
+                "user_age": [25, 30, 35],
+                "user_category": ["A", "B", "A"],
+                "item_price": [10.0, 20.0, 15.0],
+                "item_category": ["X", "Y", "X"],
+            },
+        )
+        cb_csv = os.path.join(self.temp_dir.name, "cb_data.csv")
+        cb_data.to_csv(cb_csv, index=False)
+
+        # Analyze content-based data
+        stats = self.analyzer.analyze_csv(cb_csv)
+        characteristics = stats["characteristics"]
+
+        # Check content-based detection
+        self.assertIn("recommendation_systems", characteristics)
+        # Should detect content features
+        self.assertIn("continuous_features", characteristics)
+        self.assertIn("categorical_features", characteristics)
+
+        # Check recommendations
+        recommendations = self.analyzer.recommend_layers(stats)
+        self.assertIn("recommendation_systems", recommendations)
+
+        # If content features are detected, should recommend content-based layers
+        if "content_based_recommendation" in characteristics:
+            self.assertIn("content_based_recommendation", recommendations)
+            cb_recs = recommendations["content_based_recommendation"]
+            layer_names = [rec[0] for rec in cb_recs]
+            self.assertIn("DeepFeatureTower", layer_names)
+
 
 if __name__ == "__main__":
     unittest.main()

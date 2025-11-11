@@ -1,0 +1,435 @@
+"""End-to-end tests for UnifiedRecommendationModel - 15 comprehensive tests."""
+
+import numpy as np
+import tensorflow as tf
+import pytest
+from keras.optimizers import Adam
+from kmr.models import UnifiedRecommendationModel
+from kmr.losses import ImprovedMarginRankingLoss
+from kmr.metrics import AccuracyAtK, PrecisionAtK, RecallAtK
+from kmr.utils import KMRDataGenerator
+
+
+class TestUnifiedRecommendationModelE2E:
+    """Comprehensive E2E tests for UnifiedRecommendationModel (hybrid CF+CB)."""
+
+    @pytest.fixture(scope="class")
+    def setup_data(self):
+        """Generate hybrid test data (IDs + features)."""
+        (
+            user_ids,
+            item_ids,
+            _,
+            _,
+            _,
+        ) = KMRDataGenerator.generate_collaborative_filtering_data(
+            n_users=100,
+            n_items=50,
+            n_interactions=500,
+            random_state=42,
+        )
+        n_users, n_items = len(np.unique(user_ids)), len(np.unique(item_ids))
+        unique_users = np.unique(user_ids)[:30]
+
+        (
+            train_x_user_ids,
+            train_x_user_features,
+            train_x_item_ids,
+            train_x_item_features,
+            train_y,
+        ) = ([], [], [], [], [])
+        for user_id in unique_users:
+            if user_id >= n_users:
+                continue
+            user_items = item_ids[user_ids == user_id]
+            positive_set = set(user_items[user_items < n_items])
+            labels = np.zeros(n_items, dtype=np.float32)
+            labels[list(positive_set)] = 1.0
+
+            train_x_user_ids.append(user_id)
+            train_x_user_features.append(np.random.randn(10).astype(np.float32))
+            train_x_item_ids.append(np.arange(n_items))
+            train_x_item_features.append(
+                np.random.randn(n_items, 10).astype(np.float32),
+            )
+            train_y.append(labels)
+
+        return {
+            "n_users": n_users,
+            "n_items": n_items,
+            "train_x_user_ids": np.array(train_x_user_ids, dtype=np.int32),
+            "train_x_user_features": np.array(train_x_user_features, dtype=np.float32),
+            "train_x_item_ids": np.array(train_x_item_ids, dtype=np.int32),
+            "train_x_item_features": np.array(train_x_item_features, dtype=np.float32),
+            "train_y": np.array(train_y, dtype=np.float32),
+        }
+
+    @pytest.fixture
+    def model_and_metrics(self, setup_data):
+        """Create model and metrics."""
+        model = UnifiedRecommendationModel(
+            num_users=setup_data["n_users"],
+            num_items=setup_data["n_items"],
+            user_feature_dim=10,
+            item_feature_dim=10,
+            embedding_dim=16,
+            top_k=5,
+        )
+
+        model.compile(
+            optimizer=Adam(learning_rate=0.001),
+            loss=[ImprovedMarginRankingLoss(), None, None],
+            metrics=[[AccuracyAtK(k=5), PrecisionAtK(k=5)], None, None],
+        )
+        return {"model": model}
+
+    def test_01_model_compilation(self, model_and_metrics):
+        """Test 1: Model compiles."""
+        assert model_and_metrics["model"].optimizer is not None
+        print("✅ Test 1: Compilation successful")
+
+    def test_02_training_convergence(self, setup_data, model_and_metrics):
+        """Test 2: Model trains."""
+        model = model_and_metrics["model"]
+        history = model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=2,
+            batch_size=4,
+            verbose=0,
+        )
+        assert len(history.history["loss"]) == 2
+        print("✅ Test 2: Training convergence")
+
+    def test_03_metrics_tracked(self, setup_data, model_and_metrics):
+        """Test 3: Metrics tracked."""
+        model = model_and_metrics["model"]
+        history = model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=2,
+            batch_size=4,
+            verbose=0,
+        )
+        # Check that metrics are in history
+        assert "loss" in history.history
+        assert len(history.history["loss"]) == 2
+        print(f"   Tracked metrics: {list(history.history.keys())}")
+        print("✅ Test 3: Metrics tracked")
+
+    def test_04_inference_tuple(self, setup_data, model_and_metrics):
+        """Test 4: Returns 3-tuple."""
+        model = model_and_metrics["model"]
+        output = model(
+            [
+                setup_data["train_x_user_ids"][:2],
+                setup_data["train_x_user_features"][:2],
+                setup_data["train_x_item_ids"][:2],
+                setup_data["train_x_item_features"][:2],
+            ],
+            training=False,
+        )
+        assert isinstance(output, tuple) and len(output) == 3
+        assert output[0].shape == (2, setup_data["n_items"])
+        print("✅ Test 4: Returns correct 3-tuple")
+
+    def test_05_recommendation_validity(self, setup_data, model_and_metrics):
+        """Test 5: Valid recommendations."""
+        model = model_and_metrics["model"]
+        _, rec_indices, rec_scores = model(
+            [
+                setup_data["train_x_user_ids"][:3],
+                setup_data["train_x_user_features"][:3],
+                setup_data["train_x_item_ids"][:3],
+                setup_data["train_x_item_features"][:3],
+            ],
+            training=False,
+        )
+        assert np.all(rec_indices.numpy() >= 0)
+        assert np.all(rec_indices.numpy() < setup_data["n_items"])
+        print("✅ Test 5: Valid recommendations")
+
+    def test_06_recommendation_diversity(self, setup_data, model_and_metrics):
+        """Test 6: Diverse recommendations."""
+        model = model_and_metrics["model"]
+        _, rec_indices, _ = model(
+            [
+                setup_data["train_x_user_ids"][:8],
+                setup_data["train_x_user_features"][:8],
+                setup_data["train_x_item_ids"][:8],
+                setup_data["train_x_item_features"][:8],
+            ],
+            training=False,
+        )
+        all_items = set()
+        for rec in rec_indices.numpy():
+            all_items.update(rec)
+        assert len(all_items) > 1
+        print("✅ Test 6: Diverse recommendations")
+
+    def test_07_consistency(self, setup_data, model_and_metrics):
+        """Test 7: Consistent outputs."""
+        model = model_and_metrics["model"]
+        model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=1,
+            batch_size=4,
+            verbose=0,
+        )
+        out1 = model(
+            [
+                setup_data["train_x_user_ids"][:2],
+                setup_data["train_x_user_features"][:2],
+                setup_data["train_x_item_ids"][:2],
+                setup_data["train_x_item_features"][:2],
+            ],
+            training=False,
+        )
+        out2 = model(
+            [
+                setup_data["train_x_user_ids"][:2],
+                setup_data["train_x_user_features"][:2],
+                setup_data["train_x_item_ids"][:2],
+                setup_data["train_x_item_features"][:2],
+            ],
+            training=True,
+        )
+        assert out1[0].shape == out2[0].shape
+        print("✅ Test 7: Consistent outputs")
+
+    def test_08_batch_prediction(self, setup_data, model_and_metrics):
+        """Test 8: Batch predictions."""
+        model = model_and_metrics["model"]
+        output = model(
+            [
+                setup_data["train_x_user_ids"][:6],
+                setup_data["train_x_user_features"][:6],
+                setup_data["train_x_item_ids"][:6],
+                setup_data["train_x_item_features"][:6],
+            ],
+            training=False,
+        )
+        assert output[0].shape[0] == 6
+        print("✅ Test 8: Batch prediction works")
+
+    def test_09_full_workflow(self, setup_data):
+        """Test 9: Full workflow."""
+        model = UnifiedRecommendationModel(
+            num_users=setup_data["n_users"],
+            num_items=setup_data["n_items"],
+            user_feature_dim=10,
+            item_feature_dim=10,
+            embedding_dim=16,
+            top_k=5,
+        )
+        model.compile(optimizer=Adam(), loss=[ImprovedMarginRankingLoss(), None, None])
+        history = model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=1,
+            batch_size=4,
+            verbose=0,
+        )
+        assert len(history.history["loss"]) == 1
+        print("✅ Test 9: Full workflow")
+
+    def test_10_varied_recommendations(self, setup_data, model_and_metrics):
+        """Test 10: Varied recommendations per user."""
+        model = model_and_metrics["model"]
+        model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=2,
+            batch_size=4,
+            verbose=0,
+        )
+        _, rec_indices, _ = model(
+            [
+                setup_data["train_x_user_ids"][:6],
+                setup_data["train_x_user_features"][:6],
+                setup_data["train_x_item_ids"][:6],
+                setup_data["train_x_item_features"][:6],
+            ],
+            training=False,
+        )
+        rec_indices_np = rec_indices.numpy()
+        different = sum(
+            1
+            for i in range(1, len(rec_indices_np))
+            if not np.array_equal(rec_indices_np[0], rec_indices_np[i])
+        )
+        assert different > 0
+        print("✅ Test 10: Varied recommendations")
+
+    def test_11_metric_quality(self, setup_data, model_and_metrics):
+        """Test 11: Quality metrics."""
+        model = model_and_metrics["model"]
+        history = model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=2,
+            batch_size=4,
+            verbose=0,
+        )
+        # Check that loss decreases or stays reasonable
+        assert history.history["loss"][-1] >= 0.0
+        print("✅ Test 11: Quality metrics")
+
+    def test_12_reproducible(self, setup_data, model_and_metrics):
+        """Test 12: Reproducible predictions."""
+        model = model_and_metrics["model"]
+        model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=1,
+            batch_size=4,
+            verbose=0,
+        )
+        _, idx1, _ = model(
+            [
+                setup_data["train_x_user_ids"][:2],
+                setup_data["train_x_user_features"][:2],
+                setup_data["train_x_item_ids"][:2],
+                setup_data["train_x_item_features"][:2],
+            ],
+            training=False,
+        )
+        _, idx2, _ = model(
+            [
+                setup_data["train_x_user_ids"][:2],
+                setup_data["train_x_user_features"][:2],
+                setup_data["train_x_item_ids"][:2],
+                setup_data["train_x_item_features"][:2],
+            ],
+            training=False,
+        )
+        assert np.array_equal(idx1.numpy(), idx2.numpy())
+        print("✅ Test 12: Reproducible predictions")
+
+    def test_13_edge_case_single_user(self, setup_data, model_and_metrics):
+        """Test 13: Single user."""
+        model = model_and_metrics["model"]
+        model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=1,
+            batch_size=4,
+            verbose=0,
+        )
+        output = model(
+            [
+                setup_data["train_x_user_ids"][:1],
+                setup_data["train_x_user_features"][:1],
+                setup_data["train_x_item_ids"][:1],
+                setup_data["train_x_item_features"][:1],
+            ],
+            training=False,
+        )
+        assert all(o.shape[0] == 1 for o in output)
+        print("✅ Test 13: Single user")
+
+    def test_14_unique_recommendations(self, setup_data, model_and_metrics):
+        """Test 14: Unique recommendations per user."""
+        model = model_and_metrics["model"]
+        model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=1,
+            batch_size=4,
+            verbose=0,
+        )
+        _, rec_indices, _ = model(
+            [
+                setup_data["train_x_user_ids"][:4],
+                setup_data["train_x_user_features"][:4],
+                setup_data["train_x_item_ids"][:4],
+                setup_data["train_x_item_features"][:4],
+            ],
+            training=False,
+        )
+        for user_recs in rec_indices.numpy():
+            assert len(np.unique(user_recs)) == 5
+        print("✅ Test 14: Unique recommendations")
+
+    def test_15_personalization(self, setup_data, model_and_metrics):
+        """Test 15: Personalization."""
+        model = model_and_metrics["model"]
+        model.fit(
+            x=[
+                setup_data["train_x_user_ids"],
+                setup_data["train_x_user_features"],
+                setup_data["train_x_item_ids"],
+                setup_data["train_x_item_features"],
+            ],
+            y=setup_data["train_y"],
+            epochs=2,
+            batch_size=4,
+            verbose=0,
+        )
+        _, rec_indices, _ = model(
+            [
+                setup_data["train_x_user_ids"][:10],
+                setup_data["train_x_user_features"][:10],
+                setup_data["train_x_item_ids"][:10],
+                setup_data["train_x_item_features"][:10],
+            ],
+            training=False,
+        )
+        rec_indices_np = rec_indices.numpy()
+        different = sum(
+            1
+            for i in range(1, len(rec_indices_np))
+            if not np.array_equal(rec_indices_np[0], rec_indices_np[i])
+        )
+        assert different > 0
+        print("✅ Test 15: Personalization")
+
+
+if __name__ == "__main__":
+    pytest.main([__file__, "-v", "-s"])

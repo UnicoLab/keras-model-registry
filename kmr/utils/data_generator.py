@@ -951,3 +951,192 @@ class KMRDataGenerator:
         dataset = dataset.prefetch(tf.data.AUTOTUNE)
 
         return dataset
+
+    @staticmethod
+    def generate_collaborative_filtering_data(
+        n_users: int = 1000,
+        n_items: int = 500,
+        n_interactions: int = 10000,
+        random_state: int = 42,
+        rating_scale: tuple[int, int] = (1, 5),
+        sparsity: float = 0.95,
+    ) -> tuple:
+        """Generate synthetic collaborative filtering data.
+
+        Args:
+            n_users: Number of users
+            n_items: Number of items
+            n_interactions: Number of user-item interactions
+            random_state: Random seed
+            rating_scale: Tuple of (min_rating, max_rating)
+            sparsity: Target sparsity level (0-1, higher = more sparse)
+
+        Returns:
+            Tuple of (user_ids, item_ids, ratings, user_features, item_features)
+            where user_features and item_features are optional feature matrices
+        """
+        np.random.seed(random_state)
+
+        # Generate user-item interaction pairs
+        max_interactions = n_users * n_items
+        actual_interactions = min(
+            n_interactions,
+            int(max_interactions * (1 - sparsity)),
+        )
+
+        # Sample user-item pairs without replacement
+        all_pairs = [(u, i) for u in range(n_users) for i in range(n_items)]
+        np.random.shuffle(all_pairs)
+        selected_pairs = all_pairs[:actual_interactions]
+
+        user_ids = np.array([p[0] for p in selected_pairs], dtype=np.int32)
+        item_ids = np.array([p[1] for p in selected_pairs], dtype=np.int32)
+
+        # Generate ratings (simulate some user-item affinity)
+        # Use a simple model: rating = base + user_bias + item_bias + noise
+        user_bias = np.random.normal(0, 0.5, n_users)
+        item_bias = np.random.normal(0, 0.5, n_items)
+        base_rating = (rating_scale[0] + rating_scale[1]) / 2
+
+        ratings = []
+        for u, i in selected_pairs:
+            rating = (
+                base_rating + user_bias[u] + item_bias[i] + np.random.normal(0, 0.3)
+            )
+            rating = np.clip(rating, rating_scale[0], rating_scale[1])
+            ratings.append(int(np.round(rating)))
+
+        ratings = np.array(ratings, dtype=np.float32)
+
+        # Generate optional user and item features
+        user_features = np.random.normal(0, 1, (n_users, 10)).astype(np.float32)
+        item_features = np.random.normal(0, 1, (n_items, 8)).astype(np.float32)
+
+        return user_ids, item_ids, ratings, user_features, item_features
+
+    @staticmethod
+    def generate_geospatial_recommendation_data(
+        n_users: int = 500,
+        n_items: int = 200,
+        n_interactions: int = 5000,
+        random_state: int = 42,
+        location_range: tuple[float, float, float, float] = (-90, 90, -180, 180),
+    ) -> tuple:
+        """Generate synthetic geospatial recommendation data.
+
+        Args:
+            n_users: Number of users
+            n_items: Number of items
+            n_interactions: Number of interactions
+            random_state: Random seed
+            location_range: Tuple of (min_lat, max_lat, min_lon, max_lon)
+
+        Returns:
+            Tuple of (user_lat, user_lon, item_lats, item_lons, user_ids, item_ids)
+        """
+        np.random.seed(random_state)
+
+        # Generate user locations (uniform distribution)
+        user_lat = np.random.uniform(
+            location_range[0],
+            location_range[1],
+            n_users,
+        ).astype(np.float32)
+        user_lon = np.random.uniform(
+            location_range[2],
+            location_range[3],
+            n_users,
+        ).astype(np.float32)
+
+        # Generate item locations (clustered around some centers)
+        n_clusters = 5
+        cluster_centers_lat = np.random.uniform(
+            location_range[0],
+            location_range[1],
+            n_clusters,
+        )
+        cluster_centers_lon = np.random.uniform(
+            location_range[2],
+            location_range[3],
+            n_clusters,
+        )
+
+        item_lats = []
+        item_lons = []
+        for _ in range(n_items):
+            cluster_idx = np.random.randint(0, n_clusters)
+            lat = cluster_centers_lat[cluster_idx] + np.random.normal(0, 5)
+            lon = cluster_centers_lon[cluster_idx] + np.random.normal(0, 5)
+            lat = np.clip(lat, location_range[0], location_range[1])
+            lon = np.clip(lon, location_range[2], location_range[3])
+            item_lats.append(lat)
+            item_lons.append(lon)
+
+        item_lats = np.array(item_lats, dtype=np.float32)
+        item_lons = np.array(item_lons, dtype=np.float32)
+
+        # Generate some interactions (biased towards nearby items)
+        user_ids = np.random.randint(0, n_users, n_interactions)
+        item_ids = np.random.randint(0, n_items, n_interactions)
+
+        return user_lat, user_lon, item_lats, item_lons, user_ids, item_ids
+
+    @staticmethod
+    def generate_content_based_recommendation_data(
+        n_users: int = 1000,
+        n_items: int = 500,
+        user_feature_dim: int = 20,
+        item_feature_dim: int = 15,
+        n_interactions: int = 10000,
+        random_state: int = 42,
+    ) -> tuple:
+        """Generate synthetic content-based recommendation data.
+
+        Args:
+            n_users: Number of users
+            n_items: Number of items
+            user_feature_dim: Dimension of user feature vectors
+            item_feature_dim: Dimension of item feature vectors
+            n_interactions: Number of interactions
+            random_state: Random seed
+
+        Returns:
+            Tuple of (user_features, item_features, user_ids, item_ids, ratings)
+        """
+        np.random.seed(random_state)
+
+        # Generate user features (e.g., demographics, preferences)
+        user_features = np.random.normal(0, 1, (n_users, user_feature_dim)).astype(
+            np.float32,
+        )
+
+        # Generate item features (e.g., content attributes)
+        item_features = np.random.normal(0, 1, (n_items, item_feature_dim)).astype(
+            np.float32,
+        )
+
+        # Generate interactions (simulate affinity based on feature similarity)
+        user_ids = np.random.randint(0, n_users, n_interactions)
+        item_ids = np.random.randint(0, n_items, n_interactions)
+
+        # Generate ratings based on feature similarity (simplified)
+        ratings = []
+        for u, i in zip(user_ids, item_ids, strict=False):
+            # Simple similarity-based rating
+            # Use cosine similarity by computing dot product on common dimension
+            # If dimensions differ, use the minimum dimension
+            user_feat = user_features[u]
+            item_feat = item_features[i]
+            min_dim = min(len(user_feat), len(item_feat))
+            similarity = np.dot(user_feat[:min_dim], item_feat[:min_dim]) / (
+                np.linalg.norm(user_feat[:min_dim])
+                * np.linalg.norm(item_feat[:min_dim])
+                + 1e-8
+            )
+            rating = 3.0 + similarity * 2.0 + np.random.normal(0, 0.3)
+            rating = np.clip(rating, 1.0, 5.0)
+            ratings.append(rating)
+
+        ratings = np.array(ratings, dtype=np.float32)
+
+        return user_features, item_features, user_ids, item_ids, ratings

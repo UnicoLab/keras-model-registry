@@ -283,7 +283,7 @@ KMR is optimized for performance with:
 
 Have questions or want to connect with other KDP users? Join us on Discord:
 
-[![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/bhvGunkF)
+[![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/6zf4VZFYV5)
 
 ## 📄 License
 
@@ -300,7 +300,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Issues**: [GitHub Issues](https://github.com/UnicoLab/keras-model-registry/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/UnicoLab/keras-model-registry/discussions)
 - **Documentation**: [Online Docs](https://unicolab.github.io/keras-model-registry/)
-- **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/bhvGunkF)
+- **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/6zf4VZFYV5)
 
 ---
 

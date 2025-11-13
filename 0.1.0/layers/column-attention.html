@@ -110,7 +110,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -172,7 +172,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
@@ -3592,6 +3592,47 @@ the input features and outputs attention weights for each feature.</p>
     </tbody>
   </table>
 
+                <details class="quote">
+                  <summary>Source code in <code>kerasfactory/layers/ColumnAttention.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-33"><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="__span-0-34">    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-0-35">    <span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-36">    <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-37">    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+</span><span id="__span-0-38"><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-39"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize column attention.</span>
+</span><span id="__span-0-40">
+</span><span id="__span-0-41"><span class="sd">    Args:</span>
+</span><span id="__span-0-42"><span class="sd">        input_dim: Input dimension</span>
+</span><span id="__span-0-43"><span class="sd">        hidden_dim: Hidden layer dimension. If None, uses input_dim // 2</span>
+</span><span id="__span-0-44"><span class="sd">        **kwargs: Additional layer arguments</span>
+</span><span id="__span-0-45"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-46">    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="__span-0-47">    <span class="bp">self</span><span class="o">.</span><span class="n">input_dim</span> <span class="o">=</span> <span class="n">input_dim</span>
+</span><span id="__span-0-48">    <span class="bp">self</span><span class="o">.</span><span class="n">hidden_dim</span> <span class="o">=</span> <span class="n">hidden_dim</span> <span class="ow">or</span> <span class="nb">max</span><span class="p">(</span><span class="n">input_dim</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-49">
+</span><span id="__span-0-50">    <span class="c1"># Initialize layer weights to None</span>
+</span><span id="__span-0-51">    <span class="bp">self</span><span class="o">.</span><span class="n">attention_net</span><span class="p">:</span> <span class="n">Sequential</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span></code></pre></div></td></tr></table></div>
+                </details>
 
   
 
@@ -3680,6 +3721,31 @@ the input features and outputs attention weights for each feature.</p>
     </tbody>
   </table>
 
+          <details class="quote">
+            <summary>Source code in <code>kerasfactory/layers/ColumnAttention.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-111"><span class="nd">@classmethod</span>
+</span><span id="__span-0-112"><span class="k">def</span><span class="w"> </span><span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;ColumnAttention&quot;</span><span class="p">:</span>
+</span><span id="__span-0-113"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create layer from configuration.</span>
+</span><span id="__span-0-114">
+</span><span id="__span-0-115"><span class="sd">    Args:</span>
+</span><span id="__span-0-116"><span class="sd">        config: Layer configuration dictionary</span>
+</span><span id="__span-0-117">
+</span><span id="__span-0-118"><span class="sd">    Returns:</span>
+</span><span id="__span-0-119"><span class="sd">        ColumnAttention instance</span>
+</span><span id="__span-0-120"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-121">    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
   </div>
 
 </div>

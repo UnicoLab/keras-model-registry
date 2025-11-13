@@ -110,7 +110,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -172,7 +172,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
@@ -3944,6 +3944,131 @@ dimension for the distribution embedding.</p>
     </tbody>
   </table>
 
+                <details class="quote">
+                  <summary>Source code in <code>kerasfactory/layers/DistributionAwareEncoder.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-79"><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="__span-0-80">    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-0-81">    <span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-82">    <span class="n">auto_detect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-83">    <span class="n">distribution_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+</span><span id="__span-0-84">    <span class="n">transform_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+</span><span id="__span-0-85">    <span class="n">add_distribution_embedding</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+</span><span id="__span-0-86">    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-87">    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+</span><span id="__span-0-88"><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-89"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize the DistributionAwareEncoder.</span>
+</span><span id="__span-0-90">
+</span><span id="__span-0-91"><span class="sd">    Args:</span>
+</span><span id="__span-0-92"><span class="sd">        embedding_dim: Embedding dimension.</span>
+</span><span id="__span-0-93"><span class="sd">        auto_detect: Whether to auto-detect distribution type.</span>
+</span><span id="__span-0-94"><span class="sd">        distribution_type: Type of distribution.</span>
+</span><span id="__span-0-95"><span class="sd">        transform_type: Type of transformation to apply.</span>
+</span><span id="__span-0-96"><span class="sd">        add_distribution_embedding: Whether to add distribution embedding.</span>
+</span><span id="__span-0-97"><span class="sd">        name: Name of the layer.</span>
+</span><span id="__span-0-98"><span class="sd">        **kwargs: Additional keyword arguments.</span>
+</span><span id="__span-0-99"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-100">    <span class="c1"># Set private attributes first</span>
+</span><span id="__span-0-101">    <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_dim</span> <span class="o">=</span> <span class="n">embedding_dim</span>
+</span><span id="__span-0-102">    <span class="bp">self</span><span class="o">.</span><span class="n">_auto_detect</span> <span class="o">=</span> <span class="n">auto_detect</span>
+</span><span id="__span-0-103">    <span class="bp">self</span><span class="o">.</span><span class="n">_distribution_type</span> <span class="o">=</span> <span class="n">distribution_type</span>
+</span><span id="__span-0-104">    <span class="bp">self</span><span class="o">.</span><span class="n">_transform_type</span> <span class="o">=</span> <span class="n">transform_type</span>
+</span><span id="__span-0-105">    <span class="bp">self</span><span class="o">.</span><span class="n">_add_distribution_embedding</span> <span class="o">=</span> <span class="n">add_distribution_embedding</span>
+</span><span id="__span-0-106">
+</span><span id="__span-0-107">    <span class="c1"># Define valid distribution types</span>
+</span><span id="__span-0-108">    <span class="bp">self</span><span class="o">.</span><span class="n">_valid_distributions</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-0-109">        <span class="s2">&quot;normal&quot;</span><span class="p">,</span>
+</span><span id="__span-0-110">        <span class="s2">&quot;exponential&quot;</span><span class="p">,</span>
+</span><span id="__span-0-111">        <span class="s2">&quot;lognormal&quot;</span><span class="p">,</span>
+</span><span id="__span-0-112">        <span class="s2">&quot;uniform&quot;</span><span class="p">,</span>
+</span><span id="__span-0-113">        <span class="s2">&quot;beta&quot;</span><span class="p">,</span>
+</span><span id="__span-0-114">        <span class="s2">&quot;bimodal&quot;</span><span class="p">,</span>
+</span><span id="__span-0-115">        <span class="s2">&quot;heavy_tailed&quot;</span><span class="p">,</span>
+</span><span id="__span-0-116">        <span class="s2">&quot;mixed&quot;</span><span class="p">,</span>
+</span><span id="__span-0-117">        <span class="s2">&quot;bounded&quot;</span><span class="p">,</span>
+</span><span id="__span-0-118">        <span class="s2">&quot;unknown&quot;</span><span class="p">,</span>
+</span><span id="__span-0-119">    <span class="p">]</span>
+</span><span id="__span-0-120">
+</span><span id="__span-0-121">    <span class="c1"># Validate parameters</span>
+</span><span id="__span-0-122">    <span class="bp">self</span><span class="o">.</span><span class="n">_validate_params</span><span class="p">()</span>
+</span><span id="__span-0-123">
+</span><span id="__span-0-124">    <span class="c1"># Set public attributes BEFORE calling parent&#39;s __init__</span>
+</span><span id="__span-0-125">    <span class="bp">self</span><span class="o">.</span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_embedding_dim</span>
+</span><span id="__span-0-126">    <span class="bp">self</span><span class="o">.</span><span class="n">auto_detect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_detect</span>
+</span><span id="__span-0-127">    <span class="bp">self</span><span class="o">.</span><span class="n">distribution_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distribution_type</span>
+</span><span id="__span-0-128">    <span class="bp">self</span><span class="o">.</span><span class="n">transform_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform_type</span>
+</span><span id="__span-0-129">    <span class="bp">self</span><span class="o">.</span><span class="n">add_distribution_embedding</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_distribution_embedding</span>
+</span><span id="__span-0-130">
+</span><span id="__span-0-131">    <span class="c1"># Initialize instance variables</span>
+</span><span id="__span-0-132">    <span class="bp">self</span><span class="o">.</span><span class="n">distribution_transform</span><span class="p">:</span> <span class="n">DistributionTransformLayer</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-133">    <span class="bp">self</span><span class="o">.</span><span class="n">distribution_embedding</span><span class="p">:</span> <span class="n">layers</span><span class="o">.</span><span class="n">Embedding</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-134">    <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span> <span class="n">layers</span><span class="o">.</span><span class="n">Dense</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-135">    <span class="bp">self</span><span class="o">.</span><span class="n">detected_distribution</span><span class="p">:</span> <span class="n">layers</span><span class="o">.</span><span class="n">Variable</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="__span-0-136">    <span class="bp">self</span><span class="o">.</span><span class="n">_is_initialized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="__span-0-137">
+</span><span id="__span-0-138">    <span class="c1"># Call parent&#39;s __init__ after setting public attributes</span>
+</span><span id="__span-0-139">    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+                </details>
 
   
 

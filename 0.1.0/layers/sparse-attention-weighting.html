@@ -110,7 +110,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -172,7 +172,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
@@ -3806,6 +3806,79 @@ Controls the sparsity of attention weights:
     </tbody>
   </table>
 
+                <details class="quote">
+                  <summary>Source code in <code>kerasfactory/layers/SparseAttentionWeighting.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-59"><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="__span-0-60">    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-0-61">    <span class="n">num_modules</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+</span><span id="__span-0-62">    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+</span><span id="__span-0-63">    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+</span><span id="__span-0-64"><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-65"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize sparse attention weighting layer.</span>
+</span><span id="__span-0-66">
+</span><span id="__span-0-67"><span class="sd">    Args:</span>
+</span><span id="__span-0-68"><span class="sd">        num_modules: Number of input modules to weight. Must be positive.</span>
+</span><span id="__span-0-69"><span class="sd">        temperature: Temperature parameter for softmax scaling. Must be positive.</span>
+</span><span id="__span-0-70"><span class="sd">            Controls the sparsity of attention weights:</span>
+</span><span id="__span-0-71"><span class="sd">            - Higher values (&gt;1.0) lead to more uniform weights</span>
+</span><span id="__span-0-72"><span class="sd">            - Lower values (&lt;1.0) lead to more concentrated weights</span>
+</span><span id="__span-0-73"><span class="sd">        **kwargs: Additional layer arguments passed to the parent Layer class.</span>
+</span><span id="__span-0-74">
+</span><span id="__span-0-75"><span class="sd">    Raises:</span>
+</span><span id="__span-0-76"><span class="sd">        ValueError: If num_modules &lt;= 0 or temperature &lt;= 0</span>
+</span><span id="__span-0-77"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-78">    <span class="k">if</span> <span class="n">num_modules</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-0-79">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;num_modules must be positive, got </span><span class="si">{</span><span class="n">num_modules</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-80">    <span class="k">if</span> <span class="n">temperature</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="__span-0-81">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;temperature must be positive, got </span><span class="si">{</span><span class="n">temperature</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-82">
+</span><span id="__span-0-83">    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="__span-0-84">    <span class="bp">self</span><span class="o">.</span><span class="n">num_modules</span> <span class="o">=</span> <span class="n">num_modules</span>
+</span><span id="__span-0-85">    <span class="bp">self</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">temperature</span>
+</span><span id="__span-0-86">
+</span><span id="__span-0-87">    <span class="c1"># Learnable attention weights</span>
+</span><span id="__span-0-88">    <span class="bp">self</span><span class="o">.</span><span class="n">attention_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_weight</span><span class="p">(</span>
+</span><span id="__span-0-89">        <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">num_modules</span><span class="p">,),</span>
+</span><span id="__span-0-90">        <span class="n">initializer</span><span class="o">=</span><span class="s2">&quot;ones&quot;</span><span class="p">,</span>
+</span><span id="__span-0-91">        <span class="n">trainable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+</span><span id="__span-0-92">        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;attention_weights&quot;</span><span class="p">,</span>
+</span><span id="__span-0-93">    <span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+                </details>
 
   
 
@@ -3894,6 +3967,31 @@ Controls the sparsity of attention weights:
     </tbody>
   </table>
 
+          <details class="quote">
+            <summary>Source code in <code>kerasfactory/layers/SparseAttentionWeighting.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-148"><span class="nd">@classmethod</span>
+</span><span id="__span-0-149"><span class="k">def</span><span class="w"> </span><span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;SparseAttentionWeighting&quot;</span><span class="p">:</span>
+</span><span id="__span-0-150"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create layer from configuration.</span>
+</span><span id="__span-0-151">
+</span><span id="__span-0-152"><span class="sd">    Args:</span>
+</span><span id="__span-0-153"><span class="sd">        config: Layer configuration dictionary</span>
+</span><span id="__span-0-154">
+</span><span id="__span-0-155"><span class="sd">    Returns:</span>
+</span><span id="__span-0-156"><span class="sd">        SparseAttentionWeighting instance</span>
+</span><span id="__span-0-157"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-158">    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
   </div>
 
 </div>

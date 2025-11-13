@@ -110,7 +110,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -172,7 +172,7 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="pink"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="black"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
       <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
@@ -3749,6 +3749,61 @@ This technique helps reduce overfitting and training time in deep networks.</p>
     </tbody>
   </table>
 
+                <details class="quote">
+                  <summary>Source code in <code>kerasfactory/layers/StochasticDepth.py</code></summary>
+                  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-35"><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+</span><span id="__span-0-36">    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-0-37">    <span class="n">survival_prob</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+</span><span id="__span-0-38">    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+</span><span id="__span-0-39">    <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+</span><span id="__span-0-40"><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="__span-0-41"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize stochastic depth.</span>
+</span><span id="__span-0-42">
+</span><span id="__span-0-43"><span class="sd">    Args:</span>
+</span><span id="__span-0-44"><span class="sd">        survival_prob: Probability of keeping the residual branch (default: 0.5)</span>
+</span><span id="__span-0-45"><span class="sd">        seed: Random seed for reproducibility</span>
+</span><span id="__span-0-46"><span class="sd">        **kwargs: Additional layer arguments</span>
+</span><span id="__span-0-47">
+</span><span id="__span-0-48"><span class="sd">    Raises:</span>
+</span><span id="__span-0-49"><span class="sd">        ValueError: If survival_prob is not in [0, 1]</span>
+</span><span id="__span-0-50"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-51">    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span id="__span-0-52">
+</span><span id="__span-0-53">    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">survival_prob</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+</span><span id="__span-0-54">        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;survival_prob must be in [0, 1], got </span><span class="si">{</span><span class="n">survival_prob</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-55">
+</span><span id="__span-0-56">    <span class="bp">self</span><span class="o">.</span><span class="n">survival_prob</span> <span class="o">=</span> <span class="n">survival_prob</span>
+</span><span id="__span-0-57">    <span class="bp">self</span><span class="o">.</span><span class="n">seed</span> <span class="o">=</span> <span class="n">seed</span>
+</span><span id="__span-0-58">
+</span><span id="__span-0-59">    <span class="c1"># Create random generator with fixed seed</span>
+</span><span id="__span-0-60">    <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">SeedGenerator</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span> <span class="k">if</span> <span class="n">seed</span> <span class="k">else</span> <span class="kc">None</span>
+</span></code></pre></div></td></tr></table></div>
+                </details>
 
   
 
@@ -3833,6 +3888,35 @@ This technique helps reduce overfitting and training time in deep networks.</p>
     </tbody>
   </table>
 
+          <details class="quote">
+            <summary>Source code in <code>kerasfactory/layers/StochasticDepth.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-100"><span class="k">def</span><span class="w"> </span><span class="nf">compute_output_shape</span><span class="p">(</span>
+</span><span id="__span-0-101">    <span class="bp">self</span><span class="p">,</span>
+</span><span id="__span-0-102">    <span class="n">input_shape</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span>
+</span><span id="__span-0-103"><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+</span><span id="__span-0-104"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Compute output shape.</span>
+</span><span id="__span-0-105">
+</span><span id="__span-0-106"><span class="sd">    Args:</span>
+</span><span id="__span-0-107"><span class="sd">        input_shape: List of input shape tuples</span>
+</span><span id="__span-0-108">
+</span><span id="__span-0-109"><span class="sd">    Returns:</span>
+</span><span id="__span-0-110"><span class="sd">        Output shape tuple</span>
+</span><span id="__span-0-111"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-112">    <span class="k">return</span> <span class="n">input_shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
   </div>
 
 </div>
@@ -3912,6 +3996,31 @@ This technique helps reduce overfitting and training time in deep networks.</p>
     </tbody>
   </table>
 
+          <details class="quote">
+            <summary>Source code in <code>kerasfactory/layers/StochasticDepth.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-129"><span class="nd">@classmethod</span>
+</span><span id="__span-0-130"><span class="k">def</span><span class="w"> </span><span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;StochasticDepth&quot;</span><span class="p">:</span>
+</span><span id="__span-0-131"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create layer from configuration.</span>
+</span><span id="__span-0-132">
+</span><span id="__span-0-133"><span class="sd">    Args:</span>
+</span><span id="__span-0-134"><span class="sd">        config: Layer configuration dictionary</span>
+</span><span id="__span-0-135">
+</span><span id="__span-0-136"><span class="sd">    Returns:</span>
+</span><span id="__span-0-137"><span class="sd">        StochasticDepth instance</span>
+</span><span id="__span-0-138"><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="__span-0-139">    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="o">**</span><span class="n">config</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+          </details>
   </div>
 
 </div>

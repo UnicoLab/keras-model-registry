@@ -620,4 +620,4 @@ attention_weights = interpret_model(model, X_test)
 
 ---
 
-**Ready to see real examples?** Check out the [Examples](../examples/) section!
+**Ready to see real examples?** Check out the [Examples](../examples/README.md) section!

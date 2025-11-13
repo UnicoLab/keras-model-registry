@@ -107,6 +107,23 @@ nav:
       - MultiHeadGraphFeaturePreprocessor: layers/multi-head-graph-feature-preprocessor.md
       - NumericalAnomalyDetection: layers/numerical-anomaly-detection.md
       - CategoricalAnomalyDetectionLayer: layers/categorical-anomaly-detection-layer.md
+    - ⏰ Time Series:
+      - MovingAverage: layers/moving-average.md
+      - SeriesDecomposition: layers/series-decomposition.md
+      - DFTSeriesDecomposition: layers/dft-series-decomposition.md
+      - ReversibleInstanceNorm: layers/reversible-instance-norm.md
+      - ReversibleInstanceNormMultivariate: layers/reversible-instance-norm-multivariate.md
+      - PositionalEmbedding: layers/positional-embedding.md
+      - FixedEmbedding: layers/fixed-embedding.md
+      - TokenEmbedding: layers/token-embedding.md
+      - TemporalEmbedding: layers/temporal-embedding.md
+      - DataEmbeddingWithoutPosition: layers/data-embedding-without-position.md
+      - TemporalMixing: layers/temporal-mixing.md
+      - FeatureMixing: layers/feature-mixing.md
+      - MixingLayer: layers/mixing-layer.md
+      - MultiScaleSeasonMixing: layers/multi-scale-season-mixing.md
+      - MultiScaleTrendMixing: layers/multi-scale-trend-mixing.md
+      - PastDecomposableMixing: layers/past-decomposable-mixing.md
   - 📚 Tutorials:
     - Basic Workflows: tutorials/basic-workflows.md
     - Feature Engineering: tutorials/feature-engineering.md
@@ -119,7 +136,14 @@ nav:
     - Data Analyzer Examples: examples/data_analyzer_examples.md
   - 📑 API Reference:
     - Layers: api/layers.md
-    - Models: api/models.md
+    - Models:
+      - Models Overview: api/models.md
+      - TSMixer: models/tsmixer.md
+      - TimeMixer: models/timemixer.md
+      - BaseFeedForwardModel: models/base-feed-forward-model.md
+      - SFNEBlock: models/sfne-block.md
+      - TerminatorModel: models/terminator-model.md
+      - Autoencoder: models/autoencoder.md
     - Metrics: api/metrics.md
     - Utils: api/utils.md
   - 🤝 Contributing:
@@ -127,6 +151,8 @@ nav:
     - Layer Implementation Guide: layers_implementation_guide.md
     - Model Implementation Guide: models_implementation_guide.md
     - Data Analyzer: data_analyzer.md
+
+# Note: 404.md is intentionally not in nav as it's a special error page
 
 repo_name: KerasFactory
 repo_url: https://github.com/UnicoLab/KerasFactory
@@ -187,6 +213,7 @@ plugins:
             heading_level: 3
             show_signature: true
             show_docstring: true
+            ignore_warnings: true
   - mike:
       # These fields are all optional; the defaults are as below...
       canonical_version: null

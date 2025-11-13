@@ -224,7 +224,8 @@ plugins:
             show_docstring: true
             ignore_warnings: true
   - mike:
-      # Set canonical_version to null - mike will handle redirects via set-default
+      # Copy files instead of creating symlinks (GitHub Pages doesn't follow symlinks)
+      alias_type: copy
       canonical_version: null
       version_selector: true
       css_dir: css

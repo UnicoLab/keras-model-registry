@@ -78,4 +78,6 @@ jobs:
           echo "${{ steps.semantic-release.outputs.new_release_version }}"
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
+          # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
+          mike delete latest --push 2>/dev/null || true
           mike deploy --push --update-aliases ${{ steps.semantic-release.outputs.new_release_version }} latest

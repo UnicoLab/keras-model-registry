@@ -48,4 +48,6 @@ jobs:
           else
             echo "Using manually specified version: $VERSION"
           fi
+          # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
+          mike delete latest --push 2>/dev/null || true
           mike deploy --push --update-aliases $VERSION latest

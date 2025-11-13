@@ -109,7 +109,7 @@ docs_deploy:
 	@echo "Starting to build docs"
 	@echo "more info: https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/"
 ifdef HAS_POETRY
-	poetry version -s | xargs -I {} sh -c 'echo Deploying version {} && mike deploy --push --update-aliases {} latest'
+	poetry version -s | xargs -I {} sh -c 'echo Deploying version {} && mike delete latest --push 2>/dev/null || true && mike deploy --push --update-aliases {} latest'
 else
 	@echo "To build the docs, you need to have poetry first"
 	exit 1
@@ -118,7 +118,23 @@ endif
 .PHONY: docs_version_list
 ## List available versions of the docs
 docs_version_list:
-	poetry run mike list
+	@echo "=== Mike Versions and Aliases ==="
+	@poetry run mike list || echo "No versions found or error occurred"
+	@echo ""
+	@echo "=== Detailed version info from gh-pages branch ==="
+	@git fetch origin gh-pages 2>/dev/null || true
+	@git show origin/gh-pages:versions.json 2>/dev/null | python3 -m json.tool 2>/dev/null || echo "Could not fetch versions.json"
+
+.PHONY: docs_version_delete
+## Delete a specific version (usage: make docs_version_delete VERSION=latest)
+docs_version_delete:
+ifdef VERSION
+	@echo "Deleting version: $(VERSION)"
+	poetry run mike delete $(VERSION) --push
+else
+	@echo "Error: VERSION not specified. Usage: make docs_version_delete VERSION=latest"
+	@exit 1
+endif
 
 .PHONY: docs_version_serve
 ## Serve versioned docs

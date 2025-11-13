@@ -1,9 +1,7 @@
 name: "Release Fallback - Triggered by Tags"
 
-# This workflow serves as a fallback to ensure releases are created
-# when tags are pushed (e.g., if semantic-release creates a tag but
-# the main RELEASE workflow fails or doesn't complete)
-# Can also be manually triggered with a specific tag
+# This workflow creates GitHub releases from tags
+# Can be triggered automatically by tag push or manually with a tag
 on:
   push:
     tags:
@@ -27,8 +25,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 jobs:
   release_fallback:
@@ -63,32 +59,6 @@ jobs:
             echo "Tag $TAG_NAME created successfully"
           fi
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: latest
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-3.11-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
-      - name: Install project
-        run: poetry install --no-interaction
-
       - name: Extract version from tag
         id: version
         run: |
@@ -109,28 +79,6 @@ jobs:
           echo "Extracted version: $VERSION from tag: $TAG_NAME"
           echo "Triggered by: ${{ github.event_name }}"
 
-      - name: Verify version matches poetry
-        run: |
-          POETRY_VERSION=$(poetry version -s)
-          if [ "${{ steps.version.outputs.version }}" != "$POETRY_VERSION" ]; then
-            echo "Warning: Tag version (${{ steps.version.outputs.version }}) does not match poetry version ($POETRY_VERSION)"
-            echo "Updating poetry version to match tag..."
-            poetry version "${{ steps.version.outputs.version }}"
-          else
-            echo "✓ Version consistency verified: ${{ steps.version.outputs.version }}"
-          fi
-
-      - name: Run tests
-        run: poetry run pytest tests/ -v
-
-      - name: Build package
-        run: poetry build
-
-      - name: Publish to PyPI
-        env:
-          POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish --no-interaction
-
       - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v1
         env:
@@ -141,24 +89,8 @@ jobs:
           body: |
             ## Release ${{ steps.version.outputs.tag }}
             
-            This release was automatically created from tag ${{ steps.version.outputs.tag }}.
+            This release was created from tag ${{ steps.version.outputs.tag }}.
             
-            **Package Version:** ${{ steps.version.outputs.version }}
-            **Published to PyPI:** ✅
-            
-            > Note: This is a fallback release. If semantic-release was used, check the main release for detailed changelog.
+            **Version:** ${{ steps.version.outputs.version }}
           draft: false
           prerelease: false
-
-      - name: Deploy documentation
-        continue-on-error: true
-        run: |
-          git config user.name "UnicoLab Bot"
-          git config user.email "bot@unicolab.ai"
-          # Configure git authentication
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          echo "Deploying documentation version: ${{ steps.version.outputs.version }}"
-          # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
-          poetry run mike delete latest --push 2>/dev/null || true
-          poetry run mike deploy --push --update-aliases "${{ steps.version.outputs.version }}" latest
-

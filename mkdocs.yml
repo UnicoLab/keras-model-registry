@@ -224,7 +224,7 @@ plugins:
             ignore_warnings: true
   - mike:
       # Copy files instead of creating symlinks (GitHub Pages doesn't follow symlinks)
-      # alias_type: copy
+      alias_type: copy
       canonical_version: null
       version_selector: true
       css_dir: css

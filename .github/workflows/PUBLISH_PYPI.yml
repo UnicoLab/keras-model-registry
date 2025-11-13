@@ -75,6 +75,20 @@ jobs:
         run: |
           git config user.name "UnicoLab Bot"
           git config user.email "bot@unicolab.ai"
+          # Extract version from tag (remove 'v' prefix if present) or use poetry version
+          if [[ "${{ github.ref_name }}" =~ ^v(.+)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+          else
+            VERSION="${{ github.ref_name }}"
+          fi
+          # Verify version matches poetry version (source of truth)
+          POETRY_VERSION=$(poetry version -s)
+          if [ "$VERSION" != "$POETRY_VERSION" ]; then
+            echo "Warning: Tag version ($VERSION) does not match poetry version ($POETRY_VERSION)"
+            echo "Using poetry version as source of truth: $POETRY_VERSION"
+            VERSION="$POETRY_VERSION"
+          fi
+          echo "Deploying documentation version: $VERSION"
           # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
           poetry run mike delete latest --push 2>/dev/null || true
-          poetry run mike deploy --push --update-aliases ${{ github.ref_name }} latest
+          poetry run mike deploy --push --update-aliases "$VERSION" latest

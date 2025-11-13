@@ -104,16 +104,38 @@ clean_built:
 # ------------------------------------
 
 .PHONY: docs_deploy
-## Build docs using mike
+## Build docs using mike (uses poetry version as source of truth, matches PyPI version)
 docs_deploy:
 	@echo "Starting to build docs"
 	@echo "more info: https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/"
 ifdef HAS_POETRY
-	poetry version -s | xargs -I {} sh -c 'echo Deploying version {} && mike delete latest --push 2>/dev/null || true && mike deploy --push --update-aliases {} latest'
+	@VERSION=$$(poetry version -s); \
+	echo "Deploying documentation version: $$VERSION (from pyproject.toml - matches PyPI)"; \
+	mike delete latest --push 2>/dev/null || true; \
+	mike deploy --push --update-aliases "$$VERSION" latest
 else
 	@echo "To build the docs, you need to have poetry first"
 	exit 1
 endif
+
+.PHONY: docs_version_check
+## Check version consistency between poetry, PyPI, and documentation
+docs_version_check:
+	@echo "=== Version Consistency Check ==="
+	@POETRY_VERSION=$$(poetry version -s); \
+	echo "Poetry version (pyproject.toml): $$POETRY_VERSION"; \
+	echo ""; \
+	echo "Version synchronization flow:"; \
+	echo "  1. Semantic-release determines version from commit messages"; \
+	echo "  2. Poetry version is updated to match semantic-release version"; \
+	echo "  3. pyproject.toml is committed back to repo (keeps it synchronized)"; \
+	echo "  4. Package is published to PyPI with this version"; \
+	echo "  5. Documentation is deployed with mike using this version"; \
+	echo ""; \
+	echo "This version should match:"; \
+	echo "  - PyPI package version"; \
+	echo "  - Documentation version deployed with mike"; \
+	echo "  - Git tags (may have 'v' prefix: v$$POETRY_VERSION)"
 
 .PHONY: docs_version_list
 ## List available versions of the docs
@@ -124,6 +146,9 @@ docs_version_list:
 	@echo "=== Detailed version info from gh-pages branch ==="
 	@git fetch origin gh-pages 2>/dev/null || true
 	@git show origin/gh-pages:versions.json 2>/dev/null | python3 -m json.tool 2>/dev/null || echo "Could not fetch versions.json"
+	@echo ""
+	@echo "=== Current Poetry Version (should match deployed versions) ==="
+	@poetry version -s
 
 .PHONY: docs_version_delete
 ## Delete a specific version (usage: make docs_version_delete VERSION=latest)

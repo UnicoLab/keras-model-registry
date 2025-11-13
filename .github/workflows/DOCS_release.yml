@@ -41,13 +41,23 @@ jobs:
       - name: "Releasing new documentation with mike"
         shell: bash
         run: |
+          # Use poetry version as source of truth (matches PyPI version)
+          POETRY_VERSION=$(poetry version -s)
           VERSION="${{ github.event.inputs.version }}"
           if [ -z "$VERSION" ]; then
-            VERSION=$(poetry version -s)
-            echo "Using poetry version: $VERSION"
+            VERSION="$POETRY_VERSION"
+            echo "Using poetry version (source of truth): $VERSION"
           else
+            # Remove 'v' prefix if present
+            VERSION="${VERSION#v}"
             echo "Using manually specified version: $VERSION"
+            # Warn if manual version doesn't match poetry version
+            if [ "$VERSION" != "$POETRY_VERSION" ]; then
+              echo "Warning: Manual version ($VERSION) does not match poetry version ($POETRY_VERSION)"
+              echo "Consider updating pyproject.toml to match, or use poetry version as default"
+            fi
           fi
+          echo "Deploying documentation version: $VERSION"
           # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
           mike delete latest --push 2>/dev/null || true
-          mike deploy --push --update-aliases $VERSION latest
+          mike deploy --push --update-aliases "$VERSION" latest

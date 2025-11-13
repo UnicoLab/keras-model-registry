@@ -64,20 +64,57 @@ jobs:
           # Configuring PyPi
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
 
-          # Setting correct package version
-          poetry version ${{ steps.semantic-release.outputs.new_release_version }}
+          # Setting correct package version (from semantic-release)
+          RELEASE_VERSION="${{ steps.semantic-release.outputs.new_release_version }}"
+          echo "Updating poetry version to: $RELEASE_VERSION (determined by semantic-release from commits)"
+          poetry version "$RELEASE_VERSION"
+          
+          # Fetch latest changes (semantic-release may have pushed CHANGELOG.md and created a tag)
+          git fetch origin main --tags || true
+          
+          # Commit pyproject.toml update back to repo to keep it synchronized
+          # This ensures pyproject.toml always matches the released version
+          # Note: This commit happens after semantic-release's tag, but that's okay -
+          # the important thing is pyproject.toml matches the released version
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git add pyproject.toml
+          if git diff --staged --quiet; then
+            echo "✓ pyproject.toml already matches semantic-release version: $RELEASE_VERSION"
+          else
+            echo "Committing pyproject.toml version update to keep repo synchronized"
+            git commit -m "chore: sync version to $RELEASE_VERSION [skip ci]" || echo "Commit failed (may already be committed)"
+            # Try to push, but don't fail if there are conflicts (manual resolution may be needed)
+            git push origin HEAD:main || echo "Warning: Push failed - pyproject.toml may need manual sync"
+          fi
 
-          # Publishing to PyPi
+          # Publishing to PyPi (will use the version we just set)
+          echo "Publishing to PyPI with version: $RELEASE_VERSION"
           poetry publish --build
 
       - name: "Releasing new documentation with mike"
         continue-on-error: true
         shell: bash
         run: |
-          echo "CURRENT TAG:"
-          echo "${{ steps.semantic-release.outputs.new_release_version }}"
+          # Get version from semantic-release (determined from commits)
+          # This version was already used to update pyproject.toml and publish to PyPI
+          RELEASE_VERSION="${{ steps.semantic-release.outputs.new_release_version }}"
+          # Remove 'v' prefix if present (semantic-release might include it)
+          VERSION="${RELEASE_VERSION#v}"
+          
+          # Verify version matches poetry version (should match after line 68-69 update)
+          POETRY_VERSION=$(poetry version -s)
+          if [ "$VERSION" != "$POETRY_VERSION" ]; then
+            echo "Error: Semantic-release version ($VERSION) does not match poetry version ($POETRY_VERSION)"
+            echo "This should not happen - using poetry version as source of truth: $POETRY_VERSION"
+            VERSION="$POETRY_VERSION"
+          else
+            echo "✓ Version consistency verified: $VERSION"
+          fi
+          
+          echo "Deploying documentation version: $VERSION (from semantic-release, matches PyPI)"
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor }}@users.noreply.github.com"
           # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
           mike delete latest --push 2>/dev/null || true
-          mike deploy --push --update-aliases ${{ steps.semantic-release.outputs.new_release_version }} latest
+          mike deploy --push --update-aliases "$VERSION" latest

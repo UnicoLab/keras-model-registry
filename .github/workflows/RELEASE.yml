@@ -139,9 +139,6 @@ jobs:
           echo "Deploying documentation version: $VERSION (from semantic-release tag: $RELEASE_VERSION, matches PyPI)"
           # Configure git authentication for mike
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
-          mike delete latest --push 2>/dev/null || true
-          # Deploy with mike (creates symlink for latest alias)
           mike deploy --push --update-aliases "$VERSION" latest
 
       - name: Retry documentation release on failure
@@ -159,34 +156,3 @@ jobs:
           fi
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           mike deploy --push --update-aliases --force "$VERSION" latest
-
-      - name: Set default version and fix symlink
-        shell: bash
-        run: |
-          RELEASE_VERSION="${{ steps.semantic-release.outputs.new_release_version }}"
-          VERSION="${RELEASE_VERSION#v}"
-          POETRY_VERSION=$(poetry version -s)
-          if [ "$VERSION" != "$POETRY_VERSION" ]; then
-            VERSION="$POETRY_VERSION"
-          fi
-          
-          # Set default version (creates root redirect)
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          mike set-default --push latest || echo "set-default failed or already set"
-          
-          # Fix symlink issue: GitHub Pages doesn't follow symlinks, so copy files instead
-          echo "Fixing latest symlink for GitHub Pages compatibility..."
-          git fetch origin gh-pages --force || true
-          git checkout gh-pages 2>/dev/null || git checkout -b gh-pages origin/gh-pages 2>/dev/null || true
-          
-          # Remove symlink and copy files
-          if [ -L latest ]; then
-            echo "Replacing latest symlink with actual files..."
-            rm -f latest
-            cp -r "$VERSION" latest
-            git add -A latest/
-            git commit -m "Fix: Replace latest symlink with actual files for GitHub Pages" 2>/dev/null || echo "Already committed or no changes"
-            git push origin gh-pages || echo "Push failed"
-          fi
-          
-          git checkout main 2>/dev/null || true

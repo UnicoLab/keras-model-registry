@@ -109,30 +109,7 @@ docs_deploy:
 	@echo "Starting to build docs"
 	@echo "more info: https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/"
 ifdef HAS_POETRY
-	@echo "Fetching latest gh-pages branch..."
-	@git fetch origin gh-pages:gh-pages 2>/dev/null || echo "No gh-pages branch exists yet"
 	@poetry version -s | xargs -I {} sh -c 'echo Deploying version {} && poetry run mike deploy --push --update-aliases --ignore-remote-status {} latest'
-	@echo "Fixing latest symlink for GitHub Pages compatibility..."
-	@VERSION=$$(poetry version -s); \
-	CURRENT_BRANCH=$$(git branch --show-current 2>/dev/null || echo "main"); \
-	git fetch origin gh-pages 2>/dev/null || true; \
-	git stash push -m "Temporary stash for docs_deploy" 2>/dev/null || true; \
-	if git show-ref --verify --quiet refs/heads/gh-pages; then \
-		git checkout gh-pages 2>/dev/null || echo "Checkout failed, continuing..."; \
-	else \
-		git checkout -b gh-pages origin/gh-pages 2>/dev/null || git checkout -b gh-pages 2>/dev/null || echo "Branch creation failed"; \
-	fi; \
-	if [ -L latest ]; then \
-		echo "Replacing latest symlink with actual files..."; \
-		rm -f latest; \
-		cp -r "$$VERSION" latest; \
-		git add -A latest/; \
-		git commit -m "Fix: Replace latest symlink with actual files for GitHub Pages" 2>/dev/null || echo "Already committed"; \
-		git push origin gh-pages 2>/dev/null || echo "Push failed"; \
-	fi; \
-	poetry run mike set-default --push --ignore-remote-status latest 2>/dev/null || echo "set-default failed or already set"; \
-	git checkout "$$CURRENT_BRANCH" 2>/dev/null || true; \
-	git stash pop 2>/dev/null || true
 else
 	@echo "To build the docs, you need to have poetry first"
 	exit 1

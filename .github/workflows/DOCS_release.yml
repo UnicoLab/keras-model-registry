@@ -74,9 +74,6 @@ jobs:
             fi
           fi
           echo "Deploying documentation version: $VERSION"
-          # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
-          mike delete latest --push 2>/dev/null || true
-          # Deploy with mike (creates symlink for latest alias)
           mike deploy --push --update-aliases "$VERSION" latest
         continue-on-error: true
 
@@ -97,36 +94,3 @@ jobs:
             VERSION="${VERSION#v}"
           fi
           mike deploy --push --update-aliases --force "$VERSION" latest
-
-      - name: Set default version and fix symlink
-        shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          POETRY_VERSION=$(poetry version -s)
-          VERSION="${{ github.event.inputs.version }}"
-          if [ -z "$VERSION" ]; then
-            VERSION="$POETRY_VERSION"
-          else
-            VERSION="${VERSION#v}"
-          fi
-          
-          # Set default version (creates root redirect)
-          mike set-default --push latest || echo "set-default failed or already set"
-          
-          # Fix symlink issue: GitHub Pages doesn't follow symlinks, so copy files instead
-          echo "Fixing latest symlink for GitHub Pages compatibility..."
-          git fetch origin gh-pages --force || true
-          git checkout gh-pages 2>/dev/null || git checkout -b gh-pages origin/gh-pages 2>/dev/null || true
-          
-          # Remove symlink and copy files
-          if [ -L latest ]; then
-            echo "Replacing latest symlink with actual files..."
-            rm -f latest
-            cp -r "$VERSION" latest
-            git add -A latest/
-            git commit -m "Fix: Replace latest symlink with actual files for GitHub Pages" 2>/dev/null || echo "Already committed or no changes"
-            git push origin gh-pages || echo "Push failed"
-          fi
-          
-          git checkout main 2>/dev/null || true

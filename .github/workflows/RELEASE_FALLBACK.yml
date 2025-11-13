@@ -11,9 +11,19 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag to release (e.g., v0.1.0)'
+        description: 'Tag to release (e.g., v0.1.0). Will be created if it does not exist.'
         required: true
         type: string
+      branch:
+        description: 'Branch to create tag from (default: main)'
+        required: false
+        default: 'main'
+        type: string
+      create_tag:
+        description: 'Create the tag if it does not exist'
+        required: false
+        default: true
+        type: boolean
 
 permissions:
   contents: write
@@ -28,8 +38,30 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # If manually triggered, checkout the specified tag; otherwise use the ref from push event
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
+          # If manually triggered, checkout the branch (tag will be created later if needed)
+          # Otherwise use the ref from push event (tag push)
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.branch || github.ref }}
+
+      - name: Create tag if it doesn't exist (manual trigger only)
+        if: github.event_name == 'workflow_dispatch' && github.event.inputs.create_tag == true
+        run: |
+          TAG_NAME="${{ github.event.inputs.tag }}"
+          # Check if tag already exists
+          if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Tag $TAG_NAME already exists, using existing tag"
+            git checkout "$TAG_NAME"
+          else
+            echo "Tag $TAG_NAME does not exist, creating it..."
+            # Configure git for tag creation
+            git config user.name "${{ github.actor }}"
+            git config user.email "${{ github.actor }}@users.noreply.github.com"
+            # Create the tag
+            git tag -a "$TAG_NAME" -m "Release $TAG_NAME"
+            # Push the tag to remote
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+            git push origin "$TAG_NAME" || echo "Tag push failed, continuing anyway..."
+            echo "Tag $TAG_NAME created successfully"
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5

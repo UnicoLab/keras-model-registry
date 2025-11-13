@@ -1,8 +1,6 @@
 site_name: KerasFactory
 site_url: https://unicolab.github.io/KerasFactory/
-
-# Disable directory URLs to make relative paths work better (important for GitHub Pages + mike)
-use_directory_urls: false
+docs_dir: docs
 
 # Suppress warnings for pages not in nav (like 404.md)
 strict: false
@@ -162,8 +160,8 @@ nav:
 
 # Note: 404.md is intentionally not in nav as it's a special error page
 
-site_url: https://unicolab.github.io/KerasFactory/
 repo_name: KerasFactory
+site_url: https://unicolab.github.io/KerasFactory/
 repo_url: https://github.com/UnicoLab/KerasFactory
 
 markdown_extensions:
@@ -197,14 +195,15 @@ markdown_extensions:
 
 plugins:
   - search
-  - autorefs
+  - autorefs:
+      link_titles: true
   - mkdocstrings:
       handlers:
         python:
           paths: [.]
           options:
             docstring_style: google
-            show_source: false
+            show_source: true
             show_root_heading: true
             show_root_toc_entry: false
             show_object_full_path: false
@@ -225,11 +224,15 @@ plugins:
             ignore_warnings: true
   - mike:
       # Copy files instead of creating symlinks (GitHub Pages doesn't follow symlinks)
-      alias_type: copy
+      # alias_type: copy
       canonical_version: null
       version_selector: true
       css_dir: css
       javascript_dir: js
+
+# Disable directory URLs to make relative paths work better
+use_directory_urls: false
+
 
 extra:
   version:

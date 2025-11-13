@@ -1,4 +1,8 @@
 site_name: KerasFactory
+
+# Suppress warnings for pages not in nav (like 404.md)
+strict: false
+
 theme:
   name: "material"
   custom_dir: docs/overrides

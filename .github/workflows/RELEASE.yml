@@ -6,6 +6,7 @@ on:
       DRY_RUN:
         type: boolean
         required: false
+        description: "Run in dry run mode (no actual release)"
 
 permissions:
   contents: write
@@ -137,9 +138,10 @@ jobs:
           fi
           
           echo "Deploying documentation version: $VERSION (from semantic-release tag: $RELEASE_VERSION, matches PyPI)"
+          echo "Building from current code and overwriting remote gh-pages"
           # Configure git authentication for mike
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          mike deploy --push --update-aliases "$VERSION" latest
+          mike deploy --push --update-aliases --ignore-remote-status "$VERSION" latest
 
       - name: Retry documentation release on failure
         if: steps.deploy_docs.outcome == 'failure'
@@ -155,4 +157,4 @@ jobs:
             VERSION="$POETRY_VERSION"
           fi
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          mike deploy --push --update-aliases --force "$VERSION" latest
+          mike deploy --push --update-aliases --ignore-remote-status "$VERSION" latest

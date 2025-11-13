@@ -158,6 +158,7 @@ nav:
 
 # Note: 404.md is intentionally not in nav as it's a special error page
 
+site_url: https://unicolab.github.io/KerasFactory/
 repo_name: KerasFactory
 repo_url: https://github.com/UnicoLab/KerasFactory
 

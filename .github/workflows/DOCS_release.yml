@@ -73,8 +73,8 @@ jobs:
               echo "Consider updating pyproject.toml to match, or use poetry version as default"
             fi
           fi
-          echo "Deploying documentation version: $VERSION"
-          mike deploy --push --update-aliases "$VERSION" latest
+          echo "Deploying documentation version: $VERSION (building from current code and overwriting remote)"
+          mike deploy --push --update-aliases --ignore-remote-status "$VERSION" latest
         continue-on-error: true
 
       - name: Retry documentation release on failure
@@ -93,4 +93,4 @@ jobs:
           else
             VERSION="${VERSION#v}"
           fi
-          mike deploy --push --update-aliases --force "$VERSION" latest
+          mike deploy --push --update-aliases --ignore-remote-status "$VERSION" latest

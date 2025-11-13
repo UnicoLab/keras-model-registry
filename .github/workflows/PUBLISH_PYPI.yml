@@ -104,8 +104,8 @@ jobs:
             echo "Using poetry version as source of truth: $POETRY_VERSION"
             VERSION="$POETRY_VERSION"
           fi
-          echo "Deploying documentation version: $VERSION"
-          poetry run mike deploy --push --update-aliases "$VERSION" latest
+          echo "Deploying documentation version: $VERSION (building from current code and overwriting remote)"
+          poetry run mike deploy --push --update-aliases --ignore-remote-status "$VERSION" latest
 
       - name: Retry documentation release on failure
         if: steps.deploy_docs.outcome == 'failure'
@@ -123,4 +123,4 @@ jobs:
             VERSION="$POETRY_VERSION"
           fi
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-          poetry run mike deploy --push --update-aliases --force "$VERSION" latest
+          poetry run mike deploy --push --update-aliases --ignore-remote-status "$VERSION" latest

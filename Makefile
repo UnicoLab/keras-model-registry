@@ -105,6 +105,7 @@ clean_built:
 
 .PHONY: docs_deploy
 ## Build docs using mike (uses poetry version as source of truth, matches PyPI version)
+## Builds locally and overwrites remote gh-pages branch
 docs_deploy:
 	@echo "Starting to build docs"
 	@echo "more info: https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/"

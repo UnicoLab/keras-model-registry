@@ -47,7 +47,10 @@ jobs:
         run: poetry install --no-interaction --no-root
 
       - name: Install project
-        run: poetry install --no-interaction
+        run: |
+          poetry install --no-interaction
+          # Ensure doc dependencies are installed for mike
+          poetry install --only doc --no-interaction
 
       - name: Run tests
         run: poetry run pytest tests/ -v
@@ -78,12 +81,15 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Fetch gh-pages branch
+      - name: Configure Git for docs deployment
         run: |
           git config user.name "UnicoLab Bot"
           git config user.email "bot@unicolab.ai"
-          # Fetch the gh-pages branch (required for mike to work correctly)
-          git fetch origin gh-pages:gh-pages || echo "No gh-pages branch exists yet"
+
+      - name: Fetch gh-pages branch
+        run: |
+          # Fetch the gh-pages branch (create it if it doesn't exist)
+          git fetch origin gh-pages:gh-pages 2>/dev/null || git checkout -b gh-pages && git push origin gh-pages && git checkout main
 
       - name: Deploy documentation
         id: deploy_docs
@@ -111,8 +117,18 @@ jobs:
         if: steps.deploy_docs.outcome == 'failure'
         run: |
           echo "First documentation deploy attempt failed, retrying..."
-          # Force-fetch the latest gh-pages branch
-          git fetch origin gh-pages:gh-pages --force
+
+          # Try to fetch the latest gh-pages branch, create if it doesn't exist
+          if ! git fetch origin gh-pages:gh-pages --force 2>/dev/null; then
+            echo "gh-pages branch doesn't exist, creating it..."
+            git checkout --orphan gh-pages
+            git rm -rf .
+            git commit --allow-empty -m "Initialize gh-pages branch"
+            git push origin gh-pages
+            git checkout main
+            git fetch origin gh-pages:gh-pages
+          fi
+
           if [[ "${{ github.ref_name }}" =~ ^v(.+)$ ]]; then
             VERSION="${BASH_REMATCH[1]}"
           else

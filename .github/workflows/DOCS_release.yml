@@ -39,6 +39,9 @@ jobs:
           # assuring we have all extras for testing as well
           poetry install --only doc --no-interaction
 
+          # Verify mike is installed
+          mike --version || pip install mike
+
       - name: Configure Git
         run: |
           git config --global user.name "${{ github.actor }}"
@@ -48,8 +51,8 @@ jobs:
 
       - name: Fetch gh-pages branch
         run: |
-          # Fetch the gh-pages branch (required for mike to work correctly)
-          git fetch origin gh-pages:gh-pages || echo "No gh-pages branch exists yet"
+          # Fetch the gh-pages branch (create it if it doesn't exist)
+          git fetch origin gh-pages:gh-pages 2>/dev/null || git checkout -b gh-pages && git push origin gh-pages && git checkout main
 
       - name: "Releasing new documentation with mike"
         id: deploy_docs
@@ -84,8 +87,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "First documentation deploy attempt failed, retrying..."
-          # Force-fetch the latest gh-pages branch
-          git fetch origin gh-pages:gh-pages --force
+
+          # Try to fetch the latest gh-pages branch, create if it doesn't exist
+          if ! git fetch origin gh-pages:gh-pages --force 2>/dev/null; then
+            echo "gh-pages branch doesn't exist, creating it..."
+            git checkout --orphan gh-pages
+            git rm -rf .
+            git commit --allow-empty -m "Initialize gh-pages branch"
+            git push origin gh-pages
+            git checkout main
+            git fetch origin gh-pages:gh-pages
+          fi
+
           POETRY_VERSION=$(poetry version -s)
           VERSION="${{ github.event.inputs.version }}"
           if [ -z "$VERSION" ]; then

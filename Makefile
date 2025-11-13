@@ -111,8 +111,8 @@ docs_deploy:
 ifdef HAS_POETRY
 	@VERSION=$$(poetry version -s); \
 	echo "Deploying documentation version: $$VERSION (from pyproject.toml - matches PyPI)"; \
-	mike delete latest --push 2>/dev/null || true; \
-	mike deploy --push --update-aliases "$$VERSION" latest
+	poetry run mike delete latest --push 2>/dev/null || true; \
+	poetry run mike deploy --push --update-aliases "$$VERSION" latest
 else
 	@echo "To build the docs, you need to have poetry first"
 	exit 1

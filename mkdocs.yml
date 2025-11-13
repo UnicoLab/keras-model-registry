@@ -219,8 +219,8 @@ plugins:
             show_docstring: true
             ignore_warnings: true
   - mike:
-      # These fields are all optional; the defaults are as below...
-      canonical_version: null
+      # Set canonical version to 'latest' so root redirects to /latest/
+      canonical_version: latest
       version_selector: true
       css_dir: css
       javascript_dir: js

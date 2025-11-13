@@ -219,8 +219,8 @@ plugins:
             show_docstring: true
             ignore_warnings: true
   - mike:
-      # Set canonical version to 'latest' so root redirects to /latest/
-      canonical_version: latest
+      # Set canonical_version to null - mike will handle redirects via set-default
+      canonical_version: null
       version_selector: true
       css_dir: css
       javascript_dir: js

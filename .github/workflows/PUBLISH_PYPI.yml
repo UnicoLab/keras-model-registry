@@ -78,11 +78,17 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Deploy documentation
-        continue-on-error: true
+      - name: Fetch gh-pages branch
         run: |
           git config user.name "UnicoLab Bot"
           git config user.email "bot@unicolab.ai"
+          # Fetch the gh-pages branch (required for mike to work correctly)
+          git fetch origin gh-pages:gh-pages || echo "No gh-pages branch exists yet"
+
+      - name: Deploy documentation
+        id: deploy_docs
+        continue-on-error: true
+        run: |
           # Configure git authentication for mike
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           # Extract version from tag (remove 'v' prefix if present) or use poetry version
@@ -101,4 +107,56 @@ jobs:
           echo "Deploying documentation version: $VERSION"
           # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
           poetry run mike delete latest --push 2>/dev/null || true
+          # Deploy with mike (creates symlink for latest alias)
           poetry run mike deploy --push --update-aliases "$VERSION" latest
+
+      - name: Retry documentation release on failure
+        if: steps.deploy_docs.outcome == 'failure'
+        run: |
+          echo "First documentation deploy attempt failed, retrying..."
+          # Force-fetch the latest gh-pages branch
+          git fetch origin gh-pages:gh-pages --force
+          if [[ "${{ github.ref_name }}" =~ ^v(.+)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+          else
+            VERSION="${{ github.ref_name }}"
+          fi
+          POETRY_VERSION=$(poetry version -s)
+          if [ "$VERSION" != "$POETRY_VERSION" ]; then
+            VERSION="$POETRY_VERSION"
+          fi
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          poetry run mike deploy --push --update-aliases --force "$VERSION" latest
+
+      - name: Set default version and fix symlink
+        run: |
+          if [[ "${{ github.ref_name }}" =~ ^v(.+)$ ]]; then
+            VERSION="${BASH_REMATCH[1]}"
+          else
+            VERSION="${{ github.ref_name }}"
+          fi
+          POETRY_VERSION=$(poetry version -s)
+          if [ "$VERSION" != "$POETRY_VERSION" ]; then
+            VERSION="$POETRY_VERSION"
+          fi
+          
+          # Set default version (creates root redirect)
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          poetry run mike set-default --push latest || echo "set-default failed or already set"
+          
+          # Fix symlink issue: GitHub Pages doesn't follow symlinks, so copy files instead
+          echo "Fixing latest symlink for GitHub Pages compatibility..."
+          git fetch origin gh-pages --force || true
+          git checkout gh-pages 2>/dev/null || git checkout -b gh-pages origin/gh-pages 2>/dev/null || true
+          
+          # Remove symlink and copy files
+          if [ -L latest ]; then
+            echo "Replacing latest symlink with actual files..."
+            rm -f latest
+            cp -r "$VERSION" latest
+            git add -A latest/
+            git commit -m "Fix: Replace latest symlink with actual files for GitHub Pages" 2>/dev/null || echo "Already committed or no changes"
+            git push origin gh-pages || echo "Push failed"
+          fi
+          
+          git checkout main 2>/dev/null || true

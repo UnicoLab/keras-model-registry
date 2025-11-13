@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       DRY_RUN:
+        type: boolean
         required: false
-        default: false
 
 permissions:
   contents: write
@@ -108,7 +108,15 @@ jobs:
           echo "Release notes preview:"
           echo "$RELEASE_NOTES"
 
+      - name: Fetch gh-pages branch
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          # Fetch the gh-pages branch (required for mike to work correctly)
+          git fetch origin gh-pages:gh-pages || echo "No gh-pages branch exists yet"
+
       - name: "Releasing new documentation with mike"
+        id: deploy_docs
         continue-on-error: true
         shell: bash
         run: |
@@ -129,10 +137,56 @@ jobs:
           fi
           
           echo "Deploying documentation version: $VERSION (from semantic-release tag: $RELEASE_VERSION, matches PyPI)"
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor }}@users.noreply.github.com"
           # Configure git authentication for mike
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           # Delete 'latest' if it exists as a version (not an alias) to avoid conflicts
           mike delete latest --push 2>/dev/null || true
+          # Deploy with mike (creates symlink for latest alias)
           mike deploy --push --update-aliases "$VERSION" latest
+
+      - name: Retry documentation release on failure
+        if: steps.deploy_docs.outcome == 'failure'
+        shell: bash
+        run: |
+          echo "First documentation deploy attempt failed, retrying..."
+          # Force-fetch the latest gh-pages branch
+          git fetch origin gh-pages:gh-pages --force
+          RELEASE_VERSION="${{ steps.semantic-release.outputs.new_release_version }}"
+          VERSION="${RELEASE_VERSION#v}"
+          POETRY_VERSION=$(poetry version -s)
+          if [ "$VERSION" != "$POETRY_VERSION" ]; then
+            VERSION="$POETRY_VERSION"
+          fi
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          mike deploy --push --update-aliases --force "$VERSION" latest
+
+      - name: Set default version and fix symlink
+        shell: bash
+        run: |
+          RELEASE_VERSION="${{ steps.semantic-release.outputs.new_release_version }}"
+          VERSION="${RELEASE_VERSION#v}"
+          POETRY_VERSION=$(poetry version -s)
+          if [ "$VERSION" != "$POETRY_VERSION" ]; then
+            VERSION="$POETRY_VERSION"
+          fi
+          
+          # Set default version (creates root redirect)
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          mike set-default --push latest || echo "set-default failed or already set"
+          
+          # Fix symlink issue: GitHub Pages doesn't follow symlinks, so copy files instead
+          echo "Fixing latest symlink for GitHub Pages compatibility..."
+          git fetch origin gh-pages --force || true
+          git checkout gh-pages 2>/dev/null || git checkout -b gh-pages origin/gh-pages 2>/dev/null || true
+          
+          # Remove symlink and copy files
+          if [ -L latest ]; then
+            echo "Replacing latest symlink with actual files..."
+            rm -f latest
+            cp -r "$VERSION" latest
+            git add -A latest/
+            git commit -m "Fix: Replace latest symlink with actual files for GitHub Pages" 2>/dev/null || echo "Already committed or no changes"
+            git push origin gh-pages || echo "Push failed"
+          fi
+          
+          git checkout main 2>/dev/null || true

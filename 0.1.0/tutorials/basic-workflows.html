@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://unicolab.github.io/KerasFactory/0.1.0/examples/index.html">
+        <link rel="canonical" href="https://unicolab.github.io/KerasFactory/0.1.0/tutorials/basic-workflows.html">
       
       
-        <link rel="prev" href="../tutorials/model-building.html">
+        <link rel="prev" href="../layers/past-decomposable-mixing.html">
       
       
-        <link rel="next" href="rich_docstrings_showcase.html">
+        <link rel="next" href="feature-engineering.html">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>Examples Overview - KerasFactory</title>
+        <title>Basic Workflows - KerasFactory</title>
       
     
     
@@ -117,7 +117,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#examples" class="md-skip">
+        <a href="#basic-workflows" class="md-skip">
           Skip to content
         </a>
       
@@ -157,7 +157,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Examples Overview
+              Basic Workflows
             
           </span>
         </div>
@@ -320,11 +320,13 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../tutorials/basic-workflows.html" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="basic-workflows.html" class="md-tabs__link">
           
   
     
@@ -340,13 +342,11 @@
         
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="index.html" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../examples/index.html" class="md-tabs__link">
           
   
     
@@ -2144,8 +2144,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -2158,21 +2160,22 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -2183,7 +2186,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             📚 Tutorials
@@ -2194,10 +2197,30 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../tutorials/basic-workflows.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Basic Workflows
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="basic-workflows.html" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -2206,6 +2229,293 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Table of Contents
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Data Preparation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Data Preparation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#loading-and-preprocessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Loading and Preprocessing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-missing-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling Missing Values
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-building" class="md-nav__link">
+    <span class="md-ellipsis">
+      🏗️ Model Building
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🏗️ Model Building">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-sequential-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Sequential Model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-model-with-residual-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Model with Residual Connections
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#training-and-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Training and Evaluation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Training and Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#model-compilation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Model Compilation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#training-with-callbacks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Training with Callbacks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evaluation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 Common Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 Common Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-feature-engineering-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Feature Engineering Pipeline
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-multi-head-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Multi-Head Processing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-ensemble-approach" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Ensemble Approach
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-anomaly-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Anomaly Detection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      🐛 Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🐛 Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#memory-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#training-instability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Training Instability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overfitting
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Optimization
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Optimization">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#speed-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Speed Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memory Optimization
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Next Steps
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2218,7 +2528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorials/feature-engineering.html" class="md-nav__link">
+      <a href="feature-engineering.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2239,7 +2549,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../tutorials/model-building.html" class="md-nav__link">
+      <a href="model-building.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2264,8 +2574,6 @@
       
   
   
-    
-  
   
   
     
@@ -2286,24 +2594,23 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="index.html" class="md-nav__link md-nav__link--active">
+            <a href="../examples/index.html" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -2314,13 +2621,13 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_5" id="__nav_5_label" tabindex="">
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             📖 Examples
@@ -2336,7 +2643,7 @@
   
   
     <li class="md-nav__item">
-      <a href="rich_docstrings_showcase.html" class="md-nav__link">
+      <a href="../examples/rich_docstrings_showcase.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2357,7 +2664,7 @@
   
   
     <li class="md-nav__item">
-      <a href="feed_forward_guide.html" class="md-nav__link">
+      <a href="../examples/feed_forward_guide.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2378,7 +2685,7 @@
   
   
     <li class="md-nav__item">
-      <a href="kdp_integration_guide.html" class="md-nav__link">
+      <a href="../examples/kdp_integration_guide.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2399,7 +2706,7 @@
   
   
     <li class="md-nav__item">
-      <a href="data_analyzer_examples.html" class="md-nav__link">
+      <a href="../examples/data_analyzer_examples.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -2916,7 +3223,7 @@
                   
 
   
-    <a href="https://github.com/UnicoLab/KerasFactory/edit/master/docs/examples/README.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/UnicoLab/KerasFactory/edit/master/docs/tutorials/basic-workflows.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -2925,67 +3232,25 @@
     
       
     
-    <a href="https://github.com/UnicoLab/KerasFactory/raw/master/docs/examples/README.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/UnicoLab/KerasFactory/raw/master/docs/tutorials/basic-workflows.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="examples">📚 Examples</h1>
-<p>Real-world examples and use cases demonstrating KerasFactory layers in action. These examples show how to build production-ready tabular models for various domains and applications.</p>
-<h2 id="quick-navigation">🎯 Quick Navigation</h2>
-<ul>
-<li><a href="rich_docstrings_showcase.html">Rich Docstrings Showcase</a> - Comprehensive examples with detailed documentation</li>
-<li><a href="feed_forward_guide.html">BaseFeedForwardModel Guide</a> - Building feed-forward models with KerasFactory</li>
-<li><a href="kdp_integration_guide.html">KDP Integration Guide</a> - Integrating with Keras Data Processor</li>
-<li><a href="data_analyzer_examples.html">Data Analyzer Examples</a> - Data analysis and preprocessing workflows</li>
-</ul>
-<h2 id="getting-started">🚀 Getting Started</h2>
-<h3 id="1-basic-classification">1. <strong>Basic Classification</strong></h3>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="kn">import</span><span class="w"> </span><span class="nn">keras</span>
-</span><span id="__span-0-2"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">TabularAttention</span><span class="p">,</span> <span class="n">VariableSelection</span>
-</span><span id="__span-0-3">
-</span><span id="__span-0-4"><span class="c1"># Simple classification model</span>
-</span><span id="__span-0-5"><span class="k">def</span><span class="w"> </span><span class="nf">create_classifier</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-0-6">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-0-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-0-8">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-0-9">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-0-10">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
-</span><span id="__span-0-11">
-</span><span id="__span-0-12"><span class="c1"># Usage</span>
-</span><span id="__span-0-13"><span class="n">model</span> <span class="o">=</span> <span class="n">create_classifier</span><span class="p">(</span>
-</span><span id="__span-0-14">    <span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-</span><span id="__span-0-15">    <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-</span><span id="__span-0-16"><span class="p">)</span>
-</span><span id="__span-0-17"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-</span><span id="__span-0-18">    <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
-</span><span id="__span-0-19">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
-</span><span id="__span-0-20">    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span>
-</span><span id="__span-0-21"><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<h3 id="2-regression-with-feature-engineering">2. <strong>Regression with Feature Engineering</strong></h3>
+<h1 id="basic-workflows">🔄 Basic Workflows</h1>
+<p>Learn the fundamental workflows for building tabular models with KerasFactory layers. This tutorial covers the most common patterns and best practices.</p>
+<h2 id="table-of-contents">📋 Table of Contents</h2>
+<ol>
+<li><a href="#data-preparation">Data Preparation</a></li>
+<li><a href="#model-building">Model Building</a></li>
+<li><a href="#training-and-evaluation">Training and Evaluation</a></li>
+<li><a href="#common-patterns">Common Patterns</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<h2 id="data-preparation">📊 Data Preparation</h2>
+<h3 id="loading-and-preprocessing">Loading and Preprocessing</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3010,36 +3275,63 @@
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="__span-1-2">    <span class="n">DifferentiableTabularPreprocessor</span><span class="p">,</span>
-</span><span id="__span-1-3">    <span class="n">AdvancedNumericalEmbedding</span><span class="p">,</span>
-</span><span id="__span-1-4">    <span class="n">GatedFeatureFusion</span>
-</span><span id="__span-1-5"><span class="p">)</span>
-</span><span id="__span-1-6">
-</span><span id="__span-1-7"><span class="k">def</span><span class="w"> </span><span class="nf">create_regressor</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-1-8">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-1-9">
-</span><span id="__span-1-10">    <span class="n">x</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-1-11">    <span class="n">x</span> <span class="o">=</span> <span class="n">AdvancedNumericalEmbedding</span><span class="p">(</span><span class="n">embedding_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-12">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-13">
-</span><span id="__span-1-14">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-15">
-</span><span id="__span-1-16">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
-</span><span id="__span-1-17">
-</span><span id="__span-1-18"><span class="c1"># Usage</span>
-</span><span id="__span-1-19"><span class="n">model</span> <span class="o">=</span> <span class="n">create_regressor</span><span class="p">(</span>
-</span><span id="__span-1-20">    <span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-</span><span id="__span-1-21"><span class="p">)</span>
-</span><span id="__span-1-22"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-</span><span id="__span-1-23">    <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
-</span><span id="__span-1-24">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;mse&#39;</span><span class="p">,</span>
-</span><span id="__span-1-25">    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mae&#39;</span><span class="p">],</span>
-</span><span id="__span-1-26"><span class="p">)</span>
+<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</span><span id="__span-0-2"><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+</span><span id="__span-0-3"><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+</span><span id="__span-0-4"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">DifferentiableTabularPreprocessor</span>
+</span><span id="__span-0-5">
+</span><span id="__span-0-6"><span class="c1"># Load your dataset</span>
+</span><span id="__span-0-7"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;your_dataset.csv&#39;</span><span class="p">)</span>
+</span><span id="__span-0-8">
+</span><span id="__span-0-9"><span class="c1"># Separate features and target</span>
+</span><span id="__span-0-10"><span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-11"><span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+</span><span id="__span-0-12">
+</span><span id="__span-0-13"><span class="c1"># Split the data</span>
+</span><span id="__span-0-14"><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+</span><span id="__span-0-15">    <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+</span><span id="__span-0-16"><span class="p">)</span>
+</span><span id="__span-0-17">
+</span><span id="__span-0-18"><span class="c1"># Convert to numpy arrays</span>
+</span><span id="__span-0-19"><span class="n">X_train</span> <span class="o">=</span> <span class="n">X_train</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-0-20"><span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-0-21"><span class="n">y_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-0-22"><span class="n">y_test</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">values</span>
+</span><span id="__span-0-23">
+</span><span id="__span-0-24"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Training shape: </span><span class="si">{</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-0-25"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test shape: </span><span class="si">{</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<h2 id="architecture-examples">🏗️ Architecture Examples</h2>
-<h3 id="1-attention-based-architecture">1. <strong>Attention-Based Architecture</strong></h3>
+<h3 id="handling-missing-values">Handling Missing Values</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">DifferentiableTabularPreprocessor</span>
+</span><span id="__span-1-2">
+</span><span id="__span-1-3"><span class="c1"># Create preprocessing layer</span>
+</span><span id="__span-1-4"><span class="n">preprocessor</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">(</span>
+</span><span id="__span-1-5">    <span class="n">imputation_strategy</span><span class="o">=</span><span class="s1">&#39;learnable&#39;</span><span class="p">,</span>
+</span><span id="__span-1-6">    <span class="n">normalization</span><span class="o">=</span><span class="s1">&#39;learnable&#39;</span>
+</span><span id="__span-1-7"><span class="p">)</span>
+</span><span id="__span-1-8">
+</span><span id="__span-1-9"><span class="c1"># Fit on training data</span>
+</span><span id="__span-1-10"><span class="n">preprocessor</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</span><span id="__span-1-11">
+</span><span id="__span-1-12"><span class="c1"># Transform data</span>
+</span><span id="__span-1-13"><span class="n">X_train_processed</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="p">(</span><span class="n">X_train</span><span class="p">)</span>
+</span><span id="__span-1-14"><span class="n">X_test_processed</span> <span class="o">=</span> <span class="n">preprocessor</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="model-building">🏗️ Model Building</h2>
+<h3 id="basic-sequential-model">Basic Sequential Model</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3066,100 +3358,47 @@
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="__span-2-2">    <span class="n">MultiResolutionTabularAttention</span><span class="p">,</span>
-</span><span id="__span-2-3">    <span class="n">InterpretableMultiHeadAttention</span><span class="p">,</span>
-</span><span id="__span-2-4">    <span class="n">GatedFeatureFusion</span>
-</span><span id="__span-2-5"><span class="p">)</span>
-</span><span id="__span-2-6">
-</span><span id="__span-2-7"><span class="k">def</span><span class="w"> </span><span class="nf">create_attention_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
-</span><span id="__span-2-8">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-2-9">
-</span><span id="__span-2-10">    <span class="c1"># Multi-resolution attention</span>
-</span><span id="__span-2-11">    <span class="n">x</span> <span class="o">=</span> <span class="n">MultiResolutionTabularAttention</span><span class="p">(</span>
-</span><span id="__span-2-12">        <span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-</span><span id="__span-2-13">        <span class="n">numerical_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-</span><span id="__span-2-14">        <span class="n">categorical_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-</span><span id="__span-2-15">    <span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><span class="kn">import</span><span class="w"> </span><span class="nn">keras</span>
+</span><span id="__span-2-2"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-2-3">    <span class="n">VariableSelection</span><span class="p">,</span>
+</span><span id="__span-2-4">    <span class="n">TabularAttention</span><span class="p">,</span>
+</span><span id="__span-2-5">    <span class="n">GatedFeatureFusion</span>
+</span><span id="__span-2-6"><span class="p">)</span>
+</span><span id="__span-2-7">
+</span><span id="__span-2-8"><span class="k">def</span><span class="w"> </span><span class="nf">create_basic_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
+</span><span id="__span-2-9"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a basic tabular model with KerasFactory layers.&quot;&quot;&quot;</span>
+</span><span id="__span-2-10">
+</span><span id="__span-2-11">    <span class="c1"># Input layer</span>
+</span><span id="__span-2-12">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
+</span><span id="__span-2-13">
+</span><span id="__span-2-14">    <span class="c1"># Preprocessing</span>
+</span><span id="__span-2-15">    <span class="n">x</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
 </span><span id="__span-2-16">
-</span><span id="__span-2-17">    <span class="c1"># Interpretable attention</span>
-</span><span id="__span-2-18">    <span class="n">x</span> <span class="o">=</span> <span class="n">InterpretableMultiHeadAttention</span><span class="p">(</span>
-</span><span id="__span-2-19">        <span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-</span><span id="__span-2-20">        <span class="n">key_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
-</span><span id="__span-2-21">    <span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-2-17">    <span class="c1"># Feature selection</span>
+</span><span id="__span-2-18">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-2-19">
+</span><span id="__span-2-20">    <span class="c1"># Attention mechanism</span>
+</span><span id="__span-2-21">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
 </span><span id="__span-2-22">
 </span><span id="__span-2-23">    <span class="c1"># Feature fusion</span>
-</span><span id="__span-2-24">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-2-24">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">dropout</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
 </span><span id="__span-2-25">
-</span><span id="__span-2-26">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-2-27">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+</span><span id="__span-2-26">    <span class="c1"># Output layer</span>
+</span><span id="__span-2-27">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-2-28">
+</span><span id="__span-2-29">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+</span><span id="__span-2-30">
+</span><span id="__span-2-31"><span class="c1"># Create model</span>
+</span><span id="__span-2-32"><span class="n">model</span> <span class="o">=</span> <span class="n">create_basic_model</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+</span><span id="__span-2-33"><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="2-residual-network-architecture">2. <strong>Residual Network Architecture</strong></h3>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GatedResidualNetwork</span><span class="p">,</span> <span class="n">GatedLinearUnit</span>
-</span><span id="__span-3-2">
-</span><span id="__span-3-3"><span class="k">def</span><span class="w"> </span><span class="nf">create_residual_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-3-4">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-3-5">
-</span><span id="__span-3-6">    <span class="c1"># Residual blocks</span>
-</span><span id="__span-3-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedResidualNetwork</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-3-8">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedResidualNetwork</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-3-9">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedResidualNetwork</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-3-10">
-</span><span id="__span-3-11">    <span class="c1"># Gated linear unit</span>
-</span><span id="__span-3-12">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedLinearUnit</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-3-13">
-</span><span id="__span-3-14">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-3-15">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<h3 id="3-ensemble-architecture">3. <strong>Ensemble Architecture</strong></h3>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">TabularMoELayer</span><span class="p">,</span> <span class="n">BoostingEnsembleLayer</span>
-</span><span id="__span-4-2">
-</span><span id="__span-4-3"><span class="k">def</span><span class="w"> </span><span class="nf">create_ensemble_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-4-4">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-4-5">
-</span><span id="__span-4-6">    <span class="c1"># Mixture of experts</span>
-</span><span id="__span-4-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularMoELayer</span><span class="p">(</span><span class="n">num_experts</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">expert_units</span><span class="o">=</span><span class="mi">16</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-4-8">
-</span><span id="__span-4-9">    <span class="c1"># Boosting ensemble</span>
-</span><span id="__span-4-10">    <span class="n">x</span> <span class="o">=</span> <span class="n">BoostingEnsembleLayer</span><span class="p">(</span>
-</span><span id="__span-4-11">        <span class="n">num_learners</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-</span><span id="__span-4-12">        <span class="n">learner_units</span><span class="o">=</span><span class="mi">64</span>
-</span><span id="__span-4-13">    <span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-4-14">
-</span><span id="__span-4-15">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-4-16">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<h2 id="feature-engineering-examples">🔧 Feature Engineering Examples</h2>
-<h3 id="1-complete-feature-pipeline">1. <strong>Complete Feature Pipeline</strong></h3>
+<h3 id="advanced-model-with-residual-connections">Advanced Model with Residual Connections</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3186,35 +3425,36 @@
 <span class="normal">24</span>
 <span class="normal">25</span>
 <span class="normal">26</span>
-<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="__span-5-2">    <span class="n">DifferentiableTabularPreprocessor</span><span class="p">,</span>
-</span><span id="__span-5-3">    <span class="n">AdvancedNumericalEmbedding</span><span class="p">,</span>
-</span><span id="__span-5-4">    <span class="n">DistributionAwareEncoder</span><span class="p">,</span>
-</span><span id="__span-5-5">    <span class="n">VariableSelection</span><span class="p">,</span>
-</span><span id="__span-5-6">    <span class="n">SparseAttentionWeighting</span>
-</span><span id="__span-5-7"><span class="p">)</span>
-</span><span id="__span-5-8">
-</span><span id="__span-5-9"><span class="k">def</span><span class="w"> </span><span class="nf">create_feature_pipeline</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-5-10">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-5-11">
-</span><span id="__span-5-12">    <span class="c1"># Preprocessing</span>
-</span><span id="__span-5-13">    <span class="n">x</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-5-14">
-</span><span id="__span-5-15">    <span class="c1"># Numerical embedding</span>
-</span><span id="__span-5-16">    <span class="n">x</span> <span class="o">=</span> <span class="n">AdvancedNumericalEmbedding</span><span class="p">(</span><span class="n">embedding_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-5-17">
-</span><span id="__span-5-18">    <span class="c1"># Distribution-aware encoding</span>
-</span><span id="__span-5-19">    <span class="n">x</span> <span class="o">=</span> <span class="n">DistributionAwareEncoder</span><span class="p">(</span><span class="n">encoding_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-5-20">
-</span><span id="__span-5-21">    <span class="c1"># Variable selection</span>
-</span><span id="__span-5-22">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-5-23">
-</span><span id="__span-5-24">    <span class="c1"># Sparse attention weighting</span>
-</span><span id="__span-5-25">    <span class="n">x</span> <span class="o">=</span> <span class="n">SparseAttentionWeighting</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-5-26">
-</span><span id="__span-5-27">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">GatedResidualNetwork</span><span class="p">,</span> <span class="n">TransformerBlock</span>
+</span><span id="__span-3-2">
+</span><span id="__span-3-3"><span class="k">def</span><span class="w"> </span><span class="nf">create_advanced_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
+</span><span id="__span-3-4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an advanced model with residual connections.&quot;&quot;&quot;</span>
+</span><span id="__span-3-5">
+</span><span id="__span-3-6">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
+</span><span id="__span-3-7">
+</span><span id="__span-3-8">    <span class="c1"># Preprocessing</span>
+</span><span id="__span-3-9">    <span class="n">x</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
+</span><span id="__span-3-10">
+</span><span id="__span-3-11">    <span class="c1"># Residual blocks</span>
+</span><span id="__span-3-12">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedResidualNetwork</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-3-13">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedResidualNetwork</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-3-14">
+</span><span id="__span-3-15">    <span class="c1"># Transformer block</span>
+</span><span id="__span-3-16">    <span class="n">x</span> <span class="o">=</span> <span class="n">TransformerBlock</span><span class="p">(</span><span class="n">dim_model</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">ff_units</span><span class="o">=</span><span class="mi">128</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-3-17">
+</span><span id="__span-3-18">    <span class="c1"># Feature selection</span>
+</span><span id="__span-3-19">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-3-20">
+</span><span id="__span-3-21">    <span class="c1"># Output</span>
+</span><span id="__span-3-22">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-3-23">
+</span><span id="__span-3-24">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+</span><span id="__span-3-25">
+</span><span id="__span-3-26"><span class="c1"># Create advanced model</span>
+</span><span id="__span-3-27"><span class="n">advanced_model</span> <span class="o">=</span> <span class="n">create_advanced_model</span><span class="p">(</span><span class="n">input_dim</span><span class="o">=</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="2-temporal-feature-processing">2. <strong>Temporal Feature Processing</strong></h3>
+<h2 id="training-and-evaluation">🎯 Training and Evaluation</h2>
+<h3 id="model-compilation">Model Compilation</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3227,36 +3467,21 @@
 <span class="normal">10</span>
 <span class="normal">11</span>
 <span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="__span-6-2">    <span class="n">DateParsingLayer</span><span class="p">,</span>
-</span><span id="__span-6-3">    <span class="n">DateEncodingLayer</span><span class="p">,</span>
-</span><span id="__span-6-4">    <span class="n">SeasonLayer</span>
-</span><span id="__span-6-5"><span class="p">)</span>
-</span><span id="__span-6-6">
-</span><span id="__span-6-7"><span class="k">def</span><span class="w"> </span><span class="nf">create_temporal_pipeline</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-6-8">    <span class="c1"># Date parsing</span>
-</span><span id="__span-6-9">    <span class="n">date_parser</span> <span class="o">=</span> <span class="n">DateParsingLayer</span><span class="p">()</span>
-</span><span id="__span-6-10">
-</span><span id="__span-6-11">    <span class="c1"># Date encoding</span>
-</span><span id="__span-6-12">    <span class="n">date_encoder</span> <span class="o">=</span> <span class="n">DateEncodingLayer</span><span class="p">(</span><span class="n">min_year</span><span class="o">=</span><span class="mi">1900</span><span class="p">,</span> <span class="n">max_year</span><span class="o">=</span><span class="mi">2100</span><span class="p">)</span>
-</span><span id="__span-6-13">
-</span><span id="__span-6-14">    <span class="c1"># Season extraction</span>
-</span><span id="__span-6-15">    <span class="n">season_layer</span> <span class="o">=</span> <span class="n">SeasonLayer</span><span class="p">()</span>
-</span><span id="__span-6-16">
-</span><span id="__span-6-17">    <span class="k">return</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">date_encoder</span><span class="p">,</span> <span class="n">season_layer</span>
-</span><span id="__span-6-18">
-</span><span id="__span-6-19"><span class="c1"># Usage</span>
-</span><span id="__span-6-20"><span class="n">date_parser</span><span class="p">,</span> <span class="n">date_encoder</span><span class="p">,</span> <span class="n">season_layer</span> <span class="o">=</span> <span class="n">create_temporal_pipeline</span><span class="p">()</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><span class="c1"># Compile model</span>
+</span><span id="__span-4-2"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+</span><span id="__span-4-3">    <span class="n">optimizer</span><span class="o">=</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">),</span>
+</span><span id="__span-4-4">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+</span><span id="__span-4-5">    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
+</span><span id="__span-4-6"><span class="p">)</span>
+</span><span id="__span-4-7">
+</span><span id="__span-4-8"><span class="c1"># For regression tasks</span>
+</span><span id="__span-4-9"><span class="c1"># model.compile(</span>
+</span><span id="__span-4-10"><span class="c1">#     optimizer=keras.optimizers.Adam(learning_rate=0.001),</span>
+</span><span id="__span-4-11"><span class="c1">#     loss=&#39;mse&#39;,</span>
+</span><span id="__span-4-12"><span class="c1">#     metrics=[&#39;mae&#39;]</span>
+</span><span id="__span-4-13"><span class="c1"># )</span>
 </span></code></pre></div></td></tr></table></div>
-<h2 id="domain-specific-examples">🎯 Domain-Specific Examples</h2>
-<h3 id="1-financial-modeling">1. <strong>Financial Modeling</strong></h3>
+<h3 id="training-with-callbacks">Training with Callbacks</h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3281,33 +3506,53 @@
 <span class="normal">22</span>
 <span class="normal">23</span>
 <span class="normal">24</span>
-<span class="normal">25</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><span class="k">def</span><span class="w"> </span><span class="nf">create_financial_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-7-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for financial risk assessment.&quot;&quot;&quot;</span>
-</span><span id="__span-7-3">
-</span><span id="__span-7-4">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-7-5">
-</span><span id="__span-7-6">    <span class="c1"># Preprocessing for financial data</span>
-</span><span id="__span-7-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-7-8">
-</span><span id="__span-7-9">    <span class="c1"># Feature selection for risk factors</span>
-</span><span id="__span-7-10">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-7-11">
-</span><span id="__span-7-12">    <span class="c1"># Attention for complex relationships</span>
-</span><span id="__span-7-13">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-7-14">
-</span><span id="__span-7-15">    <span class="c1"># Business rules integration</span>
-</span><span id="__span-7-16">    <span class="n">x</span> <span class="o">=</span> <span class="n">BusinessRulesLayer</span><span class="p">(</span>
-</span><span id="__span-7-17">        <span class="n">rules</span><span class="o">=</span><span class="p">[</span>
-</span><span id="__span-7-18">            <span class="p">{</span><span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="s1">&#39;credit_score&#39;</span><span class="p">,</span> <span class="s1">&#39;operator&#39;</span><span class="p">:</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mi">600</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">},</span>
-</span><span id="__span-7-19">            <span class="p">{</span><span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="s1">&#39;debt_ratio&#39;</span><span class="p">,</span> <span class="s1">&#39;operator&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">:</span> <span class="mf">0.8</span><span class="p">}</span>
-</span><span id="__span-7-20">        <span class="p">],</span>
-</span><span id="__span-7-21">        <span class="n">feature_type</span><span class="o">=</span><span class="s1">&#39;numerical&#39;</span><span class="p">,</span>
-</span><span id="__span-7-22">    <span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-7-23">
-</span><span id="__span-7-24">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-7-25">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><span class="kn">from</span><span class="w"> </span><span class="nn">keras.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarlyStopping</span><span class="p">,</span> <span class="n">ReduceLROnPlateau</span>
+</span><span id="__span-5-2">
+</span><span id="__span-5-3"><span class="c1"># Define callbacks</span>
+</span><span id="__span-5-4"><span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span>
+</span><span id="__span-5-5">    <span class="n">EarlyStopping</span><span class="p">(</span>
+</span><span id="__span-5-6">        <span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span>
+</span><span id="__span-5-7">        <span class="n">patience</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+</span><span id="__span-5-8">        <span class="n">restore_best_weights</span><span class="o">=</span><span class="kc">True</span>
+</span><span id="__span-5-9">    <span class="p">),</span>
+</span><span id="__span-5-10">    <span class="n">ReduceLROnPlateau</span><span class="p">(</span>
+</span><span id="__span-5-11">        <span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span>
+</span><span id="__span-5-12">        <span class="n">factor</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+</span><span id="__span-5-13">        <span class="n">patience</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+</span><span id="__span-5-14">        <span class="n">min_lr</span><span class="o">=</span><span class="mf">1e-7</span>
+</span><span id="__span-5-15">    <span class="p">)</span>
+</span><span id="__span-5-16"><span class="p">]</span>
+</span><span id="__span-5-17">
+</span><span id="__span-5-18"><span class="c1"># Train model</span>
+</span><span id="__span-5-19"><span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span>
+</span><span id="__span-5-20">    <span class="n">X_train_processed</span><span class="p">,</span>
+</span><span id="__span-5-21">    <span class="n">y_train</span><span class="p">,</span>
+</span><span id="__span-5-22">    <span class="n">validation_split</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+</span><span id="__span-5-23">    <span class="n">epochs</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+</span><span id="__span-5-24">    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+</span><span id="__span-5-25">    <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">,</span>
+</span><span id="__span-5-26">    <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span>
+</span><span id="__span-5-27"><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="2-healthcare-analytics">2. <strong>Healthcare Analytics</strong></h3>
+<h3 id="evaluation">Evaluation</h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><span class="c1"># Evaluate model</span>
+</span><span id="__span-6-2"><span class="n">test_loss</span><span class="p">,</span> <span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test_processed</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+</span><span id="__span-6-3"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test Accuracy: </span><span class="si">{</span><span class="n">test_accuracy</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-6-4">
+</span><span id="__span-6-5"><span class="c1"># Make predictions</span>
+</span><span id="__span-6-6"><span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_processed</span><span class="p">)</span>
+</span><span id="__span-6-7"><span class="n">predicted_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span></code></pre></div></td></tr></table></div>
+<h2 id="common-patterns">🔄 Common Patterns</h2>
+<h3 id="1-feature-engineering-pipeline">1. <strong>Feature Engineering Pipeline</strong></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3326,33 +3571,60 @@
 <span class="normal">16</span>
 <span class="normal">17</span>
 <span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><span class="k">def</span><span class="w"> </span><span class="nf">create_healthcare_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-8-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for healthcare outcome prediction.&quot;&quot;&quot;</span>
-</span><span id="__span-8-3">
-</span><span id="__span-8-4">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
+<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-7-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+</span><span id="__span-7-2">    <span class="n">AdvancedNumericalEmbedding</span><span class="p">,</span>
+</span><span id="__span-7-3">    <span class="n">DistributionAwareEncoder</span><span class="p">,</span>
+</span><span id="__span-7-4">    <span class="n">SparseAttentionWeighting</span>
+</span><span id="__span-7-5"><span class="p">)</span>
+</span><span id="__span-7-6">
+</span><span id="__span-7-7"><span class="k">def</span><span class="w"> </span><span class="nf">feature_engineering_pipeline</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+</span><span id="__span-7-8"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Advanced feature engineering pipeline.&quot;&quot;&quot;</span>
+</span><span id="__span-7-9">
+</span><span id="__span-7-10">    <span class="c1"># Numerical embedding</span>
+</span><span id="__span-7-11">    <span class="n">x</span> <span class="o">=</span> <span class="n">AdvancedNumericalEmbedding</span><span class="p">(</span><span class="n">embedding_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+</span><span id="__span-7-12">
+</span><span id="__span-7-13">    <span class="c1"># Distribution-aware encoding</span>
+</span><span id="__span-7-14">    <span class="n">x</span> <span class="o">=</span> <span class="n">DistributionAwareEncoder</span><span class="p">(</span><span class="n">encoding_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-7-15">
+</span><span id="__span-7-16">    <span class="c1"># Sparse attention weighting</span>
+</span><span id="__span-7-17">    <span class="n">x</span> <span class="o">=</span> <span class="n">SparseAttentionWeighting</span><span class="p">(</span><span class="n">temperature</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-7-18">
+</span><span id="__span-7-19">    <span class="k">return</span> <span class="n">x</span>
+</span></code></pre></div></td></tr></table></div>
+<h3 id="2-multi-head-processing">2. <strong>Multi-Head Processing</strong></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
+<span class="normal"> 2</span>
+<span class="normal"> 3</span>
+<span class="normal"> 4</span>
+<span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-8-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiResolutionTabularAttention</span>
+</span><span id="__span-8-2">
+</span><span id="__span-8-3"><span class="k">def</span><span class="w"> </span><span class="nf">multi_head_model</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+</span><span id="__span-8-4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Model with multi-resolution attention.&quot;&quot;&quot;</span>
 </span><span id="__span-8-5">
-</span><span id="__span-8-6">    <span class="c1"># Preprocessing</span>
-</span><span id="__span-8-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-8-8">
-</span><span id="__span-8-9">    <span class="c1"># Advanced numerical embedding for medical features</span>
-</span><span id="__span-8-10">    <span class="n">x</span> <span class="o">=</span> <span class="n">AdvancedNumericalEmbedding</span><span class="p">(</span><span class="n">embedding_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-8-11">
-</span><span id="__span-8-12">    <span class="c1"># Distribution-aware encoding for lab values</span>
-</span><span id="__span-8-13">    <span class="n">x</span> <span class="o">=</span> <span class="n">DistributionAwareEncoder</span><span class="p">(</span><span class="n">encoding_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-8-14">
-</span><span id="__span-8-15">    <span class="c1"># Attention for symptom relationships</span>
-</span><span id="__span-8-16">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-8-17">
-</span><span id="__span-8-18">    <span class="c1"># Anomaly detection for outliers</span>
-</span><span id="__span-8-19">    <span class="n">x</span><span class="p">,</span> <span class="n">anomalies</span> <span class="o">=</span> <span class="n">NumericalAnomalyDetection</span><span class="p">()(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-8-20">
-</span><span id="__span-8-21">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-8-22">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="p">[</span><span class="n">outputs</span><span class="p">,</span> <span class="n">anomalies</span><span class="p">])</span>
+</span><span id="__span-8-6">    <span class="c1"># Multi-resolution attention</span>
+</span><span id="__span-8-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">MultiResolutionTabularAttention</span><span class="p">(</span>
+</span><span id="__span-8-8">        <span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+</span><span id="__span-8-9">        <span class="n">numerical_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+</span><span id="__span-8-10">        <span class="n">categorical_heads</span><span class="o">=</span><span class="mi">4</span>
+</span><span id="__span-8-11">    <span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+</span><span id="__span-8-12">
+</span><span id="__span-8-13">    <span class="c1"># Feature fusion</span>
+</span><span id="__span-8-14">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-8-15">
+</span><span id="__span-8-16">    <span class="k">return</span> <span class="n">x</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="3-e-commerce-recommendation">3. <strong>E-commerce Recommendation</strong></h3>
+<h3 id="3-ensemble-approach">3. <strong>Ensemble Approach</strong></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3367,40 +3639,23 @@
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><span class="k">def</span><span class="w"> </span><span class="nf">create_recommendation_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-9-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for e-commerce product recommendation.&quot;&quot;&quot;</span>
-</span><span id="__span-9-3">
-</span><span id="__span-9-4">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-9-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoostingEnsembleLayer</span>
+</span><span id="__span-9-2">
+</span><span id="__span-9-3"><span class="k">def</span><span class="w"> </span><span class="nf">ensemble_model</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+</span><span id="__span-9-4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Model with boosting ensemble.&quot;&quot;&quot;</span>
 </span><span id="__span-9-5">
-</span><span id="__span-9-6">    <span class="c1"># Preprocessing</span>
-</span><span id="__span-9-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">DifferentiableTabularPreprocessor</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-9-8">
-</span><span id="__span-9-9">    <span class="c1"># Feature selection for user preferences</span>
-</span><span id="__span-9-10">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-9-6">    <span class="c1"># Boosting ensemble</span>
+</span><span id="__span-9-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">BoostingEnsembleLayer</span><span class="p">(</span>
+</span><span id="__span-9-8">        <span class="n">num_learners</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+</span><span id="__span-9-9">        <span class="n">learner_units</span><span class="o">=</span><span class="mi">64</span>
+</span><span id="__span-9-10">    <span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
 </span><span id="__span-9-11">
-</span><span id="__span-9-12">    <span class="c1"># Multi-resolution attention for different feature types</span>
-</span><span id="__span-9-13">    <span class="n">x</span> <span class="o">=</span> <span class="n">MultiResolutionTabularAttention</span><span class="p">(</span>
-</span><span id="__span-9-14">        <span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
-</span><span id="__span-9-15">        <span class="n">numerical_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-</span><span id="__span-9-16">        <span class="n">categorical_heads</span><span class="o">=</span><span class="mi">4</span>
-</span><span id="__span-9-17">    <span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-9-18">
-</span><span id="__span-9-19">    <span class="c1"># Feature fusion for recommendation</span>
-</span><span id="__span-9-20">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-9-21">
-</span><span id="__span-9-22">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-9-23">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+</span><span id="__span-9-12">    <span class="c1"># Final processing</span>
+</span><span id="__span-9-13">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedResidualNetwork</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-9-14">
+</span><span id="__span-9-15">    <span class="k">return</span> <span class="n">x</span>
 </span></code></pre></div></td></tr></table></div>
-<h2 id="performance-examples">🚀 Performance Examples</h2>
-<h3 id="1-memory-efficient-model">1. <strong>Memory-Efficient Model</strong></h3>
+<h3 id="4-anomaly-detection">4. <strong>Anomaly Detection</strong></h3>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3412,44 +3667,43 @@
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><span class="k">def</span><span class="w"> </span><span class="nf">create_memory_efficient_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-10-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Memory-efficient model for large datasets.&quot;&quot;&quot;</span>
-</span><span id="__span-10-3">
-</span><span id="__span-10-4">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
+<span class="normal">12</span>
+<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-10-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NumericalAnomalyDetection</span>
+</span><span id="__span-10-2">
+</span><span id="__span-10-3"><span class="k">def</span><span class="w"> </span><span class="nf">anomaly_detection_model</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+</span><span id="__span-10-4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Model with anomaly detection.&quot;&quot;&quot;</span>
 </span><span id="__span-10-5">
-</span><span id="__span-10-6">    <span class="c1"># Use smaller dimensions</span>
-</span><span id="__span-10-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-10-8">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-10-9">    <span class="n">x</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-10-10">
-</span><span id="__span-10-11">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-10-12">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+</span><span id="__span-10-6">    <span class="c1"># Anomaly detection</span>
+</span><span id="__span-10-7">    <span class="n">anomaly_output</span> <span class="o">=</span> <span class="n">NumericalAnomalyDetection</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
+</span><span id="__span-10-8">
+</span><span id="__span-10-9">    <span class="c1"># Main processing</span>
+</span><span id="__span-10-10">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+</span><span id="__span-10-11">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-10-12">
+</span><span id="__span-10-13">    <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">anomaly_output</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="2-speed-optimized-model">2. <strong>Speed-Optimized Model</strong></h3>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><span class="k">def</span><span class="w"> </span><span class="nf">create_speed_optimized_model</span><span class="p">(</span><span class="n">input_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">:</span>
-</span><span id="__span-11-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Speed-optimized model for real-time inference.&quot;&quot;&quot;</span>
-</span><span id="__span-11-3">
-</span><span id="__span-11-4">    <span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,))</span>
-</span><span id="__span-11-5">
-</span><span id="__span-11-6">    <span class="c1"># Minimal layers for speed</span>
-</span><span id="__span-11-7">    <span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-11-8">    <span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-11-9">
-</span><span id="__span-11-10">    <span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="n">num_classes</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-11-11">    <span class="k">return</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
+<h2 id="troubleshooting">🐛 Troubleshooting</h2>
+<h3 id="common-issues">Common Issues</h3>
+<h4 id="memory-issues"><strong>Memory Issues</strong></h4>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><span class="c1"># Reduce model size</span>
+</span><span id="__span-11-2"><span class="n">layer</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span>
+</span><span id="__span-11-3">    <span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>      <span class="c1"># Reduce from 8</span>
+</span><span id="__span-11-4">    <span class="n">key_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>       <span class="c1"># Reduce from 64</span>
+</span><span id="__span-11-5">    <span class="n">dropout</span><span class="o">=</span><span class="mf">0.1</span>
+</span><span id="__span-11-6"><span class="p">)</span>
+</span><span id="__span-11-7">
+</span><span id="__span-11-8"><span class="c1"># Use smaller batch size</span>
+</span><span id="__span-11-9"><span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>  <span class="c1"># Instead of 32</span>
 </span></code></pre></div></td></tr></table></div>
-<h2 id="analysis-and-interpretation">🔍 Analysis and Interpretation</h2>
-<h3 id="1-model-interpretation">1. <strong>Model Interpretation</strong></h3>
+<h4 id="training-instability"><strong>Training Instability</strong></h4>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3461,28 +3715,20 @@
 <span class="normal"> 9</span>
 <span class="normal">10</span>
 <span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><span class="k">def</span><span class="w"> </span><span class="nf">interpret_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">layer_name</span><span class="o">=</span><span class="s1">&#39;tabular_attention&#39;</span><span class="p">):</span>
-</span><span id="__span-12-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpret model using attention weights.&quot;&quot;&quot;</span>
-</span><span id="__span-12-3">
-</span><span id="__span-12-4">    <span class="c1"># Get attention weights</span>
-</span><span id="__span-12-5">    <span class="n">attention_model</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span>
-</span><span id="__span-12-6">        <span class="n">inputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">input</span><span class="p">,</span>
-</span><span id="__span-12-7">        <span class="n">outputs</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">get_layer</span><span class="p">(</span><span class="n">layer_name</span><span class="p">)</span><span class="o">.</span><span class="n">output</span><span class="p">,</span>
-</span><span id="__span-12-8">    <span class="p">)</span>
-</span><span id="__span-12-9">
-</span><span id="__span-12-10">    <span class="n">attention_weights</span> <span class="o">=</span> <span class="n">attention_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-12-1"><span class="c1"># Add gradient clipping</span>
+</span><span id="__span-12-2"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+</span><span id="__span-12-3">    <span class="n">optimizer</span><span class="o">=</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">clipnorm</span><span class="o">=</span><span class="mf">1.0</span><span class="p">),</span>
+</span><span id="__span-12-4">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+</span><span id="__span-12-5">    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
+</span><span id="__span-12-6"><span class="p">)</span>
+</span><span id="__span-12-7">
+</span><span id="__span-12-8"><span class="c1"># Use learning rate scheduling</span>
+</span><span id="__span-12-9"><span class="k">def</span><span class="w"> </span><span class="nf">lr_schedule</span><span class="p">(</span><span class="n">epoch</span><span class="p">):</span>
+</span><span id="__span-12-10">    <span class="k">return</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">**</span> <span class="p">(</span><span class="n">epoch</span> <span class="o">//</span> <span class="mi">20</span><span class="p">))</span>
 </span><span id="__span-12-11">
-</span><span id="__span-12-12">    <span class="c1"># Analyze attention patterns</span>
-</span><span id="__span-12-13">    <span class="n">mean_attention</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">attention_weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-</span><span id="__span-12-14">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Mean attention weights:&quot;</span><span class="p">,</span> <span class="n">mean_attention</span><span class="p">)</span>
-</span><span id="__span-12-15">
-</span><span id="__span-12-16">    <span class="k">return</span> <span class="n">attention_weights</span>
+</span><span id="__span-12-12"><span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">LearningRateScheduler</span><span class="p">(</span><span class="n">lr_schedule</span><span class="p">))</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="2-feature-importance-analysis">2. <strong>Feature Importance Analysis</strong></h3>
+<h4 id="overfitting"><strong>Overfitting</strong></h4>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3492,72 +3738,36 @@
 <span class="normal"> 7</span>
 <span class="normal"> 8</span>
 <span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><span class="k">def</span><span class="w"> </span><span class="nf">analyze_feature_importance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">feature_names</span><span class="p">):</span>
-</span><span id="__span-13-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Analyze feature importance using attention weights.&quot;&quot;&quot;</span>
-</span><span id="__span-13-3">
-</span><span id="__span-13-4">    <span class="c1"># Get attention weights</span>
-</span><span id="__span-13-5">    <span class="n">attention_weights</span> <span class="o">=</span> <span class="n">interpret_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">)</span>
+<span class="normal">10</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-13-1"><span class="c1"># Increase regularization</span>
+</span><span id="__span-13-2"><span class="n">layer</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span>
+</span><span id="__span-13-3">    <span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+</span><span id="__span-13-4">    <span class="n">dropout</span><span class="o">=</span><span class="mf">0.3</span>  <span class="c1"># Increase dropout</span>
+</span><span id="__span-13-5"><span class="p">)</span>
 </span><span id="__span-13-6">
-</span><span id="__span-13-7">    <span class="c1"># Calculate feature importance</span>
-</span><span id="__span-13-8">    <span class="n">feature_importance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">attention_weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
-</span><span id="__span-13-9">
-</span><span id="__span-13-10">    <span class="c1"># Create importance dataframe</span>
-</span><span id="__span-13-11">    <span class="n">importance_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-</span><span id="__span-13-12">        <span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="n">feature_names</span><span class="p">,</span>
-</span><span id="__span-13-13">        <span class="s1">&#39;importance&#39;</span><span class="p">:</span> <span class="n">feature_importance</span>
-</span><span id="__span-13-14">    <span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;importance&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</span><span id="__span-13-15">
-</span><span id="__span-13-16">    <span class="k">return</span> <span class="n">importance_df</span>
+</span><span id="__span-13-7"><span class="c1"># Add early stopping</span>
+</span><span id="__span-13-8"><span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+</span><span id="__span-13-9">    <span class="n">EarlyStopping</span><span class="p">(</span><span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</span><span id="__span-13-10"><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<h2 id="evaluation-examples">📊 Evaluation Examples</h2>
-<h3 id="1-comprehensive-evaluation">1. <strong>Comprehensive Evaluation</strong></h3>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><span class="k">def</span><span class="w"> </span><span class="nf">evaluate_model_comprehensive</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">):</span>
-</span><span id="__span-14-2"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Comprehensive model evaluation.&quot;&quot;&quot;</span>
+<h3 id="performance-optimization">Performance Optimization</h3>
+<h4 id="speed-optimization"><strong>Speed Optimization</strong></h4>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-14-1"><span class="c1"># Use fewer attention heads</span>
+</span><span id="__span-14-2"><span class="n">layer</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 </span><span id="__span-14-3">
-</span><span id="__span-14-4">    <span class="c1"># Basic evaluation</span>
-</span><span id="__span-14-5">    <span class="n">test_loss</span><span class="p">,</span> <span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-14-4"><span class="c1"># Reduce hidden dimensions</span>
+</span><span id="__span-14-5"><span class="n">layer</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">hidden_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
 </span><span id="__span-14-6">
-</span><span id="__span-14-7">    <span class="c1"># Predictions</span>
-</span><span id="__span-14-8">    <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-</span><span id="__span-14-9">    <span class="n">predicted_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-14-10">    <span class="n">true_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-</span><span id="__span-14-11">
-</span><span id="__span-14-12">    <span class="c1"># Additional metrics</span>
-</span><span id="__span-14-13">    <span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">confusion_matrix</span>
-</span><span id="__span-14-14">
-</span><span id="__span-14-15">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test Accuracy: </span><span class="si">{</span><span class="n">test_accuracy</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-14-16">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test Loss: </span><span class="si">{</span><span class="n">test_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-14-17">    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Classification Report:&quot;</span><span class="p">)</span>
-</span><span id="__span-14-18">    <span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">true_classes</span><span class="p">,</span> <span class="n">predicted_classes</span><span class="p">))</span>
-</span><span id="__span-14-19">
-</span><span id="__span-14-20">    <span class="k">return</span> <span class="n">test_accuracy</span><span class="p">,</span> <span class="n">test_loss</span>
+</span><span id="__span-14-7"><span class="c1"># Use mixed precision</span>
+</span><span id="__span-14-8"><span class="n">keras</span><span class="o">.</span><span class="n">mixed_precision</span><span class="o">.</span><span class="n">set_global_policy</span><span class="p">(</span><span class="s1">&#39;mixed_float16&#39;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="2-cross-validation">2. <strong>Cross-Validation</strong></h3>
+<h4 id="memory-optimization"><strong>Memory Optimization</strong></h4>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
 <span class="normal"> 2</span>
 <span class="normal"> 3</span>
@@ -3572,49 +3782,31 @@
 <span class="normal">12</span>
 <span class="normal">13</span>
 <span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_val_score</span>
-</span><span id="__span-15-2">
-</span><span id="__span-15-3"><span class="k">def</span><span class="w"> </span><span class="nf">cross_validate_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-</span><span id="__span-15-4"><span class="w">    </span><span class="sd">&quot;&quot;&quot;Cross-validation for model evaluation.&quot;&quot;&quot;</span>
-</span><span id="__span-15-5">
-</span><span id="__span-15-6">    <span class="c1"># Compile model</span>
-</span><span id="__span-15-7">    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-</span><span id="__span-15-8">        <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
-</span><span id="__span-15-9">        <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
-</span><span id="__span-15-10">        <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
-</span><span id="__span-15-11">    <span class="p">)</span>
-</span><span id="__span-15-12">
-</span><span id="__span-15-13">    <span class="c1"># Cross-validation</span>
-</span><span id="__span-15-14">    <span class="n">scores</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span>
-</span><span id="__span-15-15">        <span class="n">model</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> 
-</span><span id="__span-15-16">        <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> 
-</span><span id="__span-15-17">        <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span>
-</span><span id="__span-15-18">        <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span>
-</span><span id="__span-15-19">    <span class="p">)</span>
-</span><span id="__span-15-20">
-</span><span id="__span-15-21">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cross-validation scores: </span><span class="si">{</span><span class="n">scores</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="__span-15-22">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean accuracy: </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> (+/- </span><span class="si">{</span><span class="n">scores</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">2</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
-</span><span id="__span-15-23">
-</span><span id="__span-15-24">    <span class="k">return</span> <span class="n">scores</span>
+<span class="normal">15</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-15-1"><span class="c1"># Use gradient checkpointing</span>
+</span><span id="__span-15-2"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+</span><span id="__span-15-3">    <span class="n">optimizer</span><span class="o">=</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(),</span>
+</span><span id="__span-15-4">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;categorical_crossentropy&#39;</span><span class="p">,</span>
+</span><span id="__span-15-5">    <span class="n">run_eagerly</span><span class="o">=</span><span class="kc">False</span>  <span class="c1"># Use graph mode</span>
+</span><span id="__span-15-6"><span class="p">)</span>
+</span><span id="__span-15-7">
+</span><span id="__span-15-8"><span class="c1"># Process data in smaller chunks</span>
+</span><span id="__span-15-9"><span class="k">def</span><span class="w"> </span><span class="nf">process_in_chunks</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">chunk_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">):</span>
+</span><span id="__span-15-10">    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+</span><span id="__span-15-11">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">chunk_size</span><span class="p">):</span>
+</span><span id="__span-15-12">        <span class="n">chunk</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">chunk_size</span><span class="p">]</span>
+</span><span id="__span-15-13">        <span class="n">result</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</span><span id="__span-15-14">        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</span><span id="__span-15-15">    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
 <h2 id="next-steps">📚 Next Steps</h2>
 <ol>
-<li><strong>Rich Docstrings Showcase</strong>: See comprehensive examples with detailed documentation</li>
-<li><strong>BaseFeedForwardModel Guide</strong>: Learn about feed-forward model architectures</li>
-<li><strong>KDP Integration Guide</strong>: Integrate with Keras Data Processor</li>
-<li><strong>Data Analyzer Examples</strong>: Explore data analysis workflows</li>
+<li><strong>Feature Engineering</strong>: Learn advanced feature engineering techniques</li>
+<li><strong>Model Building</strong>: Explore specialized architectures</li>
+<li><strong>Examples</strong>: See real-world applications</li>
+<li><strong>API Reference</strong>: Deep dive into layer parameters</li>
 </ol>
 <hr />
-<p><strong>Ready to dive deeper?</strong> Check out the <a href="rich_docstrings_showcase.html">Rich Docstrings Showcase</a> for comprehensive examples!</p>
+<p><strong>Ready for more advanced topics?</strong> Check out <a href="feature-engineering.html">Feature Engineering</a> next!</p>
 
 
 

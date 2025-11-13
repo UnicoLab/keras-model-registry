@@ -1,315 +1,315 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/index.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/404/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/404.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/contributing/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/contributing.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/data_analyzer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/data_analyzer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers_implementation_guide/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers_implementation_guide.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers_overview/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers_overview.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models_implementation_guide/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models_implementation_guide.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/layers/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/layers.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/metrics/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/metrics.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/models/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/models.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/utils/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/api/utils.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/index.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/data_analyzer_examples/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/data_analyzer_examples.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/feed_forward_guide/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/feed_forward_guide.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/kdp_integration_guide/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/kdp_integration_guide.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/rich_docstrings_showcase/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/examples/rich_docstrings_showcase.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/getting-started/concepts/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/getting-started/concepts.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/getting-started/installation/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/getting-started/installation.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/getting-started/quickstart/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/getting-started/quickstart.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/advanced-graph-feature/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/advanced-graph-feature.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/advanced-numerical-embedding/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/advanced-numerical-embedding.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/boosting-block/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/boosting-block.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/boosting-ensemble-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/boosting-ensemble-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/business-rules-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/business-rules-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/cast-to-float32-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/cast-to-float32-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/categorical-anomaly-detection-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/categorical-anomaly-detection-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/column-attention/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/column-attention.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/data-embedding-without-position/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/data-embedding-without-position.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/date-encoding-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/date-encoding-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/date-parsing-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/date-parsing-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/dft-series-decomposition/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/dft-series-decomposition.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/differentiable-tabular-preprocessor/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/differentiable-tabular-preprocessor.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/differential-preprocessing-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/differential-preprocessing-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/distribution-aware-encoder/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/distribution-aware-encoder.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/distribution-transform-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/distribution-transform-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/feature-cutout/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/feature-cutout.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/feature-mixing/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/feature-mixing.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/fixed-embedding/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/fixed-embedding.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-feature-fusion/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-feature-fusion.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-feature-selection/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-feature-selection.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-linear-unit/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-linear-unit.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-residual-network/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/gated-residual-network.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/graph-feature-aggregation/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/graph-feature-aggregation.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/hyper-zzw-operator/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/hyper-zzw-operator.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/interpretable-multi-head-attention/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/interpretable-multi-head-attention.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/mixing-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/mixing-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/moving-average/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/moving-average.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-head-graph-feature-preprocessor/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-head-graph-feature-preprocessor.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-resolution-tabular-attention/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-resolution-tabular-attention.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-scale-season-mixing/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-scale-season-mixing.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-scale-trend-mixing/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/multi-scale-trend-mixing.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/numerical-anomaly-detection/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/numerical-anomaly-detection.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/past-decomposable-mixing/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/past-decomposable-mixing.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/positional-embedding/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/positional-embedding.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/reversible-instance-norm-multivariate/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/reversible-instance-norm-multivariate.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/reversible-instance-norm/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/reversible-instance-norm.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/row-attention/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/row-attention.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/season-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/season-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/series-decomposition/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/series-decomposition.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/slow-network/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/slow-network.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/sparse-attention-weighting/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/sparse-attention-weighting.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/stochastic-depth/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/stochastic-depth.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/tabular-attention/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/tabular-attention.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/tabular-moe-layer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/tabular-moe-layer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/temporal-embedding/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/temporal-embedding.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/temporal-mixing/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/temporal-mixing.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/token-embedding/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/token-embedding.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/transformer-block/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/transformer-block.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/variable-selection/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/layers/variable-selection.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/autoencoder/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/autoencoder.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/base-feed-forward-model/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/base-feed-forward-model.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/sfne-block/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/sfne-block.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/terminator-model/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/terminator-model.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/timemixer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/timemixer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/tsmixer/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/models/tsmixer.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/tutorials/basic-workflows/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/tutorials/basic-workflows.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/tutorials/feature-engineering/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/tutorials/feature-engineering.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
     <url>
-         <loc>https://unicolab.github.io/KerasFactory/0.1.0/tutorials/model-building/</loc>
+         <loc>https://unicolab.github.io/KerasFactory/0.1.0/tutorials/model-building.html</loc>
          <lastmod>2025-11-13</lastmod>
     </url>
 </urlset>

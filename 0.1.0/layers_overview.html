@@ -6,13 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-      
-      
-        <link rel="canonical" href="https://unicolab.github.io/KerasFactory/0.1.0/index.html">
+        <meta name="description" content="Complete reference for 36+ production-ready KerasFactory layers including attention mechanisms, feature engineering, preprocessing, and specialized architectures for tabular data with interactive explorer.">
       
       
       
-        <link rel="next" href="getting-started/quickstart.html">
+        <link rel="canonical" href="https://unicolab.github.io/KerasFactory/0.1.0/layers_overview.html">
+      
+      
+        <link rel="prev" href="getting-started/concepts.html">
+      
+      
+        <link rel="next" href="layers/tabular-attention.html">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -20,7 +24,7 @@
     
     
       
-        <title>KerasFactory</title>
+        <title>🧩 Layers - Complete Reference & Explorer - KerasFactory</title>
       
     
     
@@ -115,7 +119,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-kerasfactory" class="md-skip">
+        <a href="#why-use-kerasfactory-layers" class="md-skip">
           Skip to content
         </a>
       
@@ -155,7 +159,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              🧩 Layers - Complete Reference & Explorer
             
           </span>
         </div>
@@ -261,10 +265,8 @@
         
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
+    <li class="md-tabs__item">
       <a href="index.html" class="md-tabs__link">
         
   
@@ -300,10 +302,12 @@
         
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="layers_overview.html" class="md-tabs__link">
           
   
@@ -454,30 +458,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Home
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="index.html" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -486,98 +470,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-is-kerasfactory" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎯 What is KerasFactory?
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#whats-inside-kerasfactory" class="md-nav__link">
-    <span class="md-ellipsis">
-      🧩 What's Inside KerasFactory?
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#see-it-in-action-build-real-models-now" class="md-nav__link">
-    <span class="md-ellipsis">
-      💡 See It In Action - Build Real Models Now!
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#real-world-use-cases" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎯 Real-World Use Cases
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#key-technical-features" class="md-nav__link">
-    <span class="md-ellipsis">
-      🎨 Key Technical Features
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#perfect-for" class="md-nav__link">
-    <span class="md-ellipsis">
-      🚀 Perfect For
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#contributing" class="md-nav__link">
-    <span class="md-ellipsis">
-      🤝 Contributing
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#your-journey-with-kerasfactory" class="md-nav__link">
-    <span class="md-ellipsis">
-      📖 Your Journey with KerasFactory
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -706,8 +598,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -728,21 +622,22 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -753,7 +648,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             🧩 Layers
@@ -764,10 +659,28 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="layers_overview.html" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Layer Overview & Explorer
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="layers_overview.html" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -776,6 +689,147 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-use-kerasfactory-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Why Use KerasFactory Layers?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✨ Key Features
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interactive-layers-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 Interactive Layers Explorer
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all-layers-by-category" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 All Layers by Category
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 All Layers by Category">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#time-series-forecasting-16-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⏱️ Time Series &amp; Forecasting (16 layers)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attention-mechanisms-6-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Attention Mechanisms (6 layers)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-preprocessing-transformation-9-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔧 Data Preprocessing &amp; Transformation (9 layers)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#feature-engineering-selection-5-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚙️ Feature Engineering &amp; Selection (5 layers)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specialized-architectures-8-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      🏗️ Specialized Architectures (8 layers)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#utility-graph-processing-8-layers" class="md-nav__link">
+    <span class="md-ellipsis">
+      🛠️ Utility &amp; Graph Processing (8 layers)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-api-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Complete API Reference
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-start-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Quick Start Guide
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#for-more-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      📖 For More Information
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -805,10 +859,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -817,7 +874,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
         
           
-          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -974,10 +1031,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -986,7 +1046,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
         
           
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1168,10 +1228,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -1180,7 +1243,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_4" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1408,10 +1471,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -1420,7 +1486,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_5" >
         
           
-          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_5" id="__nav_3_5_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1680,10 +1746,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -1692,7 +1761,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_6" >
         
           
-          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -1869,10 +1938,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -1881,7 +1953,7 @@
         <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="">
             
   
   <span class="md-ellipsis">
@@ -3023,7 +3095,7 @@
                   
 
   
-    <a href="https://github.com/UnicoLab/KerasFactory/edit/master/docs/index.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/UnicoLab/KerasFactory/edit/master/docs/layers_overview.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -3032,411 +3104,1124 @@
     
       
     
-    <a href="https://github.com/UnicoLab/KerasFactory/raw/master/docs/index.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/UnicoLab/KerasFactory/raw/master/docs/layers_overview.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="welcome-to-kerasfactory">🚀 Welcome to KerasFactory</h1>
-<div align="center">
-  <img src="logo.png" width="350" alt="KerasFactory Logo"/>
+<style>
+.layers-hero {
+  background: linear-gradient(135deg, var(--md-primary-fg-color) 0%, var(--md-primary-fg-color-light) 100%);
+  color: white;
+  padding: 4rem 2rem;
+  border-radius: 16px;
+  margin-bottom: 3rem;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
 
-  <p><strong>🧩 Reusable Model Architecture Bricks in Keras 3</strong></p>
+.layers-hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
 
-  <p><strong>🏢 Provided and maintained by <a href="https://unicolab.ai" target="_blank">UnicoLab</a></strong></p>
+.layers-tagline {
+  font-size: 1.3rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.layers-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-box {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.stat-text {
+  font-size: 0.95rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.search-section {
+  background: var(--md-default-bg-color);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: var(--md-shadow-z1);
+}
+
+.search-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--md-primary-fg-color);
+}
+
+.filter-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--md-default-fg-color-70);
+  font-size: 0.9rem;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filter-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--md-default-fg-color-20);
+  border-radius: 6px;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: var(--md-primary-fg-color);
+  color: var(--md-primary-fg-color);
+  background: var(--md-primary-fg-color-light);
+}
+
+.filter-btn.active {
+  border-color: var(--md-primary-fg-color);
+  background: var(--md-primary-fg-color);
+  color: white;
+  font-weight: 600;
+}
+
+.results-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: var(--md-default-bg-color);
+  border-radius: 8px;
+}
+
+.results-count {
+  font-weight: 600;
+  color: var(--md-primary-fg-color);
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--md-default-fg-color-20);
+  border-radius: 6px;
+  background: var(--md-default-bg-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.view-btn.active {
+  border-color: var(--md-primary-fg-color);
+  background: var(--md-primary-fg-color);
+  color: white;
+}
+
+.layers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.layer-card {
+  background: var(--md-default-bg-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--md-primary-fg-color);
+  box-shadow: var(--md-shadow-z1);
+  transition: all 0.3s ease;
+}
+
+.layer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--md-shadow-z2);
+}
+
+.layer-header {
+  margin-bottom: 1rem;
+}
+
+.layer-header h3 {
+  margin: 0 0 0.5rem 0;
+  color: var(--md-primary-fg-color);
+  font-size: 1.2rem;
+}
+
+.layer-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge-popular {
+  background: #ff9800;
+  color: white;
+}
+
+.badge-stable {
+  background: #4caf50;
+  color: white;
+}
+
+.badge-advanced {
+  background: #2196f3;
+  color: white;
+}
+
+.layer-description {
+  font-size: 0.9rem;
+  color: var(--md-default-fg-color-70);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.layer-info {
+  background: var(--md-default-bg-color-20);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.layer-info-item {
+  margin-bottom: 0.5rem;
+}
+
+.layer-info-item strong {
+  color: var(--md-primary-fg-color);
+}
+
+.layer-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 6px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.action-btn.primary {
+  background: var(--md-primary-fg-color);
+  color: white;
+}
+
+.action-btn.primary:hover {
+  opacity: 0.9;
+}
+
+.action-btn.secondary {
+  border: 1px solid var(--md-primary-fg-color);
+  color: var(--md-primary-fg-color);
+  background: transparent;
+}
+
+.action-btn.secondary:hover {
+  background: var(--md-primary-fg-color-light);
+}
+
+.problem-solution-table {
+  width: 100%;
+  margin: 2rem 0;
+  border-collapse: collapse;
+  background: var(--md-default-bg-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--md-shadow-z1);
+}
+
+.problem-solution-table th {
+  background: var(--md-primary-fg-color-20);
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--md-primary-fg-color);
+}
+
+.problem-solution-table td {
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--md-default-fg-color-10);
+}
+
+.problem-solution-table tr:last-child td {
+  border-bottom: none;
+}
+
+.problem-col {
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+.solution-col {
+  color: #388e3c;
+  font-weight: 500;
+}
+
+.highlight-box {
+  background: var(--md-default-bg-color);
+  border-left: 4px solid var(--md-primary-fg-color);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+}
+
+.feature-highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.feature-card {
+  background: var(--md-default-bg-color);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: var(--md-shadow-z1);
+  text-align: center;
+  border-top: 4px solid var(--md-primary-fg-color);
+}
+
+.feature-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.feature-card h3 {
+  margin: 1rem 0;
+  color: var(--md-primary-fg-color);
+}
+
+.feature-card p {
+  font-size: 0.95rem;
+  color: var(--md-default-fg-color-70);
+  line-height: 1.6;
+}
+
+.api-reference-section {
+  margin-top: 4rem;
+}
+
+.section-header {
+  border-bottom: 2px solid var(--md-primary-fg-color);
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.section-header h2 {
+  margin: 0 0 0.5rem 0;
+  color: var(--md-primary-fg-color);
+}
+
+.section-header p {
+  color: var(--md-default-fg-color-70);
+}
+
+.api-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.api-card {
+  background: var(--md-default-bg-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--md-primary-fg-color);
+}
+
+.api-card h4 {
+  margin-top: 0;
+  color: var(--md-primary-fg-color);
+}
+
+.api-signature {
+  background: var(--md-default-bg-color-20);
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .layers-hero h1 {
+    font-size: 2rem;
+  }
+
+  .layers-tagline {
+    font-size: 1.1rem;
+  }
+
+  .layers-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .filter-row {
+    grid-template-columns: 1fr;
+  }
+
+  .layers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<div class="layers-hero">
+  <h1>🧩 Layers - Complete Reference & Explorer</h1>
+  <div class="layers-tagline">
+    <strong>36+ production-ready layers</strong> designed exclusively for <strong>Keras 3</strong>.<br>
+    Build sophisticated tabular models with advanced attention, feature engineering, and preprocessing layers.
+  </div>
+
+  <div class="layers-stats">
+    <div class="stat-box">
+      <span class="stat-number">36+</span>
+      <span class="stat-text">Production Layers</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-number">8</span>
+      <span class="stat-text">Categories</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-number">100%</span>
+      <span class="stat-text">Keras 3 Native</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-number">0%</span>
+      <span class="stat-text">TensorFlow Lock-in</span>
+    </div>
+  </div>
 </div>
 
-<div class="admonition success">
-<p class="admonition-title">🎯 Production-Ready Tabular AI</p>
-<p>Build sophisticated tabular models with <strong>38+ specialized layers</strong>, <strong>smart preprocessing</strong>, and <strong>intelligent feature engineering</strong> - all designed exclusively for Keras 3.</p>
+<h2 id="why-use-kerasfactory-layers">🎯 Why Use KerasFactory Layers?</h2>
+<table>
+<thead>
+<tr>
+<th>Challenge</th>
+<th>Traditional Approach</th>
+<th>KerasFactory's Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔗 <strong>Feature Interactions</strong></td>
+<td>Manual feature crosses</td>
+<td>👁️ <strong>Tabular Attention</strong> - Automatic relationship discovery</td>
+</tr>
+<tr>
+<td>🏷️ <strong>Mixed Feature Types</strong></td>
+<td>Uniform processing</td>
+<td>🧩 <strong>Feature-wise Layers</strong> - Specialized processing per feature</td>
+</tr>
+<tr>
+<td>📊 <strong>Complex Distributions</strong></td>
+<td>Fixed strategies</td>
+<td>📊 <strong>Distribution-Aware Encoding</strong> - Adaptive transformations</td>
+</tr>
+<tr>
+<td>⚡ <strong>Performance Optimization</strong></td>
+<td>Post-hoc analysis</td>
+<td>🎯 <strong>Built-in Selection</strong> - Learned during training</td>
+</tr>
+<tr>
+<td>🔒 <strong>Production Readiness</strong></td>
+<td>Extra tooling needed</td>
+<td>✅ <strong>Battle-Tested</strong> - Used in production models</td>
+</tr>
+</tbody>
+</table>
+<h2 id="key-features">✨ Key Features</h2>
+<div class="feature-highlights">
+  <div class="feature-card">
+    <div class="feature-icon">👁️</div>
+    <h3>Attention Mechanisms</h3>
+    <p>Automatically discover feature relationships and sample importance with advanced attention layers.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">🧩</div>
+    <h3>Feature-wise Processing</h3>
+    <p>Each feature receives specialized processing through mixture of experts and dedicated layers.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">📊</div>
+    <h3>Distribution-Aware</h3>
+    <p>Automatically adapt to different distributions with intelligent encoding and transformations.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">⚡</div>
+    <h3>Performance Ready</h3>
+    <p>Optimized for production with built-in regularization and efficient memory usage.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">🎯</div>
+    <h3>Built-in Optimization</h3>
+    <p>Learn which features matter during training, not after with integrated feature selection.</p>
+  </div>
+
+  <div class="feature-card">
+    <div class="feature-icon">🔒</div>
+    <h3>Production Proven</h3>
+    <p>Battle-tested in real-world ML pipelines with comprehensive testing and documentation.</p>
+  </div>
 </div>
+
+<div class="highlight-box">
+  <strong>💡 Pro Tip:</strong> Start with TabularAttention for feature relationships, VariableSelection for feature importance, and DifferentiableTabularPreprocessor for end-to-end preprocessing. Combine them for powerful custom architectures.
+</div>
+
 <hr />
-<h2 id="what-is-kerasfactory">🎯 What is KerasFactory?</h2>
-<p>KerasFactory is a comprehensive collection of <strong>production-ready layers and models</strong> designed specifically for <strong>tabular data processing</strong> with Keras 3. Our library provides:</p>
+<h2 id="interactive-layers-explorer">🔍 Interactive Layers Explorer</h2>
+<div class="search-section">
+  <div class="search-title">🔍 Smart Search & Advanced Filtering</div>
+
+  <input type="search" placeholder="🔎 Search by name, description, or use case..." id="layer-search" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--md-default-fg-color-20); border-radius: 8px; font-size: 1rem; margin-bottom: 1.5rem;">
+
+  <div class="filter-row">
+    <div class="filter-group">
+      <label>📁 Category</label>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-category="all">All (36)</button>
+        <button class="filter-btn" data-category="attention">🧠 Attention</button>
+        <button class="filter-btn" data-category="preprocessing">🔧 Preprocessing</button>
+        <button class="filter-btn" data-category="feature-engineering">⚙️ Feature Eng.</button>
+        <button class="filter-btn" data-category="ensemble">🏗️ Ensemble</button>
+        <button class="filter-btn" data-category="utility">🛠️ Utility</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label>📊 Complexity</label>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-complexity="all">All</button>
+        <button class="filter-btn" data-complexity="beginner">🟢 Beginner</button>
+        <button class="filter-btn" data-complexity="intermediate">🟡 Intermediate</button>
+        <button class="filter-btn" data-complexity="advanced">🔴 Advanced</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="results-info">
+  <span class="results-count" id="result-count">Showing all 36+ layers</span>
+</div>
+
+<hr />
+<h2 id="all-layers-by-category">📚 All Layers by Category</h2>
+<h3 id="time-series-forecasting-16-layers">⏱️ Time Series &amp; Forecasting (16 layers)</h3>
+<p><strong>Specialized layers for time series forecasting, decomposition, and feature extraction with multi-scale pattern recognition.</strong></p>
 <ul>
-<li>🧠 <strong>Advanced Attention Mechanisms</strong> for tabular data</li>
-<li>🔧 <strong>Feature Engineering Layers</strong> for data preprocessing  </li>
-<li>🏗️ <strong>Pre-built Models</strong> for common ML tasks</li>
-<li>📊 <strong>Data Analysis Tools</strong> for intelligent layer recommendations</li>
-<li>⚡ <strong>Keras 3 Native</strong> - No TensorFlow dependencies in production code</li>
+<li><strong>PositionalEmbedding</strong> - Sinusoidal positional encoding for sequence models</li>
+<li><strong>FixedEmbedding</strong> - Non-trainable embeddings for temporal indices (months, days, hours)</li>
+<li><strong>TokenEmbedding</strong> - 1D convolution-based embedding for time series values</li>
+<li><strong>TemporalEmbedding</strong> - Embedding layer for temporal features (month, day, weekday, hour, minute)</li>
+<li><strong>DataEmbeddingWithoutPosition</strong> - Combined token and temporal embedding for comprehensive features</li>
+<li><strong>MovingAverage</strong> - Trend extraction using moving average filtering</li>
+<li><strong>SeriesDecomposition</strong> - Trend-seasonal decomposition using moving average</li>
+<li><strong>DFTSeriesDecomposition</strong> - Frequency-based decomposition using Discrete Fourier Transform</li>
+<li><strong>ReversibleInstanceNorm</strong> - Reversible instance normalization with optional denormalization</li>
+<li><strong>ReversibleInstanceNormMultivariate</strong> - Multivariate reversible instance normalization</li>
+<li><strong>MultiScaleSeasonMixing</strong> - Bottom-up multi-scale seasonal pattern mixing</li>
+<li><strong>MultiScaleTrendMixing</strong> - Top-down multi-scale trend pattern mixing</li>
+<li><strong>PastDecomposableMixing</strong> - Decomposable mixing encoder combining decomposition and multi-scale mixing</li>
+<li><strong>TemporalMixing</strong> - MLP-based temporal mixing for TSMixer architecture</li>
+<li><strong>FeatureMixing</strong> - Feed-forward feature mixing for cross-series correlations</li>
+<li><strong>MixingLayer</strong> - Core mixing block combining temporal and feature mixing</li>
 </ul>
-<div class="admonition tip">
-<p class="admonition-title">Why KerasFactory?</p>
-<p>KerasFactory eliminates the need to build complex tabular models from scratch. Our layers are battle-tested, well-documented, and designed to work seamlessly together.</p>
-</div>
-<hr />
-<h2 id="whats-inside-kerasfactory">🧩 What's Inside KerasFactory?</h2>
-<div class="grid cards">
+<h3 id="attention-mechanisms-6-layers">🧠 Attention Mechanisms (6 layers)</h3>
+<p><strong>Advanced attention layers for capturing complex feature relationships and dependencies in tabular data.</strong></p>
 <ul>
-<li>
-<p><strong>38+ Production Layers</strong></p>
-<p>Advanced attention mechanisms, feature processing, and specialized architectures ready for production use.</p>
-<p><a class="md-button md-button--primary" href="api/layers.html">Explore All Layers →</a></p>
-</li>
-<li>
-<p><strong>Smart Preprocessing</strong></p>
-<p>Automatic data transformation, date encoding, and intelligent feature engineering layers.</p>
-<p><a class="md-button md-button--primary" href="examples/index.html">See Layer Examples →</a></p>
-</li>
-<li>
-<p><strong>Pre-built Models</strong></p>
-<p>Ready-to-use models like BaseFeedForwardModel and SFNEBlock for common ML tasks.</p>
-<p><a class="md-button md-button--primary" href="api/models.html">View Models →</a></p>
-</li>
-<li>
-<p><strong>Data Analyzer</strong></p>
-<p>Intelligent CSV analysis tool that recommends the best layers for your specific data.</p>
-<p><a class="md-button md-button--primary" href="data_analyzer.html">Try Analyzer →</a></p>
-</li>
+<li><strong>TabularAttention</strong> - Dual attention mechanism for inter-feature and inter-sample relationships</li>
+<li><strong>MultiResolutionTabularAttention</strong> - Multi-resolution attention for different feature scales</li>
+<li><strong>InterpretableMultiHeadAttention</strong> - Multi-head attention with explainability features</li>
+<li><strong>TransformerBlock</strong> - Standard transformer block with self-attention and feed-forward</li>
+<li><strong>ColumnAttention</strong> - Column-wise attention for feature relationships</li>
+<li><strong>RowAttention</strong> - Row-wise attention for sample relationships</li>
 </ul>
-</div>
+<h3 id="data-preprocessing-transformation-9-layers">🔧 Data Preprocessing &amp; Transformation (9 layers)</h3>
+<p><strong>Essential preprocessing layers for data cleaning, transformation, and preparation for optimal model performance.</strong></p>
+<ul>
+<li><strong>DifferentiableTabularPreprocessor</strong> - End-to-end differentiable preprocessing with learnable imputation</li>
+<li><strong>DifferentialPreprocessingLayer</strong> - Multiple candidate transformations with learnable combination</li>
+<li><strong>DateParsingLayer</strong> - Flexible date parsing from various formats</li>
+<li><strong>DateEncodingLayer</strong> - Cyclical date feature encoding</li>
+<li><strong>SeasonLayer</strong> - Seasonal feature extraction</li>
+<li><strong>DistributionTransformLayer</strong> - Automatic distribution transformation</li>
+<li><strong>DistributionAwareEncoder</strong> - Distribution-aware feature encoding</li>
+<li><strong>CastToFloat32Layer</strong> - Type casting utility</li>
+<li><strong>AdvancedNumericalEmbedding</strong> - Advanced numerical embedding with dual-branch architecture</li>
+</ul>
+<h3 id="feature-engineering-selection-5-layers">⚙️ Feature Engineering &amp; Selection (5 layers)</h3>
+<p><strong>Intelligent feature engineering and selection layers for identifying important features and creating powerful representations.</strong></p>
+<ul>
+<li><strong>VariableSelection</strong> - Intelligent variable selection using gated residual networks</li>
+<li><strong>GatedFeatureSelection</strong> - Learnable feature selection with gating</li>
+<li><strong>GatedFeatureFusion</strong> - Gated mechanism for feature fusion</li>
+<li><strong>SparseAttentionWeighting</strong> - Sparse attention for efficient computation</li>
+<li><strong>FeatureCutout</strong> - Feature cutout for data augmentation and regularization</li>
+</ul>
+<h3 id="specialized-architectures-8-layers">🏗️ Specialized Architectures (8 layers)</h3>
+<p><strong>Advanced specialized layers for specific use cases including gated networks, boosting, business rules, and ensemble methods.</strong></p>
+<ul>
+<li><strong>GatedResidualNetwork</strong> - Gated residual network with improved gradient flow</li>
+<li><strong>GatedLinearUnit</strong> - Gated linear transformation</li>
+<li><strong>TabularMoELayer</strong> - Mixture of Experts for adaptive expert selection</li>
+<li><strong>BoostingBlock</strong> - Gradient boosting inspired neural block</li>
+<li><strong>BoostingEnsembleLayer</strong> - Ensemble of boosting blocks</li>
+<li><strong>BusinessRulesLayer</strong> - Domain-specific business rules integration</li>
+<li><strong>StochasticDepth</strong> - Stochastic depth regularization</li>
+<li><strong>SlowNetwork</strong> - Careful feature processing with controlled information flow</li>
+</ul>
+<h3 id="utility-graph-processing-8-layers">🛠️ Utility &amp; Graph Processing (8 layers)</h3>
+<p><strong>Essential utility layers for data processing, graph operations, and anomaly detection.</strong></p>
+<ul>
+<li><strong>GraphFeatureAggregation</strong> - Graph feature aggregation for relational learning</li>
+<li><strong>AdvancedGraphFeatureLayer</strong> - Advanced graph feature processing</li>
+<li><strong>MultiHeadGraphFeaturePreprocessor</strong> - Multi-head graph preprocessing</li>
+<li><strong>NumericalAnomalyDetection</strong> - Statistical anomaly detection for numerical features</li>
+<li><strong>CategoricalAnomalyDetectionLayer</strong> - Pattern-based anomaly detection for categorical features</li>
+<li><strong>HyperZZWOperator</strong> - Hyperparameter-aware operator for adaptive behavior</li>
+</ul>
 <hr />
-<h2 id="see-it-in-action-build-real-models-now">💡 See It In Action - Build Real Models Now!</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">⚡ Pre-built Model (Fastest)</label><label for="__tabbed_1_2">🎨 Custom Layers (Full Control)</label><label for="__tabbed_1_3">🚀 Classification (Common Use Case)</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p>Get a production-ready model in 3 lines of code:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="kn">import</span><span class="w"> </span><span class="nn">keras</span>
-</span><span id="__span-0-2"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">SFNEBlock</span>
+<h2 id="complete-api-reference">📋 Complete API Reference</h2>
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>⏱️ Time Series & Forecasting (16 layers)</h2>
+    <p>Specialized layers for time series analysis, forecasting, and pattern recognition with advanced decomposition and mixing strategies.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>📍 PositionalEmbedding</h4>
+      <div class="api-signature">PositionalEmbedding(max_len, embedding_dim)</div>
+      <p>Sinusoidal positional encoding for sequence models and transformers.</p>
+      <p><strong>Use when:</strong> You need position information in transformer models</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔧 FixedEmbedding</h4>
+      <div class="api-signature">FixedEmbedding(num_embeddings, embedding_dim)</div>
+      <p>Non-trainable sinusoidal embeddings for temporal indices (months, days, hours).</p>
+      <p><strong>Use when:</strong> You want fixed cyclical embeddings for temporal features</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎫 TokenEmbedding</h4>
+      <div class="api-signature">TokenEmbedding(c_in, d_model, conv_kernel_size)</div>
+      <p>1D convolution-based embedding for time series values.</p>
+      <p><strong>Use when:</strong> You need learnable embeddings for raw time series values</p>
+    </div>
+
+    <div class="api-card">
+      <h4>⏰ TemporalEmbedding</h4>
+      <div class="api-signature">TemporalEmbedding(d_model, embed_type, freq)</div>
+      <p>Embedding layer for temporal features like month, day, weekday, hour, minute.</p>
+      <p><strong>Use when:</strong> You have temporal feature information to encode</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎯 DataEmbeddingWithoutPosition</h4>
+      <div class="api-signature">DataEmbeddingWithoutPosition(c_in, d_model, embedding_type, freq, dropout)</div>
+      <p>Combined token and temporal embedding for comprehensive feature representation.</p>
+      <p><strong>Use when:</strong> You want unified embeddings for both values and temporal features</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🏃 MovingAverage</h4>
+      <div class="api-signature">MovingAverage(kernel_size)</div>
+      <p>Trend extraction using moving average filtering for time series.</p>
+      <p><strong>Use when:</strong> You need to separate trends from seasonal components</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 SeriesDecomposition</h4>
+      <div class="api-signature">SeriesDecomposition(kernel_size)</div>
+      <p>Trend-seasonal decomposition using moving average filtering.</p>
+      <p><strong>Use when:</strong> You want explicit decomposition of time series components</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📊 DFTSeriesDecomposition</h4>
+      <div class="api-signature">DFTSeriesDecomposition()</div>
+      <p>Frequency-based series decomposition using Discrete Fourier Transform.</p>
+      <p><strong>Use when:</strong> You prefer frequency-domain decomposition</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔄 ReversibleInstanceNorm</h4>
+      <div class="api-signature">ReversibleInstanceNorm(eps, subtract_last)</div>
+      <p>Reversible instance normalization with optional denormalization for time series.</p>
+      <p><strong>Use when:</strong> You need reversible normalization for stable training</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🏗️ ReversibleInstanceNormMultivariate</h4>
+      <div class="api-signature">ReversibleInstanceNormMultivariate(eps)</div>
+      <p>Multivariate version of reversible instance normalization.</p>
+      <p><strong>Use when:</strong> You have multivariate time series data</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🌊 MultiScaleSeasonMixing</h4>
+      <div class="api-signature">MultiScaleSeasonMixing(seq_len, down_sampling_window, d_model)</div>
+      <p>Bottom-up multi-scale seasonal pattern mixing with hierarchical aggregation.</p>
+      <p><strong>Use when:</strong> You want to capture seasonal patterns at multiple scales</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📈 MultiScaleTrendMixing</h4>
+      <div class="api-signature">MultiScaleTrendMixing(seq_len, down_sampling_window, d_model)</div>
+      <p>Top-down multi-scale trend pattern mixing with hierarchical decomposition.</p>
+      <p><strong>Use when:</strong> You want to capture trend patterns at multiple scales</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 PastDecomposableMixing</h4>
+      <div class="api-signature">PastDecomposableMixing(seq_len, pred_len, d_model, decomp_method, down_sampling_window)</div>
+      <p>Past decomposable mixing encoder combining decomposition and multi-scale mixing.</p>
+      <p><strong>Use when:</strong> You need comprehensive decomposition with multi-scale mixing</p>
+    </div>
+
+    <div class="api-card">
+      <h4>⏱️ TemporalMixing</h4>
+      <div class="api-signature">TemporalMixing(seq_len, d_model, hidden_dim, dropout)</div>
+      <p>MLP-based temporal mixing for TSMixer that applies transformations across time.</p>
+      <p><strong>Use when:</strong> You want lightweight temporal pattern learning</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 FeatureMixing</h4>
+      <div class="api-signature">FeatureMixing(d_model, ff_dim, dropout)</div>
+      <p>Feed-forward feature mixing learning cross-series correlations.</p>
+      <p><strong>Use when:</strong> You want to capture dependencies between time series</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 MixingLayer</h4>
+      <div class="api-signature">MixingLayer(seq_len, d_model, hidden_dim, ff_dim, dropout)</div>
+      <p>Core mixing block combining TemporalMixing and FeatureMixing for TSMixer.</p>
+      <p><strong>Use when:</strong> You need dual-perspective temporal and feature learning</p>
+    </div>
+  </div>
+</div>
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>🎯 Feature Selection & Gating (5 layers)</h2>
+    <p>Layers for dynamic feature selection, gating mechanisms, and feature fusion.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>🔀 VariableSelection</h4>
+      <div class="api-signature">VariableSelection(nr_features, units, dropout_rate)</div>
+      <p>Dynamic feature selection using gated residual networks with optional context conditioning.</p>
+      <p><strong>Use when:</strong> You need automatic feature importance learning during training</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🚪 GatedFeatureSelection</h4>
+      <div class="api-signature">GatedFeatureSelection(units, dropout_rate)</div>
+      <p>Feature selection layer using gating mechanisms for conditional feature routing.</p>
+      <p><strong>Use when:</strong> You want learnable adaptive feature importance</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🌊 GatedFeatureFusion</h4>
+      <div class="api-signature">GatedFeatureFusion(hidden_dim, dropout)</div>
+      <p>Combines and fuses features using gated mechanisms for adaptive integration.</p>
+      <p><strong>Use when:</strong> You need to intelligently combine multiple feature representations</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📍 GatedLinearUnit</h4>
+      <div class="api-signature">GatedLinearUnit(units)</div>
+      <p>Gated linear transformation for controlling information flow.</p>
+      <p><strong>Use when:</strong> You need selective information flow in your model</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔗 GatedResidualNetwork</h4>
+      <div class="api-signature">GatedResidualNetwork(units, dropout_rate)</div>
+      <p>Gated residual network architecture with improved gradient flow.</p>
+      <p><strong>Use when:</strong> You need robust feature processing with residual connections</p>
+    </div>
+  </div>
+</div>
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>👁️ Attention Mechanisms (6 layers)</h2>
+    <p>Advanced attention layers for capturing complex feature and sample relationships.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>🎯 TabularAttention</h4>
+      <div class="api-signature">TabularAttention(num_heads, key_dim, dropout)</div>
+      <p>Dual attention mechanism for inter-feature and inter-sample relationships.</p>
+      <p><strong>Use when:</strong> You have complex feature interactions to discover</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📊 MultiResolutionTabularAttention</h4>
+      <div class="api-signature">MultiResolutionTabularAttention(num_heads, key_dim, dropout)</div>
+      <p>Multi-resolution attention for numerical and categorical features.</p>
+      <p><strong>Use when:</strong> You have mixed feature types needing different processing</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔍 InterpretableMultiHeadAttention</h4>
+      <div class="api-signature">InterpretableMultiHeadAttention(num_heads, key_dim, dropout)</div>
+      <p>Multi-head attention with explainability features.</p>
+      <p><strong>Use when:</strong> You need to understand attention patterns</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🧠 TransformerBlock</h4>
+      <div class="api-signature">TransformerBlock(dim_model, num_heads, ff_units, dropout)</div>
+      <p>Complete transformer block with self-attention and feed-forward.</p>
+      <p><strong>Use when:</strong> You want standard transformer architecture for tabular data</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📌 ColumnAttention</h4>
+      <div class="api-signature">ColumnAttention(hidden_dim, dropout)</div>
+      <p>Column-wise attention for feature relationships.</p>
+      <p><strong>Use when:</strong> You want to focus on feature-level interactions</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📍 RowAttention</h4>
+      <div class="api-signature">RowAttention(hidden_dim, dropout)</div>
+      <p>Row-wise attention for sample relationships.</p>
+      <p><strong>Use when:</strong> You want to capture sample-level patterns</p>
+    </div>
+  </div>
+</div>
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>📊 Data Preprocessing & Transformation (9 layers)</h2>
+    <p>Essential preprocessing layers for data preparation and transformation.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>🔄 DistributionTransformLayer</h4>
+      <div class="api-signature">DistributionTransformLayer(transform_type, epsilon, method)</div>
+      <p>Automatic distribution transformation for improved analysis.</p>
+      <p><strong>Use when:</strong> You have skewed distributions that need normalization</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎓 DistributionAwareEncoder</h4>
+      <div class="api-signature">DistributionAwareEncoder(encoding_dim, dropout, detection_method)</div>
+      <p>Distribution-aware feature encoding with auto-detection.</p>
+      <p><strong>Use when:</strong> You need adaptive encoding based on data distributions</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📈 AdvancedNumericalEmbedding</h4>
+      <div class="api-signature">AdvancedNumericalEmbedding(embedding_dim, num_bins, hidden_dim)</div>
+      <p>Advanced numerical embedding with dual-branch architecture.</p>
+      <p><strong>Use when:</strong> You want rich numerical feature representations</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📅 DateParsingLayer</h4>
+      <div class="api-signature">DateParsingLayer(date_formats, default_format)</div>
+      <p>Flexible date parsing from various formats.</p>
+      <p><strong>Use when:</strong> You have date/time features to parse</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🕐 DateEncodingLayer</h4>
+      <div class="api-signature">DateEncodingLayer(min_year, max_year)</div>
+      <p>Cyclical date feature encoding.</p>
+      <p><strong>Use when:</strong> You want cyclical representations of temporal features</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🌙 SeasonLayer</h4>
+      <div class="api-signature">SeasonLayer()</div>
+      <p>Seasonal feature extraction for temporal patterns.</p>
+      <p><strong>Use when:</strong> Your data has seasonal patterns</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔀 DifferentialPreprocessingLayer</h4>
+      <div class="api-signature">DifferentialPreprocessingLayer(transform_types, dropout)</div>
+      <p>Multiple transformations with learnable combination.</p>
+      <p><strong>Use when:</strong> You want the model to learn optimal preprocessing</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🔧 DifferentiableTabularPreprocessor</h4>
+      <div class="api-signature">DifferentiableTabularPreprocessor(imputation_strategy, normalization, dropout)</div>
+      <p>End-to-end differentiable preprocessing.</p>
+      <p><strong>Use when:</strong> You want learnable imputation and normalization</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎨 CastToFloat32Layer</h4>
+      <div class="api-signature">CastToFloat32Layer()</div>
+      <p>Type casting utility for float32 precision.</p>
+      <p><strong>Use when:</strong> You need to ensure consistent data types</p>
+    </div>
+  </div>
+</div>
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>⚙️ Feature Engineering & Selection (5 layers)</h2>
+    <p>Advanced feature engineering and selection layers.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>🧬 GraphFeatureAggregation</h4>
+      <div class="api-signature">GraphFeatureAggregation(aggregation_method, hidden_dim, dropout)</div>
+      <p>Graph feature aggregation for relational learning.</p>
+      <p><strong>Use when:</strong> You have feature relationships to model</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎯 SparseAttentionWeighting</h4>
+      <div class="api-signature">SparseAttentionWeighting(temperature, dropout, sparsity_threshold)</div>
+      <p>Sparse attention for efficient computation.</p>
+      <p><strong>Use when:</strong> You need memory-efficient attention</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🗑️ FeatureCutout</h4>
+      <div class="api-signature">FeatureCutout(cutout_prob, noise_value, training_only)</div>
+      <p>Feature cutout for data augmentation.</p>
+      <p><strong>Use when:</strong> You want to improve model robustness through augmentation</p>
+    </div>
+  </div>
+</div>
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>🏗️ Specialized Architectures (8 layers)</h2>
+    <p>Advanced specialized layers for specific use cases.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>📈 BoostingBlock</h4>
+      <div class="api-signature">BoostingBlock(hidden_units, hidden_activation, gamma_trainable)</div>
+      <p>Gradient boosting inspired neural block.</p>
+      <p><strong>Use when:</strong> You want boosting-like behavior in neural networks</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎯 BoostingEnsembleLayer</h4>
+      <div class="api-signature">BoostingEnsembleLayer(num_learners, learner_units, hidden_activation)</div>
+      <p>Ensemble of boosting blocks.</p>
+      <p><strong>Use when:</strong> You want ensemble-based learning</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🏗️ BusinessRulesLayer</h4>
+      <div class="api-signature">BusinessRulesLayer(rules, feature_type, trainable_weights)</div>
+      <p>Domain-specific business rules integration.</p>
+      <p><strong>Use when:</strong> You need to enforce domain constraints</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🐢 SlowNetwork</h4>
+      <div class="api-signature">SlowNetwork(hidden_units, num_layers, activation, dropout)</div>
+      <p>Careful feature processing with controlled flow.</p>
+      <p><strong>Use when:</strong> You want deliberate, well-controlled processing</p>
+    </div>
+
+    <div class="api-card">
+      <h4>⚡ HyperZZWOperator</h4>
+      <div class="api-signature">HyperZZWOperator(hidden_units, hyperparameter_dim, activation)</div>
+      <p>Hyperparameter-aware operator for adaptive behavior.</p>
+      <p><strong>Use when:</strong> You want dynamic hyperparameter adjustment</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📊 TabularMoELayer</h4>
+      <div class="api-signature">TabularMoELayer(num_experts, expert_units)</div>
+      <p>Mixture of Experts for tabular data.</p>
+      <p><strong>Use when:</strong> You have diverse data requiring different expert processing</p>
+    </div>
+
+    <div class="api-card">
+      <h4>🎲 StochasticDepth</h4>
+      <div class="api-signature">StochasticDepth(survival_prob, scale_at_test)</div>
+      <p>Stochastic depth regularization.</p>
+      <p><strong>Use when:</strong> You want improved generalization in deep networks</p>
+    </div>
+  </div>
+</div>
+
+<div class="api-reference-section">
+  <div class="section-header">
+    <h2>🛠️ Utility & Graph Processing (8 layers)</h2>
+    <p>Utility layers for data processing, graph operations, and anomaly detection.</p>
+  </div>
+
+  <div class="api-grid">
+    <div class="api-card">
+      <h4>🧬 AdvancedGraphFeatureLayer</h4>
+      <div class="api-signature">AdvancedGraphFeatureLayer(hidden_dim, num_heads, dropout, use_attention)</div>
+      <p>Advanced graph feature processing with dynamic learning.</p>
+      <p><strong>Use when:</strong> You have complex feature relationships</p>
+    </div>
+
+    <div class="api-card">
+      <h4>👥 MultiHeadGraphFeaturePreprocessor</h4>
+      <div class="api-signature">MultiHeadGraphFeaturePreprocessor(num_heads, hidden_dim, dropout, aggregation)</div>
+      <p>Multi-head graph preprocessing.</p>
+      <p><strong>Use when:</strong> You want parallel feature processing</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📉 NumericalAnomalyDetection</h4>
+      <div class="api-signature">NumericalAnomalyDetection(method, contamination, threshold)</div>
+      <p>Statistical anomaly detection for numerical features.</p>
+      <p><strong>Use when:</strong> You need to detect numerical outliers</p>
+    </div>
+
+    <div class="api-card">
+      <h4>📊 CategoricalAnomalyDetectionLayer</h4>
+      <div class="api-signature">CategoricalAnomalyDetectionLayer(method, threshold, min_frequency)</div>
+      <p>Pattern-based anomaly detection for categorical features.</p>
+      <p><strong>Use when:</strong> You need to detect categorical anomalies</p>
+    </div>
+  </div>
+</div>
+
+<hr />
+<h2 id="quick-start-guide">🚀 Quick Start Guide</h2>
+<div class="highlight-box">
+  <h3>Getting Started with KerasFactory Layers</h3>
+
+  **Step 1: Choose Your Base Layer**
+  - Start with `DifferentiableTabularPreprocessor` for data preparation
+  - Add `VariableSelection` for feature importance
+
+  **Step 2: Add Attention**
+  - Use `TabularAttention` to capture feature relationships
+
+  **Step 3: Build Your Model**
+  - Stack layers together for powerful architectures
+
+  **Example:**
+  <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">1</span>
+<span class="normal">2</span>
+<span class="normal">3</span>
+<span class="normal">4</span>
+<span class="normal">5</span>
+<span class="normal">6</span>
+<span class="normal">7</span>
+<span class="normal">8</span>
+<span class="normal">9</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><span class="kn">import</span><span class="w"> </span><span class="nn">keras</span>
+</span><span id="__span-0-2"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">TabularAttention</span><span class="p">,</span> <span class="n">VariableSelection</span>
 </span><span id="__span-0-3">
-</span><span id="__span-0-4"><span class="c1"># Create a state-of-the-art tabular model</span>
-</span><span id="__span-0-5"><span class="n">model</span> <span class="o">=</span> <span class="n">SFNEBlock</span><span class="p">(</span>
-</span><span id="__span-0-6">    <span class="n">input_dim</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>              <span class="c1"># Number of input features</span>
-</span><span id="__span-0-7">    <span class="n">hidden_dim</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>            <span class="c1"># Hidden representation size</span>
-</span><span id="__span-0-8">    <span class="n">num_blocks</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>              <span class="c1"># Number of processing blocks</span>
-</span><span id="__span-0-9">    <span class="n">output_dim</span><span class="o">=</span><span class="mi">10</span>              <span class="c1"># Number of output classes</span>
-</span><span id="__span-0-10"><span class="p">)</span>
-</span><span id="__span-0-11">
-</span><span id="__span-0-12"><span class="c1"># Compile and train</span>
-</span><span id="__span-0-13"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-</span><span id="__span-0-14">    <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
-</span><span id="__span-0-15">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;sparse_categorical_crossentropy&#39;</span><span class="p">,</span>
-</span><span id="__span-0-16">    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">]</span>
-</span><span id="__span-0-17"><span class="p">)</span>
-</span><span id="__span-0-18"><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ State-of-the-art model ready!&quot;</span><span class="p">)</span>
+</span><span id="__span-0-4"><span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,))</span>
+</span><span id="__span-0-5"><span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">nr_features</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">)(</span><span class="n">inputs</span><span class="p">)</span>
+</span><span id="__span-0-6"><span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">key_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-7"><span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-8">
+</span><span id="__span-0-9"><span class="n">model</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
-<p><strong>When to use:</strong> Maximum performance, zero architecture design effort.</p>
 </div>
-<div class="tabbed-block">
-<p>Build advanced models by combining specialized layers:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><span class="kn">import</span><span class="w"> </span><span class="nn">keras</span>
-</span><span id="__span-1-2"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="__span-1-3">    <span class="n">DistributionTransformLayer</span><span class="p">,</span>    <span class="c1"># Intelligent preprocessing</span>
-</span><span id="__span-1-4">    <span class="n">VariableSelection</span><span class="p">,</span>              <span class="c1"># Learn feature importance</span>
-</span><span id="__span-1-5">    <span class="n">TabularAttention</span><span class="p">,</span>               <span class="c1"># Model feature relationships</span>
-</span><span id="__span-1-6">    <span class="n">GatedFeatureFusion</span>              <span class="c1"># Combine representations</span>
-</span><span id="__span-1-7"><span class="p">)</span>
-</span><span id="__span-1-8">
-</span><span id="__span-1-9"><span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,))</span>
-</span><span id="__span-1-10">
-</span><span id="__span-1-11"><span class="c1"># Build processing pipeline</span>
-</span><span id="__span-1-12"><span class="n">x</span> <span class="o">=</span> <span class="n">DistributionTransformLayer</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-1-13"><span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="mi">15</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-14"><span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">head_dim</span><span class="o">=</span><span class="mi">16</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-15">
-</span><span id="__span-1-16"><span class="c1"># Combine representations</span>
-</span><span id="__span-1-17"><span class="n">linear</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-18"><span class="n">nonlinear</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-19"><span class="n">x</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">()([</span><span class="n">linear</span><span class="p">,</span> <span class="n">nonlinear</span><span class="p">])</span>
-</span><span id="__span-1-20">
-</span><span id="__span-1-21"><span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-1-22"><span class="n">model</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<p><strong>When to use:</strong> Fine-grained control, reuse battle-tested components.</p>
-</div>
-<div class="tabbed-block">
-<p>Production-ready classification with all best practices:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><span class="kn">import</span><span class="w"> </span><span class="nn">keras</span>
-</span><span id="__span-2-2"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseFeedForwardModel</span>
-</span><span id="__span-2-3">
-</span><span id="__span-2-4"><span class="c1"># Create robust classification model</span>
-</span><span id="__span-2-5"><span class="n">model</span> <span class="o">=</span> <span class="n">BaseFeedForwardModel</span><span class="p">(</span>
-</span><span id="__span-2-6">    <span class="n">input_dim</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-</span><span id="__span-2-7">    <span class="n">output_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-</span><span id="__span-2-8">    <span class="n">hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">],</span>
-</span><span id="__span-2-9">    <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span>
-</span><span id="__span-2-10">    <span class="n">dropout_rate</span><span class="o">=</span><span class="mf">0.2</span>
-</span><span id="__span-2-11"><span class="p">)</span>
-</span><span id="__span-2-12">
-</span><span id="__span-2-13"><span class="c1"># Compile with production metrics</span>
-</span><span id="__span-2-14"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-</span><span id="__span-2-15">    <span class="n">optimizer</span><span class="o">=</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">),</span>
-</span><span id="__span-2-16">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
-</span><span id="__span-2-17">    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="s1">&#39;recall&#39;</span><span class="p">]</span>
-</span><span id="__span-2-18"><span class="p">)</span>
-</span><span id="__span-2-19"><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Production model ready!&quot;</span><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<p><strong>When to use:</strong> Proven architecture for classification tasks.</p>
-</div>
-</div>
-</div>
+
 <hr />
-<h2 id="real-world-use-cases">🎯 Real-World Use Cases</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:3"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">💰 Financial Risk Modeling</label><label for="__tabbed_2_2">🏥 Healthcare Analytics</label><label for="__tabbed_2_3">🛒 E-commerce Recommendations</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p>Predict credit risk with advanced tabular features:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseFeedForwardModel</span>
-</span><span id="__span-3-2">
-</span><span id="__span-3-3"><span class="c1"># 50+ financial features → Risk prediction</span>
-</span><span id="__span-3-4"><span class="n">model</span> <span class="o">=</span> <span class="n">BaseFeedForwardModel</span><span class="p">(</span>
-</span><span id="__span-3-5">    <span class="n">input_dim</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-</span><span id="__span-3-6">    <span class="n">output_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-</span><span id="__span-3-7">    <span class="n">hidden_layers</span><span class="o">=</span><span class="p">[</span><span class="mi">256</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">64</span><span class="p">]</span>
-</span><span id="__span-3-8"><span class="p">)</span>
-</span><span id="__span-3-9"><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
-</span><span id="__span-3-10">    <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;adam&#39;</span><span class="p">,</span>
-</span><span id="__span-3-11">    <span class="n">loss</span><span class="o">=</span><span class="s1">&#39;binary_crossentropy&#39;</span><span class="p">,</span>
-</span><span id="__span-3-12">    <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;auc&#39;</span><span class="p">,</span> <span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="s1">&#39;recall&#39;</span><span class="p">]</span>
-</span><span id="__span-3-13"><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<p><strong>Use case:</strong> Loan approval, credit scoring, fraud detection</p>
-</div>
-<div class="tabbed-block">
-<p>Intelligent medical diagnosis with mixed data:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-</span><span id="__span-4-2">    <span class="n">DistributionTransformLayer</span><span class="p">,</span>
-</span><span id="__span-4-3">    <span class="n">VariableSelection</span><span class="p">,</span>
-</span><span id="__span-4-4">    <span class="n">TabularAttention</span>
-</span><span id="__span-4-5"><span class="p">)</span>
-</span><span id="__span-4-6">
-</span><span id="__span-4-7"><span class="n">inputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,))</span>
-</span><span id="__span-4-8"><span class="n">x</span> <span class="o">=</span> <span class="n">DistributionTransformLayer</span><span class="p">()(</span><span class="n">inputs</span><span class="p">)</span>
-</span><span id="__span-4-9"><span class="n">x</span> <span class="o">=</span> <span class="n">VariableSelection</span><span class="p">(</span><span class="n">num_features</span><span class="o">=</span><span class="mi">30</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-4-10"><span class="n">x</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span><span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">head_dim</span><span class="o">=</span><span class="mi">16</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-4-11"><span class="n">outputs</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span>
-</span><span id="__span-4-12"><span class="n">model</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputs</span><span class="o">=</span><span class="n">outputs</span><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<p><strong>Use case:</strong> Disease prediction, patient risk assessment, diagnosis support</p>
-</div>
-<div class="tabbed-block">
-<p>Build user-item interaction models:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 1</span>
-<span class="normal"> 2</span>
-<span class="normal"> 3</span>
-<span class="normal"> 4</span>
-<span class="normal"> 5</span>
-<span class="normal"> 6</span>
-<span class="normal"> 7</span>
-<span class="normal"> 8</span>
-<span class="normal"> 9</span>
-<span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><span class="kn">from</span><span class="w"> </span><span class="nn">kerasfactory.layers</span><span class="w"> </span><span class="kn">import</span> <span class="n">TabularAttention</span><span class="p">,</span> <span class="n">GatedFeatureFusion</span>
-</span><span id="__span-5-2">
-</span><span id="__span-5-3"><span class="n">user_features</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,))</span>
-</span><span id="__span-5-4"><span class="n">item_features</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,))</span>
-</span><span id="__span-5-5">
-</span><span id="__span-5-6"><span class="n">user_repr</span> <span class="o">=</span> <span class="n">TabularAttention</span><span class="p">(</span>
-</span><span id="__span-5-7">    <span class="n">num_heads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">head_dim</span><span class="o">=</span><span class="mi">16</span>
-</span><span id="__span-5-8"><span class="p">)(</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Concatenate</span><span class="p">()(</span>
-</span><span id="__span-5-9">    <span class="p">[</span><span class="n">user_features</span><span class="p">,</span> <span class="n">item_features</span><span class="p">]</span>
-</span><span id="__span-5-10"><span class="p">))</span>
-</span><span id="__span-5-11">
-</span><span id="__span-5-12"><span class="n">fused</span> <span class="o">=</span> <span class="n">GatedFeatureFusion</span><span class="p">()([</span><span class="n">user_repr</span><span class="p">,</span> <span class="n">item_features</span><span class="p">])</span>
-</span><span id="__span-5-13"><span class="n">compatibility</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">)(</span><span class="n">fused</span><span class="p">)</span>
-</span><span id="__span-5-14"><span class="n">model</span> <span class="o">=</span> <span class="n">keras</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span>
-</span><span id="__span-5-15">    <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="n">user_features</span><span class="p">,</span> <span class="n">item_features</span><span class="p">],</span>
-</span><span id="__span-5-16">    <span class="n">outputs</span><span class="o">=</span><span class="n">compatibility</span>
-</span><span id="__span-5-17"><span class="p">)</span>
-</span></code></pre></div></td></tr></table></div>
-<p><strong>Use case:</strong> Product recommendations, CTR prediction, customer lifetime value</p>
-</div>
-</div>
-</div>
-<hr />
-<h2 id="key-technical-features">🎨 Key Technical Features</h2>
-<div class="grid cards">
+<h2 id="for-more-information">📖 For More Information</h2>
 <ul>
-<li>
-<p><strong>🧠 Advanced Architecture</strong></p>
-<p>Graph-based feature relationships • Multi-head attention mechanisms • Hierarchical aggregation • Residual connections for stable training</p>
-</li>
-<li>
-<p><strong>⚡ Performance Optimized</strong></p>
-<p>Keras 3 native • Memory efficient • GPU ready • Fully serializable for production deployment</p>
-</li>
-<li>
-<p><strong>🔧 Developer Friendly</strong></p>
-<p>Complete type annotations • 461+ passing tests • Rich docstrings with examples • Modular design for customization</p>
-</li>
+<li><strong><a href="api/layers.html">API Reference</a></strong> - Detailed API documentation with autodoc references</li>
+<li><strong><a href="contributing.html">Contributing</a></strong> - How to contribute new layers</li>
+<li><strong><a href="examples/index.html">Examples</a></strong> - Real-world usage examples</li>
+<li><strong><a href="tutorials/basic-workflows.html">Tutorials</a></strong> - Step-by-step guides</li>
 </ul>
-</div>
-<hr />
-<h2 id="perfect-for">🚀 Perfect For</h2>
-<div class="grid cards">
-<ul>
-<li>
-<p><strong>🏢 Enterprise ML Teams</strong></p>
-<p>Build production systems that scale. Battle-tested layers, 461+ passing tests, clear APIs for team collaboration, and detailed monitoring support.</p>
-<p><a class="md-button" href="getting-started/installation.html">Get Started →</a></p>
-</li>
-<li>
-<p><strong>🔬 Research &amp; Development</strong></p>
-<p>Experiment with cutting-edge techniques. State-of-the-art architectures, easy composition, reproducible results, and detailed docstrings throughout.</p>
-<p><a class="md-button" href="api/layers.html">Explore Layers →</a></p>
-</li>
-<li>
-<p><strong>🎓 Learning &amp; Education</strong></p>
-<p>Master tabular deep learning. Rich examples from basic to advanced, learn from production code, interactive examples, and best practices embedded in the library.</p>
-<p><a class="md-button" href="getting-started/quickstart.html">Start Learning →</a></p>
-</li>
-<li>
-<p><strong>⚙️ Data Engineering</strong></p>
-<p>Streamline feature engineering. Intelligent feature layers, automatic preprocessing, data quality analysis, and built-in layer recommendations.</p>
-<p><a class="md-button" href="data_analyzer.html">Try Analyzer →</a></p>
-</li>
-</ul>
-</div>
-<hr />
-<h2 id="contributing">🤝 Contributing</h2>
-<p>We welcome contributions! Whether you're:</p>
-<ul>
-<li>🐛 <strong>Reporting bugs</strong> or suggesting improvements</li>
-<li>🧩 <strong>Adding new layers</strong> or models</li>
-<li>📝 <strong>Improving documentation</strong> or examples</li>
-<li>🔍 <strong>Enhancing data analysis</strong> tools</li>
-</ul>
-<p>Check out our <a href="contributing.html">Contributing Guide</a> to get started!</p>
-<hr />
-<h2 id="your-journey-with-kerasfactory">📖 Your Journey with KerasFactory</h2>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:3"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><input id="__tabbed_3_3" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">🟢 Beginner</label><label for="__tabbed_3_2">🟡 Intermediate</label><label for="__tabbed_3_3">🔴 Advanced</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<p><strong>Start here</strong> - Get up and running in 5 minutes</p>
-<ol>
-<li><a href="getting-started/quickstart.html">Quick Start Guide</a></li>
-<li><a href="api/models.html">Try pre-built models</a></li>
-<li><a href="examples/index.html">Run basic examples</a></li>
-</ol>
-</div>
-<div class="tabbed-block">
-<p><strong>Build custom models</strong> - Mix and match layers</p>
-<ol>
-<li><a href="api/layers.html">Explore all layers</a></li>
-<li><a href="examples/index.html">Study layer combinations</a></li>
-<li><a href="tutorials/model-building.html">Build your first custom model</a></li>
-</ol>
-</div>
-<div class="tabbed-block">
-<p><strong>Push boundaries</strong> - Extend and optimize</p>
-<ol>
-<li><a href="layers_implementation_guide.html">Study implementation details</a></li>
-<li><a href="data_analyzer.html">Analyze data with our tools</a></li>
-<li><a href="contributing.html">Contribute new layers</a></li>
-</ol>
-</div>
-</div>
-</div>
-<hr />
-<p align="center">
-  <strong>Ready to build amazing tabular models?</strong>
-
-  **Choose your path:**
-
-  [⚡ Quick Start (5 min)](getting-started/quickstart.md){ .md-button .md-button--primary .md-button--large }
-
-  [🧩 Explore Layers](api/layers.md){ .md-button .md-button--large }
-
-  [🏗️ View Models](api/models.md){ .md-button .md-button--large }
-</p>
-
-<hr />
-<p align="center">
-  <em>Join thousands of ML engineers building production-ready tabular models with KerasFactory 🚀</em>
-</p>
 
 
 
 
 
 
+
+  
+  
 
 
 

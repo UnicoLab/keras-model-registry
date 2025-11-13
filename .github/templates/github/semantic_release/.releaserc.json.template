@@ -1,13 +1,17 @@
 {
   "branches": "main",
-  "tagFormat": "${PROJECT_NAME_LOWER}.${version}",
+  "tagFormat": "v${version}",
   "plugins": [
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
-    "@semantic-release/github",
+    ["@semantic-release/github", {
+        "successComment": false,
+        "releasedLabels": false
+      }],
     "@semantic-release/changelog",
     ["@semantic-release/git", {
-        "assets": ["CHANGELOG.md"]
+        "assets": ["CHANGELOG.md"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }]
   ],
   "preset": "conventionalcommits",

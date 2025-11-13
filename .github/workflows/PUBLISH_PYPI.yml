@@ -60,13 +60,21 @@ jobs:
           POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_TOKEN }}
         run: poetry publish --no-interaction
 
-      - name: Create GitHub Release
+      - name: Create GitHub Release (if not already created by semantic-release)
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
         with:
-          tag_name: ${{ github.ref }}
-          name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            ## Release ${{ github.ref_name }}
+            
+            This release was created from tag ${{ github.ref_name }}.
+            
+            **Package Version:** ${{ github.ref_name }}
+            **Published to PyPI:** ✅
           draft: false
           prerelease: false
 
@@ -75,6 +83,8 @@ jobs:
         run: |
           git config user.name "UnicoLab Bot"
           git config user.email "bot@unicolab.ai"
+          # Configure git authentication for mike
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
           # Extract version from tag (remove 'v' prefix if present) or use poetry version
           if [[ "${{ github.ref_name }}" =~ ^v(.+)$ ]]; then
             VERSION="${BASH_REMATCH[1]}"

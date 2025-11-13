@@ -1,4 +1,8 @@
 site_name: KerasFactory
+site_url: https://unicolab.github.io/KerasFactory/
+
+# Disable directory URLs to make relative paths work better (important for GitHub Pages + mike)
+use_directory_urls: false
 
 # Suppress warnings for pages not in nav (like 404.md)
 strict: false

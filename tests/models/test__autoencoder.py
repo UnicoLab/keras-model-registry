@@ -6,7 +6,7 @@ import numpy as np
 import tensorflow as tf
 from loguru import logger
 
-from kmr.models.autoencoder import Autoencoder
+from kerasfactory.models.autoencoder import Autoencoder
 from ._base import BaseModelTest
 
 

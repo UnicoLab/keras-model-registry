@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import Model, layers
-from kmr.layers.SeasonLayer import SeasonLayer
+from kerasfactory.layers.SeasonLayer import SeasonLayer
 
 
 class TestSeasonLayer(unittest.TestCase):

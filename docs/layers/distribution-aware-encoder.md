@@ -1,5 +1,5 @@
 ---
-title: DistributionAwareEncoder - KMR
+title: DistributionAwareEncoder - KerasFactory
 description: Distribution-aware feature encoding that automatically detects and encodes data based on its distribution
 keywords: [distribution aware, encoding, preprocessing, tabular, keras, neural networks, automatic detection, feature encoding]
 ---
@@ -91,7 +91,7 @@ graph TD
 ```python
 import keras
 import numpy as np
-from kmr.layers import DistributionAwareEncoder
+from kerasfactory.layers import DistributionAwareEncoder
 
 # Create sample data with different distributions
 batch_size = 1000
@@ -151,7 +151,7 @@ encoded = manual_encoder(exp_data)
 
 ```python
 import keras
-from kmr.layers import DistributionAwareEncoder
+from kerasfactory.layers import DistributionAwareEncoder
 
 model = keras.Sequential([
     DistributionAwareEncoder(
@@ -171,7 +171,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import DistributionAwareEncoder
+from kerasfactory.layers import DistributionAwareEncoder
 
 # Define inputs
 inputs = keras.Input(shape=(25,))  # 25 features
@@ -225,7 +225,7 @@ model = keras.Model(inputs, [classification, regression])
 
 ## 📖 API Reference
 
-::: kmr.layers.DistributionAwareEncoder
+::: kerasfactory.layers.DistributionAwareEncoder
 
 ## 🔧 Parameters Deep Dive
 
@@ -268,7 +268,7 @@ model = keras.Model(inputs, [classification, regression])
 ```python
 import keras
 import numpy as np
-from kmr.layers import DistributionAwareEncoder
+from kerasfactory.layers import DistributionAwareEncoder
 
 # Create data with different distributions
 batch_size = 2000
@@ -412,5 +412,5 @@ model.compile(
 - [Distribution Detection in Machine Learning](https://en.wikipedia.org/wiki/Goodness_of_fit) - Distribution testing concepts
 - [Feature Encoding Techniques](https://en.wikipedia.org/wiki/Feature_engineering) - Feature encoding approaches
 - [Adaptive Preprocessing](https://en.wikipedia.org/wiki/Data_pre-processing) - Adaptive data preprocessing
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

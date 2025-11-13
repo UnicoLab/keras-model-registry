@@ -12,7 +12,7 @@ from keras.optimizers import Adam
 from keras.losses import MeanSquaredError
 from keras.metrics import MeanAbsoluteError
 
-from kmr.models.autoencoder import Autoencoder
+from kerasfactory.models.autoencoder import Autoencoder
 from kdp.processor import PreprocessingModel
 from kdp.features import NumericalFeature
 

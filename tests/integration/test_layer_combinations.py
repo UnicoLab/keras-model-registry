@@ -1,6 +1,6 @@
-"""Integration tests for KMR layer combinations.
+"""Integration tests for kerasfactory layer combinations.
 
-These tests verify that KMR layers work correctly when combined together
+These tests verify that kerasfactory layers work correctly when combined together
 in various configurations and pipelines.
 """
 
@@ -9,7 +9,7 @@ import keras
 import tensorflow as tf
 from keras import Model, layers
 
-from kmr.layers import (
+from kerasfactory.layers import (
     TabularAttention,
     AdvancedNumericalEmbedding,
     GatedFeatureFusion,
@@ -18,11 +18,11 @@ from kmr.layers import (
     BoostingBlock,
     StochasticDepth,
 )
-from kmr.models import TerminatorModel, BaseFeedForwardModel
+from kerasfactory.models import TerminatorModel, BaseFeedForwardModel
 
 
 class TestLayerCombinations(unittest.TestCase):
-    """Test combinations of KMR layers."""
+    """Test combinations of kerasfactory layers."""
 
     def setUp(self) -> None:
         """Set up test data."""
@@ -167,7 +167,7 @@ class TestLayerCombinations(unittest.TestCase):
         self.assertIsNotNone(output)
 
     def test_complex_pipeline(self) -> None:
-        """Test a complex pipeline with multiple KMR layers."""
+        """Test a complex pipeline with multiple kerasfactory layers."""
         # Create complex pipeline
         inputs = keras.Input(shape=(self.num_features,))
 
@@ -272,7 +272,7 @@ class TestLayerCombinations(unittest.TestCase):
 
 
 class TestModelIntegration(unittest.TestCase):
-    """Test integration of KMR models."""
+    """Test integration of kerasfactory models."""
 
     def setUp(self) -> None:
         """Set up test data."""
@@ -337,7 +337,7 @@ class TestModelIntegration(unittest.TestCase):
 
     def test_model_training_integration(self) -> None:
         """Test model training integration."""
-        # Create a simple model with KMR layers
+        # Create a simple model with kerasfactory layers
         inputs = keras.Input(shape=(self.num_features,))
         embedded = AdvancedNumericalEmbedding(embedding_dim=8, num_heads=2)(inputs)
         # Use a simple dense layer instead of GatedFeatureFusion

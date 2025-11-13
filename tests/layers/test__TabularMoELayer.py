@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model
-from kmr.layers.TabularMoELayer import TabularMoELayer
+from kerasfactory.layers.TabularMoELayer import TabularMoELayer
 
 
 class TestTabularMoELayer(unittest.TestCase):

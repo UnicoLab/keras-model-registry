@@ -1,20 +1,20 @@
 # 🚀 Quick Start Guide
 
-Get up and running with KMR in minutes! This guide will walk you through installing KMR and building your first tabular model.
+Get up and running with KerasFactory in minutes! This guide will walk you through installing KerasFactory and building your first tabular model.
 
 ## 📦 Installation
 
 ```bash
-pip install kmr
+pip install kerasfactory
 ```
 
 ## 🎯 Your First Model
 
-Here's a complete example that demonstrates the power of KMR layers:
+Here's a complete example that demonstrates the power of KerasFactory layers:
 
 ```python
 import keras
-from kmr.layers import (
+from kerasfactory.layers import (
     TabularAttention, 
     VariableSelection, 
     GatedFeatureFusion,
@@ -64,11 +64,11 @@ print(f"Total parameters: {model.count_params():,}")
 - **🛠️ Utility**: Essential tools for data processing
 
 ### 2. **Layer Composition**
-KMR layers are designed to work together seamlessly:
+KerasFactory layers are designed to work together seamlessly:
 
 ```python
 # Example: Building a feature engineering pipeline
-from kmr.layers import (
+from kerasfactory.layers import (
     AdvancedNumericalEmbedding,
     DistributionAwareEncoder,
     SparseAttentionWeighting
@@ -89,7 +89,7 @@ def feature_pipeline(inputs):
 ```
 
 ### 3. **Performance Optimization**
-KMR layers are optimized for production use:
+KerasFactory layers are optimized for production use:
 
 ```python
 # Example: Memory-efficient model

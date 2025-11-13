@@ -8,7 +8,7 @@ import unittest
 import tensorflow as tf  # Used for testing only
 import numpy as np
 from keras import layers, Model
-from kmr.layers.AdvancedNumericalEmbedding import AdvancedNumericalEmbedding
+from kerasfactory.layers.AdvancedNumericalEmbedding import AdvancedNumericalEmbedding
 
 
 class TestAdvancedNumericalEmbedding(unittest.TestCase):

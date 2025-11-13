@@ -7,7 +7,7 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf
 import keras
-from kmr.layers.MultiScaleSeasonMixing import MultiScaleSeasonMixing
+from kerasfactory.layers.MultiScaleSeasonMixing import MultiScaleSeasonMixing
 
 
 class TestMultiScaleSeasonMixing(unittest.TestCase):

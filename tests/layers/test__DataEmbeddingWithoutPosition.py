@@ -7,7 +7,9 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf
 import keras
-from kmr.layers.DataEmbeddingWithoutPosition import DataEmbeddingWithoutPosition
+from kerasfactory.layers.DataEmbeddingWithoutPosition import (
+    DataEmbeddingWithoutPosition,
+)
 
 
 class TestDataEmbeddingWithoutPosition(unittest.TestCase):

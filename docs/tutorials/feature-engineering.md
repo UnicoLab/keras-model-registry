@@ -1,6 +1,6 @@
 # 🔧 Feature Engineering Tutorial
 
-Master the art of feature engineering with KMR layers. Learn how to transform, select, and create powerful features for your tabular models.
+Master the art of feature engineering with KerasFactory layers. Learn how to transform, select, and create powerful features for your tabular models.
 
 ## 📋 Table of Contents
 
@@ -13,14 +13,14 @@ Master the art of feature engineering with KMR layers. Learn how to transform, s
 
 ## 🎯 Understanding Feature Engineering
 
-Feature engineering is the process of creating, transforming, and selecting features to improve model performance. KMR provides specialized layers for this purpose.
+Feature engineering is the process of creating, transforming, and selecting features to improve model performance. KerasFactory provides specialized layers for this purpose.
 
 ### Why Feature Engineering Matters
 
 ```python
 import numpy as np
 import pandas as pd
-from kmr.layers import AdvancedNumericalEmbedding, DistributionAwareEncoder
+from kerasfactory.layers import AdvancedNumericalEmbedding, DistributionAwareEncoder
 
 # Example: Raw features vs Engineered features
 raw_features = np.random.normal(0, 1, (1000, 10))
@@ -41,7 +41,7 @@ print("Engineered features shape:", engineered_features.shape)
 Transform numerical features into rich embeddings:
 
 ```python
-from kmr.layers import AdvancedNumericalEmbedding
+from kerasfactory.layers import AdvancedNumericalEmbedding
 
 def create_numerical_embedding(input_dim, embedding_dim=64):
     """Create numerical feature embeddings."""
@@ -66,7 +66,7 @@ embedding_model = create_numerical_embedding(input_dim=20, embedding_dim=64)
 Automatically detect and encode feature distributions:
 
 ```python
-from kmr.layers import DistributionAwareEncoder
+from kerasfactory.layers import DistributionAwareEncoder
 
 def create_distribution_aware_encoding(input_dim):
     """Create distribution-aware feature encoding."""
@@ -90,7 +90,7 @@ distribution_model = create_distribution_aware_encoding(input_dim=20)
 Transform features to follow specific distributions:
 
 ```python
-from kmr.layers import DistributionTransformLayer
+from kerasfactory.layers import DistributionTransformLayer
 
 def create_distribution_transform(input_dim):
     """Transform features to normal distribution."""
@@ -116,7 +116,7 @@ transform_model = create_distribution_transform(input_dim=20)
 Process temporal features effectively:
 
 ```python
-from kmr.layers import DateParsingLayer, DateEncodingLayer, SeasonLayer
+from kerasfactory.layers import DateParsingLayer, DateEncodingLayer, SeasonLayer
 
 def create_temporal_features():
     """Create comprehensive temporal feature processing."""
@@ -147,7 +147,7 @@ seasonal_features = season_layer(parsed_dates)
 Handle text features in tabular data:
 
 ```python
-from kmr.layers import TextPreprocessingLayer
+from kerasfactory.layers import TextPreprocessingLayer
 
 def create_text_preprocessing():
     """Create text preprocessing pipeline."""
@@ -171,7 +171,7 @@ text_preprocessor = create_text_preprocessing()
 Intelligently select important features:
 
 ```python
-from kmr.layers import VariableSelection
+from kerasfactory.layers import VariableSelection
 
 def create_variable_selection(input_dim, hidden_dim=64):
     """Create intelligent variable selection."""
@@ -196,7 +196,7 @@ selection_model = create_variable_selection(input_dim=20, hidden_dim=64)
 Learnable feature selection with gating:
 
 ```python
-from kmr.layers import GatedFeatureSelection
+from kerasfactory.layers import GatedFeatureSelection
 
 def create_gated_selection(input_dim, hidden_dim=64):
     """Create gated feature selection."""
@@ -221,7 +221,7 @@ gated_model = create_gated_selection(input_dim=20, hidden_dim=64)
 Sparse feature weighting for efficiency:
 
 ```python
-from kmr.layers import SparseAttentionWeighting
+from kerasfactory.layers import SparseAttentionWeighting
 
 def create_sparse_weighting(input_dim):
     """Create sparse attention weighting."""
@@ -248,7 +248,7 @@ sparse_model = create_sparse_weighting(input_dim=20)
 Combine multiple feature representations:
 
 ```python
-from kmr.layers import GatedFeatureFusion
+from kerasfactory.layers import GatedFeatureFusion
 
 def create_feature_fusion(input_dim1, input_dim2, hidden_dim=128):
     """Create feature fusion mechanism."""
@@ -274,7 +274,7 @@ fusion_model = create_feature_fusion(input_dim1=10, input_dim2=10, hidden_dim=12
 Data augmentation for features:
 
 ```python
-from kmr.layers import FeatureCutout
+from kerasfactory.layers import FeatureCutout
 
 def create_feature_augmentation(input_dim):
     """Create feature augmentation pipeline."""
@@ -299,7 +299,7 @@ augmentation_model = create_feature_augmentation(input_dim=20)
 Process features as a graph:
 
 ```python
-from kmr.layers import AdvancedGraphFeature, GraphFeatureAggregation
+from kerasfactory.layers import AdvancedGraphFeature, GraphFeatureAggregation
 
 def create_graph_features(input_dim, hidden_dim=64):
     """Create graph-based feature processing."""

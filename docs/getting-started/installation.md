@@ -1,11 +1,11 @@
 # 📦 Installation Guide
 
-Install KMR and get your development environment ready for tabular modeling with Keras 3.
+Install KerasFactory and get your development environment ready for tabular modeling with Keras 3.
 
 ## 🎯 Quick Install
 
 ```bash
-pip install kmr
+pip install kerasfactory
 ```
 
 ## 🔧 Requirements
@@ -28,20 +28,20 @@ pip install kmr
 ### 1. **Pip Install (Recommended)**
 ```bash
 # Latest stable release
-pip install kmr
+pip install kerasfactory
 
 # With optional dependencies
-pip install kmr[full]
+pip install kerasfactory[full]
 
 # Specific version
-pip install kmr==1.0.0
+pip install kerasfactory==1.0.0
 ```
 
 ### 2. **Development Install**
 ```bash
 # Clone the repository
-git clone https://github.com/your-org/keras-model-registry.git
-cd keras-model-registry
+git clone https://github.com/UnicoLab/KerasFactory.git
+cd KerasFactory
 
 # Install in development mode
 pip install -e .
@@ -53,11 +53,11 @@ pip install -e ".[dev]"
 ### 3. **Conda Install**
 ```bash
 # Create a new environment
-conda create -n kmr python=3.10
-conda activate kmr
+conda create -n kerasfactory python=3.10
+conda activate kerasfactory
 
-# Install KMR
-pip install kmr
+# Install KerasFactory
+pip install kerasfactory
 ```
 
 ## 🔍 Verify Installation
@@ -66,10 +66,10 @@ Test your installation with this simple script:
 
 ```python
 import keras
-from kmr.layers import TabularAttention
+from kerasfactory.layers import TabularAttention
 
 # Test basic import
-print("✅ KMR imported successfully!")
+print("✅ KerasFactory imported successfully!")
 
 # Test layer creation
 layer = TabularAttention(num_heads=8, key_dim=64)
@@ -112,7 +112,7 @@ if gpus:
 
 ### Backend Configuration
 
-KMR works with multiple Keras backends:
+KerasFactory works with multiple Keras backends:
 
 ```python
 # TensorFlow backend (default)
@@ -139,14 +139,14 @@ os.environ['KERAS_BACKEND'] = 'torch'
 - **CPU**: 4+ cores
 - **GPU**: NVIDIA GPU with CUDA support (optional)
 
-## 🔄 Updating KMR
+## 🔄 Updating KerasFactory
 
 ```bash
 # Update to latest version
-pip install --upgrade kmr
+pip install --upgrade kerasfactory
 
 # Check current version
-python -c "import kmr; print(kmr.__version__)"
+python -c "import kerasfactory; print(kerasfactory.__version__)"
 ```
 
 ## 🧪 Testing Installation
@@ -156,8 +156,8 @@ Run the test suite to ensure everything works:
 ```bash
 # Run basic tests
 python -c "
-import kmr
-from kmr.layers import *
+import kerasfactory
+from kerasfactory.layers import *
 print('All layers imported successfully!')
 "
 
@@ -174,4 +174,4 @@ pytest tests/
 
 ---
 
-**Installation complete!** Ready to start building with KMR? Head to the [Quick Start Guide](quickstart.md)!
+**Installation complete!** Ready to start building with KerasFactory? Head to the [Quick Start Guide](quickstart.md)!

@@ -1,5 +1,5 @@
 ---
-title: GatedFeatureFusion - KMR
+title: GatedFeatureFusion - KerasFactory
 description: Gated feature fusion layer for intelligently combining multiple feature representations
 keywords: [feature fusion, gated fusion, tabular, keras, neural networks, feature combination, multi-representation]
 ---
@@ -82,7 +82,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import GatedFeatureFusion
+from kerasfactory.layers import GatedFeatureFusion
 
 # Create two feature representations
 batch_size, num_features = 32, 10
@@ -100,7 +100,7 @@ print(f"Fused features shape: {fused_features.shape}")  # (32, 10)
 
 ```python
 import keras
-from kmr.layers import GatedFeatureFusion
+from kerasfactory.layers import GatedFeatureFusion
 
 # Create a model with feature fusion
 model = keras.Sequential([
@@ -120,7 +120,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 ```python
 import keras
-from kmr.layers import GatedFeatureFusion
+from kerasfactory.layers import GatedFeatureFusion
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -172,7 +172,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.GatedFeatureFusion
+::: kerasfactory.layers.GatedFeatureFusion
 
 ## 🔧 Parameters Deep Dive
 
@@ -196,7 +196,7 @@ model = keras.Model(inputs, outputs)
 
 ```python
 import keras
-from kmr.layers import GatedFeatureFusion
+from kerasfactory.layers import GatedFeatureFusion
 
 # Simulate mixed data: numerical features + categorical embeddings
 batch_size = 32
@@ -317,5 +317,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 - [Gated Residual Networks](https://arxiv.org/abs/1612.08083) - GRN architecture details
 - [Feature Fusion in Deep Learning](https://en.wikipedia.org/wiki/Feature_fusion) - Feature fusion concepts
 - [Multi-Modal Learning](https://en.wikipedia.org/wiki/Multimodal_learning) - Multi-modal learning approaches
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

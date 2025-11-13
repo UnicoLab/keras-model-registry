@@ -1,5 +1,5 @@
 ---
-title: RowAttention - KMR
+title: RowAttention - KerasFactory
 description: Row-wise attention mechanism for dynamic sample weighting in tabular data
 keywords: [attention, row, sample weighting, tabular, keras, neural networks, sample importance]
 ---
@@ -72,7 +72,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import RowAttention
+from kerasfactory.layers import RowAttention
 
 # Create sample tabular data
 batch_size, num_features = 32, 10
@@ -90,7 +90,7 @@ print(f"Output shape: {weighted_samples.shape}")  # (32, 10)
 
 ```python
 import keras
-from kmr.layers import RowAttention
+from kerasfactory.layers import RowAttention
 
 model = keras.Sequential([
     keras.layers.Dense(64, activation='relu'),
@@ -106,7 +106,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import RowAttention
+from kerasfactory.layers import RowAttention
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -145,7 +145,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.RowAttention
+::: kerasfactory.layers.RowAttention
 
 ## 🔧 Parameters Deep Dive
 
@@ -175,7 +175,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import RowAttention
+from kerasfactory.layers import RowAttention
 
 # Create data with outliers
 np.random.seed(42)
@@ -299,5 +299,5 @@ model.compile(
 
 - [Attention Mechanisms in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Understanding attention mechanisms
 - [Sample Weighting in Machine Learning](https://en.wikipedia.org/wiki/Instance_weighting) - Sample weighting concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Quality Tutorial](../tutorials/feature-engineering.md) - Complete guide to data quality handling

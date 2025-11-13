@@ -1,10 +1,10 @@
 # 📖 Rich Docstrings Showcase
 
-Comprehensive examples demonstrating KMR layers with detailed documentation, best practices, and real-world use cases.
+Comprehensive examples demonstrating KerasFactory layers with detailed documentation, best practices, and real-world use cases.
 
 ## 🎯 Overview
 
-This showcase provides in-depth examples of KMR layers with rich documentation, showing how to build production-ready tabular models. Each example includes:
+This showcase provides in-depth examples of KerasFactory layers with rich documentation, showing how to build production-ready tabular models. Each example includes:
 
 - **Detailed explanations** of layer functionality
 - **Best practices** for parameter selection
@@ -21,7 +21,7 @@ import keras
 import numpy as np
 from loguru import logger
 from typing import Tuple, Dict, Any, Optional
-from kmr.layers import TabularAttention
+from kerasfactory.layers import TabularAttention
 
 def create_tabular_attention_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a model using TabularAttention for dual attention mechanisms.
@@ -123,7 +123,7 @@ def demonstrate_tabular_attention() -> Tuple[keras.Model, keras.callbacks.Histor
 ### MultiResolutionTabularAttention - Multi-Resolution Processing
 
 ```python
-from kmr.layers import MultiResolutionTabularAttention
+from kerasfactory.layers import MultiResolutionTabularAttention
 
 def create_multi_resolution_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a model using MultiResolutionTabularAttention for different feature scales.
@@ -225,7 +225,7 @@ def demonstrate_multi_resolution() -> Tuple[keras.Model, keras.callbacks.History
 ### VariableSelection - Intelligent Feature Selection
 
 ```python
-from kmr.layers import VariableSelection
+from kerasfactory.layers import VariableSelection
 
 def create_variable_selection_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a model using VariableSelection for intelligent feature selection.
@@ -331,7 +331,7 @@ def demonstrate_variable_selection() -> Tuple[keras.Model, keras.callbacks.Histo
 ### AdvancedNumericalEmbedding - Rich Numerical Representations
 
 ```python
-from kmr.layers import AdvancedNumericalEmbedding
+from kerasfactory.layers import AdvancedNumericalEmbedding
 
 def create_advanced_embedding_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a model using AdvancedNumericalEmbedding for rich numerical representations.
@@ -434,7 +434,7 @@ def demonstrate_advanced_embedding() -> Tuple[keras.Model, keras.callbacks.Histo
 ### DifferentiableTabularPreprocessor - End-to-End Preprocessing
 
 ```python
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 def create_preprocessing_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a model using DifferentiableTabularPreprocessor for end-to-end preprocessing.
@@ -540,7 +540,7 @@ def demonstrate_preprocessing() -> Tuple[keras.Model, keras.callbacks.History]:
 ### GatedResidualNetwork - Advanced Residual Processing
 
 ```python
-from kmr.layers import GatedResidualNetwork
+from kerasfactory.layers import GatedResidualNetwork
 
 def create_gated_residual_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a model using GatedResidualNetwork for advanced residual processing.
@@ -643,7 +643,7 @@ def demonstrate_gated_residual() -> Tuple[keras.Model, keras.callbacks.History]:
 ### TabularMoELayer - Mixture of Experts
 
 ```python
-from kmr.layers import TabularMoELayer
+from kerasfactory.layers import TabularMoELayer
 
 def create_moe_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a model using TabularMoELayer for mixture of experts architecture.
@@ -834,7 +834,7 @@ def demonstrate_attention_analysis() -> Dict[str, Any]:
 ### Memory-Efficient Training
 
 ```python
-from kmr.layers import GatedFeatureFusion
+from kerasfactory.layers import GatedFeatureFusion
 
 def create_memory_efficient_model(input_dim: int, num_classes: int) -> keras.Model:
     """Create a memory-efficient model for large datasets.

@@ -1,6 +1,6 @@
 # 🏗️ BaseFeedForwardModel Guide
 
-Learn how to build feed-forward models using KMR layers. This guide covers the fundamentals of creating efficient feed-forward architectures for tabular data.
+Learn how to build feed-forward models using KerasFactory layers. This guide covers the fundamentals of creating efficient feed-forward architectures for tabular data.
 
 ## 📋 Table of Contents
 
@@ -18,10 +18,10 @@ import keras
 import numpy as np
 from loguru import logger
 from typing import Optional, Tuple
-from kmr.layers import VariableSelection, GatedFeatureFusion
+from kerasfactory.layers import VariableSelection, GatedFeatureFusion
 
 def create_basic_feedforward(input_dim: int, num_classes: int) -> keras.Model:
-    """Create a basic feed-forward model with KMR layers.
+    """Create a basic feed-forward model with KerasFactory layers.
     
     Constructs a simple feed-forward neural network using VariableSelection layer
     for feature selection followed by dense layers for classification.
@@ -65,7 +65,7 @@ def create_basic_feedforward(input_dim: int, num_classes: int) -> keras.Model:
 ### Feed-Forward with Feature Engineering
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     DifferentiableTabularPreprocessor,
     AdvancedNumericalEmbedding,
     GatedFeatureFusion
@@ -116,7 +116,7 @@ def create_engineered_feedforward(input_dim: int, num_classes: int) -> keras.Mod
 ### Residual Feed-Forward
 
 ```python
-from kmr.layers import GatedResidualNetwork
+from kerasfactory.layers import GatedResidualNetwork
 
 def create_residual_feedforward(input_dim: int, num_classes: int) -> keras.Model:
     """Create a residual feed-forward model.

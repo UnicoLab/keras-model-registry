@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import Model, layers
-from kmr.layers.DateParsingLayer import DateParsingLayer
+from kerasfactory.layers.DateParsingLayer import DateParsingLayer
 
 
 class TestDateParsingLayer(unittest.TestCase):

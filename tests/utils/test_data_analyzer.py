@@ -1,4 +1,4 @@
-"""Unit tests for the kmr.utils.data_analyzer module."""
+"""Unit tests for the kerasfactory.utils.data_analyzer module."""
 
 import os
 import sys
@@ -14,7 +14,7 @@ project_root = os.path.dirname(os.path.dirname(current_dir))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from kmr.utils.data_analyzer import DataAnalyzer, analyze_data
+from kerasfactory.utils.data_analyzer import DataAnalyzer, analyze_data
 
 
 class TestDataAnalyzer(unittest.TestCase):
@@ -267,7 +267,7 @@ class TestDataAnalyzer(unittest.TestCase):
         self.assertIn("analysis", result)
         self.assertIn("recommendations", result)
 
-    @mock.patch("kmr.utils.data_analyzer.pd.read_csv")
+    @mock.patch("kerasfactory.utils.data_analyzer.pd.read_csv")
     def test_error_handling(self, mock_read_csv) -> None:
         """Test error handling when analyzing invalid files."""
         # Mock pd.read_csv to raise an exception
@@ -312,7 +312,7 @@ class TestDataAnalyzer(unittest.TestCase):
         non_existent_path = os.path.join(self.temp_dir.name, "non_existent")
 
         # Mock the logger to capture error messages
-        with mock.patch("kmr.utils.data_analyzer.logger") as mock_logger:
+        with mock.patch("kerasfactory.utils.data_analyzer.logger") as mock_logger:
             # Call analyze_and_recommend with invalid source
             result = self.analyzer.analyze_and_recommend(non_existent_path)
 

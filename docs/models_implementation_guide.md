@@ -1,6 +1,6 @@
-[38;5;243m   1[0m [38;5;249m# 🤖 Model Implementation Guide for Keras Model Registry (KMR)[0m
+[38;5;243m   1[0m [38;5;249m# 🤖 Model Implementation Guide for KerasFactory[0m
 [38;5;243m   2[0m 
-[38;5;243m   3[0m [38;5;249mThis guide outlines the complete process and best practices for implementing new models in the Keras Model Registry project. Follow the checklists to ensure your implementation meets all KMR standards.[0m
+[38;5;243m   3[0m [38;5;249mThis guide outlines the complete process and best practices for implementing new models in the KerasFactory project. Follow the checklists to ensure your implementation meets all KerasFactory standards.[0m
 [38;5;243m   4[0m 
 [38;5;243m   5[0m [38;5;249m## 📋 Model Implementation Checklist[0m
 [38;5;243m   6[0m 
@@ -10,7 +10,7 @@
 [38;5;243m  10[0m [38;5;249m- [ ] **Define Purpose**: Clearly document what the model does and when to use it[0m
 [38;5;243m  11[0m [38;5;249m- [ ] **Review Architecture**: Design the model architecture (layers, connections, data flow)[0m
 [38;5;243m  12[0m [38;5;249m- [ ] **Plan Layers**: Identify which layers the model needs[0m
-[38;5;243m  13[0m [38;5;249m  - [ ] Check if all required layers exist in `kmr/layers/`[0m
+[38;5;243m  13[0m [38;5;249m  - [ ] Check if all required layers exist in `kerasfactory/layers/`[0m
 [38;5;243m  14[0m [38;5;249m  - [ ] Plan to implement missing layers separately first[0m
 [38;5;243m  15[0m [38;5;249m  - [ ] Prioritize reusability (create standalone layers, not embedded logic)[0m
 [38;5;243m  16[0m [38;5;249m- [ ] **Define Inputs/Outputs**: Plan input and output specifications[0m
@@ -28,11 +28,11 @@
 [38;5;243m  28[0m [38;5;249m- [ ] Run all tests and linting[0m
 [38;5;243m  29[0m 
 [38;5;243m  30[0m [38;5;249m### Phase 3: Implementation - Core Model Code[0m
-[38;5;243m  31[0m [38;5;249m- [ ] **Create File**: Create `kmr/models/YourModelName.py` following naming conventions[0m
+[38;5;243m  31[0m [38;5;249m- [ ] **Create File**: Create `kerasfactory/models/YourModelName.py` following naming conventions[0m
 [38;5;243m  32[0m [38;5;249m- [ ] **Add Module Docstring**: Document the module's purpose[0m
 [38;5;243m  33[0m [38;5;249m- [ ] **Implement Pure Keras 3**: Use only Keras operations (no TensorFlow)[0m
-[38;5;243m  34[0m [38;5;249m- [ ] **Apply @register_keras_serializable**: Decorate class with `@register_keras_serializable(package="kmr.models")`[0m
-[38;5;243m  35[0m [38;5;249m- [ ] **Inherit from BaseModel**: Extend `kmr.models._base.BaseModel`[0m
+[38;5;243m  34[0m [38;5;249m- [ ] **Apply @register_keras_serializable**: Decorate class with `@register_keras_serializable(package="kerasfactory.models")`[0m
+[38;5;243m  35[0m [38;5;249m- [ ] **Inherit from BaseModel**: Extend `kerasfactory.models._base.BaseModel`[0m
 [38;5;243m  36[0m [38;5;249m- [ ] **Implement __init__**: [0m
 [38;5;243m  37[0m [38;5;249m  - [ ] Set private attributes first (`self._param = param`)[0m
 [38;5;243m  38[0m [38;5;249m  - [ ] Validate parameters (in __init__ or _validate_params)[0m
@@ -94,7 +94,7 @@
 [38;5;243m  94[0m [38;5;249m  - [ ] Comparison with related architectures[0m
 [38;5;243m  95[0m [38;5;249m  - [ ] Training best practices[0m
 [38;5;243m  96[0m [38;5;249m  - [ ] Common issues & troubleshooting[0m
-[38;5;243m  97[0m [38;5;249m  - [ ] Integration with other KMR components[0m
+[38;5;243m  97[0m [38;5;249m  - [ ] Integration with other KerasFactory components[0m
 [38;5;243m  98[0m [38;5;249m  - [ ] References and citations[0m
 [38;5;243m  99[0m [38;5;249m- [ ] **Add Code Examples**: Real, working examples (training, evaluation, prediction)[0m
 [38;5;243m 100[0m [38;5;249m- [ ] **Include Mathematical Details**: Equations, loss functions, optimization details[0m
@@ -125,12 +125,12 @@
 [38;5;243m 125[0m [38;5;249m- [ ] **Use Interactive Plots**: Plotly for better interactivity[0m
 [38;5;243m 126[0m 
 [38;5;243m 127[0m [38;5;249m### Phase 7: Integration & Updates[0m
-[38;5;243m 128[0m [38;5;249m- [ ] **Update Imports**: Add to `kmr/models/__init__.py`[0m
+[38;5;243m 128[0m [38;5;249m- [ ] **Update Imports**: Add to `kerasfactory/models/__init__.py`[0m
 [38;5;243m 129[0m [38;5;249m  - [ ] Add import statement[0m
 [38;5;243m 130[0m [38;5;249m  - [ ] Add model name to `__all__` list[0m
 [38;5;243m 131[0m [38;5;249m- [ ] **Update API Documentation**: Add entry to `docs/api/models.md`[0m
 [38;5;243m 132[0m [38;5;249m  - [ ] Add model name and description[0m
-[38;5;243m 133[0m [38;5;249m  - [ ] Include autodoc reference (`::: kmr.models.YourModelName`)[0m
+[38;5;243m 133[0m [38;5;249m  - [ ] Include autodoc reference (`::: kerasfactory.models.YourModelName`)[0m
 [38;5;243m 134[0m [38;5;249m  - [ ] List key features[0m
 [38;5;243m 135[0m [38;5;249m  - [ ] Add use case recommendations[0m
 [38;5;243m 136[0m [38;5;249m- [ ] **Update Models Overview**: If exists, add to `docs/models_overview.md` or similar[0m
@@ -138,7 +138,7 @@
 [38;5;243m 138[0m [38;5;249m  - [ ] Add to feature list[0m
 [38;5;243m 139[0m [38;5;249m  - [ ] Link to documentation[0m
 [38;5;243m 140[0m [38;5;249m- [ ] **Update Tutorials**: If introducing new concepts[0m
-[38;5;243m 141[0m [38;5;249m- [ ] **Update Data Analyzer**: If applicable, add to `kmr/utils/data_analyzer.py`[0m
+[38;5;243m 141[0m [38;5;249m- [ ] **Update Data Analyzer**: If applicable, add to `kerasfactory/utils/data_analyzer.py`[0m
 [38;5;243m 142[0m 
 [38;5;243m 143[0m [38;5;249m### Phase 8: Quality Assurance[0m
 [38;5;243m 144[0m [38;5;249m- [ ] **Run All Tests**: [0m
@@ -169,7 +169,7 @@
 [38;5;243m 169[0m 
 [38;5;243m 170[0m [38;5;249m### ✅ Keras 3 Only[0m
 [38;5;243m 171[0m [38;5;249mAll model implementations MUST use only Keras 3 operations and layers. NO TensorFlow dependencies are allowed in model implementations.[0m
-[38;5;243m 172[0m [38;5;249m- **Allowed**: `keras.layers`, `keras.ops`, `kmr.layers`, `kmr.models`[0m
+[38;5;243m 172[0m [38;5;249m- **Allowed**: `keras.layers`, `keras.ops`, `kerasfactory.layers`, `kerasfactory.models`[0m
 [38;5;243m 173[0m [38;5;249m- **NOT Allowed**: `tensorflow.python.*`, `tf.nn.*` (use `keras.ops.*` instead)[0m
 [38;5;243m 174[0m [38;5;249m- **Exception**: TensorFlow can ONLY be used in test files and notebooks for validation[0m
 [38;5;243m 175[0m 
@@ -179,8 +179,8 @@
 [38;5;243m 179[0m [38;5;249m- **Bad**: Implement temporal mixing logic directly in model[0m
 [38;5;243m 180[0m 
 [38;5;243m 181[0m [38;5;249m### ✅ Proper Inheritance[0m
-[38;5;243m 182[0m [38;5;249m- Models must inherit from `kmr.models._base.BaseModel`[0m
-[38;5;243m 183[0m [38;5;249m- Layers must inherit from `kmr.layers._base_layer.BaseLayer`[0m
+[38;5;243m 182[0m [38;5;249m- Models must inherit from `kerasfactory.models._base.BaseModel`[0m
+[38;5;243m 183[0m [38;5;249m- Layers must inherit from `kerasfactory.layers._base_layer.BaseLayer`[0m
 [38;5;243m 184[0m 
 [38;5;243m 185[0m [38;5;249m### ✅ Type Annotations (Python 3.12+)[0m
 [38;5;243m 186[0m [38;5;249mUse modern type hints with the union operator:[0m
@@ -207,10 +207,10 @@
 [38;5;243m 207[0m [38;5;249mfrom keras import layers, ops[0m
 [38;5;243m 208[0m [38;5;249mfrom keras import KerasTensor[0m
 [38;5;243m 209[0m [38;5;249mfrom keras.saving import register_keras_serializable[0m
-[38;5;243m 210[0m [38;5;249mfrom kmr.models._base import BaseModel[0m
-[38;5;243m 211[0m [38;5;249mfrom kmr.layers import YourCustomLayer  # Use existing layers[0m
+[38;5;243m 210[0m [38;5;249mfrom kerasfactory.models._base import BaseModel[0m
+[38;5;243m 211[0m [38;5;249mfrom kerasfactory.layers import YourCustomLayer  # Use existing layers[0m
 [38;5;243m 212[0m 
-[38;5;243m 213[0m [38;5;249m@register_keras_serializable(package="kmr.models")[0m
+[38;5;243m 213[0m [38;5;249m@register_keras_serializable(package="kerasfactory.models")[0m
 [38;5;243m 214[0m [38;5;249mclass YourCustomModel(BaseModel):[0m
 [38;5;243m 215[0m [38;5;249m    """Comprehensive model description.[0m
 [38;5;243m 216[0m [38;5;249m    [0m
@@ -231,7 +231,7 @@
 [38;5;243m 231[0m [38;5;249m    Example:[0m
 [38;5;243m 232[0m [38;5;249m        ```python[0m
 [38;5;243m 233[0m [38;5;249m        import keras[0m
-[38;5;243m 234[0m [38;5;249m        from kmr.models import YourCustomModel[0m
+[38;5;243m 234[0m [38;5;249m        from kerasfactory.models import YourCustomModel[0m
 [38;5;243m 235[0m [38;5;249m        [0m
 [38;5;243m 236[0m [38;5;249m        # Create model[0m
 [38;5;243m 237[0m [38;5;249m        model = YourCustomModel(param1=value1, param2=value2)[0m
@@ -368,7 +368,7 @@
 [38;5;243m 368[0m [38;5;249mimport tensorflow as tf[0m
 [38;5;243m 369[0m [38;5;249mimport keras[0m
 [38;5;243m 370[0m 
-[38;5;243m 371[0m [38;5;249mfrom kmr.models import YourCustomModel[0m
+[38;5;243m 371[0m [38;5;249mfrom kerasfactory.models import YourCustomModel[0m
 [38;5;243m 372[0m 
 [38;5;243m 373[0m [38;5;249mclass TestYourCustomModel(unittest.TestCase):[0m
 [38;5;243m 374[0m [38;5;249m    """Test suite for YourCustomModel."""[0m
@@ -447,7 +447,7 @@
 [38;5;243m 447[0m [38;5;249m| Pitfall | Problem | Solution |[0m
 [38;5;243m 448[0m [38;5;249m|---------|---------|----------|[0m
 [38;5;243m 449[0m [38;5;249m| Embedded layer logic | Code not reusable | Create standalone layers first |[0m
-[38;5;243m 450[0m [38;5;249m| TensorFlow dependencies | Using `tf.*` operations | Use `keras.ops.*` and `kmr.layers` |[0m
+[38;5;243m 450[0m [38;5;249m| TensorFlow dependencies | Using `tf.*` operations | Use `keras.ops.*` and `kerasfactory.layers` |[0m
 [38;5;243m 451[0m [38;5;249m| Wrong inheritance | Type errors | Inherit from `BaseModel` |[0m
 [38;5;243m 452[0m [38;5;249m| Incomplete serialization | Cannot save/load | Include all parameters in `get_config()` |[0m
 [38;5;243m 453[0m [38;5;249m| Missing layer instantiation | Runtime errors | Initialize all layers in `build()` |[0m

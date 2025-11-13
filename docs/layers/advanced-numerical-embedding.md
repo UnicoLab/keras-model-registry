@@ -1,5 +1,5 @@
 ---
-title: AdvancedNumericalEmbedding - KMR
+title: AdvancedNumericalEmbedding - KerasFactory
 description: Advanced numerical embedding with dual-branch architecture for continuous and discrete feature processing
 keywords: [numerical embedding, feature embedding, tabular, keras, neural networks, continuous features, discrete features]
 ---
@@ -83,7 +83,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import AdvancedNumericalEmbedding
+from kerasfactory.layers import AdvancedNumericalEmbedding
 
 # Create sample input data
 batch_size, num_features = 32, 5
@@ -105,7 +105,7 @@ print(f"Output shape: {embedded.shape}")   # (32, 5, 8)
 
 ```python
 import keras
-from kmr.layers import AdvancedNumericalEmbedding
+from kerasfactory.layers import AdvancedNumericalEmbedding
 
 model = keras.Sequential([
     AdvancedNumericalEmbedding(
@@ -125,7 +125,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import AdvancedNumericalEmbedding
+from kerasfactory.layers import AdvancedNumericalEmbedding
 
 # Define inputs
 inputs = keras.Input(shape=(10,))  # 10 numerical features
@@ -175,7 +175,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.AdvancedNumericalEmbedding
+::: kerasfactory.layers.AdvancedNumericalEmbedding
 
 ## 🔧 Parameters Deep Dive
 
@@ -217,7 +217,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import AdvancedNumericalEmbedding
+from kerasfactory.layers import AdvancedNumericalEmbedding
 
 # Simulate mixed numerical data
 batch_size = 1000
@@ -377,5 +377,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 - [Deep Learning for Tabular Data](https://arxiv.org/abs/2106.11959) - Tabular deep learning approaches
 - [Feature Embedding in Neural Networks](https://en.wikipedia.org/wiki/Feature_learning) - Feature learning concepts
 - [Numerical Feature Processing](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

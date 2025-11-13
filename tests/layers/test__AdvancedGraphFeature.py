@@ -7,7 +7,7 @@ hierarchical aggregation.
 
 import unittest
 import tensorflow as tf
-from kmr.layers.AdvancedGraphFeature import AdvancedGraphFeatureLayer
+from kerasfactory.layers.AdvancedGraphFeature import AdvancedGraphFeatureLayer
 
 
 class TestAdvancedGraphFeatureLayer(unittest.TestCase):

@@ -16,15 +16,20 @@ warnings.filterwarnings("ignore")
 np.random.seed(42)
 tf.random.set_seed(42)
 
-# Import KMR models and utilities
-from kmr.models import TerminatorModel
-from kmr.utils import KMRDataGenerator
+# Import kerasfactory models and utilities
+from kerasfactory.models import TerminatorModel
+from kerasfactory.utils import KerasFactoryDataGenerator
 
 
 @pytest.fixture
 def test_data():
     """Fixture to generate test data for all tests."""
-    X_train, X_test, y_train, y_test = KMRDataGenerator.generate_classification_data(
+    (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+    ) = KerasFactoryDataGenerator.generate_classification_data(
         n_samples=1000,
         n_features=10,
         n_classes=2,
@@ -41,7 +46,12 @@ def test_data_generation():
     print("=" * 50)
 
     # Generate balanced data
-    X_train, X_test, y_train, y_test = KMRDataGenerator.generate_classification_data(
+    (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+    ) = KerasFactoryDataGenerator.generate_classification_data(
         n_samples=1000,
         n_features=10,
         n_classes=2,
@@ -324,7 +334,7 @@ def test_kdp_preprocessing_model(test_data):
             context_test,
             _,
             _,
-        ) = KMRDataGenerator.generate_classification_data(
+        ) = KerasFactoryDataGenerator.generate_classification_data(
             n_samples=len(X_train),
             n_features=5,
             n_classes=2,
@@ -498,7 +508,7 @@ def test_improved_kdp_preprocessing(test_data):
             context_test,
             _,
             _,
-        ) = KMRDataGenerator.generate_classification_data(
+        ) = KerasFactoryDataGenerator.generate_classification_data(
             n_samples=len(X_train),
             n_features=5,
             n_classes=2,
@@ -673,7 +683,7 @@ def test_all_kdp_tests(test_data):
 
 if __name__ == "__main__":
     # For standalone execution
-    test_data_obj = KMRDataGenerator.generate_classification_data(
+    test_data_obj = KerasFactoryDataGenerator.generate_classification_data(
         n_samples=1000,
         n_features=10,
         n_classes=2,

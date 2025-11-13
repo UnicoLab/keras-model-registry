@@ -1,5 +1,5 @@
 ---
-title: TabularAttention - KMR
+title: TabularAttention - KerasFactory
 description: Dual attention mechanism for inter-feature and inter-sample relationships in tabular data
 keywords: [attention, tabular, multi-head, feature relationships, sample relationships, keras, neural networks]
 ---
@@ -71,7 +71,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import TabularAttention
+from kerasfactory.layers import TabularAttention
 
 # Create sample tabular data
 batch_size, num_samples, num_features = 32, 100, 20
@@ -89,7 +89,7 @@ print(f"Output shape: {output.shape}")  # (32, 100, 64)
 
 ```python
 import keras
-from kmr.layers import TabularAttention
+from kerasfactory.layers import TabularAttention
 
 model = keras.Sequential([
     keras.layers.Dense(64, activation='relu'),
@@ -105,7 +105,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import TabularAttention
+from kerasfactory.layers import TabularAttention
 
 # Define inputs
 inputs = keras.Input(shape=(100, 20))  # 100 samples, 20 features
@@ -146,7 +146,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.TabularAttention
+::: kerasfactory.layers.TabularAttention
 
 ## 🔧 Parameters Deep Dive
 
@@ -182,7 +182,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import TabularAttention
+from kerasfactory.layers import TabularAttention
 
 # Simulate customer data: age, income, spending, credit_score, etc.
 num_customers, num_features = 1000, 15
@@ -266,5 +266,5 @@ model.compile(
 
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original Transformer paper
 - [TabNet: Attentive Interpretable Tabular Learning](https://arxiv.org/abs/1908.07442) - Tabular-specific attention mechanisms
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Tabular Data Tutorial](../tutorials/feature-engineering.md) - Complete guide to tabular modeling

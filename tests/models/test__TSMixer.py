@@ -9,7 +9,7 @@ import unittest
 import tensorflow as tf
 
 import keras
-from kmr.models.TSMixer import TSMixer
+from kerasfactory.models.TSMixer import TSMixer
 
 
 class TestTSMixer(unittest.TestCase):

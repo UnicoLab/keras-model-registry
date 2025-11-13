@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 from keras import layers, Model
 
-from kmr.layers.StochasticDepth import StochasticDepth
+from kerasfactory.layers.StochasticDepth import StochasticDepth
 
 
 class TestStochasticDepth(unittest.TestCase):

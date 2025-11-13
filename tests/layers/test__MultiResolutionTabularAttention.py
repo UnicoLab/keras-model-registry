@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 from keras import Model, layers
 
-from kmr.layers import MultiResolutionTabularAttention
+from kerasfactory.layers import MultiResolutionTabularAttention
 
 
 class TestMultiResolutionTabularAttention(unittest.TestCase):

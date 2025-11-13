@@ -24,7 +24,7 @@ if project_root not in sys.path:
 
 # Dictionary mapping module prefixes to test directories
 MODULE_TEST_MAP = {
-    "kmr.utils.data_analyzer": "tests/utils/",
+    "kerasfactory.utils.data_analyzer": "tests/utils/",
     # Add more mappings as needed
 }
 
@@ -62,7 +62,10 @@ def get_modules_to_analyze(args):
         return [m.strip() for m in args.modules.split(",")]
     else:
         # Default to analyzing data analyzer modules
-        return ["kmr.utils.data_analyzer", "kmr.utils.data_analyzer_cli"]
+        return [
+            "kerasfactory.utils.data_analyzer",
+            "kerasfactory.utils.data_analyzer_cli",
+        ]
 
 
 def get_test_files(modules):
@@ -159,8 +162,8 @@ if __name__ == "__main__":
         output_dir = os.path.join(project_root, args.output)
     elif (
         len(modules) == 2
-        and "kmr.utils.data_analyzer" in modules
-        and "kmr.utils.data_analyzer_cli" in modules
+        and "kerasfactory.utils.data_analyzer" in modules
+        and "kerasfactory.utils.data_analyzer_cli" in modules
     ):
         # Default for data analyzer
         output_dir = os.path.join(project_root, "htmlcov", "data_analyzer")

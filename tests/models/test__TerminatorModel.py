@@ -9,7 +9,7 @@ import unittest
 import numpy as np
 from keras import Model, layers, ops
 from keras import utils, random
-from kmr.models.TerminatorModel import TerminatorModel
+from kerasfactory.models.TerminatorModel import TerminatorModel
 
 
 class TestTerminatorModel(unittest.TestCase):

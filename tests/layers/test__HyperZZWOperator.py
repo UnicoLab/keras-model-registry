@@ -9,7 +9,7 @@ import unittest
 import numpy as np
 from keras import layers, Model, ops, utils
 from keras import random
-from kmr.layers.HyperZZWOperator import HyperZZWOperator
+from kerasfactory.layers.HyperZZWOperator import HyperZZWOperator
 
 
 class TestHyperZZWOperator(unittest.TestCase):

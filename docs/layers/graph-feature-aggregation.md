@@ -1,5 +1,5 @@
 ---
-title: GraphFeatureAggregation - KMR
+title: GraphFeatureAggregation - KerasFactory
 description: Graph-based feature aggregation layer with self-attention for tabular data
 keywords: [graph feature aggregation, graph neural networks, self-attention, tabular data, keras, neural networks, feature relationships]
 ---
@@ -75,7 +75,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import GraphFeatureAggregation
+from kerasfactory.layers import GraphFeatureAggregation
 
 # Create sample input data
 batch_size, num_features = 32, 10
@@ -93,7 +93,7 @@ print(f"Output shape: {output.shape}")     # (32, 10)
 
 ```python
 import keras
-from kmr.layers import GraphFeatureAggregation
+from kerasfactory.layers import GraphFeatureAggregation
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -110,7 +110,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import GraphFeatureAggregation
+from kerasfactory.layers import GraphFeatureAggregation
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -169,7 +169,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.GraphFeatureAggregation
+::: kerasfactory.layers.GraphFeatureAggregation
 
 ## 🔧 Parameters Deep Dive
 
@@ -205,7 +205,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import GraphFeatureAggregation
+from kerasfactory.layers import GraphFeatureAggregation
 
 # Create a model for feature relationship learning
 def create_relationship_learning_model():
@@ -333,5 +333,5 @@ def analyze_attention_patterns():
 - [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network) - Graph neural network concepts
 - [Self-Attention](https://arxiv.org/abs/1706.03762) - Self-attention mechanism
 - [Feature Relationships](https://en.wikipedia.org/wiki/Feature_engineering) - Feature relationship concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

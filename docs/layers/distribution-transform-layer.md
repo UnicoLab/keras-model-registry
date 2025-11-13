@@ -1,5 +1,5 @@
 ---
-title: DistributionTransformLayer - KMR
+title: DistributionTransformLayer - KerasFactory
 description: Automatic distribution transformation for numerical features to improve model performance
 keywords: [distribution transformation, preprocessing, numerical features, box-cox, yeo-johnson, keras, neural networks, data preprocessing]
 ---
@@ -83,7 +83,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import DistributionTransformLayer
+from kerasfactory.layers import DistributionTransformLayer
 
 # Create sample data with skewed distribution
 batch_size, num_features = 32, 10
@@ -116,7 +116,7 @@ box_cox_transformed = box_cox_transformer(x)
 
 ```python
 import keras
-from kmr.layers import DistributionTransformLayer
+from kerasfactory.layers import DistributionTransformLayer
 
 model = keras.Sequential([
     DistributionTransformLayer(transform_type='auto'),  # Preprocess data
@@ -132,7 +132,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import DistributionTransformLayer
+from kerasfactory.layers import DistributionTransformLayer
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 numerical features
@@ -178,7 +178,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.DistributionTransformLayer
+::: kerasfactory.layers.DistributionTransformLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -215,7 +215,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import DistributionTransformLayer
+from kerasfactory.layers import DistributionTransformLayer
 
 # Simulate financial data with different distributions
 batch_size = 1000
@@ -345,5 +345,5 @@ model.compile(
 - [Box-Cox Transformation](https://en.wikipedia.org/wiki/Power_transform#Box%E2%80%93Cox_transformation) - Box-Cox transformation details
 - [Yeo-Johnson Transformation](https://en.wikipedia.org/wiki/Power_transform#Yeo%E2%80%93Johnson_transformation) - Yeo-Johnson transformation
 - [Data Preprocessing in Machine Learning](https://en.wikipedia.org/wiki/Data_pre-processing) - Data preprocessing concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

@@ -1,5 +1,5 @@
 ---
-title: GatedFeatureSelection - KMR
+title: GatedFeatureSelection - KerasFactory
 description: Gated feature selection layer with residual connection for dynamic feature importance learning
 keywords: [feature selection, gated selection, tabular, keras, neural networks, feature importance, attention mechanism]
 ---
@@ -77,7 +77,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import GatedFeatureSelection
+from kerasfactory.layers import GatedFeatureSelection
 
 # Create sample input data
 batch_size, input_dim = 32, 20
@@ -95,7 +95,7 @@ print(f"Output shape: {selected_features.shape}")  # (32, 20)
 
 ```python
 import keras
-from kmr.layers import GatedFeatureSelection
+from kerasfactory.layers import GatedFeatureSelection
 
 model = keras.Sequential([
     keras.layers.Dense(64, activation='relu'),
@@ -111,7 +111,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import GatedFeatureSelection
+from kerasfactory.layers import GatedFeatureSelection
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -150,7 +150,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.GatedFeatureSelection
+::: kerasfactory.layers.GatedFeatureSelection
 
 ## 🔧 Parameters Deep Dive
 
@@ -180,7 +180,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import GatedFeatureSelection
+from kerasfactory.layers import GatedFeatureSelection
 
 # Simulate time series data with varying feature importance
 batch_size, time_steps, features = 32, 24, 15
@@ -305,5 +305,5 @@ def analyze_feature_selection(model, test_data, feature_names=None):
 - [Attention Mechanisms in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Understanding attention mechanisms
 - [Feature Selection in Machine Learning](https://en.wikipedia.org/wiki/Feature_selection) - Feature selection concepts
 - [Gated Networks](https://arxiv.org/abs/1612.08083) - Gated network architectures
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 from keras import Model, layers
 
-from kmr.layers import TabularAttention
+from kerasfactory.layers import TabularAttention
 
 
 class TestTabularAttention(unittest.TestCase):

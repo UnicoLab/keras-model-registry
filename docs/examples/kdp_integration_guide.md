@@ -1,6 +1,6 @@
 <!-- # 🔗 KDP Integration Guide
 
-Learn how to integrate KMR layers with Keras Data Processor (KDP) for comprehensive tabular data processing workflows.
+Learn how to integrate KerasFactory layers with Keras Data Processor (KDP) for comprehensive tabular data processing workflows.
 
 ## 📋 Table of Contents
 
@@ -11,25 +11,25 @@ Learn how to integrate KMR layers with Keras Data Processor (KDP) for comprehens
 
 ## 🎯 KDP Overview
 
-Keras Data Processor (KDP) provides powerful data preprocessing capabilities that complement KMR layers perfectly. This integration allows for:
+Keras Data Processor (KDP) provides powerful data preprocessing capabilities that complement KerasFactory layers perfectly. This integration allows for:
 
-- **Seamless data preprocessing** before KMR layer processing
+- **Seamless data preprocessing** before KerasFactory layer processing
 - **End-to-end pipelines** from raw data to predictions
 - **Production-ready workflows** with proper data validation
 - **Scalable processing** for large datasets
 
 ## 🔧 Basic Integration
 
-### Simple KDP + KMR Pipeline
+### Simple KDP + KerasFactory Pipeline
 
 ```python
 import keras
 import numpy as np
-from kmr.layers import TabularAttention, VariableSelection
+from kerasfactory.layers import TabularAttention, VariableSelection
 from kdp import DataProcessor
 
-def create_kdp_kmr_pipeline(input_dim, num_classes):
-    """Create a pipeline combining KDP preprocessing with KMR layers."""
+def create_kdp_kerasfactory_pipeline(input_dim, num_classes):
+    """Create a pipeline combining KDP preprocessing with KerasFactory layers."""
     
     # KDP preprocessing
     processor = DataProcessor(
@@ -38,7 +38,7 @@ def create_kdp_kmr_pipeline(input_dim, num_classes):
         target_column='target'
     )
     
-    # KMR model
+    # KerasFactory model
     inputs = keras.Input(shape=(input_dim,))
     x = VariableSelection(hidden_dim=64)(inputs)
     x = TabularAttention(num_heads=8, key_dim=64)(x)
@@ -49,14 +49,14 @@ def create_kdp_kmr_pipeline(input_dim, num_classes):
     return processor, model
 
 # Usage
-processor, model = create_kdp_kmr_pipeline(input_dim=20, num_classes=3)
+processor, model = create_kdp_kerasfactory_pipeline(input_dim=20, num_classes=3)
 ```
 
 ### End-to-End Training Pipeline
 
 ```python
-def train_kdp_kmr_pipeline(processor, model, X_train, y_train, X_val, y_val):
-    """Train a complete KDP + KMR pipeline."""
+def train_kdp_kerasfactory_pipeline(processor, model, X_train, y_train, X_val, y_val):
+    """Train a complete KDP + KerasFactory pipeline."""
     
     # Preprocess data with KDP
     X_train_processed = processor.fit_transform(X_train, y_train)
@@ -81,7 +81,7 @@ def train_kdp_kmr_pipeline(processor, model, X_train, y_train, X_val, y_val):
     return history
 
 # Usage
-history = train_kdp_kmr_pipeline(processor, model, X_train, y_train, X_val, y_val)
+history = train_kdp_kerasfactory_pipeline(processor, model, X_train, y_train, X_val, y_val)
 ```
 
 ## 🚀 Advanced Workflows
@@ -89,13 +89,13 @@ history = train_kdp_kmr_pipeline(processor, model, X_train, y_train, X_val, y_va
 ### Multi-Stage Processing
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     DifferentiableTabularPreprocessor,
     AdvancedNumericalEmbedding,
     GatedFeatureFusion
 )
 
-def create_advanced_kdp_kmr_pipeline(input_dim, num_classes):
+def create_advanced_kdp_kerasfactory_pipeline(input_dim, num_classes):
     """Create an advanced multi-stage pipeline."""
     
     # Stage 1: KDP preprocessing
@@ -110,7 +110,7 @@ def create_advanced_kdp_kmr_pipeline(input_dim, num_classes):
         ]
     )
     
-    # Stage 2: KMR feature engineering
+    # Stage 2: KerasFactory feature engineering
     inputs = keras.Input(shape=(input_dim,))
     x = DifferentiableTabularPreprocessor()(inputs)
     x = AdvancedNumericalEmbedding(embedding_dim=64)(x)
@@ -142,7 +142,7 @@ def create_custom_preprocessing_pipeline(input_dim, num_classes):
         }
     )
     
-    # KMR model with preprocessing
+    # KerasFactory model with preprocessing
     inputs = keras.Input(shape=(input_dim,))
     x = DifferentiableTabularPreprocessor()(inputs)
     x = AdvancedNumericalEmbedding(embedding_dim=64)(x)

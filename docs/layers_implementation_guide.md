@@ -1,6 +1,6 @@
-# 🧩 Layer Implementation Guide for Keras Model Registry (KMR)
+# 🧩 Layer Implementation Guide for KerasFactory
 
-This guide outlines the complete process and best practices for implementing new layers in the Keras Model Registry project. Follow the checklists to ensure your implementation meets all KMR standards.
+This guide outlines the complete process and best practices for implementing new layers in the KerasFactory project. Follow the checklists to ensure your implementation meets all KerasFactory standards.
 
 ## 📋 Layer Implementation Checklist
 
@@ -8,17 +8,17 @@ Use this checklist when implementing a new layer. Check off each item as you com
 
 ### Phase 1: Planning & Design
 - [ ] **Define Purpose**: Clearly document what the layer does and when to use it
-- [ ] **Review Existing Layers**: Check if similar functionality already exists in `kmr/layers/`
+- [ ] **Review Existing Layers**: Check if similar functionality already exists in `kerasfactory/layers/`
 - [ ] **Plan Architecture**: Design the layer's interface (parameters, inputs, outputs)
 - [ ] **Review Keras 3 APIs**: Ensure all operations are available in Keras 3
 - [ ] **Check Dependencies**: Verify no TensorFlow-specific code is needed
 
 ### Phase 2: Implementation - Core Layer Code
-- [ ] **Create File**: Create `kmr/layers/YourLayerName.py` following naming conventions
+- [ ] **Create File**: Create `kerasfactory/layers/YourLayerName.py` following naming conventions
 - [ ] **Add Module Docstring**: Document the module's purpose
 - [ ] **Implement Pure Keras 3**: Use only Keras operations (no TensorFlow)
-- [ ] **Apply @register_keras_serializable**: Decorate class with `@register_keras_serializable(package="kmr.layers")`
-- [ ] **Inherit from BaseLayer**: Extend `kmr.layers._base_layer.BaseLayer`
+- [ ] **Apply @register_keras_serializable**: Decorate class with `@register_keras_serializable(package="kerasfactory.layers")`
+- [ ] **Inherit from BaseLayer**: Extend `kerasfactory.layers._base_layer.BaseLayer`
 - [ ] **Implement __init__**: 
   - [ ] Set private attributes first (`self._param = param`)
   - [ ] Validate parameters (in __init__ or _validate_params)
@@ -73,16 +73,16 @@ Use this checklist when implementing a new layer. Check off each item as you com
 - [ ] **Add Visual Aids**: Diagrams, flowcharts, or Mermaid diagrams
 
 ### Phase 5: Integration & Updates
-- [ ] **Update Imports**: Add to `kmr/layers/__init__.py`
+- [ ] **Update Imports**: Add to `kerasfactory/layers/__init__.py`
   - [ ] Add import statement
   - [ ] Add layer name to `__all__` list
 - [ ] **Update API Documentation**: Add entry to `docs/api/layers.md`
   - [ ] Add layer name and description
-  - [ ] Include autodoc reference (`::: kmr.layers.YourLayerName`)
+  - [ ] Include autodoc reference (`::: kerasfactory.layers.YourLayerName`)
 - [ ] **Update Layers Overview**: Add to `docs/layers_overview.md`
   - [ ] Add to appropriate category
   - [ ] Add API reference card
-- [ ] **Update Data Analyzer**: If applicable, add to `kmr/utils/data_analyzer.py`
+- [ ] **Update Data Analyzer**: If applicable, add to `kerasfactory/utils/data_analyzer.py`
   - [ ] Add to appropriate data characteristic
   - [ ] Update layer recommendations
 - [ ] **Update Contributing Guide**: If introducing new patterns
@@ -137,7 +137,7 @@ def my_method(self, param: str) -> int:
 
 ## Layer Structure
 
-All layers in the KMR project should follow this structure:
+All layers in the KerasFactory project should follow this structure:
 
 1. **Module Docstring**: Describe the purpose and functionality of the layer.
 2. **Imports**: Import necessary dependencies (Keras only, no TensorFlow).
@@ -163,9 +163,9 @@ from loguru import logger
 from keras import layers, ops
 from keras import KerasTensor
 from keras.saving import register_keras_serializable
-from kmr.layers._base_layer import BaseLayer
+from kerasfactory.layers._base_layer import BaseLayer
 
-@register_keras_serializable(package="kmr.layers")
+@register_keras_serializable(package="kerasfactory.layers")
 class MyCustomLayer(BaseLayer):
     """Short description.
     
@@ -185,7 +185,7 @@ class MyCustomLayer(BaseLayer):
     Example:
         ```python
         import keras
-        from kmr.layers import MyCustomLayer
+        from kerasfactory.layers import MyCustomLayer
         
         # Create layer
         layer = MyCustomLayer(param1=value1, param2=value2)
@@ -322,7 +322,7 @@ import numpy as np
 import tensorflow as tf
 import keras
 
-from kmr.layers import MyCustomLayer
+from kerasfactory.layers import MyCustomLayer
 
 class TestMyCustomLayer(unittest.TestCase):
     """Test suite for MyCustomLayer."""

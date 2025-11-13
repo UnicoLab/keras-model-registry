@@ -5,7 +5,7 @@ import unittest
 import keras
 from keras import ops
 
-from kmr.layers._base_layer import BaseLayer
+from kerasfactory.layers._base_layer import BaseLayer
 
 
 class CustomTestLayer(BaseLayer):

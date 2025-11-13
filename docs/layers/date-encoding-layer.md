@@ -1,5 +1,5 @@
 ---
-title: DateEncodingLayer - KMR
+title: DateEncodingLayer - KerasFactory
 description: Layer for encoding date components into cyclical features using sine and cosine transformations
 keywords: [date encoding, cyclical features, sine cosine, time series, keras, neural networks, temporal features]
 ---
@@ -80,7 +80,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import DateEncodingLayer
+from kerasfactory.layers import DateEncodingLayer
 
 # Create sample date components [year, month, day, day_of_week]
 date_components = keras.ops.convert_to_tensor([
@@ -103,7 +103,7 @@ print(f"Encoded features: {encoded}")
 
 ```python
 import keras
-from kmr.layers import DateEncodingLayer
+from kerasfactory.layers import DateEncodingLayer
 
 model = keras.Sequential([
     DateEncodingLayer(min_year=1900, max_year=2100),
@@ -119,7 +119,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import DateEncodingLayer
+from kerasfactory.layers import DateEncodingLayer
 
 # Define inputs
 inputs = keras.Input(shape=(4,))  # [year, month, day, day_of_week]
@@ -173,7 +173,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.DateEncodingLayer
+::: kerasfactory.layers.DateEncodingLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -203,7 +203,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import DateEncodingLayer
+from kerasfactory.layers import DateEncodingLayer
 
 # Create seasonal analysis model
 def create_seasonal_model():
@@ -345,5 +345,5 @@ def analyze_cyclical_features():
 - [Cyclical Encoding in Time Series](https://en.wikipedia.org/wiki/Cyclical_encoding) - Cyclical encoding concepts
 - [Sine and Cosine Transformations](https://en.wikipedia.org/wiki/Trigonometric_functions) - Trigonometric functions
 - [Time Series Feature Engineering](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

@@ -7,7 +7,7 @@ The actual model implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf  # Used for testing only
 from keras import Model
-from kmr.models.TimeMixer import TimeMixer
+from kerasfactory.models.TimeMixer import TimeMixer
 
 
 class TestTimeMixer(unittest.TestCase):

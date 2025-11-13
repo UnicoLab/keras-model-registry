@@ -7,7 +7,7 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf
 import keras
-from kmr.layers.PastDecomposableMixing import PastDecomposableMixing
+from kerasfactory.layers.PastDecomposableMixing import PastDecomposableMixing
 
 
 class TestPastDecomposableMixing(unittest.TestCase):

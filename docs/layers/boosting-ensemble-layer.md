@@ -1,5 +1,5 @@
 ---
-title: BoostingEnsembleLayer - KMR
+title: BoostingEnsembleLayer - KerasFactory
 description: Ensemble layer that aggregates multiple BoostingBlocks in parallel with learnable weights
 keywords: [boosting ensemble, ensemble learning, parallel boosting, gating mechanism, keras, neural networks, ensemble methods]
 ---
@@ -83,7 +83,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import BoostingEnsembleLayer
+from kerasfactory.layers import BoostingEnsembleLayer
 
 # Create sample input data
 batch_size, input_dim = 32, 16
@@ -101,7 +101,7 @@ print(f"Output shape: {output.shape}")     # (32, 16)
 
 ```python
 import keras
-from kmr.layers import BoostingEnsembleLayer
+from kerasfactory.layers import BoostingEnsembleLayer
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -118,7 +118,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import BoostingEnsembleLayer
+from kerasfactory.layers import BoostingEnsembleLayer
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -179,7 +179,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.BoostingEnsembleLayer
+::: kerasfactory.layers.BoostingEnsembleLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -222,7 +222,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import BoostingEnsembleLayer
+from kerasfactory.layers import BoostingEnsembleLayer
 
 # Create an ensemble learning model
 def create_ensemble_learning_model():
@@ -361,5 +361,5 @@ def compare_ensemble_configurations():
 - [Ensemble Learning](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
 - [Boosting Methods](https://en.wikipedia.org/wiki/Boosting_(machine_learning)) - Boosting techniques
 - [Parallel Processing](https://en.wikipedia.org/wiki/Parallel_computing) - Parallel processing concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

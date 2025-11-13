@@ -1,5 +1,5 @@
 ---
-title: MixingLayer - KMR
+title: MixingLayer - KerasFactory
 description: Core mixing layer combining temporal and feature mixing for TSMixer architecture with MLP-based transformations
 keywords: [mixing layer, temporal mixing, feature mixing, mlp, time series, forecasting, keras, residual connections]
 ---
@@ -81,7 +81,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import MixingLayer
+from kerasfactory.layers import MixingLayer
 
 # Create sample multivariate time series
 batch_size, time_steps, features = 32, 96, 7
@@ -103,7 +103,7 @@ print(f"Output shape: {output.shape}")   # (32, 96, 7)
 ### Stacking Multiple Layers
 
 ```python
-from kmr.layers import MixingLayer
+from kerasfactory.layers import MixingLayer
 import keras
 
 # Create stacked mixing layers (core of TSMixer)
@@ -234,7 +234,7 @@ efficient = MixingLayer(n_series=7, input_size=96, dropout=0.1, ff_dim=32)
 
 ```python
 import tensorflow as tf
-from kmr.layers import MixingLayer
+from kerasfactory.layers import MixingLayer
 
 layer = MixingLayer(n_series=7, input_size=96, dropout=0.1, ff_dim=64)
 x = tf.random.normal((32, 96, 7))

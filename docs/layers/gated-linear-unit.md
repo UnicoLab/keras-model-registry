@@ -1,5 +1,5 @@
 ---
-title: GatedLinearUnit - KMR
+title: GatedLinearUnit - KerasFactory
 description: Gated linear unit that applies gated linear transformation to control information flow in neural networks
 keywords: [gated linear unit, GLU, gating mechanism, information flow, keras, neural networks, feature transformation]
 ---
@@ -73,7 +73,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import GatedLinearUnit
+from kerasfactory.layers import GatedLinearUnit
 
 # Create sample input data
 batch_size, input_dim = 32, 16
@@ -91,7 +91,7 @@ print(f"Output shape: {output.shape}")     # (32, 8)
 
 ```python
 import keras
-from kmr.layers import GatedLinearUnit
+from kerasfactory.layers import GatedLinearUnit
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -108,7 +108,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import GatedLinearUnit
+from kerasfactory.layers import GatedLinearUnit
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -158,7 +158,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.GatedLinearUnit
+::: kerasfactory.layers.GatedLinearUnit
 
 ## 🔧 Parameters Deep Dive
 
@@ -182,7 +182,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import GatedLinearUnit
+from kerasfactory.layers import GatedLinearUnit
 
 # Create a network with controlled information flow
 def create_controlled_flow_network():
@@ -307,5 +307,5 @@ print(f"Attention-like predictions shape: {predictions.shape}")
 - [Gated Linear Units](https://arxiv.org/abs/1612.08083) - Original GLU paper
 - [Information Flow in Neural Networks](https://en.wikipedia.org/wiki/Information_flow) - Information flow concepts
 - [Attention Mechanisms](https://distill.pub/2016/augmented-rnns/) - Attention mechanism concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

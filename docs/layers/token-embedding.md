@@ -1,5 +1,5 @@
 ---
-title: TokenEmbedding - KMR
+title: TokenEmbedding - KerasFactory
 description: 1D convolution-based token embedding layer for transforming raw time series values into rich feature representations
 keywords: [token embedding, convolution, time series, feature embedding, keras, temporal data, embeddings]
 ---
@@ -71,7 +71,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import TokenEmbedding
+from kerasfactory.layers import TokenEmbedding
 
 # Create token embedding layer
 token_emb = TokenEmbedding(c_in=7, d_model=64)
@@ -91,7 +91,7 @@ print(f"Output shape: {output.shape}") # (32, 100, 64)
 
 ```python
 import keras
-from kmr.layers import TokenEmbedding, PositionalEmbedding
+from kerasfactory.layers import TokenEmbedding, PositionalEmbedding
 
 # Build forecasting model
 def create_forecasting_model():
@@ -120,7 +120,7 @@ model.compile(optimizer='adam', loss='mse')
 ### With Multivariate Time Series
 
 ```python
-from kmr.layers import TokenEmbedding, TemporalEmbedding, DataEmbeddingWithoutPosition
+from kerasfactory.layers import TokenEmbedding, TemporalEmbedding, DataEmbeddingWithoutPosition
 
 # Multi-feature time series embedding
 token_emb = TokenEmbedding(c_in=12, d_model=96)
@@ -143,7 +143,7 @@ print(f"Combined embedding shape: {combined.shape}")  # (32, 100, 96)
 ### Advanced Multi-Scale Architecture
 
 ```python
-from kmr.layers import TokenEmbedding, MultiScaleSeasonMixing
+from kerasfactory.layers import TokenEmbedding, MultiScaleSeasonMixing
 
 class MultiScaleTimeSeriesModel(keras.Model):
     def __init__(self, c_in, d_model, num_scales=3):
@@ -171,7 +171,7 @@ class MultiScaleTimeSeriesModel(keras.Model):
 ### TokenEmbedding
 
 ```python
-kmr.layers.TokenEmbedding(
+kerasfactory.layers.TokenEmbedding(
     c_in: int,
     d_model: int,
     name: str | None = None,
@@ -209,7 +209,7 @@ kmr.layers.TokenEmbedding(
 ### Custom Initialization
 
 ```python
-from kmr.layers import TokenEmbedding
+from kerasfactory.layers import TokenEmbedding
 
 # Create layer with custom initialization
 token_emb = TokenEmbedding(c_in=8, d_model=64)
@@ -222,7 +222,7 @@ conv_layer.kernel_initializer = keras.initializers.HeNormal()
 ### Integration with Preprocessing
 
 ```python
-from kmr.layers import TokenEmbedding, ReversibleInstanceNorm
+from kerasfactory.layers import TokenEmbedding, ReversibleInstanceNorm
 
 # Preprocessing pipeline
 normalizer = ReversibleInstanceNorm(num_features=7)

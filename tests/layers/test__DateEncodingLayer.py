@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import Model, layers
-from kmr.layers.DateEncodingLayer import DateEncodingLayer
+from kerasfactory.layers.DateEncodingLayer import DateEncodingLayer
 
 
 class TestDateEncodingLayer(unittest.TestCase):

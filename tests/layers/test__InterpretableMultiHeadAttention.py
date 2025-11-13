@@ -3,7 +3,9 @@ import unittest
 import tensorflow as tf
 from keras import layers, Model, ops
 
-from kmr.layers.InterpretableMultiHeadAttention import InterpretableMultiHeadAttention
+from kerasfactory.layers.InterpretableMultiHeadAttention import (
+    InterpretableMultiHeadAttention,
+)
 
 
 class TestInterpretableMultiHeadAttention(unittest.TestCase):

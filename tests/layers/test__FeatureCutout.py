@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 from keras import layers, Model, ops
 
-from kmr.layers.FeatureCutout import FeatureCutout
+from kerasfactory.layers.FeatureCutout import FeatureCutout
 
 
 class TestFeatureCutout(unittest.TestCase):

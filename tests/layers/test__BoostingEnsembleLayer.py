@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model
-from kmr.layers.BoostingEnsembleLayer import BoostingEnsembleLayer
+from kerasfactory.layers.BoostingEnsembleLayer import BoostingEnsembleLayer
 
 
 class TestBoostingEnsembleLayer(unittest.TestCase):

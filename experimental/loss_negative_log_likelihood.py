@@ -3,7 +3,7 @@ from keras import KerasTensor
 from keras.saving import register_keras_serializable
 
 
-@register_keras_serializable(package="kmr.losses")
+@register_keras_serializable(package="kerasfactory.losses")
 def nll_loss(y_true: KerasTensor, y_pred: KerasTensor) -> KerasTensor:
     """Gaussian Negative Log-Likelihood loss.
 

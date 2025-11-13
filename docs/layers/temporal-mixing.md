@@ -1,5 +1,5 @@
 ---
-title: TemporalMixing - KMR
+title: TemporalMixing - KerasFactory
 description: Temporal mixing layer for TSMixer model that applies MLP-based transformations across the time dimension for multivariate time series
 keywords: [temporal mixing, time series, mlp, forecasting, keras, batch normalization, residual connections]
 ---
@@ -79,7 +79,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import TemporalMixing
+from kerasfactory.layers import TemporalMixing
 
 # Create sample multivariate time series
 batch_size, time_steps, features = 32, 96, 7
@@ -96,7 +96,7 @@ print(f"Output shape: {output.shape}")   # (32, 96, 7)
 ### In TSMixer Model
 
 ```python
-from kmr.layers import TemporalMixing, FeatureMixing, MixingLayer
+from kerasfactory.layers import TemporalMixing, FeatureMixing, MixingLayer
 import keras
 
 # TemporalMixing is used inside MixingLayer
@@ -196,7 +196,7 @@ assert new_layer.dropout_rate == layer.dropout_rate
 
 ```python
 import tensorflow as tf
-from kmr.layers import TemporalMixing
+from kerasfactory.layers import TemporalMixing
 
 # Test 1: Output shape preservation
 layer = TemporalMixing(n_series=7, input_size=96, dropout=0.1)

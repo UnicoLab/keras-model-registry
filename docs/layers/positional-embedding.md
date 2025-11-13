@@ -1,5 +1,5 @@
 ---
-title: PositionalEmbedding - KMR
+title: PositionalEmbedding - KerasFactory
 description: Fixed sinusoidal positional encoding layer for transformer-based time series models
 keywords: [positional encoding, transformers, time series, keras, embeddings, attention mechanisms]
 ---
@@ -61,7 +61,7 @@ Where:
 
 ```python
 import keras
-from kmr.layers import PositionalEmbedding
+from kerasfactory.layers import PositionalEmbedding
 
 # Create sample sequence
 batch_size, seq_len, d_model = 32, 100, 64
@@ -79,7 +79,7 @@ print(f"Embedding shape: {pe.shape}") # (32, 100, 64)
 
 ```python
 import keras
-from kmr.layers import PositionalEmbedding, TokenEmbedding
+from kerasfactory.layers import PositionalEmbedding, TokenEmbedding
 
 model = keras.Sequential([
     keras.layers.Input(shape=(100, 1)),
@@ -97,7 +97,7 @@ model.compile(optimizer='adam', loss='mse')
 ### PositionalEmbedding
 
 ```python
-kmr.layers.PositionalEmbedding(
+kerasfactory.layers.PositionalEmbedding(
     max_len: int = 5000,
     d_model: int = 512,
     name: str | None = None,
@@ -134,7 +134,7 @@ kmr.layers.PositionalEmbedding(
 ### With Different Sequence Lengths
 
 ```python
-from kmr.layers import PositionalEmbedding
+from kerasfactory.layers import PositionalEmbedding
 
 # Create layer for max length 512
 pos_emb = PositionalEmbedding(max_len=512, d_model=64)
@@ -152,7 +152,7 @@ pe_long = pos_emb(x_long)      # Works fine
 ### Combining with Multiple Embeddings
 
 ```python
-from kmr.layers import PositionalEmbedding, TokenEmbedding
+from kerasfactory.layers import PositionalEmbedding, TokenEmbedding
 
 # Create embeddings
 token_emb = TokenEmbedding(c_in=1, d_model=64)

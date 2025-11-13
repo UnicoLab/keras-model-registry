@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 from keras import layers, Model, ops
 
-from kmr.layers.SparseAttentionWeighting import SparseAttentionWeighting
+from kerasfactory.layers.SparseAttentionWeighting import SparseAttentionWeighting
 
 
 class TestSparseAttentionWeighting(unittest.TestCase):

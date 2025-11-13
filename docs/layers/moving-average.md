@@ -1,5 +1,5 @@
 ---
-title: MovingAverage - KMR
+title: MovingAverage - KerasFactory
 description: Moving average layer for time series trend extraction in time series forecasting
 keywords: [moving average, trend extraction, time series, keras, forecasting, smoothing]
 ---
@@ -67,7 +67,7 @@ graph LR
 
 ```python
 import keras
-from kmr.layers import MovingAverage
+from kerasfactory.layers import MovingAverage
 
 # Create sample time series data
 batch_size, time_steps, features = 32, 100, 8
@@ -83,7 +83,7 @@ print(f"Trend shape: {trend.shape}")  # (32, 100, 8)
 
 ```python
 import keras
-from kmr.layers import MovingAverage
+from kerasfactory.layers import MovingAverage
 
 # Create synthetic seasonal time series
 x = keras.random.normal((16, 200, 4))
@@ -103,7 +103,7 @@ print(f"Seasonal shape: {seasonal.shape}")
 
 ```python
 import keras
-from kmr.layers import MovingAverage
+from kerasfactory.layers import MovingAverage
 
 def create_forecasting_model(seq_len, n_features):
     inputs = keras.Input(shape=(seq_len, n_features))
@@ -124,7 +124,7 @@ model.compile(optimizer='adam', loss='mse')
 
 ## 📖 API Reference
 
-::: kmr.layers.MovingAverage
+::: kerasfactory.layers.MovingAverage
 
 ## 🔧 Parameters Deep Dive
 
@@ -148,7 +148,7 @@ model.compile(optimizer='adam', loss='mse')
 
 ```python
 import keras
-from kmr.layers import MovingAverage
+from kerasfactory.layers import MovingAverage
 
 # Create noisy sine wave
 time_steps = 200
@@ -168,7 +168,7 @@ print(f"Smoothed signal shape: {smoothed.shape}")
 
 ```python
 import keras
-from kmr.layers import MovingAverage
+from kerasfactory.layers import MovingAverage
 
 def multi_scale_decomposition(x, scales=[7, 25, 50]):
     """Decompose time series at multiple scales."""
@@ -199,7 +199,7 @@ for i, (t, s) in enumerate(zip(trends, seasonals)):
 
 ```python
 import keras
-from kmr.layers import MovingAverage
+from kerasfactory.layers import MovingAverage
 
 # Create a model that uses both trend and seasonal components
 def create_decomposition_forecaster(seq_len, pred_len, n_features):
@@ -257,4 +257,4 @@ model.compile(optimizer='adam', loss='mse')
 - [Moving Average Filters](https://en.wikipedia.org/wiki/Moving_average) - Mathematical foundations
 - [Time Series Decomposition](https://otexts.com/fpp2/classical-decomposition.html) - Decomposition concepts
 - [Signal Processing Basics](https://en.wikipedia.org/wiki/Signal_processing) - Signal smoothing
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers

@@ -1,5 +1,5 @@
 /**
- * KMR Code Copy Functionality
+ * KerasFactory Code Copy Functionality
  * Copy code snippets to clipboard with visual feedback
  */
 

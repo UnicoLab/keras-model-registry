@@ -1,5 +1,5 @@
 ---
-title: DataEmbeddingWithoutPosition - KMR
+title: DataEmbeddingWithoutPosition - KerasFactory
 description: Combined token and temporal embedding layer for time series with integrated dropout
 keywords: [embedding, token embedding, temporal embedding, time series, multimodal input, keras]
 ---
@@ -85,7 +85,7 @@ x: (batch, time, channels)           x_mark: (batch, time, 5)
 
 ```python
 import keras
-from kmr.layers import DataEmbeddingWithoutPosition
+from kerasfactory.layers import DataEmbeddingWithoutPosition
 
 # Create the embedding layer
 data_emb = DataEmbeddingWithoutPosition(
@@ -122,7 +122,7 @@ print(output.shape)   # (32, 96, 64)
 ### In a Complete Forecasting Pipeline
 
 ```python
-from kmr.layers import DataEmbeddingWithoutPosition, PositionalEmbedding
+from kerasfactory.layers import DataEmbeddingWithoutPosition, PositionalEmbedding
 
 def create_time_series_model():
     # Inputs
@@ -201,7 +201,7 @@ class MultiScaleEmbedding(keras.layers.Layer):
 ### DataEmbeddingWithoutPosition
 
 ```python
-kmr.layers.DataEmbeddingWithoutPosition(
+kerasfactory.layers.DataEmbeddingWithoutPosition(
     c_in: int,
     d_model: int,
     dropout: float = 0.0,

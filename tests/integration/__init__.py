@@ -1,1 +1,1 @@
-"""Integration tests for KMR package."""
+"""Integration tests for kerasfactory package."""

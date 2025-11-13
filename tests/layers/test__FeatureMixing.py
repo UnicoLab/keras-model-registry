@@ -9,7 +9,7 @@ import unittest
 import tensorflow as tf
 
 import keras
-from kmr.layers.FeatureMixing import FeatureMixing
+from kerasfactory.layers.FeatureMixing import FeatureMixing
 
 
 class TestFeatureMixing(unittest.TestCase):

@@ -7,7 +7,7 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf
 import keras
-from kmr.layers.TemporalEmbedding import TemporalEmbedding
+from kerasfactory.layers.TemporalEmbedding import TemporalEmbedding
 
 
 class TestTemporalEmbedding(unittest.TestCase):

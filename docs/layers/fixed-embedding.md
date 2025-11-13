@@ -1,5 +1,5 @@
 ---
-title: FixedEmbedding - KMR
+title: FixedEmbedding - KerasFactory
 description: Non-trainable sinusoidal embeddings for discrete temporal indices
 keywords: [embedding, sinusoidal, fixed embeddings, temporal features, keras, time series]
 ---
@@ -70,7 +70,7 @@ The sinusoidal pattern ensures:
 
 ```python
 import keras
-from kmr.layers import FixedEmbedding
+from kerasfactory.layers import FixedEmbedding
 
 # Create fixed embedding for hours (0-23)
 hour_embed = FixedEmbedding(vocab_size=24, d_model=64)
@@ -89,7 +89,7 @@ print(output.shape)  # (32, 96, 64)
 ## 🔧 API Reference
 
 ```python
-kmr.layers.FixedEmbedding(
+kerasfactory.layers.FixedEmbedding(
     vocab_size: int,
     d_model: int,
     name: str | None = None,

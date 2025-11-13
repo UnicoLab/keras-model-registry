@@ -12,7 +12,7 @@ from keras.optimizers import Adam
 from keras.losses import MeanSquaredError
 from keras.metrics import MeanAbsoluteError
 
-from kmr.models.TerminatorModel import TerminatorModel
+from kerasfactory.models.TerminatorModel import TerminatorModel
 from kdp.processor import PreprocessingModel
 from kdp.features import NumericalFeature
 

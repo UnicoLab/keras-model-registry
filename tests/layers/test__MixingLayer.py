@@ -9,7 +9,7 @@ import unittest
 import tensorflow as tf
 
 import keras
-from kmr.layers.MixingLayer import MixingLayer
+from kerasfactory.layers.MixingLayer import MixingLayer
 
 
 class TestMixingLayer(unittest.TestCase):

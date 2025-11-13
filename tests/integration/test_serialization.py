@@ -1,6 +1,6 @@
-"""Integration tests for KMR serialization and deserialization.
+"""Integration tests for kerasfactory serialization and deserialization.
 
-These tests verify that KMR layers and models can be properly serialized
+These tests verify that kerasfactory layers and models can be properly serialized
 and deserialized using Keras serialization mechanisms.
 """
 
@@ -11,7 +11,7 @@ import keras
 from keras import Model, layers
 from pathlib import Path
 
-from kmr.layers import (
+from kerasfactory.layers import (
     TabularAttention,
     AdvancedNumericalEmbedding,
     GatedFeatureFusion,
@@ -19,11 +19,11 @@ from kmr.layers import (
     TransformerBlock,
     BoostingBlock,
 )
-from kmr.models import TerminatorModel, BaseFeedForwardModel
+from kerasfactory.models import TerminatorModel, BaseFeedForwardModel
 
 
 class TestLayerSerialization(unittest.TestCase):
-    """Test serialization of individual KMR layers."""
+    """Test serialization of individual kerasfactory layers."""
 
     def setUp(self) -> None:
         """Set up test data."""
@@ -205,7 +205,7 @@ class TestLayerSerialization(unittest.TestCase):
 
 
 class TestModelSerialization(unittest.TestCase):
-    """Test serialization of KMR models."""
+    """Test serialization of kerasfactory models."""
 
     def setUp(self) -> None:
         """Set up test data."""
@@ -292,7 +292,7 @@ class TestModelSerialization(unittest.TestCase):
 
 
 class TestModelSaving(unittest.TestCase):
-    """Test saving and loading of KMR models."""
+    """Test saving and loading of kerasfactory models."""
 
     def setUp(self) -> None:
         """Set up test data."""
@@ -339,7 +339,7 @@ class TestModelSaving(unittest.TestCase):
 
     def test_model_save_load_tf_format(self) -> None:
         """Test saving and loading model in TensorFlow format."""
-        # Create a model with KMR layers
+        # Create a model with kerasfactory layers
         inputs = keras.Input(shape=(self.num_features,))
         embedded = AdvancedNumericalEmbedding(embed_dim=8, num_heads=2)(inputs)
         # Use a simple dense layer instead of GatedFeatureFusion
@@ -366,9 +366,9 @@ class TestModelSaving(unittest.TestCase):
             np.testing.assert_allclose(original_output, loaded_output, rtol=1e-5)
 
     def test_complex_model_save_load(self) -> None:
-        """Test saving and loading a complex model with multiple KMR layers."""
+        """Test saving and loading a complex model with multiple kerasfactory layers."""
         # Create a simpler complex model for now
-        # (KMR layers with complex internal structure need special handling for saving/loading)
+        # (kerasfactory layers with complex internal structure need special handling for saving/loading)
         inputs = keras.Input(shape=(self.num_features,))
 
         # Stage 1: Dense layers

@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 import tensorflow as tf
 from keras import Model, Input
-from kmr.layers import BusinessRulesLayer
+from kerasfactory.layers import BusinessRulesLayer
 
 
 class TestBusinessRulesLayer(unittest.TestCase):

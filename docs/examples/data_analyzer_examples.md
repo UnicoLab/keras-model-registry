@@ -1,6 +1,6 @@
 # 📊 Data Analyzer Examples
 
-Comprehensive examples demonstrating data analysis workflows with KMR layers. Learn how to analyze, visualize, and understand your tabular data before building models.
+Comprehensive examples demonstrating data analysis workflows with KerasFactory layers. Learn how to analyze, visualize, and understand your tabular data before building models.
 
 ## 📋 Table of Contents
 
@@ -22,7 +22,7 @@ from plotly.offline import plot
 from loguru import logger
 from typing import Optional, Dict, Tuple, List, Any
 import keras
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 def analyze_dataset(X: np.ndarray, y: np.ndarray, feature_names: Optional[List[str]] = None) -> bool:
     """Comprehensive dataset analysis.
@@ -136,7 +136,7 @@ def analyze_feature_distributions(X: np.ndarray, feature_names: Optional[List[st
 ### Feature Importance Analysis
 
 ```python
-from kmr.layers import VariableSelection, TabularAttention
+from kerasfactory.layers import VariableSelection, TabularAttention
 
 def analyze_feature_importance(
     model: keras.Model,

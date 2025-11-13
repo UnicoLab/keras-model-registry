@@ -1,1 +1,1 @@
-"""Test module for kmr.utils package."""
+"""Test module for kerasfactory.utils package."""

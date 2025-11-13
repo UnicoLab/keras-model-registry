@@ -1,5 +1,5 @@
 ---
-title: MultiScaleSeasonMixing - KMR
+title: MultiScaleSeasonMixing - KerasFactory
 description: Bottom-up multi-scale seasonal pattern mixing and downsampling
 keywords: [multi-scale, seasonal, mixing, hierarchical, time series, keras]
 ---
@@ -79,7 +79,7 @@ Input Seasonal Patterns (Fine Scale)
 
 ```python
 import keras
-from kmr.layers import MultiScaleSeasonMixing
+from kerasfactory.layers import MultiScaleSeasonMixing
 
 # Create seasonal mixing layer
 season_mix = MultiScaleSeasonMixing(
@@ -99,7 +99,7 @@ print(len(output))  # Number of output scales
 ## 🔧 API Reference
 
 ```python
-kmr.layers.MultiScaleSeasonMixing(
+kerasfactory.layers.MultiScaleSeasonMixing(
     seq_len: int,
     down_sampling_window: int = 2,
     down_sampling_layers: int = 1,

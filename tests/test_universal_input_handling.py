@@ -1,4 +1,4 @@
-"""Test universal input handling across all KMR models."""
+"""Test universal input handling across all kerasfactory models."""
 
 import numpy as np
 import pytest
@@ -6,11 +6,16 @@ import keras
 from keras import layers
 from collections import OrderedDict
 
-from kmr.models import Autoencoder, BaseFeedForwardModel, SFNEBlock, TerminatorModel
+from kerasfactory.models import (
+    Autoencoder,
+    BaseFeedForwardModel,
+    SFNEBlock,
+    TerminatorModel,
+)
 
 
 class TestUniversalInputHandling:
-    """Test universal input handling across all KMR models."""
+    """Test universal input handling across all kerasfactory models."""
 
     def test_autoencoder_universal_inputs(self) -> None:
         """Test Autoencoder with various input formats."""

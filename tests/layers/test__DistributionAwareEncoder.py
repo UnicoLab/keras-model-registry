@@ -7,7 +7,7 @@ without any additional dependencies.
 import unittest
 import numpy as np
 from keras import Model, layers, ops
-from kmr.layers.DistributionAwareEncoder import DistributionAwareEncoder
+from kerasfactory.layers.DistributionAwareEncoder import DistributionAwareEncoder
 
 
 class TestDistributionAwareEncoder(unittest.TestCase):

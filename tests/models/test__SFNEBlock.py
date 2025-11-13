@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model
-from kmr.models.SFNEBlock import SFNEBlock
+from kerasfactory.models.SFNEBlock import SFNEBlock
 
 
 class TestSFNEBlock(unittest.TestCase):

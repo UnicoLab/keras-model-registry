@@ -1,4 +1,4 @@
-"""Integration tests for the kmr.utils.data_analyzer module.
+"""Integration tests for the kerasfactory.utils.data_analyzer module.
 
 These tests verify the data analyzer functionality with actual data files
 and check the full pipeline from data analysis to layer recommendations.
@@ -19,7 +19,7 @@ project_root = os.path.dirname(os.path.dirname(current_dir))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from kmr.utils import DataAnalyzer, analyze_data
+from kerasfactory.utils import DataAnalyzer, analyze_data
 
 
 class TestDataAnalyzerIntegration(unittest.TestCase):
@@ -235,7 +235,7 @@ class TestDataAnalyzerIntegration(unittest.TestCase):
             cmd = [
                 "python",
                 "-m",
-                "kmr.utils.data_analyzer_cli",
+                "kerasfactory.utils.data_analyzer_cli",
                 self.mixed_csv,
                 "--output",
                 output_file,

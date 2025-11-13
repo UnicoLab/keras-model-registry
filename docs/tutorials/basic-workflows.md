@@ -1,6 +1,6 @@
 # 🔄 Basic Workflows
 
-Learn the fundamental workflows for building tabular models with KMR layers. This tutorial covers the most common patterns and best practices.
+Learn the fundamental workflows for building tabular models with KerasFactory layers. This tutorial covers the most common patterns and best practices.
 
 ## 📋 Table of Contents
 
@@ -18,7 +18,7 @@ Learn the fundamental workflows for building tabular models with KMR layers. Thi
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 # Load your dataset
 df = pd.read_csv('your_dataset.csv')
@@ -45,7 +45,7 @@ print(f"Test shape: {X_test.shape}")
 ### Handling Missing Values
 
 ```python
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 # Create preprocessing layer
 preprocessor = DifferentiableTabularPreprocessor(
@@ -67,14 +67,14 @@ X_test_processed = preprocessor(X_test)
 
 ```python
 import keras
-from kmr.layers import (
+from kerasfactory.layers import (
     VariableSelection,
     TabularAttention,
     GatedFeatureFusion
 )
 
 def create_basic_model(input_dim, num_classes):
-    """Create a basic tabular model with KMR layers."""
+    """Create a basic tabular model with KerasFactory layers."""
     
     # Input layer
     inputs = keras.Input(shape=(input_dim,))
@@ -104,7 +104,7 @@ model.summary()
 ### Advanced Model with Residual Connections
 
 ```python
-from kmr.layers import GatedResidualNetwork, TransformerBlock
+from kerasfactory.layers import GatedResidualNetwork, TransformerBlock
 
 def create_advanced_model(input_dim, num_classes):
     """Create an advanced model with residual connections."""
@@ -202,7 +202,7 @@ predicted_classes = np.argmax(predictions, axis=1)
 ### 1. **Feature Engineering Pipeline**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     AdvancedNumericalEmbedding,
     DistributionAwareEncoder,
     SparseAttentionWeighting
@@ -226,7 +226,7 @@ def feature_engineering_pipeline(inputs):
 ### 2. **Multi-Head Processing**
 
 ```python
-from kmr.layers import MultiResolutionTabularAttention
+from kerasfactory.layers import MultiResolutionTabularAttention
 
 def multi_head_model(inputs):
     """Model with multi-resolution attention."""
@@ -247,7 +247,7 @@ def multi_head_model(inputs):
 ### 3. **Ensemble Approach**
 
 ```python
-from kmr.layers import BoostingEnsembleLayer
+from kerasfactory.layers import BoostingEnsembleLayer
 
 def ensemble_model(inputs):
     """Model with boosting ensemble."""
@@ -267,7 +267,7 @@ def ensemble_model(inputs):
 ### 4. **Anomaly Detection**
 
 ```python
-from kmr.layers import NumericalAnomalyDetection
+from kerasfactory.layers import NumericalAnomalyDetection
 
 def anomaly_detection_model(inputs):
     """Model with anomaly detection."""

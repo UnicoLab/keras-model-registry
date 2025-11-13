@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import Model, layers
-from kmr.layers.CastToFloat32Layer import CastToFloat32Layer
+from kerasfactory.layers.CastToFloat32Layer import CastToFloat32Layer
 
 
 class TestCastToFloat32Layer(unittest.TestCase):

@@ -7,7 +7,7 @@
 # import unittest
 # import tensorflow as tf  # Used for testing only
 # from keras import Model, layers
-# from kmr.layers.TextPreprocessingLayer import TextPreprocessingLayer
+# from kerasfactory.layers.TextPreprocessingLayer import TextPreprocessingLayer
 
 # class TestTextPreprocessingLayer(unittest.TestCase):
 #     """Test cases for the TextPreprocessingLayer."""

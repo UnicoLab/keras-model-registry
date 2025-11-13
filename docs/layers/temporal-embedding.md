@@ -1,5 +1,5 @@
 ---
-title: TemporalEmbedding - KMR
+title: TemporalEmbedding - KerasFactory
 description: Embedding layer for temporal features with support for fixed and learned embeddings
 keywords: [temporal embedding, time features, month, day, hour, embeddings, keras, time series]
 ---
@@ -75,7 +75,7 @@ Each temporal component is embedded independently, then summed to create a combi
 
 ```python
 import keras
-from kmr.layers import TemporalEmbedding
+from kerasfactory.layers import TemporalEmbedding
 
 # Create temporal embedding layer
 temp_emb = TemporalEmbedding(
@@ -100,7 +100,7 @@ print(output.shape)  # (32, 96, 64)
 ## 🔧 API Reference
 
 ```python
-kmr.layers.TemporalEmbedding(
+kerasfactory.layers.TemporalEmbedding(
     d_model: int,
     embed_type: str = 'fixed',
     freq: str = 'h',

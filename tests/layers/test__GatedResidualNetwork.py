@@ -7,7 +7,7 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model, Sequential
-from kmr.layers.GatedResidualNetwork import GatedResidualNetwork
+from kerasfactory.layers.GatedResidualNetwork import GatedResidualNetwork
 
 
 class TestGatedResidualNetwork(unittest.TestCase):

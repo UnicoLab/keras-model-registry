@@ -1,4 +1,4 @@
-"""Unit tests for the kmr.utils.data_analyzer_cli module."""
+"""Unit tests for the kerasfactory.utils.data_analyzer_cli module."""
 
 import os
 import sys
@@ -15,7 +15,12 @@ project_root = os.path.dirname(os.path.dirname(current_dir))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from kmr.utils.data_analyzer_cli import parse_args, setup_logging, format_result, main
+from kerasfactory.utils.data_analyzer_cli import (
+    parse_args,
+    setup_logging,
+    format_result,
+    main,
+)
 
 
 class TestDataAnalyzerCLI(unittest.TestCase):
@@ -69,7 +74,7 @@ class TestDataAnalyzerCLI(unittest.TestCase):
             self.assertTrue(args.verbose)
             self.assertTrue(args.recommendations_only)
 
-    @mock.patch("kmr.utils.data_analyzer_cli.logger")
+    @mock.patch("kerasfactory.utils.data_analyzer_cli.logger")
     def test_setup_logging(self, mock_logger) -> None:
         """Test logging setup."""
         # Test with verbose=False
@@ -110,7 +115,7 @@ class TestDataAnalyzerCLI(unittest.TestCase):
         formatted = format_result(result, True)
         self.assertEqual(formatted, {"recommendations": {}})
 
-    @mock.patch("kmr.utils.data_analyzer_cli.DataAnalyzer")
+    @mock.patch("kerasfactory.utils.data_analyzer_cli.DataAnalyzer")
     @mock.patch("sys.stdout", new_callable=io.StringIO)
     def test_main_stdout(self, mock_stdout, mock_analyzer_class) -> None:
         """Test main function with output to stdout."""
@@ -139,7 +144,7 @@ class TestDataAnalyzerCLI(unittest.TestCase):
         self.assertIn("analysis", output)
         self.assertIn("recommendations", output)
 
-    @mock.patch("kmr.utils.data_analyzer_cli.DataAnalyzer")
+    @mock.patch("kerasfactory.utils.data_analyzer_cli.DataAnalyzer")
     def test_main_file_output(self, mock_analyzer_class) -> None:
         """Test main function with output to file."""
         # Mock the analyzer instance
@@ -171,7 +176,7 @@ class TestDataAnalyzerCLI(unittest.TestCase):
             self.assertIn("analysis", output_data)
             self.assertIn("recommendations", output_data)
 
-    @mock.patch("kmr.utils.data_analyzer_cli.DataAnalyzer")
+    @mock.patch("kerasfactory.utils.data_analyzer_cli.DataAnalyzer")
     def test_main_recommendations_only(self, mock_analyzer_class) -> None:
         """Test main function with recommendations-only flag."""
         # Mock the analyzer instance
@@ -206,7 +211,7 @@ class TestDataAnalyzerCLI(unittest.TestCase):
             self.assertNotIn("analysis", output_data)
             self.assertIn("recommendations", output_data)
 
-    @mock.patch("kmr.utils.data_analyzer_cli.logger")
+    @mock.patch("kerasfactory.utils.data_analyzer_cli.logger")
     @mock.patch("sys.exit")
     def test_main_nonexistent_file(self, mock_exit, mock_logger) -> None:
         """Test main function with a nonexistent file."""
@@ -218,8 +223,8 @@ class TestDataAnalyzerCLI(unittest.TestCase):
         mock_logger.error.assert_called_once()
         mock_exit.assert_called_once_with(1)
 
-    @mock.patch("kmr.utils.data_analyzer_cli.DataAnalyzer")
-    @mock.patch("kmr.utils.data_analyzer_cli.logger")
+    @mock.patch("kerasfactory.utils.data_analyzer_cli.DataAnalyzer")
+    @mock.patch("kerasfactory.utils.data_analyzer_cli.logger")
     @mock.patch("sys.exit")
     def test_main_exception(self, mock_exit, mock_logger, mock_analyzer_class) -> None:
         """Test main function when an exception occurs."""
@@ -247,7 +252,10 @@ class TestDataAnalyzerCLI(unittest.TestCase):
 
                 # Check that help text was printed
                 output = mock_stdout.getvalue()
-                self.assertIn("Analyze CSV data and recommend KMR layers", output)
+                self.assertIn(
+                    "Analyze CSV data and recommend kerasfactory layers",
+                    output,
+                )
 
 
 if __name__ == "__main__":

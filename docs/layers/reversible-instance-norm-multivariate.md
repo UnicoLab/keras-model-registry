@@ -1,5 +1,5 @@
 ---
-title: ReversibleInstanceNormMultivariate - KMR
+title: ReversibleInstanceNormMultivariate - KerasFactory
 description: Multivariate reversible instance normalization with batch-level statistics for time series
 keywords: [normalization, instance norm, multivariate, reversible, time series, stability, keras]
 ---
@@ -75,7 +75,7 @@ The normalization uses statistics computed across both batch and time dimensions
 
 ```python
 import keras
-from kmr.layers import ReversibleInstanceNormMultivariate
+from kerasfactory.layers import ReversibleInstanceNormMultivariate
 
 # Create normalization layer for multivariate data
 normalizer = ReversibleInstanceNormMultivariate(num_features=5, affine=True)
@@ -97,7 +97,7 @@ y_pred = normalizer(y_pred_norm, mode='denorm')
 ### Advanced Example: Multi-Scale Forecasting
 
 ```python
-from kmr.layers import ReversibleInstanceNormMultivariate
+from kerasfactory.layers import ReversibleInstanceNormMultivariate
 
 # Multiple scales with shared normalization
 normalizer = ReversibleInstanceNormMultivariate(
@@ -131,7 +131,7 @@ long_denorm = normalizer(long_pred, mode='denorm')
 ## 🔧 API Reference
 
 ```python
-kmr.layers.ReversibleInstanceNormMultivariate(
+kerasfactory.layers.ReversibleInstanceNormMultivariate(
     num_features: int,
     eps: float = 1e-5,
     affine: bool = False,
@@ -248,7 +248,7 @@ loaded_model = keras.models.load_model('model.h5')
 ```python
 import keras
 import numpy as np
-from kmr.layers import ReversibleInstanceNormMultivariate
+from kerasfactory.layers import ReversibleInstanceNormMultivariate
 
 # Test exact reconstruction
 normalizer = ReversibleInstanceNormMultivariate(num_features=8)

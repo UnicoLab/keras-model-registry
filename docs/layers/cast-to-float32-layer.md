@@ -1,5 +1,5 @@
 ---
-title: CastToFloat32Layer - KMR
+title: CastToFloat32Layer - KerasFactory
 description: Layer that casts input tensors to float32 data type for consistent data types in models
 keywords: [type casting, float32, data type conversion, keras, neural networks, mixed precision, data preprocessing]
 ---
@@ -71,7 +71,7 @@ graph TD
 ```python
 import keras
 import numpy as np
-from kmr.layers import CastToFloat32Layer
+from kerasfactory.layers import CastToFloat32Layer
 
 # Create sample input data with different types
 int_data = keras.ops.convert_to_tensor(np.array([1, 2, 3], dtype=np.int64))
@@ -92,7 +92,7 @@ print(f"Output types: {int_float32.dtype}, {float64_float32.dtype}")
 
 ```python
 import keras
-from kmr.layers import CastToFloat32Layer
+from kerasfactory.layers import CastToFloat32Layer
 
 model = keras.Sequential([
     CastToFloat32Layer(),  # Cast to float32 first
@@ -108,7 +108,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import CastToFloat32Layer
+from kerasfactory.layers import CastToFloat32Layer
 
 # Define inputs
 inputs = keras.Input(shape=(10,))  # 10 features
@@ -164,7 +164,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.CastToFloat32Layer
+::: kerasfactory.layers.CastToFloat32Layer
 
 ## 🔧 Parameters Deep Dive
 
@@ -187,7 +187,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import CastToFloat32Layer
+from kerasfactory.layers import CastToFloat32Layer
 
 # Handle mixed data types in a preprocessing pipeline
 def create_mixed_type_pipeline():
@@ -324,5 +324,5 @@ def validate_type_safety():
 - [Data Type Conversion](https://en.wikipedia.org/wiki/Type_conversion) - Type conversion concepts
 - [Mixed Precision Training](https://en.wikipedia.org/wiki/Mixed_precision) - Mixed precision techniques
 - [Neural Network Data Types](https://en.wikipedia.org/wiki/Floating_point) - Floating point representation
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

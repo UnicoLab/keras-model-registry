@@ -1,5 +1,5 @@
 ---
-title: InterpretableMultiHeadAttention - KMR
+title: InterpretableMultiHeadAttention - KerasFactory
 description: Interpretable multi-head attention layer with accessible attention scores for model interpretability
 keywords: [attention, multi-head, interpretable, attention scores, tabular, keras, neural networks, explainability]
 ---
@@ -80,7 +80,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import InterpretableMultiHeadAttention
+from kerasfactory.layers import InterpretableMultiHeadAttention
 
 # Create sample data
 batch_size, seq_len, d_model = 32, 10, 64
@@ -107,7 +107,7 @@ print(f"Attention scores shape: {attention_scores.shape}")  # (32, 8, 10, 10)
 
 ```python
 import keras
-from kmr.layers import InterpretableMultiHeadAttention
+from kerasfactory.layers import InterpretableMultiHeadAttention
 
 # Create a model with interpretable attention
 model = keras.Sequential([
@@ -126,7 +126,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 ```python
 import keras
-from kmr.layers import InterpretableMultiHeadAttention
+from kerasfactory.layers import InterpretableMultiHeadAttention
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -173,7 +173,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.InterpretableMultiHeadAttention
+::: kerasfactory.layers.InterpretableMultiHeadAttention
 
 ## 🔧 Parameters Deep Dive
 
@@ -209,7 +209,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import InterpretableMultiHeadAttention
+from kerasfactory.layers import InterpretableMultiHeadAttention
 
 # Simulate medical data: symptoms, lab values, demographics
 batch_size, num_features = 32, 20
@@ -335,5 +335,5 @@ def visualize_attention(attention_scores, feature_names=None, head_idx=0):
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original Transformer paper
 - [The Annotated Transformer](http://nlp.seas.harvard.edu/2018/04/03/attention.html) - Detailed attention explanation
 - [Attention Visualization in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Attention visualization techniques
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Model Interpretability Tutorial](../tutorials/feature-engineering.md) - Complete guide to model interpretability

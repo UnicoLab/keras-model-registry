@@ -1,6 +1,6 @@
 ---
 title: 🧩 Layers - Complete Reference & Explorer
-description: Complete reference for 36+ production-ready KMR layers including attention mechanisms, feature engineering, preprocessing, and specialized architectures for tabular data with interactive explorer.
+description: Complete reference for 36+ production-ready KerasFactory layers including attention mechanisms, feature engineering, preprocessing, and specialized architectures for tabular data with interactive explorer.
 keywords: keras layers, tabular data layers, attention mechanisms, feature engineering, preprocessing layers, neural network layers, layer explorer
 ---
 
@@ -455,9 +455,9 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
   </div>
 </div>
 
-## 🎯 Why Use KMR Layers?
+## 🎯 Why Use KerasFactory Layers?
 
-| Challenge | Traditional Approach | KMR's Solution |
+| Challenge | Traditional Approach | KerasFactory's Solution |
 |-----------|----------------------|----------------|
 | 🔗 **Feature Interactions** | Manual feature crosses | 👁️ **Tabular Attention** - Automatic relationship discovery |
 | 🏷️ **Mixed Feature Types** | Uniform processing | 🧩 **Feature-wise Layers** - Specialized processing per feature |
@@ -1053,7 +1053,7 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
 ## 🚀 Quick Start Guide
 
 <div class="highlight-box">
-  <h3>Getting Started with KMR Layers</h3>
+  <h3>Getting Started with KerasFactory Layers</h3>
   
   **Step 1: Choose Your Base Layer**
   - Start with `DifferentiableTabularPreprocessor` for data preparation
@@ -1068,7 +1068,7 @@ keywords: keras layers, tabular data layers, attention mechanisms, feature engin
   **Example:**
   ```python
   import keras
-  from kmr.layers import TabularAttention, VariableSelection
+  from kerasfactory.layers import TabularAttention, VariableSelection
   
   inputs = keras.Input(shape=(10,))
   x = VariableSelection(nr_features=10, units=64)(inputs)

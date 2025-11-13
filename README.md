@@ -1,19 +1,19 @@
-# 🌟 Keras Model Registry (KMR) - Reusable Model Architecture Bricks in Keras 🌟
+# 🌟 KerasFactory - Reusable Model Architecture Bricks in Keras 🌟
 
 <div align="center">
-  <img src="docs/kmr_logo.png" width="350" alt="KMR Logo"/>
+  <img src="docs/logo.png" width="350" alt="KerasFactory Logo"/>
   
   <p><strong>Provided and maintained by <a href="https://unicolab.ai">UnicoLab</a></strong></p>
 </div>
 
-[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Keras 3.8+](https://img.shields.io/badge/keras-3.8+-red.svg)](https://keras.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![UnicoLab](https://img.shields.io/badge/UnicoLab-Enterprise%20AI-blue.svg)](https://unicolab.ai)
-[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://unicolab.github.io/keras-model-registry/)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue.svg)](https://unicolab.github.io/KerasFactory/)
 
-**KMR** is a comprehensive collection of reusable Keras layers and models specifically designed for tabular data processing, feature engineering, and advanced neural network architectures. Built with Keras 3 and developed by [UnicoLab](https://unicolab.ai), it provides a clean, efficient, and extensible foundation for building sophisticated machine learning models for enterprise AI applications.
+**KerasFactory** is a comprehensive collection of reusable Keras layers and models specifically designed for tabular data processing, feature engineering, and advanced neural network architectures. Built with Keras 3 and developed by [UnicoLab](https://unicolab.ai), it provides a clean, efficient, and extensible foundation for building sophisticated machine learning models for enterprise AI applications.
 
 ## ✨ Key Features
 
@@ -31,11 +31,11 @@
 
 ```bash
 # Install from PyPI (coming soon)
-poetry add kmr
+poetry add kerasfactory
 
 # Or install from source
-git clone https://github.com/UnicoLab/keras-model-registry
-cd keras-model-registry
+git clone https://github.com/UnicoLab/KerasFactory
+cd KerasFactory
 poetry install
 ```
 
@@ -45,7 +45,7 @@ poetry install
 
 ```python
 import keras
-from kmr.layers import DistributionTransformLayer
+from kerasfactory.layers import DistributionTransformLayer
 
 # Create a simple model with automatic data transformation
 inputs = keras.Input(shape=(10,))  # 10 numerical features
@@ -68,7 +68,7 @@ print("Model ready! The layer will automatically choose the best transformation 
 
 ```python
 import keras
-from kmr.layers import GatedFeatureFusion
+from kerasfactory.layers import GatedFeatureFusion
 
 # Create two different representations of your data
 inputs = keras.Input(shape=(8,))  # 8 features
@@ -95,7 +95,7 @@ print("Smart feature fusion model ready! The layer learns which representation t
 
 ```python
 import keras
-from kmr.models import BaseFeedForwardModel
+from kerasfactory.models import BaseFeedForwardModel
 
 # Create a complete model with just one line!
 model = BaseFeedForwardModel(
@@ -124,7 +124,7 @@ print("✅ Model trained successfully! No complex setup needed.")
 
 ```python
 import keras
-from kmr.layers import DateEncodingLayer
+from kerasfactory.layers import DateEncodingLayer
 
 # Create a model that processes date information
 inputs = keras.Input(shape=(4,))  # [year, month, day, day_of_week]
@@ -145,7 +145,7 @@ print("📅 Date-aware model ready! Handles seasonality and cyclical patterns au
 ### 🧠 Smart Data Analyzer
 
 ```python
-from kmr.utils import analyze_data
+from kerasfactory.utils import analyze_data
 
 # Get intelligent recommendations for your data
 results = analyze_data("your_data.csv")
@@ -162,18 +162,18 @@ print("✨ No more guessing which layers to use!")
 
 ### Core Components
 
-#### **Layers** (`kmr.layers`)
+#### **Layers** (`kerasfactory.layers`)
 - **Attention Mechanisms**: `TabularAttention`, `MultiResolutionTabularAttention`, `ColumnAttention`, `RowAttention`
 - **Feature Processing**: `AdvancedNumericalEmbedding`, `GatedFeatureFusion`, `VariableSelection`
 - **Preprocessing**: `DateEncodingLayer`, `DateParsingLayer`, `DifferentiableTabularPreprocessor`
 - **Advanced Architectures**: `TransformerBlock`, `GatedResidualNetwork`, `BoostingBlock`
 - **Specialized Layers**: `BusinessRulesLayer`, `StochasticDepth`, `FeatureCutout`
 
-#### **Models** (`kmr.models`)
+#### **Models** (`kerasfactory.models`)
 - **SFNEBlock**: Advanced feature processing block
 - **TerminatorModel**: Multi-block hierarchical processing model
 
-#### **Utilities** (`kmr.utils`)
+#### **Utilities** (`kerasfactory.utils`)
 - **Data Analyzer**: Intelligent CSV analysis and layer recommendation system
 - **CLI Tools**: Command-line interface for data analysis
 
@@ -185,8 +185,8 @@ print("✨ No more guessing which layers to use!")
 
 ## 📖 Documentation
 
-- **[Online Documentation](https://unicolab.github.io/keras-model-registry/)**: Full API reference with automatic docstring generation
-- **[API Reference](https://unicolab.github.io/keras-model-registry/api/)**: Complete documentation for all layers, models, and utilities
+- **[Online Documentation](https://unicolab.github.io/KerasFactory/)**: Full API reference with automatic docstring generation
+- **[API Reference](https://unicolab.github.io/KerasFactory/api/)**: Complete documentation for all layers, models, and utilities
 - **[Layer Implementation Guide](docs/layers_implementation_guide.md)**: Comprehensive guide for implementing new layers
 - **[Data Analyzer Documentation](docs/data_analyzer.md)**: Complete guide to the data analysis tools
 - **[Contributing Guide](docs/contributing.md)**: How to contribute to the project
@@ -195,7 +195,7 @@ print("✨ No more guessing which layers to use!")
 
 ### 📊 Tabular Data Processing
 ```python
-from kmr.layers import DistributionTransformLayer, GatedFeatureFusion
+from kerasfactory.layers import DistributionTransformLayer, GatedFeatureFusion
 
 # Smart preprocessing
 preprocessor = DistributionTransformLayer(transform_type='auto')
@@ -206,7 +206,7 @@ fusion = GatedFeatureFusion()
 
 ### 🔧 Feature Engineering
 ```python
-from kmr.layers import DateEncodingLayer, BusinessRulesLayer
+from kerasfactory.layers import DateEncodingLayer, BusinessRulesLayer
 
 # Date features
 date_encoder = DateEncodingLayer()
@@ -220,7 +220,7 @@ rules = BusinessRulesLayer(
 
 ### 🎨 Advanced Architectures
 ```python
-from kmr.layers import StochasticDepth, GatedResidualNetwork
+from kerasfactory.layers import StochasticDepth, GatedResidualNetwork
 
 # Regularization
 stochastic_depth = StochasticDepth(survival_prob=0.8)
@@ -251,8 +251,8 @@ We welcome contributions! Please see our [Contributing Guide](docs/contributing.
 
 ```bash
 # Clone the repository
-git clone https://github.com/UnicoLab/keras-model-registry.git
-cd keras-model-registry
+git clone https://github.com/UnicoLab/KerasFactory.git
+cd KerasFactory
 
 # Install development dependencies
 poetry install
@@ -267,13 +267,13 @@ make all_tests
 ### Commit Convention
 
 We use semantic commit messages:
-- `feat(KMR): add new layer for feature processing`
-- `fix(KMR): resolve serialization issue`
-- `docs(KMR): update installation guide`
+- `feat(KerasFactory): add new layer for feature processing`
+- `fix(KerasFactory): resolve serialization issue`
+- `docs(KerasFactory): update installation guide`
 
 ## 📊 Performance
 
-KMR is optimized for performance with:
+KerasFactory is optimized for performance with:
 - **Keras 3 Backend**: Leverages the latest Keras optimizations
 - **Efficient Operations**: Uses only Keras operations for maximum compatibility
 - **Memory Optimization**: Careful memory management in complex layers
@@ -297,9 +297,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/UnicoLab/keras-model-registry/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/UnicoLab/keras-model-registry/discussions)
-- **Documentation**: [Online Docs](https://unicolab.github.io/keras-model-registry/)
+- **Issues**: [GitHub Issues](https://github.com/UnicoLab/KerasFactory/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/UnicoLab/KerasFactory/discussions)
+- **Documentation**: [Online Docs](https://unicolab.github.io/KerasFactory/)
 - **Discord**: [![Discord](https://img.shields.io/badge/Discord-Join%20Us-7289DA?logo=discord&logoColor=white)](https://discord.gg/6zf4VZFYV5)
 
 ---

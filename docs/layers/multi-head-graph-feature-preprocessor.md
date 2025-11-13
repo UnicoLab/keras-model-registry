@@ -1,5 +1,5 @@
 ---
-title: MultiHeadGraphFeaturePreprocessor - KMR
+title: MultiHeadGraphFeaturePreprocessor - KerasFactory
 description: Multi-head graph-based feature preprocessor with self-attention for tabular data
 keywords: [multi-head graph feature preprocessor, graph neural networks, multi-head attention, tabular data, keras, neural networks, feature preprocessing]
 ---
@@ -77,7 +77,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import MultiHeadGraphFeaturePreprocessor
+from kerasfactory.layers import MultiHeadGraphFeaturePreprocessor
 
 # Create sample input data
 batch_size, num_features = 32, 10
@@ -95,7 +95,7 @@ print(f"Output shape: {output.shape}")     # (32, 10)
 
 ```python
 import keras
-from kmr.layers import MultiHeadGraphFeaturePreprocessor
+from kerasfactory.layers import MultiHeadGraphFeaturePreprocessor
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -112,7 +112,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import MultiHeadGraphFeaturePreprocessor
+from kerasfactory.layers import MultiHeadGraphFeaturePreprocessor
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -171,7 +171,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.MultiHeadGraphFeaturePreprocessor
+::: kerasfactory.layers.MultiHeadGraphFeaturePreprocessor
 
 ## 🔧 Parameters Deep Dive
 
@@ -207,7 +207,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import MultiHeadGraphFeaturePreprocessor
+from kerasfactory.layers import MultiHeadGraphFeaturePreprocessor
 
 # Create a model for complex feature relationships
 def create_complex_relationship_model():
@@ -335,5 +335,5 @@ def analyze_attention_heads():
 - [Multi-Head Attention](https://arxiv.org/abs/1706.03762) - Multi-head attention mechanism
 - [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network) - Graph neural network concepts
 - [Feature Relationships](https://en.wikipedia.org/wiki/Feature_engineering) - Feature relationship concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

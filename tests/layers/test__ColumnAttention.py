@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 from keras import layers, Model, ops
 
-from kmr.layers.ColumnAttention import ColumnAttention
+from kerasfactory.layers.ColumnAttention import ColumnAttention
 
 
 class TestColumnAttention(unittest.TestCase):

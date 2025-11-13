@@ -21,9 +21,9 @@ jobs:
           fetch-depth: 0
       - name: "Semantic Release"
         id: semantic-release
-        uses: "UnicoLab/keras-model-registry/.github/templates/github/semantic_release@main"
+        uses: "UnicoLab/KerasFactory/.github/templates/github/semantic_release@main"
         with:
-          PROJECT_NAME: KMR
+          PROJECT_NAME: KerasFactory
           PROJECT_DIRECTORY: .
           BRANCHES: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

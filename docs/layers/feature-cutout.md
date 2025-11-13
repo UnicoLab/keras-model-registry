@@ -1,5 +1,5 @@
 ---
-title: FeatureCutout - KMR
+title: FeatureCutout - KerasFactory
 description: Feature cutout regularization layer for neural networks that randomly masks features during training
 keywords: [feature cutout, regularization, dropout, neural networks, keras, overfitting prevention, data augmentation]
 ---
@@ -74,7 +74,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import FeatureCutout
+from kerasfactory.layers import FeatureCutout
 
 # Create sample input data
 batch_size, feature_dim = 32, 10
@@ -93,7 +93,7 @@ print(f"Training mode: {cutout.training}") # True
 
 ```python
 import keras
-from kmr.layers import FeatureCutout
+from kerasfactory.layers import FeatureCutout
 
 model = keras.Sequential([
     FeatureCutout(cutout_prob=0.15),  # Apply feature cutout first
@@ -110,7 +110,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import FeatureCutout
+from kerasfactory.layers import FeatureCutout
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -160,7 +160,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.FeatureCutout
+::: kerasfactory.layers.FeatureCutout
 
 ## 🔧 Parameters Deep Dive
 
@@ -196,7 +196,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import FeatureCutout
+from kerasfactory.layers import FeatureCutout
 
 # Create a model prone to overfitting
 def create_overfitting_model():
@@ -328,5 +328,5 @@ def analyze_feature_importance(model, test_data, feature_names=None):
 - [Dropout Regularization](https://jmlr.org/papers/v15/srivastava14a.html) - Original dropout paper
 - [Data Augmentation Techniques](https://en.wikipedia.org/wiki/Data_augmentation) - Data augmentation concepts
 - [Regularization in Deep Learning](https://en.wikipedia.org/wiki/Regularization_(mathematics)) - Regularization techniques
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

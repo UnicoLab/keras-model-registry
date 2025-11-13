@@ -1,5 +1,5 @@
 ---
-title: BoostingBlock - KMR
+title: BoostingBlock - KerasFactory
 description: Neural network layer that simulates gradient boosting behavior with residual correction
 keywords: [boosting block, gradient boosting, residual correction, weak learner, keras, neural networks, ensemble learning]
 ---
@@ -75,7 +75,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import BoostingBlock
+from kerasfactory.layers import BoostingBlock
 
 # Create sample input data
 batch_size, input_dim = 32, 16
@@ -93,7 +93,7 @@ print(f"Output shape: {output.shape}")     # (32, 16)
 
 ```python
 import keras
-from kmr.layers import BoostingBlock
+from kerasfactory.layers import BoostingBlock
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -110,7 +110,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import BoostingBlock
+from kerasfactory.layers import BoostingBlock
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -173,7 +173,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.BoostingBlock
+::: kerasfactory.layers.BoostingBlock
 
 ## 🔧 Parameters Deep Dive
 
@@ -216,7 +216,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import BoostingBlock
+from kerasfactory.layers import BoostingBlock
 
 # Create a gradient boosting simulation
 def create_gradient_boosting_simulation():
@@ -346,5 +346,5 @@ def compare_boosting_configurations():
 - [Gradient Boosting](https://en.wikipedia.org/wiki/Gradient_boosting) - Gradient boosting concepts
 - [Residual Learning](https://arxiv.org/abs/1512.03385) - Residual learning paper
 - [Ensemble Methods](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

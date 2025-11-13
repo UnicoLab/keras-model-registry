@@ -1,5 +1,5 @@
 ---
-title: DFTSeriesDecomposition - KMR
+title: DFTSeriesDecomposition - KerasFactory
 description: Frequency-based series decomposition using Discrete Fourier Transform
 keywords: [decomposition, FFT, frequency domain, time series, seasonal, trend, keras]
 ---
@@ -66,7 +66,7 @@ Inverse FFT
 
 ```python
 import keras
-from kmr.layers import DFTSeriesDecomposition
+from kerasfactory.layers import DFTSeriesDecomposition
 
 # Create decomposition layer
 dft_decomp = DFTSeriesDecomposition(top_k=5)
@@ -87,7 +87,7 @@ reconstructed = seasonal + trend
 ## 🔧 API Reference
 
 ```python
-kmr.layers.DFTSeriesDecomposition(
+kerasfactory.layers.DFTSeriesDecomposition(
     top_k: int = 5,
     name: str | None = None,
     **kwargs: Any

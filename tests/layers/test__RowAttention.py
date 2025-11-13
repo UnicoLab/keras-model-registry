@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 from keras import layers, Model, ops
 
-from kmr.layers.RowAttention import RowAttention
+from kerasfactory.layers.RowAttention import RowAttention
 
 
 class TestRowAttention(unittest.TestCase):

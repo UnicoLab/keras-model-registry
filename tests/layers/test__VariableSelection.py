@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 from keras import Model, layers
 
-from kmr.layers import VariableSelection
+from kerasfactory.layers import VariableSelection
 
 
 class TestVariableSelection(unittest.TestCase):

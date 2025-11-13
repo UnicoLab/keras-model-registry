@@ -1,5 +1,5 @@
 ---
-title: AdvancedGraphFeatureLayer - KMR
+title: AdvancedGraphFeatureLayer - KerasFactory
 description: Advanced graph-based feature layer with multi-head self-attention and hierarchical aggregation
 keywords: [advanced graph feature, graph neural networks, multi-head attention, hierarchical aggregation, tabular data, keras, neural networks]
 ---
@@ -78,7 +78,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import AdvancedGraphFeatureLayer
+from kerasfactory.layers import AdvancedGraphFeatureLayer
 
 # Create sample input data
 batch_size, num_features = 32, 10
@@ -96,7 +96,7 @@ print(f"Output shape: {output.shape}")     # (32, 10)
 
 ```python
 import keras
-from kmr.layers import AdvancedGraphFeatureLayer
+from kerasfactory.layers import AdvancedGraphFeatureLayer
 
 # Create sample input data
 x = keras.random.normal((32, 20))  # 20 features
@@ -117,7 +117,7 @@ print(f"Output shape: {output.shape}")     # (32, 20)
 
 ```python
 import keras
-from kmr.layers import AdvancedGraphFeatureLayer
+from kerasfactory.layers import AdvancedGraphFeatureLayer
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -134,7 +134,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import AdvancedGraphFeatureLayer
+from kerasfactory.layers import AdvancedGraphFeatureLayer
 
 # Define inputs
 inputs = keras.Input(shape=(25,))  # 25 features
@@ -273,7 +273,7 @@ class AdvancedGraphFeatureLayer(BaseLayer):
 ```python
 import keras
 import numpy as np
-from kmr.layers import AdvancedGraphFeatureLayer
+from kerasfactory.layers import AdvancedGraphFeatureLayer
 
 # Create a model for complex feature interactions
 def create_feature_interaction_model():
@@ -412,5 +412,5 @@ def analyze_graph_behavior():
 - [Graph Neural Networks](https://en.wikipedia.org/wiki/Graph_neural_network) - Graph neural network concepts
 - [Multi-Head Attention](https://arxiv.org/abs/1706.03762) - Multi-head attention mechanism
 - [Hierarchical Clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) - Hierarchical clustering concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

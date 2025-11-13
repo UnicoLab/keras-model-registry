@@ -1,5 +1,5 @@
 ---
-title: FeatureMixing - KMR
+title: FeatureMixing - KerasFactory
 description: Feature mixing layer for TSMixer model that applies feed-forward networks across channel dimension for cross-series correlation learning
 keywords: [feature mixing, feed-forward network, time series, channel mixing, mlp, forecasting, keras, multi-layer perceptron]
 ---
@@ -77,7 +77,7 @@ graph LR
 
 ```python
 import keras
-from kmr.layers import FeatureMixing
+from kerasfactory.layers import FeatureMixing
 
 # Create sample multivariate time series
 batch_size, time_steps, features = 32, 96, 7
@@ -99,7 +99,7 @@ print(f"Output shape: {output.shape}")   # (32, 96, 7)
 ### Architecture Variants
 
 ```python
-from kmr.layers import FeatureMixing
+from kerasfactory.layers import FeatureMixing
 import keras
 
 # Bottleneck: compress feature space
@@ -229,7 +229,7 @@ for ff_dim in [8, 16, 32, 64, 128]:
 
 ```python
 import tensorflow as tf
-from kmr.layers import FeatureMixing
+from kerasfactory.layers import FeatureMixing
 
 layer = FeatureMixing(n_series=7, input_size=96, dropout=0.1, ff_dim=64)
 x = tf.random.normal((32, 96, 7))

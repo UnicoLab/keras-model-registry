@@ -5,7 +5,7 @@ import keras
 import tensorflow as tf
 from loguru import logger
 
-from kmr.metrics import StandardDeviation
+from kerasfactory.metrics import StandardDeviation
 
 
 class TestStandardDeviation(unittest.TestCase):

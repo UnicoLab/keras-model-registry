@@ -1,5 +1,5 @@
 ---
-title: DateParsingLayer - KMR
+title: DateParsingLayer - KerasFactory
 description: Layer for parsing date strings into numerical components (year, month, day, day of week)
 keywords: [date parsing, date processing, time series, keras, neural networks, date components, day of week]
 ---
@@ -76,7 +76,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import DateParsingLayer
+from kerasfactory.layers import DateParsingLayer
 
 # Create sample date strings
 date_strings = [
@@ -100,7 +100,7 @@ print(f"Parsed dates: {parsed}")
 
 ```python
 import keras
-from kmr.layers import DateParsingLayer
+from kerasfactory.layers import DateParsingLayer
 
 model = keras.Sequential([
     DateParsingLayer(date_format="YYYY-MM-DD"),
@@ -116,7 +116,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import DateParsingLayer
+from kerasfactory.layers import DateParsingLayer
 
 # Define inputs
 inputs = keras.Input(shape=(), dtype="string")  # String input for dates
@@ -166,7 +166,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.DateParsingLayer
+::: kerasfactory.layers.DateParsingLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -191,7 +191,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import DateParsingLayer
+from kerasfactory.layers import DateParsingLayer
 
 # Create time series data with dates
 def create_time_series_features():
@@ -396,5 +396,5 @@ model.compile(
 - [Date and Time Processing](https://en.wikipedia.org/wiki/Date_and_time_representation_by_country) - Date format standards
 - [Zeller's Congruence](https://en.wikipedia.org/wiki/Zeller%27s_congruence) - Day of week calculation algorithm
 - [Time Series Analysis](https://en.wikipedia.org/wiki/Time_series) - Time series concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

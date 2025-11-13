@@ -1,4 +1,4 @@
-site_name: KMR - Keras Model Registry
+site_name: KerasFactory
 theme:
   name: "material"
   custom_dir: docs/overrides
@@ -128,8 +128,8 @@ nav:
     - Model Implementation Guide: models_implementation_guide.md
     - Data Analyzer: data_analyzer.md
 
-repo_name: Keras Model Registry
-repo_url: https://github.com/UnicoLab/keras-model-registry
+repo_name: KerasFactory
+repo_url: https://github.com/UnicoLab/KerasFactory
 
 markdown_extensions:
   - attr_list

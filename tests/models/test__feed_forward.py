@@ -5,7 +5,7 @@ import tensorflow as tf
 import numpy as np
 from loguru import logger
 
-from kmr.models.feed_forward import BaseFeedForwardModel
+from kerasfactory.models.feed_forward import BaseFeedForwardModel
 from ._base import BaseModelTest
 
 

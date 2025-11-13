@@ -1,5 +1,5 @@
 ---
-title: MultiScaleTrendMixing - KMR
+title: MultiScaleTrendMixing - KerasFactory
 description: Top-down multi-scale trend pattern mixing and upsampling
 keywords: [multi-scale, trend, mixing, hierarchical, time series, keras]
 ---
@@ -69,7 +69,7 @@ Multi-scale trend analysis captures:
 
 ```python
 import keras
-from kmr.layers import MultiScaleTrendMixing
+from kerasfactory.layers import MultiScaleTrendMixing
 
 trend_mix = MultiScaleTrendMixing(
     seq_len=96,
@@ -85,7 +85,7 @@ print(len(output))
 ## 🔧 API Reference
 
 ```python
-kmr.layers.MultiScaleTrendMixing(
+kerasfactory.layers.MultiScaleTrendMixing(
     seq_len: int,
     down_sampling_window: int = 2,
     down_sampling_layers: int = 1,

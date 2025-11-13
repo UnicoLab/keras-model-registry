@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-"""Test runner for kmr.utils package tests.
+"""Test runner for kerasfactory.utils package tests.
 
-This script runs all the unit tests for the kmr.utils package
+This script runs all the unit tests for the kerasfactory.utils package
 and generates a coverage report.
 """
 
@@ -18,7 +18,10 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # Start code coverage
-cov = coverage.Coverage(source=["kmr.utils"], omit=["*/__pycache__/*", "*/tests/*"])
+cov = coverage.Coverage(
+    source=["kerasfactory.utils"],
+    omit=["*/__pycache__/*", "*/tests/*"],
+)
 cov.start()
 
 # Find and run all tests in the utils directory

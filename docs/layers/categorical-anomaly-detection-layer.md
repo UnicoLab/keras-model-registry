@@ -1,5 +1,5 @@
 ---
-title: CategoricalAnomalyDetectionLayer - KMR
+title: CategoricalAnomalyDetectionLayer - KerasFactory
 description: Categorical anomaly detection layer for identifying outliers in categorical features
 keywords: [categorical anomaly detection, outlier detection, categorical data, keras, neural networks, anomaly detection]
 ---
@@ -78,7 +78,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import CategoricalAnomalyDetectionLayer
+from kerasfactory.layers import CategoricalAnomalyDetectionLayer
 
 # Create sample categorical data
 batch_size, num_features = 32, 5
@@ -101,7 +101,7 @@ print(f"Anomaly scores shape: {anomaly_scores.shape}")  # (32, 5)
 
 ```python
 import keras
-from kmr.layers import CategoricalAnomalyDetectionLayer
+from kerasfactory.layers import CategoricalAnomalyDetectionLayer
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -117,7 +117,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import CategoricalAnomalyDetectionLayer
+from kerasfactory.layers import CategoricalAnomalyDetectionLayer
 
 # Define inputs
 inputs = keras.Input(shape=(10,), dtype='string')  # 10 categorical features
@@ -168,7 +168,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.CategoricalAnomalyDetectionLayer
+::: kerasfactory.layers.CategoricalAnomalyDetectionLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -204,7 +204,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import CategoricalAnomalyDetectionLayer
+from kerasfactory.layers import CategoricalAnomalyDetectionLayer
 
 # Create a model for categorical outlier detection
 def create_categorical_outlier_model():
@@ -329,5 +329,5 @@ def analyze_categorical_frequency():
 - [Categorical Data](https://en.wikipedia.org/wiki/Categorical_variable) - Categorical data concepts
 - [Anomaly Detection](https://en.wikipedia.org/wiki/Anomaly_detection) - Anomaly detection techniques
 - [Frequency Analysis](https://en.wikipedia.org/wiki/Frequency_analysis) - Frequency analysis concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -1,5 +1,5 @@
 ---
-title: MultiResolutionTabularAttention - KMR
+title: MultiResolutionTabularAttention - KerasFactory
 description: Multi-resolution attention for mixed-type tabular data with separate mechanisms for numerical and categorical features
 keywords: [attention, multi-resolution, tabular, numerical, categorical, mixed-type, keras, neural networks]
 ---
@@ -78,7 +78,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import MultiResolutionTabularAttention
+from kerasfactory.layers import MultiResolutionTabularAttention
 
 # Create mixed-type tabular data
 batch_size, num_samples = 32, 100
@@ -97,7 +97,7 @@ print(f"Categorical output shape: {cat_output.shape}")  # (32, 100, 64)
 
 ```python
 import keras
-from kmr.layers import MultiResolutionTabularAttention
+from kerasfactory.layers import MultiResolutionTabularAttention
 
 # For mixed-type data, you'll need to handle inputs separately
 def create_mixed_model():
@@ -125,7 +125,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 ```python
 import keras
-from kmr.layers import MultiResolutionTabularAttention
+from kerasfactory.layers import MultiResolutionTabularAttention
 
 # Define inputs for mixed data
 num_inputs = keras.Input(shape=(50, 15), name='numerical_features')
@@ -190,7 +190,7 @@ model = create_advanced_model()
 
 ## 📖 API Reference
 
-::: kmr.layers.MultiResolutionTabularAttention
+::: kerasfactory.layers.MultiResolutionTabularAttention
 
 ## 🔧 Parameters Deep Dive
 
@@ -226,7 +226,7 @@ model = create_advanced_model()
 ```python
 import keras
 import numpy as np
-from kmr.layers import MultiResolutionTabularAttention
+from kerasfactory.layers import MultiResolutionTabularAttention
 
 # Simulate e-commerce data
 batch_size, num_users = 32, 1000
@@ -352,5 +352,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 - [TabNet: Attentive Interpretable Tabular Learning](https://arxiv.org/abs/1908.07442) - Tabular-specific attention mechanisms
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original Transformer architecture
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Mixed-Type Data Tutorial](../tutorials/feature-engineering.md) - Complete guide to mixed-type tabular modeling

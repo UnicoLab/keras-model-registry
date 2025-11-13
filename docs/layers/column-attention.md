@@ -1,5 +1,5 @@
 ---
-title: ColumnAttention - KMR
+title: ColumnAttention - KerasFactory
 description: Column-wise attention mechanism for dynamic feature weighting in tabular data
 keywords: [attention, column, feature weighting, tabular, keras, neural networks, feature importance]
 ---
@@ -71,7 +71,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import ColumnAttention
+from kerasfactory.layers import ColumnAttention
 
 # Create sample tabular data
 batch_size, num_features = 32, 10
@@ -89,7 +89,7 @@ print(f"Output shape: {weighted_features.shape}")  # (32, 10)
 
 ```python
 import keras
-from kmr.layers import ColumnAttention
+from kerasfactory.layers import ColumnAttention
 
 model = keras.Sequential([
     keras.layers.Dense(64, activation='relu'),
@@ -105,7 +105,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import ColumnAttention
+from kerasfactory.layers import ColumnAttention
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -144,7 +144,7 @@ model = keras.Model(inputs, outputs)
 
 ## 📖 API Reference
 
-::: kmr.layers.ColumnAttention
+::: kerasfactory.layers.ColumnAttention
 
 ## 🔧 Parameters Deep Dive
 
@@ -174,7 +174,7 @@ model = keras.Model(inputs, outputs)
 ```python
 import keras
 import numpy as np
-from kmr.layers import ColumnAttention
+from kerasfactory.layers import ColumnAttention
 
 # Create data with varying feature importance
 np.random.seed(42)
@@ -298,5 +298,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 - [Attention Mechanisms in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Understanding attention mechanisms
 - [Feature Selection in Machine Learning](https://en.wikipedia.org/wiki/Feature_selection) - Feature selection concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

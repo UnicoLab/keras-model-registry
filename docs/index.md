@@ -1,7 +1,7 @@
-# 🚀 Welcome to KMR - Keras Model Registry
+# 🚀 Welcome to KerasFactory
 
 <div align="center">
-  <img src="kmr_logo.png" width="350" alt="KMR Logo"/>
+  <img src="logo.png" width="350" alt="KerasFactory Logo"/>
   
   <p><strong>🧩 Reusable Model Architecture Bricks in Keras 3</strong></p>
   
@@ -13,9 +13,9 @@
 
 ---
 
-## 🎯 What is KMR?
+## 🎯 What is KerasFactory?
 
-KMR (Keras Model Registry) is a comprehensive collection of **production-ready layers and models** designed specifically for **tabular data processing** with Keras 3. Our library provides:
+KerasFactory is a comprehensive collection of **production-ready layers and models** designed specifically for **tabular data processing** with Keras 3. Our library provides:
 
 - 🧠 **Advanced Attention Mechanisms** for tabular data
 - 🔧 **Feature Engineering Layers** for data preprocessing  
@@ -23,13 +23,13 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
 - 📊 **Data Analysis Tools** for intelligent layer recommendations
 - ⚡ **Keras 3 Native** - No TensorFlow dependencies in production code
 
-!!! tip "Why KMR?"
-    KMR eliminates the need to build complex tabular models from scratch. Our layers are battle-tested, well-documented, and designed to work seamlessly together.
+!!! tip "Why KerasFactory?"
+    KerasFactory eliminates the need to build complex tabular models from scratch. Our layers are battle-tested, well-documented, and designed to work seamlessly together.
 
 ---
 
 
-## 🧩 What's Inside KMR?
+## 🧩 What's Inside KerasFactory?
 
 <div class="grid cards" markdown>
 
@@ -69,7 +69,7 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
     
     ```python
     import keras
-    from kmr.models import SFNEBlock
+    from kerasfactory.models import SFNEBlock
     
     # Create a state-of-the-art tabular model
     model = SFNEBlock(
@@ -96,7 +96,7 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
     
     ```python
     import keras
-    from kmr.layers import (
+    from kerasfactory.layers import (
         DistributionTransformLayer,    # Intelligent preprocessing
         VariableSelection,              # Learn feature importance
         TabularAttention,               # Model feature relationships
@@ -127,7 +127,7 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
     
     ```python
     import keras
-    from kmr.models import BaseFeedForwardModel
+    from kerasfactory.models import BaseFeedForwardModel
     
     # Create robust classification model
     model = BaseFeedForwardModel(
@@ -158,7 +158,7 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
     Predict credit risk with advanced tabular features:
     
     ```python
-    from kmr.models import BaseFeedForwardModel
+    from kerasfactory.models import BaseFeedForwardModel
     
     # 50+ financial features → Risk prediction
     model = BaseFeedForwardModel(
@@ -180,7 +180,7 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
     Intelligent medical diagnosis with mixed data:
     
     ```python
-    from kmr.layers import (
+    from kerasfactory.layers import (
         DistributionTransformLayer,
         VariableSelection,
         TabularAttention
@@ -201,7 +201,7 @@ KMR (Keras Model Registry) is a comprehensive collection of **production-ready l
     Build user-item interaction models:
     
     ```python
-    from kmr.layers import TabularAttention, GatedFeatureFusion
+    from kerasfactory.layers import TabularAttention, GatedFeatureFusion
     
     user_features = keras.Input(shape=(20,))
     item_features = keras.Input(shape=(15,))
@@ -291,7 +291,7 @@ Check out our [Contributing Guide](contributing.md) to get started!
 
 ---
 
-## 📖 Your Journey with KMR
+## 📖 Your Journey with KerasFactory
 
 === "🟢 Beginner"
 
@@ -334,5 +334,5 @@ Check out our [Contributing Guide](contributing.md) to get started!
 ---
 
 <p align="center">
-  <em>Join thousands of ML engineers building production-ready tabular models with KMR 🚀</em>
+  <em>Join thousands of ML engineers building production-ready tabular models with KerasFactory 🚀</em>
 </p>

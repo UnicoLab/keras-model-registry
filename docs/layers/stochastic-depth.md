@@ -1,5 +1,5 @@
 ---
-title: StochasticDepth - KMR
+title: StochasticDepth - KerasFactory
 description: Stochastic depth layer for regularization that randomly drops residual branches during training
 keywords: [stochastic depth, regularization, residual branches, dropout, keras, neural networks, deep learning]
 ---
@@ -80,7 +80,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import StochasticDepth
+from kerasfactory.layers import StochasticDepth
 
 # Create sample residual branch
 inputs = keras.random.normal((32, 64, 64, 128))
@@ -100,7 +100,7 @@ print(f"Output shape: {output.shape}")     # (32, 64, 64, 128)
 
 ```python
 import keras
-from kmr.layers import StochasticDepth
+from kerasfactory.layers import StochasticDepth
 
 # Create a residual block with stochastic depth
 def create_residual_block(inputs, filters, survival_prob=0.8):
@@ -142,7 +142,7 @@ model = keras.Model(inputs, x)
 
 ```python
 import keras
-from kmr.layers import StochasticDepth
+from kerasfactory.layers import StochasticDepth
 
 # Define inputs
 inputs = keras.Input(shape=(28, 28, 3))
@@ -212,7 +212,7 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 
 ## 📖 API Reference
 
-::: kmr.layers.StochasticDepth
+::: kerasfactory.layers.StochasticDepth
 
 ## 🔧 Parameters Deep Dive
 
@@ -242,7 +242,7 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 ```python
 import keras
 import numpy as np
-from kmr.layers import StochasticDepth
+from kerasfactory.layers import StochasticDepth
 
 # Create a deep residual network with stochastic depth
 def create_deep_residual_network():
@@ -382,5 +382,5 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accur
 - [Deep Networks with Stochastic Depth](https://arxiv.org/abs/1603.09382) - Original stochastic depth paper
 - [Residual Networks](https://arxiv.org/abs/1512.03385) - Residual network paper
 - [Regularization Techniques](https://en.wikipedia.org/wiki/Regularization_(mathematics)) - Regularization concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

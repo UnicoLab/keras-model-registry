@@ -3,7 +3,7 @@
 import numpy as np
 import pytest
 import plotly.graph_objects as go
-from kmr.utils import KMRPlotter
+from kerasfactory.utils import KerasFactoryPlotter
 
 
 class TestTimeSeriesPlotting:
@@ -23,7 +23,12 @@ class TestTimeSeriesPlotting:
     def test_plot_timeseries(self, sample_data):
         """Test basic time series plotting."""
         X, y_true, y_pred = sample_data
-        fig = KMRPlotter.plot_timeseries(X, y_true, y_pred, n_samples_to_plot=3)
+        fig = KerasFactoryPlotter.plot_timeseries(
+            X,
+            y_true,
+            y_pred,
+            n_samples_to_plot=3,
+        )
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) > 0
@@ -32,7 +37,7 @@ class TestTimeSeriesPlotting:
     def test_plot_timeseries_only_input(self, sample_data):
         """Test time series plotting with only input."""
         X, _, _ = sample_data
-        fig = KMRPlotter.plot_timeseries(X, y_true=None, y_pred=None)
+        fig = KerasFactoryPlotter.plot_timeseries(X, y_true=None, y_pred=None)
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) > 0
@@ -40,7 +45,11 @@ class TestTimeSeriesPlotting:
     def test_plot_timeseries_comparison(self, sample_data):
         """Test forecast comparison plotting."""
         _, y_true, y_pred = sample_data
-        fig = KMRPlotter.plot_timeseries_comparison(y_true, y_pred, sample_idx=0)
+        fig = KerasFactoryPlotter.plot_timeseries_comparison(
+            y_true,
+            y_pred,
+            sample_idx=0,
+        )
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) == 2  # True and predicted
@@ -49,7 +58,7 @@ class TestTimeSeriesPlotting:
         """Test forecast comparison with 2D arrays."""
         y_true = np.random.randn(24).astype(np.float32)
         y_pred = y_true + 0.1 * np.random.randn(24).astype(np.float32)
-        fig = KMRPlotter.plot_timeseries_comparison(y_true, y_pred)
+        fig = KerasFactoryPlotter.plot_timeseries_comparison(y_true, y_pred)
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) == 2
@@ -62,7 +71,12 @@ class TestTimeSeriesPlotting:
         seasonal = np.sin(np.linspace(0, 4 * np.pi, n_samples)).astype(np.float32)
         residual = original - trend - seasonal
 
-        fig = KMRPlotter.plot_decomposition(original, trend, seasonal, residual)
+        fig = KerasFactoryPlotter.plot_decomposition(
+            original,
+            trend,
+            seasonal,
+            residual,
+        )
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) >= 4
@@ -74,7 +88,7 @@ class TestTimeSeriesPlotting:
         y_true_flat = y_true.flatten()
         y_pred_flat = y_pred.flatten()
 
-        fig = KMRPlotter.plot_forecasting_metrics(y_true_flat, y_pred_flat)
+        fig = KerasFactoryPlotter.plot_forecasting_metrics(y_true_flat, y_pred_flat)
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) > 0
@@ -82,7 +96,7 @@ class TestTimeSeriesPlotting:
     def test_plot_forecast_horizon_analysis(self, sample_data):
         """Test forecast horizon analysis."""
         _, y_true, y_pred = sample_data
-        fig = KMRPlotter.plot_forecast_horizon_analysis(y_true, y_pred)
+        fig = KerasFactoryPlotter.plot_forecast_horizon_analysis(y_true, y_pred)
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) > 0
@@ -90,7 +104,7 @@ class TestTimeSeriesPlotting:
     def test_plot_multiple_features_forecast(self, sample_data):
         """Test multi-feature forecast plotting."""
         X, y_true, y_pred = sample_data
-        fig = KMRPlotter.plot_multiple_features_forecast(
+        fig = KerasFactoryPlotter.plot_multiple_features_forecast(
             X,
             y_true,
             y_pred,
@@ -113,7 +127,10 @@ class TestTrainingVisualization:
             "mae": [0.3, 0.25, 0.2, 0.15],
         }
 
-        fig = KMRPlotter.plot_training_history(history, metrics=["loss", "mae"])
+        fig = KerasFactoryPlotter.plot_training_history(
+            history,
+            metrics=["loss", "mae"],
+        )
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) > 0
@@ -128,7 +145,7 @@ class TestClassificationMetrics:
         y_true = np.array([0, 1, 2, 0, 1, 2, 0, 1, 2])
         y_pred = np.array([0, 1, 2, 0, 1, 1, 0, 2, 2])
 
-        fig = KMRPlotter.plot_confusion_matrix(y_true, y_pred)
+        fig = KerasFactoryPlotter.plot_confusion_matrix(y_true, y_pred)
 
         assert isinstance(fig, go.Figure)
         assert "Confusion Matrix" in fig.layout.title.text
@@ -138,7 +155,7 @@ class TestClassificationMetrics:
         y_true = np.array([0, 0, 1, 1, 1, 0, 1, 0])
         y_scores = np.array([0.1, 0.2, 0.8, 0.9, 0.7, 0.3, 0.85, 0.15])
 
-        fig = KMRPlotter.plot_roc_curve(y_true, y_scores)
+        fig = KerasFactoryPlotter.plot_roc_curve(y_true, y_scores)
 
         assert isinstance(fig, go.Figure)
         assert "ROC" in fig.layout.title.text
@@ -148,7 +165,7 @@ class TestClassificationMetrics:
         y_true = np.array([0, 0, 1, 1, 1, 0, 1, 0])
         y_scores = np.array([0.1, 0.2, 0.8, 0.9, 0.7, 0.3, 0.85, 0.15])
 
-        fig = KMRPlotter.plot_precision_recall_curve(y_true, y_scores)
+        fig = KerasFactoryPlotter.plot_precision_recall_curve(y_true, y_scores)
 
         assert isinstance(fig, go.Figure)
         assert "Precision" in fig.layout.title.text or "Recall" in fig.layout.title.text
@@ -163,7 +180,7 @@ class TestAnomalyDetection:
         labels = np.random.randint(0, 2, 100)
         threshold = 2.0
 
-        fig = KMRPlotter.plot_anomaly_scores(scores, labels, threshold)
+        fig = KerasFactoryPlotter.plot_anomaly_scores(scores, labels, threshold)
 
         assert isinstance(fig, go.Figure)
         assert "Anomaly" in fig.layout.title.text
@@ -181,7 +198,7 @@ class TestPerformanceMetrics:
             "F1": 0.90,
         }
 
-        fig = KMRPlotter.plot_performance_metrics(metrics)
+        fig = KerasFactoryPlotter.plot_performance_metrics(metrics)
 
         assert isinstance(fig, go.Figure)
         assert len(fig.data) > 0
@@ -196,7 +213,12 @@ class TestEdgeCases:
         y_true = np.random.randn(1, 12, 7).astype(np.float32)
         y_pred = np.random.randn(1, 12, 7).astype(np.float32)
 
-        fig = KMRPlotter.plot_timeseries(X, y_true, y_pred, n_samples_to_plot=1)
+        fig = KerasFactoryPlotter.plot_timeseries(
+            X,
+            y_true,
+            y_pred,
+            n_samples_to_plot=1,
+        )
 
         assert isinstance(fig, go.Figure)
 
@@ -207,7 +229,12 @@ class TestEdgeCases:
         seasonal = np.array([0.0, 0.5, 1.0, 1.5, 2.0]).astype(np.float32)
         residual = original - trend - seasonal
 
-        fig = KMRPlotter.plot_decomposition(original, trend, seasonal, residual)
+        fig = KerasFactoryPlotter.plot_decomposition(
+            original,
+            trend,
+            seasonal,
+            residual,
+        )
 
         assert isinstance(fig, go.Figure)
 
@@ -216,6 +243,6 @@ class TestEdgeCases:
         y_true = np.array([1.0, 2.0, 3.0]).astype(np.float32)
         y_pred = np.array([1.1, 2.1, 2.9]).astype(np.float32)
 
-        fig = KMRPlotter.plot_forecasting_metrics(y_true, y_pred)
+        fig = KerasFactoryPlotter.plot_forecasting_metrics(y_true, y_pred)
 
         assert isinstance(fig, go.Figure)

@@ -1,5 +1,5 @@
 ---
-title: SparseAttentionWeighting - KMR
+title: SparseAttentionWeighting - KerasFactory
 description: Sparse attention mechanism with temperature scaling for module outputs combination
 keywords: [sparse attention, temperature scaling, module combination, keras, neural networks, attention mechanism, ensemble learning]
 ---
@@ -80,7 +80,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import SparseAttentionWeighting
+from kerasfactory.layers import SparseAttentionWeighting
 
 # Create sample module outputs
 batch_size, feature_dim = 32, 64
@@ -103,7 +103,7 @@ print(f"Output shape: {combined.shape}")  # (32, 64)
 
 ```python
 import keras
-from kmr.layers import SparseAttentionWeighting
+from kerasfactory.layers import SparseAttentionWeighting
 
 # Create multiple processing branches
 inputs = keras.Input(shape=(20,))
@@ -137,7 +137,7 @@ model = keras.Model(inputs, outputs)
 
 ```python
 import keras
-from kmr.layers import SparseAttentionWeighting
+from kerasfactory.layers import SparseAttentionWeighting
 
 # Define inputs
 inputs = keras.Input(shape=(25,))  # 25 features
@@ -205,7 +205,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.SparseAttentionWeighting
+::: kerasfactory.layers.SparseAttentionWeighting
 
 ## 🔧 Parameters Deep Dive
 
@@ -238,7 +238,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import SparseAttentionWeighting
+from kerasfactory.layers import SparseAttentionWeighting
 
 # Create ensemble of different model types
 def create_ensemble_model():
@@ -379,5 +379,5 @@ def analyze_attention_patterns(model, test_data):
 - [Attention Mechanisms in Deep Learning](https://distill.pub/2016/augmented-rnns/) - Understanding attention mechanisms
 - [Ensemble Learning Methods](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
 - [Temperature Scaling in Neural Networks](https://arxiv.org/abs/1706.04599) - Temperature scaling techniques
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

@@ -1,5 +1,5 @@
 ---
-title: SlowNetwork - KMR
+title: SlowNetwork - KerasFactory
 description: Multi-layer network with configurable depth and width for complex feature processing
 keywords: [slow network, multi-layer network, deep processing, feature transformation, keras, neural networks, complex architectures]
 ---
@@ -76,7 +76,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import SlowNetwork
+from kerasfactory.layers import SlowNetwork
 
 # Create sample input data
 batch_size, input_dim = 32, 16
@@ -94,7 +94,7 @@ print(f"Output shape: {output.shape}")     # (32, 16)
 
 ```python
 import keras
-from kmr.layers import SlowNetwork
+from kerasfactory.layers import SlowNetwork
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -111,7 +111,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import SlowNetwork
+from kerasfactory.layers import SlowNetwork
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -164,7 +164,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.SlowNetwork
+::: kerasfactory.layers.SlowNetwork
 
 ## 🔧 Parameters Deep Dive
 
@@ -200,7 +200,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import SlowNetwork
+from kerasfactory.layers import SlowNetwork
 
 # Create a complex feature processing model
 def create_complex_feature_processor():
@@ -326,5 +326,5 @@ def analyze_slow_network():
 - [Multi-Layer Networks](https://en.wikipedia.org/wiki/Multilayer_perceptron) - Multi-layer network concepts
 - [Feature Engineering](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
 - [Deep Learning](https://en.wikipedia.org/wiki/Deep_learning) - Deep learning concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

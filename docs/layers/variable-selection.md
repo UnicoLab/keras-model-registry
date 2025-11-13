@@ -1,5 +1,5 @@
 ---
-title: VariableSelection - KMR
+title: VariableSelection - KerasFactory
 description: Dynamic feature selection using gated residual networks for intelligent feature weighting
 keywords: [feature selection, variable selection, gated residual network, tabular, keras, neural networks, feature importance]
 ---
@@ -81,7 +81,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import VariableSelection
+from kerasfactory.layers import VariableSelection
 
 # Create sample input data
 batch_size, nr_features, feature_dim = 32, 10, 16
@@ -119,7 +119,7 @@ print(f"Feature weights shape: {weights.shape}")     # (32, 10)
 
 ```python
 import keras
-from kmr.layers import VariableSelection
+from kerasfactory.layers import VariableSelection
 
 # Create a model with variable selection
 model = keras.Sequential([
@@ -137,7 +137,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 
 ```python
 import keras
-from kmr.layers import VariableSelection
+from kerasfactory.layers import VariableSelection
 
 # Define inputs
 features_input = keras.Input(shape=(10, 16), name='features')
@@ -189,7 +189,7 @@ model = keras.Model([features, context], [task1, task2])
 
 ## 📖 API Reference
 
-::: kmr.layers.VariableSelection
+::: kerasfactory.layers.VariableSelection
 
 ## 🔧 Parameters Deep Dive
 
@@ -231,7 +231,7 @@ model = keras.Model([features, context], [task1, task2])
 ```python
 import keras
 import numpy as np
-from kmr.layers import VariableSelection
+from kerasfactory.layers import VariableSelection
 
 # Simulate time series data with multiple features
 batch_size, time_steps, features = 32, 24, 8  # 24 hours, 8 features per hour
@@ -369,5 +369,5 @@ def analyze_feature_selection(model, test_data, feature_names=None):
 - [Temporal Fusion Transformers](https://arxiv.org/abs/1912.09363) - Original paper on variable selection
 - [Gated Residual Networks](https://arxiv.org/abs/1612.08083) - GRN architecture details
 - [Feature Selection in Deep Learning](https://en.wikipedia.org/wiki/Feature_selection) - Feature selection concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Time Series Tutorial](../tutorials/feature-engineering.md) - Complete guide to time series modeling

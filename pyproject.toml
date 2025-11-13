@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "kmr"
+name = "kerasfactory"
 version = "0.1.0"
-documentation = "https://unicolab.github.io/keras-model-registry/"
-repository = "https://github.com/UnicoLab/keras-model-registry"
+documentation = "https://unicolab.github.io/KerasFactory/"
+repository = "https://github.com/UnicoLab/KerasFactory"
 homepage = "https://unicolab.ai"
 description = "Reusable Model Architecture Bricks in Keras - Enterprise AI by UnicoLab"
 authors = ["UnicoLab <contact@unicolab.ai>"]
@@ -17,7 +17,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -31,7 +30,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.dependencies]
-python = ">=3.9,<3.13"
+python = ">=3.10,<3.13"
 loguru = "^0.7.2"
 keras = "^3.8.0"
 pytest = "^8.3.4"
@@ -54,6 +53,8 @@ ruff = "^0.1.8"
 mypy = "^1.8.0"
 kdp = {git = "https://github.com/piotrlaczkowski/keras-data-processor.git"}
 plotly = "^6.3.1"
+nbformat = "^5.10.4"
+scikit-learn = "^1.7.2"
 
 [tool.poetry.group.doc.dependencies]
 mkdocs = "^1.5.3"
@@ -66,12 +67,12 @@ griffe = "^0.44.0"
 mike = ">=2.0.0"
 
 [tool.pytest.ini_options]
-python_paths = "kmr"
-testpaths = "tests"
+pythonpath = ["."]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
-source = ["kmr"]
+source = ["kerasfactory"]
 omit = [
   "*/__init__.py",
   "*/test_*.py",
@@ -86,8 +87,8 @@ omit = [
   "*/setup.py"
 ]
 include = [
-  "kmr/utils/data_analyzer.py",
-  "kmr/utils/data_analyzer_cli.py"
+  "kerasfactory/utils/data_analyzer.py",
+  "kerasfactory/utils/data_analyzer_cli.py"
 ]
 
 [tool.coverage.report]

@@ -4,7 +4,7 @@ import tensorflow as tf
 import keras
 from keras import layers, Model
 
-from kmr.layers.GatedFeaturesSelection import GatedFeatureSelection
+from kerasfactory.layers.GatedFeaturesSelection import GatedFeatureSelection
 
 
 class TestGatedFeatureSelection(unittest.TestCase):

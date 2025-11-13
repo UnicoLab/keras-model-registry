@@ -1,6 +1,6 @@
 # 🏗️ Model Building Tutorial
 
-Learn how to build sophisticated tabular models using KMR layers. This tutorial covers advanced architectures, design patterns, and optimization techniques.
+Learn how to build sophisticated tabular models using KerasFactory layers. This tutorial covers advanced architectures, design patterns, and optimization techniques.
 
 ## 📋 Table of Contents
 
@@ -19,7 +19,7 @@ The most straightforward approach - layers applied in sequence:
 
 ```python
 import keras
-from kmr.layers import (
+from kerasfactory.layers import (
     DifferentiableTabularPreprocessor,
     VariableSelection,
     TabularAttention,
@@ -87,7 +87,7 @@ parallel_model = create_parallel_model(input_dim=20, num_classes=3)
 Skip connections for improved gradient flow:
 
 ```python
-from kmr.layers import GatedResidualNetwork
+from kerasfactory.layers import GatedResidualNetwork
 
 def create_residual_model(input_dim, num_classes):
     """Create a residual model with skip connections."""
@@ -119,7 +119,7 @@ residual_model = create_residual_model(input_dim=20, num_classes=3)
 ### 1. **Multi-Head Attention Model**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     TabularAttention,
     MultiResolutionTabularAttention,
     InterpretableMultiHeadAttention
@@ -160,7 +160,7 @@ attention_model = create_attention_model(input_dim=20, num_classes=3)
 ### 2. **Column and Row Attention Model**
 
 ```python
-from kmr.layers import ColumnAttention, RowAttention
+from kerasfactory.layers import ColumnAttention, RowAttention
 
 def create_column_row_attention_model(input_dim, num_classes):
     """Create a model with column and row attention."""
@@ -190,7 +190,7 @@ column_row_model = create_column_row_attention_model(input_dim=20, num_classes=3
 ### 1. **Gated Residual Network**
 
 ```python
-from kmr.layers import GatedResidualNetwork, GatedLinearUnit
+from kerasfactory.layers import GatedResidualNetwork, GatedLinearUnit
 
 def create_gated_residual_model(input_dim, num_classes):
     """Create a gated residual network model."""
@@ -217,7 +217,7 @@ gated_residual_model = create_gated_residual_model(input_dim=20, num_classes=3)
 ### 2. **Transformer Block Model**
 
 ```python
-from kmr.layers import TransformerBlock
+from kerasfactory.layers import TransformerBlock
 
 def create_transformer_model(input_dim, num_classes):
     """Create a transformer-based model."""
@@ -253,7 +253,7 @@ transformer_model = create_transformer_model(input_dim=20, num_classes=3)
 ### 1. **Mixture of Experts**
 
 ```python
-from kmr.layers import TabularMoELayer
+from kerasfactory.layers import TabularMoELayer
 
 def create_moe_model(input_dim, num_classes):
     """Create a mixture of experts model."""
@@ -281,7 +281,7 @@ moe_model = create_moe_model(input_dim=20, num_classes=3)
 ### 2. **Boosting Ensemble**
 
 ```python
-from kmr.layers import BoostingEnsembleLayer
+from kerasfactory.layers import BoostingEnsembleLayer
 
 def create_boosting_model(input_dim, num_classes):
     """Create a boosting ensemble model."""
@@ -309,7 +309,7 @@ boosting_model = create_boosting_model(input_dim=20, num_classes=3)
 ### 1. **Graph-Based Model**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     AdvancedGraphFeature,
     GraphFeatureAggregation,
     MultiHeadGraphFeaturePreprocessor
@@ -351,7 +351,7 @@ graph_model = create_graph_model(input_dim=20, num_classes=3)
 ### 2. **Anomaly Detection Model**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     NumericalAnomalyDetection,
     CategoricalAnomalyDetectionLayer
 )
@@ -382,7 +382,7 @@ anomaly_model = create_anomaly_detection_model(input_dim=20, num_classes=3)
 ### 3. **Business Rules Integration**
 
 ```python
-from kmr.layers import BusinessRulesLayer
+from kerasfactory.layers import BusinessRulesLayer
 
 def create_business_rules_model(input_dim, num_classes, rules):
     """Create a model with business rules integration."""

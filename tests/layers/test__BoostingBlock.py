@@ -3,7 +3,7 @@
 import unittest
 from keras import layers
 import tensorflow as tf
-from kmr.layers.BoostingBlock import BoostingBlock
+from kerasfactory.layers.BoostingBlock import BoostingBlock
 
 
 class TestBoostingBlock(unittest.TestCase):

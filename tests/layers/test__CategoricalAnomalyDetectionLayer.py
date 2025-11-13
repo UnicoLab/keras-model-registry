@@ -4,7 +4,9 @@ import unittest
 import numpy as np
 import tensorflow as tf
 from keras import Model, Input
-from kmr.layers.CategoricalAnomalyDetectionLayer import CategoricalAnomalyDetectionLayer
+from kerasfactory.layers.CategoricalAnomalyDetectionLayer import (
+    CategoricalAnomalyDetectionLayer,
+)
 
 
 class TestCategoricalAnomalyDetectionLayer(unittest.TestCase):

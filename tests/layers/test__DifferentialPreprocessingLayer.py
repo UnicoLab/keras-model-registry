@@ -8,7 +8,9 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model
-from kmr.layers.DifferentialPreprocessingLayer import DifferentialPreprocessingLayer
+from kerasfactory.layers.DifferentialPreprocessingLayer import (
+    DifferentialPreprocessingLayer,
+)
 
 
 class TestDifferentialPreprocessingLayer(unittest.TestCase):

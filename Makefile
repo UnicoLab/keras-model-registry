@@ -58,7 +58,7 @@ detailed_coverage:
 .PHONY: data_analyzer_coverage
 ## Generate coverage report for data analyzer module only
 data_analyzer_coverage:
-	poetry run coverage run --source=kmr.utils.data_analyzer,kmr.utils.data_analyzer_cli -m pytest tests/utils/
+	poetry run coverage run --source=kerasfactory.utils.data_analyzer,kerasfactory.utils.data_analyzer_cli -m pytest tests/utils/
 	poetry run coverage report -m
 
 .PHONY: data_analyzer_coverage_detailed

@@ -1,6 +1,6 @@
 # 🔧 Utils API Reference
 
-Welcome to the KMR Utilities documentation! All utilities are designed to work exclusively with **Keras 3** and provide powerful tools for data analysis, generation, visualization, and development support.
+Welcome to the KerasFactory Utilities documentation! All utilities are designed to work exclusively with **Keras 3** and provide powerful tools for data analysis, generation, visualization, and development support.
 
 !!! tip "What You'll Find Here"
     Each utility includes detailed documentation with:
@@ -11,7 +11,7 @@ Welcome to the KMR Utilities documentation! All utilities are designed to work e
     - 🔧 **Implementation notes** for developers
 
 !!! success "Comprehensive Toolkit"
-    The KMR utilities provide intelligent data analysis, synthetic data generation, and professional visualization capabilities.
+    The KerasFactory utilities provide intelligent data analysis, synthetic data generation, and professional visualization capabilities.
 
 !!! note "Developer-Friendly"
     All utilities are designed for easy integration into your data science workflows and Jupyter notebooks.
@@ -19,26 +19,26 @@ Welcome to the KMR Utilities documentation! All utilities are designed to work e
 ## 🔍 Data Analysis
 
 ### 🧠 DataAnalyzer
-Intelligent data analyzer that examines CSV files and recommends appropriate KMR layers based on data characteristics.
+Intelligent data analyzer that examines CSV files and recommends appropriate KerasFactory layers based on data characteristics.
 
-::: kmr.utils.data_analyzer.DataAnalyzer
+::: kerasfactory.utils.data_analyzer.DataAnalyzer
 
 ### 💻 DataAnalyzerCLI
 Command-line interface for the data analyzer, allowing easy analysis of datasets from the terminal.
 
-::: kmr.utils.data_analyzer_cli
+::: kerasfactory.utils.data_analyzer_cli
 
 ## 📊 Data Generation
 
-### 🎲 KMRDataGenerator
-Utility class for generating synthetic datasets for KMR model testing, demonstrations, and experimentation.
+### 🎲 KerasFactoryDataGenerator
+Utility class for generating synthetic datasets for KerasFactory model testing, demonstrations, and experimentation.
 
 Features:
 - **Tabular Data**: Regression, classification, anomaly detection, multi-input data
 - **Time Series**: Basic, multivariate, seasonal, multi-scale, anomalous, long-horizon, energy demand
 - **Dataset Creation**: Easy conversion to TensorFlow datasets with batching and shuffling
 
-::: kmr.utils.data_generator.KMRDataGenerator
+::: kerasfactory.utils.data_generator.KerasFactoryDataGenerator
 
 #### Time Series Methods
 
@@ -46,9 +46,9 @@ Features:
 Generates synthetic multivariate time series with optional trend and seasonality.
 
 ```python
-from kmr.utils import KMRDataGenerator
+from kerasfactory.utils import KerasFactoryDataGenerator
 
-X, y = KMRDataGenerator.generate_timeseries_data(
+X, y = KerasFactoryDataGenerator.generate_timeseries_data(
     n_samples=1000,
     seq_len=96,           # Input sequence length
     pred_len=12,          # Prediction horizon
@@ -63,7 +63,7 @@ X, y = KMRDataGenerator.generate_timeseries_data(
 Generates time series with inter-feature correlations for realistic multivariate data.
 
 ```python
-X, y = KMRDataGenerator.generate_multivariate_timeseries(
+X, y = KerasFactoryDataGenerator.generate_multivariate_timeseries(
     n_samples=1000,
     seq_len=96,
     pred_len=12,
@@ -76,7 +76,7 @@ X, y = KMRDataGenerator.generate_multivariate_timeseries(
 Emphasized seasonal patterns, ideal for decomposition models like TimeMixer.
 
 ```python
-X, y = KMRDataGenerator.generate_seasonal_timeseries(
+X, y = KerasFactoryDataGenerator.generate_seasonal_timeseries(
     n_samples=1000,
     seq_len=96,
     pred_len=12,
@@ -89,7 +89,7 @@ X, y = KMRDataGenerator.generate_seasonal_timeseries(
 Components at different frequencies for testing multi-scale mixing models.
 
 ```python
-X, y = KMRDataGenerator.generate_multiscale_timeseries(
+X, y = KerasFactoryDataGenerator.generate_multiscale_timeseries(
     n_samples=1000,
     seq_len=96,
     pred_len=12,
@@ -102,7 +102,7 @@ X, y = KMRDataGenerator.generate_multiscale_timeseries(
 Time series with injected anomalies for testing anomaly detection models.
 
 ```python
-X, y, labels = KMRDataGenerator.generate_anomalous_timeseries(
+X, y, labels = KerasFactoryDataGenerator.generate_anomalous_timeseries(
     n_samples=1000,
     seq_len=96,
     pred_len=12,
@@ -116,7 +116,7 @@ X, y, labels = KMRDataGenerator.generate_anomalous_timeseries(
 For benchmarking long-term forecasting (e.g., 2 weeks ahead).
 
 ```python
-X, y = KMRDataGenerator.generate_long_horizon_timeseries(
+X, y = KerasFactoryDataGenerator.generate_long_horizon_timeseries(
     n_samples=500,
     seq_len=336,   # 2 weeks hourly
     pred_len=336,  # Forecast 2 weeks
@@ -128,7 +128,7 @@ X, y = KMRDataGenerator.generate_long_horizon_timeseries(
 Realistic energy consumption patterns with daily/weekly seasonality.
 
 ```python
-X, y = KMRDataGenerator.generate_synthetic_energy_demand(
+X, y = KerasFactoryDataGenerator.generate_synthetic_energy_demand(
     n_samples=1000,
     seq_len=168,   # 1 week
     pred_len=24,   # 1 day forecast
@@ -140,7 +140,7 @@ X, y = KMRDataGenerator.generate_synthetic_energy_demand(
 Converts numpy arrays to TensorFlow datasets with batching and auto-tuning.
 
 ```python
-dataset = KMRDataGenerator.create_timeseries_dataset(
+dataset = KerasFactoryDataGenerator.create_timeseries_dataset(
     X=X_train,
     y=y_train,
     batch_size=32,
@@ -152,8 +152,8 @@ model.fit(dataset, epochs=10)
 
 ## 🎨 Visualization
 
-### 📈 KMRPlotter
-Utility class for creating consistent and professional visualizations for KMR models, metrics, and data analysis.
+### 📈 KerasFactoryPlotter
+Utility class for creating consistent and professional visualizations for KerasFactory models, metrics, and data analysis.
 
 Features:
 - **Time Series Visualization**: Multiple visualization styles for forecasts
@@ -162,7 +162,7 @@ Features:
 - **Anomaly Detection**: Anomaly score distributions
 - **Performance Metrics**: Bar charts and comparison visualizations
 
-::: kmr.utils.plotting.KMRPlotter
+::: kerasfactory.utils.plotting.KerasFactoryPlotter
 
 #### Time Series Plotting Methods
 
@@ -170,9 +170,9 @@ Features:
 Plot time series with input, true target, and predictions for multiple samples.
 
 ```python
-from kmr.utils import KMRPlotter
+from kerasfactory.utils import KerasFactoryPlotter
 
-fig = KMRPlotter.plot_timeseries(
+fig = KerasFactoryPlotter.plot_timeseries(
     X=X_test,
     y_true=y_test,
     y_pred=predictions,
@@ -189,7 +189,7 @@ fig.show()
 Compare single forecast with true values.
 
 ```python
-fig = KMRPlotter.plot_timeseries_comparison(
+fig = KerasFactoryPlotter.plot_timeseries_comparison(
     y_true=y_test,
     y_pred=predictions,
     sample_idx=0,
@@ -204,7 +204,7 @@ fig.show()
 Visualize time series decomposition into components (trend, seasonal, residual).
 
 ```python
-fig = KMRPlotter.plot_decomposition(
+fig = KerasFactoryPlotter.plot_decomposition(
     original=time_series,
     trend=trend_component,
     seasonal=seasonal_component,
@@ -220,7 +220,7 @@ fig.show()
 Calculate and display MAE, RMSE, and MAPE metrics.
 
 ```python
-fig = KMRPlotter.plot_forecasting_metrics(
+fig = KerasFactoryPlotter.plot_forecasting_metrics(
     y_true=y_test,
     y_pred=predictions,
     title="Forecasting Performance"
@@ -234,7 +234,7 @@ fig.show()
 Analyze forecast error across different forecast horizons (how far ahead).
 
 ```python
-fig = KMRPlotter.plot_forecast_horizon_analysis(
+fig = KerasFactoryPlotter.plot_forecast_horizon_analysis(
     y_true=y_test,
     y_pred=predictions,
     title="Error by Forecast Horizon"
@@ -248,7 +248,7 @@ fig.show()
 Plot forecasts for multiple features side-by-side.
 
 ```python
-fig = KMRPlotter.plot_multiple_features_forecast(
+fig = KerasFactoryPlotter.plot_multiple_features_forecast(
     X=X_test,
     y_true=y_test,
     y_pred=predictions,
@@ -267,7 +267,7 @@ fig.show()
 Visualize training and validation metrics over epochs.
 
 ```python
-fig = KMRPlotter.plot_training_history(
+fig = KerasFactoryPlotter.plot_training_history(
     history=model.history,
     metrics=['loss', 'mae', 'accuracy'],
     title="Training Progress"
@@ -279,7 +279,7 @@ fig.show()
 Heatmap of classification confusion matrix.
 
 ```python
-fig = KMRPlotter.plot_confusion_matrix(
+fig = KerasFactoryPlotter.plot_confusion_matrix(
     y_true=y_test,
     y_pred=y_pred_labels,
     title="Confusion Matrix"
@@ -291,7 +291,7 @@ fig.show()
 ROC curve with AUC score.
 
 ```python
-fig = KMRPlotter.plot_roc_curve(
+fig = KerasFactoryPlotter.plot_roc_curve(
     y_true=y_test,
     y_scores=y_pred_probs,
     title="ROC Curve"
@@ -303,7 +303,7 @@ fig.show()
 Precision-recall curve visualization.
 
 ```python
-fig = KMRPlotter.plot_precision_recall_curve(
+fig = KerasFactoryPlotter.plot_precision_recall_curve(
     y_true=y_test,
     y_scores=y_pred_probs,
     title="Precision-Recall Curve"
@@ -315,7 +315,7 @@ fig.show()
 Distribution of anomaly scores with threshold visualization.
 
 ```python
-fig = KMRPlotter.plot_anomaly_scores(
+fig = KerasFactoryPlotter.plot_anomaly_scores(
     scores=anomaly_scores,
     labels=true_labels,
     threshold=5.0,
@@ -335,29 +335,29 @@ metrics = {
     "F1": 0.90
 }
 
-fig = KMRPlotter.plot_performance_metrics(metrics)
+fig = KerasFactoryPlotter.plot_performance_metrics(metrics)
 fig.show()
 ```
 
 ## 🛠️ Decorators
 
 ### ✨ Decorators
-Utility decorators for common functionality in KMR components and enhanced development experience.
+Utility decorators for common functionality in KerasFactory components and enhanced development experience.
 
-::: kmr.utils.decorators
+::: kerasfactory.utils.decorators
 
 ## 📚 Complete Example
 
 ```python
-from kmr.utils import KMRDataGenerator, KMRPlotter
-from kmr.models import TSMixer
+from kerasfactory.utils import KerasFactoryDataGenerator, KerasFactoryPlotter
+from kerasfactory.models import TSMixer
 import keras
 
 # 1. Generate synthetic time series data
-X_train, y_train = KMRDataGenerator.generate_seasonal_timeseries(
+X_train, y_train = KerasFactoryDataGenerator.generate_seasonal_timeseries(
     n_samples=500, seq_len=96, pred_len=12, n_features=7
 )
-X_test, y_test = KMRDataGenerator.generate_seasonal_timeseries(
+X_test, y_test = KerasFactoryDataGenerator.generate_seasonal_timeseries(
     n_samples=100, seq_len=96, pred_len=12, n_features=7
 )
 
@@ -369,31 +369,31 @@ model.compile(optimizer='adam', loss='mse')
 history = model.fit(X_train, y_train, validation_split=0.2, epochs=10)
 
 # 4. Visualize training
-fig = KMRPlotter.plot_training_history(history, metrics=['loss'])
+fig = KerasFactoryPlotter.plot_training_history(history, metrics=['loss'])
 fig.show()
 
 # 5. Make predictions
 predictions = model.predict(X_test)
 
 # 6. Visualize forecasts
-fig = KMRPlotter.plot_timeseries(
+fig = KerasFactoryPlotter.plot_timeseries(
     X_test, y_test, predictions, n_samples_to_plot=3
 )
 fig.show()
 
 # 7. Analyze performance
-fig = KMRPlotter.plot_forecasting_metrics(y_test, predictions)
+fig = KerasFactoryPlotter.plot_forecasting_metrics(y_test, predictions)
 fig.show()
 
 # 8. Detailed analysis
-fig = KMRPlotter.plot_forecast_horizon_analysis(y_test, predictions)
+fig = KerasFactoryPlotter.plot_forecast_horizon_analysis(y_test, predictions)
 fig.show()
 ```
 
 ## 🎯 Best Practices
 
-1. **Always use `KMRDataGenerator`** for synthetic data in notebooks
-2. **Leverage `KMRPlotter`** for consistent visualizations across projects
+1. **Always use `KerasFactoryDataGenerator`** for synthetic data in notebooks
+2. **Leverage `KerasFactoryPlotter`** for consistent visualizations across projects
 3. **Create TensorFlow datasets** with `create_timeseries_dataset()` for efficient training
 4. **Use semantic data generation** methods (e.g., `generate_seasonal_timeseries()`) that match your use case
 5. **Chain visualizations** to tell a complete story about model performance

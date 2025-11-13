@@ -47,7 +47,7 @@ TSMixer (Time-Series Mixer) is an all-MLP architecture for multivariate time ser
 ## Usage Example
 
 ```python
-from kmr.models import TSMixer
+from kerasfactory.models import TSMixer
 import keras
 
 # Create model

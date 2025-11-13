@@ -7,7 +7,7 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model
-from kmr.layers.GatedFeatureFusion import GatedFeatureFusion
+from kerasfactory.layers.GatedFeatureFusion import GatedFeatureFusion
 
 
 class TestGatedFeatureFusion(unittest.TestCase):

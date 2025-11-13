@@ -7,7 +7,7 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf  # Used for testing only
 from keras import layers, Model
-from kmr.layers.DFTSeriesDecomposition import DFTSeriesDecomposition
+from kerasfactory.layers.DFTSeriesDecomposition import DFTSeriesDecomposition
 
 
 class TestDFTSeriesDecomposition(unittest.TestCase):

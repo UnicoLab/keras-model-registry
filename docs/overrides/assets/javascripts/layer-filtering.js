@@ -1,5 +1,5 @@
 /**
- * KMR Layer Filtering System
+ * KerasFactory Layer Filtering System
  * Interactive search and filtering for layer documentation
  */
 

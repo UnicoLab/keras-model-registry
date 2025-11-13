@@ -1,5 +1,5 @@
 /**
- * KMR Tabs Functionality
+ * KerasFactory Tabs Functionality
  * Handle tab navigation for examples and content sections
  */
 

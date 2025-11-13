@@ -1,5 +1,5 @@
 ---
-title: SeriesDecomposition - KMR
+title: SeriesDecomposition - KerasFactory
 description: Trend-seasonal decomposition layer using moving average for time series analysis
 keywords: [decomposition, trend, seasonal, time series, moving average, keras]
 ---
@@ -68,7 +68,7 @@ The trend is computed using a moving average filter, preserving temporal length 
 ## 🚀 Quick Start
 
 ```python
-from kmr.layers import SeriesDecomposition
+from kerasfactory.layers import SeriesDecomposition
 import keras
 
 # Create decomposition layer
@@ -90,7 +90,7 @@ reconstructed = seasonal + trend  # Approximately equals x
 ## 🔧 API Reference
 
 ```python
-kmr.layers.SeriesDecomposition(
+kerasfactory.layers.SeriesDecomposition(
     kernel_size: int,
     name: str | None = None,
     **kwargs

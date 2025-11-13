@@ -1,5 +1,5 @@
 ---
-title: PastDecomposableMixing - KMR
+title: PastDecomposableMixing - KerasFactory
 description: Past decomposable mixing encoder block combining trend-seasonal decomposition and multi-scale mixing
 keywords: [decomposition, mixing, encoder, time series, keras, forecasting]
 ---
@@ -70,7 +70,7 @@ Trend Outputs  Seasonal Outputs
 
 ```python
 import keras
-from kmr.layers import PastDecomposableMixing
+from kerasfactory.layers import PastDecomposableMixing
 
 pdm = PastDecomposableMixing(
     seq_len=96,
@@ -97,7 +97,7 @@ print(len(outputs))  # Number of output scales
 ## 🔧 API Reference
 
 ```python
-kmr.layers.PastDecomposableMixing(
+kerasfactory.layers.PastDecomposableMixing(
     seq_len: int,
     pred_len: int,
     down_sampling_window: int = 2,

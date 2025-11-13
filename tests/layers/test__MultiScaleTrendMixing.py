@@ -7,7 +7,7 @@ The actual layer implementation uses only Keras 3 operations.
 import unittest
 import tensorflow as tf
 import keras
-from kmr.layers.MultiScaleTrendMixing import MultiScaleTrendMixing
+from kerasfactory.layers.MultiScaleTrendMixing import MultiScaleTrendMixing
 
 
 class TestMultiScaleTrendMixing(unittest.TestCase):

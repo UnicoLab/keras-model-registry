@@ -1,10 +1,10 @@
 # 🧠 Core Concepts
 
-Understand the fundamental concepts behind KMR and how to effectively use its layers for modeling.
+Understand the fundamental concepts behind KerasFactory and how to effectively use its layers for modeling.
 
-## 🎯 What is KMR?
+## 🎯 What is KerasFactory?
 
-KMR (Keras Model Registry) is a comprehensive collection of specialized layers designed exclusively for tabular data (but not only !!!). Unlike traditional neural network layers that were designed for images or sequences, KMR layers understand the unique characteristics of tabular data.
+KerasFactory (KerasFactory) is a comprehensive collection of specialized layers designed exclusively for tabular data (but not only !!!). Unlike traditional neural network layers that were designed for images or sequences, KerasFactory layers understand the unique characteristics of tabular data.
 
 ### Key Principles
 
@@ -49,7 +49,7 @@ print(df)
 Focus on important features and relationships:
 
 ```python
-from kmr.layers import TabularAttention, ColumnAttention, RowAttention
+from kerasfactory.layers import TabularAttention, ColumnAttention, RowAttention
 
 # Tabular attention for feature relationships
 attention = TabularAttention(num_heads=8, key_dim=64)
@@ -65,7 +65,7 @@ row_attention = RowAttention(hidden_dim=64)
 Handle data preparation and missing values:
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     DifferentiableTabularPreprocessor,
     DateParsingLayer,
     DateEncodingLayer
@@ -86,7 +86,7 @@ date_encoder = DateEncodingLayer()
 Transform and select features intelligently:
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     VariableSelection,
     GatedFeatureFusion,
     AdvancedNumericalEmbedding
@@ -106,7 +106,7 @@ embedding = AdvancedNumericalEmbedding(embedding_dim=64)
 Advanced architectures for specific use cases:
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     GatedResidualNetwork,
     TransformerBlock,
     TabularMoELayer
@@ -126,7 +126,7 @@ moe = TabularMoELayer(num_experts=4, expert_units=16)
 Essential tools for data processing:
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     CastToFloat32Layer,
     NumericalAnomalyDetection,
     FeatureCutout

@@ -12,7 +12,7 @@ from keras.optimizers import Adam
 from keras.losses import MeanSquaredError
 from keras.metrics import MeanAbsoluteError
 
-from kmr.models.SFNEBlock import SFNEBlock
+from kerasfactory.models.SFNEBlock import SFNEBlock
 from kdp.processor import PreprocessingModel
 from kdp.features import NumericalFeature
 

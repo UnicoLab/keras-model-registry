@@ -1,5 +1,5 @@
 ---
-title: GatedResidualNetwork - KMR
+title: GatedResidualNetwork - KerasFactory
 description: Gated residual network that combines residual connections with gated linear units for improved gradient flow
 keywords: [gated residual network, GRN, residual connections, gated linear units, keras, neural networks, feature transformation]
 ---
@@ -77,7 +77,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import GatedResidualNetwork
+from kerasfactory.layers import GatedResidualNetwork
 
 # Create sample input data
 batch_size, input_dim = 32, 16
@@ -95,7 +95,7 @@ print(f"Output shape: {output.shape}")     # (32, 16)
 
 ```python
 import keras
-from kmr.layers import GatedResidualNetwork
+from kerasfactory.layers import GatedResidualNetwork
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -112,7 +112,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import GatedResidualNetwork
+from kerasfactory.layers import GatedResidualNetwork
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -161,7 +161,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.GatedResidualNetwork
+::: kerasfactory.layers.GatedResidualNetwork
 
 ## 🔧 Parameters Deep Dive
 
@@ -191,7 +191,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import GatedResidualNetwork
+from kerasfactory.layers import GatedResidualNetwork
 
 # Create a deep tabular network with GRN layers
 def create_deep_tabular_network():
@@ -327,5 +327,5 @@ def analyze_gradient_flow():
 - [Residual Networks](https://en.wikipedia.org/wiki/Residual_neural_network) - Residual network concepts
 - [Gated Linear Units](https://arxiv.org/abs/1612.08083) - Gated linear unit paper
 - [Layer Normalization](https://arxiv.org/abs/1607.06450) - Layer normalization paper
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

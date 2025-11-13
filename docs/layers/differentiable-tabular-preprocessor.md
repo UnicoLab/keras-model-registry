@@ -1,5 +1,5 @@
 ---
-title: DifferentiableTabularPreprocessor - KMR
+title: DifferentiableTabularPreprocessor - KerasFactory
 description: Differentiable preprocessing layer for numeric tabular data with learnable imputation and normalization
 keywords: [differentiable preprocessing, tabular data, missing values, imputation, normalization, keras, neural networks]
 ---
@@ -77,7 +77,7 @@ graph TD
 ```python
 import keras
 import numpy as np
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 # Create sample data with missing values
 x = keras.ops.convert_to_tensor([
@@ -99,7 +99,7 @@ print(f"Has NaNs: {keras.ops.any(keras.ops.isnan(preprocessed))}")  # False
 
 ```python
 import keras
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 model = keras.Sequential([
     DifferentiableTabularPreprocessor(num_features=10),  # Preprocess first
@@ -116,7 +116,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 # Define inputs
 inputs = keras.Input(shape=(15,))  # 15 features
@@ -175,7 +175,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.DifferentiableTabularPreprocessor
+::: kerasfactory.layers.DifferentiableTabularPreprocessor
 
 ## 🔧 Parameters Deep Dive
 
@@ -199,7 +199,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import DifferentiableTabularPreprocessor
+from kerasfactory.layers import DifferentiableTabularPreprocessor
 
 # Create data with different missing patterns
 def create_missing_data():
@@ -348,5 +348,5 @@ def compare_preprocessing_methods():
 - [End-to-End Learning in Deep Learning](https://en.wikipedia.org/wiki/End-to-end_learning) - End-to-end learning concepts
 - [Missing Data Handling](https://en.wikipedia.org/wiki/Missing_data) - Missing data techniques
 - [Feature Normalization](https://en.wikipedia.org/wiki/Feature_scaling) - Feature scaling methods
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

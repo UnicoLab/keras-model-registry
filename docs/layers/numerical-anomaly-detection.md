@@ -1,5 +1,5 @@
 ---
-title: NumericalAnomalyDetection - KMR
+title: NumericalAnomalyDetection - KerasFactory
 description: Numerical anomaly detection layer for identifying outliers in numerical features
 keywords: [numerical anomaly detection, outlier detection, autoencoder, reconstruction error, keras, neural networks, anomaly detection]
 ---
@@ -81,7 +81,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import NumericalAnomalyDetection
+from kerasfactory.layers import NumericalAnomalyDetection
 
 # Create sample input data
 batch_size, num_features = 32, 5
@@ -103,7 +103,7 @@ print(f"Anomaly scores shape: {anomaly_scores.shape}")  # (32, 5)
 
 ```python
 import keras
-from kmr.layers import NumericalAnomalyDetection
+from kerasfactory.layers import NumericalAnomalyDetection
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -119,7 +119,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import NumericalAnomalyDetection
+from kerasfactory.layers import NumericalAnomalyDetection
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -182,7 +182,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.NumericalAnomalyDetection
+::: kerasfactory.layers.NumericalAnomalyDetection
 
 ## 🔧 Parameters Deep Dive
 
@@ -218,7 +218,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import NumericalAnomalyDetection
+from kerasfactory.layers import NumericalAnomalyDetection
 
 # Create a model for outlier detection
 def create_outlier_detection_model():
@@ -348,5 +348,5 @@ def analyze_reconstruction():
 - [Anomaly Detection](https://en.wikipedia.org/wiki/Anomaly_detection) - Anomaly detection concepts
 - [Autoencoders](https://en.wikipedia.org/wiki/Autoencoder) - Autoencoder concepts
 - [Outlier Detection](https://en.wikipedia.org/wiki/Outlier) - Outlier detection techniques
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

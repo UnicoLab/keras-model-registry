@@ -1,5 +1,5 @@
 ---
-title: DifferentialPreprocessingLayer - KMR
+title: DifferentialPreprocessingLayer - KerasFactory
 description: Differentiable preprocessing layer with multiple candidate transformations and learnable combination weights
 keywords: [differential preprocessing, multiple transformations, learnable combination, tabular data, keras, neural networks, preprocessing]
 ---
@@ -89,7 +89,7 @@ graph TD
 ```python
 import keras
 import numpy as np
-from kmr.layers import DifferentialPreprocessingLayer
+from kerasfactory.layers import DifferentialPreprocessingLayer
 
 # Create sample data with missing values
 x = keras.ops.convert_to_tensor([
@@ -117,7 +117,7 @@ print(f"Has NaNs: {keras.ops.any(keras.ops.isnan(preprocessed))}")  # False
 
 ```python
 import keras
-from kmr.layers import DifferentialPreprocessingLayer
+from kerasfactory.layers import DifferentialPreprocessingLayer
 
 model = keras.Sequential([
     DifferentialPreprocessingLayer(
@@ -137,7 +137,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import DifferentialPreprocessingLayer
+from kerasfactory.layers import DifferentialPreprocessingLayer
 
 # Define inputs
 inputs = keras.Input(shape=(15,))  # 15 features
@@ -200,7 +200,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.DifferentialPreprocessingLayer
+::: kerasfactory.layers.DifferentialPreprocessingLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -230,7 +230,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import DifferentialPreprocessingLayer
+from kerasfactory.layers import DifferentialPreprocessingLayer
 
 # Analyze which transformations are being used
 def analyze_transformation_usage(model):
@@ -383,5 +383,5 @@ model.compile(optimizer='adam', loss='binary_crossentropy')
 - [End-to-End Learning in Deep Learning](https://en.wikipedia.org/wiki/End-to-end_learning) - End-to-end learning concepts
 - [Missing Data Handling](https://en.wikipedia.org/wiki/Missing_data) - Missing data techniques
 - [Feature Transformation](https://en.wikipedia.org/wiki/Feature_engineering) - Feature transformation methods
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

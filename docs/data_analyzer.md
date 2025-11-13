@@ -1,6 +1,6 @@
-# 🔍 KMR Data Analyzer
+# 🔍 KerasFactory Data Analyzer
 
-The KMR Data Analyzer is an intelligent utility that analyzes your tabular data and automatically recommends the best KMR layers for your specific dataset.
+The KerasFactory Data Analyzer is an intelligent utility that analyzes your tabular data and automatically recommends the best KerasFactory layers for your specific dataset.
 
 !!! tip "Smart Recommendations"
     Just provide your CSV file, and the analyzer will suggest the most appropriate layers based on your data characteristics!
@@ -10,22 +10,22 @@ The KMR Data Analyzer is an intelligent utility that analyzes your tabular data 
 - 📊 **Automatic Analysis**: Analyzes single CSV files or entire directories
 - 🎯 **Feature Detection**: Identifies numerical, categorical, date, and text features
 - 🔍 **Data Insights**: Detects high cardinality, missing values, correlations, and patterns
-- 🧩 **Layer Recommendations**: Suggests the best KMR layers for your data
+- 🧩 **Layer Recommendations**: Suggests the best KerasFactory layers for your data
 - 🔧 **Extensible**: Add custom recommendation rules
 - 💻 **CLI & API**: Command-line interface and Python API
 - 📈 **Performance Tips**: Guidance on layer configuration and optimization
 
 ## 🚀 Installation
 
-The Data Analyzer is included with the Keras Model Registry package.
+The Data Analyzer is included with the KerasFactory package.
 
 ```bash
 # Install from PyPI (recommended)
-pip install kmr
+pip install kerasfactory
 
 # Or install from source using Poetry
-git clone https://github.com/UnicoLab/keras-model-registry
-cd keras-model-registry
+git clone https://github.com/UnicoLab/KerasFactory
+cd KerasFactory
 poetry install
 ```
 
@@ -37,16 +37,16 @@ The Data Analyzer can be used from the command line:
 
 ```bash
 # Analyze a single CSV file
-python -m kmr.utils.data_analyzer_cli path/to/data.csv
+python -m kerasfactory.utils.data_analyzer_cli path/to/data.csv
 
 # Analyze a directory of CSV files
-python -m kmr.utils.data_analyzer_cli path/to/data_dir/
+python -m kerasfactory.utils.data_analyzer_cli path/to/data_dir/
 
 # Save results to a JSON file
-python -m kmr.utils.data_analyzer_cli path/to/data.csv --output results.json
+python -m kerasfactory.utils.data_analyzer_cli path/to/data.csv --output results.json
 
 # Get only layer recommendations without detailed statistics
-python -m kmr.utils.data_analyzer_cli path/to/data.csv --recommendations-only
+python -m kerasfactory.utils.data_analyzer_cli path/to/data.csv --recommendations-only
 ```
 
 ### 🐍 Python API
@@ -54,7 +54,7 @@ python -m kmr.utils.data_analyzer_cli path/to/data.csv --recommendations-only
 You can also use the Data Analyzer in your Python code:
 
 ```python
-from kmr.utils import DataAnalyzer, analyze_data
+from kerasfactory.utils import DataAnalyzer, analyze_data
 
 # Quick usage
 results = analyze_data("path/to/data.csv")
@@ -92,7 +92,7 @@ The analyzer identifies the following data characteristics:
 
 ## Layer Recommendations
 
-For each data characteristic, the analyzer recommends appropriate KMR layers along with descriptions and use cases.
+For each data characteristic, the analyzer recommends appropriate KerasFactory layers along with descriptions and use cases.
 
 ### Example
 
@@ -106,7 +106,7 @@ For continuous features, the following layers might be recommended:
 You can extend the layer recommendations by registering new layers:
 
 ```python
-from kmr.utils import DataAnalyzer
+from kerasfactory.utils import DataAnalyzer
 
 analyzer = DataAnalyzer()
 analyzer.register_recommendation(

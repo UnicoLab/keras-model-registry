@@ -1,5 +1,5 @@
 ---
-title: HyperZZWOperator - KMR
+title: HyperZZWOperator - KerasFactory
 description: Context-dependent weight computation using hyper-kernels for specialized transformations
 keywords: [hyper zzw operator, context-dependent weights, hyper-kernels, specialized transformations, keras, neural networks, context processing]
 ---
@@ -75,7 +75,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import HyperZZWOperator
+from kerasfactory.layers import HyperZZWOperator
 
 # Create sample input data
 batch_size, input_dim, context_dim = 32, 16, 8
@@ -95,7 +95,7 @@ print(f"Output shape: {output.shape}")     # (32, 16)
 
 ```python
 import keras
-from kmr.layers import HyperZZWOperator
+from kerasfactory.layers import HyperZZWOperator
 
 # Note: Sequential models don't work well with multiple inputs
 # Use functional API for HyperZZWOperator
@@ -105,7 +105,7 @@ from kmr.layers import HyperZZWOperator
 
 ```python
 import keras
-from kmr.layers import HyperZZWOperator
+from kerasfactory.layers import HyperZZWOperator
 
 # Define inputs
 input_tensor = keras.Input(shape=(20,), name='input_features')
@@ -160,7 +160,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.HyperZZWOperator
+::: kerasfactory.layers.HyperZZWOperator
 
 ## 🔧 Parameters Deep Dive
 
@@ -190,7 +190,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import HyperZZWOperator
+from kerasfactory.layers import HyperZZWOperator
 
 # Create a context-aware processing model
 def create_context_aware_model():
@@ -313,5 +313,5 @@ def analyze_context_behavior():
 - [Hyper-Kernels](https://en.wikipedia.org/wiki/Hyperparameter) - Hyper-parameter concepts
 - [Context-Aware Processing](https://en.wikipedia.org/wiki/Context_awareness) - Context awareness concepts
 - [Specialized Transformations](https://en.wikipedia.org/wiki/Transformation_(function)) - Transformation concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

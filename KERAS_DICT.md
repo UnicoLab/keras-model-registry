@@ -62,5 +62,5 @@ from keras import KerasTensor
 from typing import Any
 from keras.saving import register_keras_serializable
 
-@register_keras_serializable(package="kmr.layers")
+@register_keras_serializable(package="kerasfactory.layers")
 ```

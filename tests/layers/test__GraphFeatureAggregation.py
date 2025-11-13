@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 import tensorflow as tf
 from keras import Model, layers
-from kmr.layers import GraphFeatureAggregation
+from kerasfactory.layers import GraphFeatureAggregation
 
 
 class TestGraphFeatureAggregation(unittest.TestCase):

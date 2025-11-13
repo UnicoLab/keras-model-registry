@@ -1,11 +1,11 @@
 # 📚 Examples
 
-Real-world examples and use cases demonstrating KMR layers in action. These examples show how to build production-ready tabular models for various domains and applications.
+Real-world examples and use cases demonstrating KerasFactory layers in action. These examples show how to build production-ready tabular models for various domains and applications.
 
 ## 🎯 Quick Navigation
 
 - [Rich Docstrings Showcase](rich_docstrings_showcase.md) - Comprehensive examples with detailed documentation
-- [BaseFeedForwardModel Guide](feed_forward_guide.md) - Building feed-forward models with KMR
+- [BaseFeedForwardModel Guide](feed_forward_guide.md) - Building feed-forward models with KerasFactory
 - [KDP Integration Guide](kdp_integration_guide.md) - Integrating with Keras Data Processor
 - [Data Analyzer Examples](data_analyzer_examples.md) - Data analysis and preprocessing workflows
 
@@ -15,7 +15,7 @@ Real-world examples and use cases demonstrating KMR layers in action. These exam
 
 ```python
 import keras
-from kmr.layers import TabularAttention, VariableSelection
+from kerasfactory.layers import TabularAttention, VariableSelection
 
 # Simple classification model
 def create_classifier(input_dim: int, num_classes: int) -> keras.Model:
@@ -40,7 +40,7 @@ model.compile(
 ### 2. **Regression with Feature Engineering**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     DifferentiableTabularPreprocessor,
     AdvancedNumericalEmbedding,
     GatedFeatureFusion
@@ -73,7 +73,7 @@ model.compile(
 ### 1. **Attention-Based Architecture**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     MultiResolutionTabularAttention,
     InterpretableMultiHeadAttention,
     GatedFeatureFusion
@@ -105,7 +105,7 @@ def create_attention_model(input_dim, num_classes):
 ### 2. **Residual Network Architecture**
 
 ```python
-from kmr.layers import GatedResidualNetwork, GatedLinearUnit
+from kerasfactory.layers import GatedResidualNetwork, GatedLinearUnit
 
 def create_residual_model(input_dim: int, num_classes: int) -> keras.Model:
     inputs = keras.Input(shape=(input_dim,))
@@ -125,7 +125,7 @@ def create_residual_model(input_dim: int, num_classes: int) -> keras.Model:
 ### 3. **Ensemble Architecture**
 
 ```python
-from kmr.layers import TabularMoELayer, BoostingEnsembleLayer
+from kerasfactory.layers import TabularMoELayer, BoostingEnsembleLayer
 
 def create_ensemble_model(input_dim: int, num_classes: int) -> keras.Model:
     inputs = keras.Input(shape=(input_dim,))
@@ -148,7 +148,7 @@ def create_ensemble_model(input_dim: int, num_classes: int) -> keras.Model:
 ### 1. **Complete Feature Pipeline**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     DifferentiableTabularPreprocessor,
     AdvancedNumericalEmbedding,
     DistributionAwareEncoder,
@@ -180,7 +180,7 @@ def create_feature_pipeline(input_dim: int) -> keras.Model:
 ### 2. **Temporal Feature Processing**
 
 ```python
-from kmr.layers import (
+from kerasfactory.layers import (
     DateParsingLayer,
     DateEncodingLayer,
     SeasonLayer

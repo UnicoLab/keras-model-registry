@@ -1,5 +1,5 @@
 ---
-title: ReversibleInstanceNorm - KMR
+title: ReversibleInstanceNorm - KerasFactory
 description: Reversible instance normalization with optional affine transformation for time series
 keywords: [normalization, instance norm, reversible, time series, stability, keras]
 ---
@@ -66,7 +66,7 @@ The layer operates in two modes:
 
 ```python
 import keras
-from kmr.layers import ReversibleInstanceNorm
+from kerasfactory.layers import ReversibleInstanceNorm
 
 # Create normalization layer
 norm_layer = ReversibleInstanceNorm(num_features=8, eps=1e-5)
@@ -87,7 +87,7 @@ y_denorm = norm_layer(y_pred, mode='denorm')
 ### In a Forecasting Pipeline
 
 ```python
-from kmr.layers import ReversibleInstanceNorm, TokenEmbedding
+from kerasfactory.layers import ReversibleInstanceNorm, TokenEmbedding
 
 # Setup pipeline
 normalizer = ReversibleInstanceNorm(num_features=7, affine=True)
@@ -107,7 +107,7 @@ y_pred = normalizer(y_pred_norm, mode='denorm')
 ## 🔧 API Reference
 
 ```python
-kmr.layers.ReversibleInstanceNorm(
+kerasfactory.layers.ReversibleInstanceNorm(
     num_features: int,
     eps: float = 1e-5,
     affine: bool = False,

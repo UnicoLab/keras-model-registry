@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 from keras import ops
-from kmr.layers.NumericalAnomalyDetection import NumericalAnomalyDetection
+from kerasfactory.layers.NumericalAnomalyDetection import NumericalAnomalyDetection
 
 
 class TestNumericalAnomalyDetection(unittest.TestCase):

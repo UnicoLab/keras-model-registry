@@ -1,5 +1,5 @@
 ---
-title: SeasonLayer - KMR
+title: SeasonLayer - KerasFactory
 description: Layer for adding seasonal information based on month, encoding it as one-hot vector for four seasons
 keywords: [seasonal information, one-hot encoding, time series, keras, neural networks, temporal features, seasons]
 ---
@@ -86,7 +86,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import SeasonLayer
+from kerasfactory.layers import SeasonLayer
 
 # Create sample date components [year, month, day, day_of_week]
 date_components = keras.ops.convert_to_tensor([
@@ -110,7 +110,7 @@ print(f"Seasonal features: {seasonal_features}")
 
 ```python
 import keras
-from kmr.layers import SeasonLayer
+from kerasfactory.layers import SeasonLayer
 
 model = keras.Sequential([
     SeasonLayer(),
@@ -126,7 +126,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import SeasonLayer
+from kerasfactory.layers import SeasonLayer
 
 # Define inputs
 inputs = keras.Input(shape=(4,))  # [year, month, day, day_of_week]
@@ -177,7 +177,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.SeasonLayer
+::: kerasfactory.layers.SeasonLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -200,7 +200,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import SeasonLayer
+from kerasfactory.layers import SeasonLayer
 
 # Create weather prediction model with seasonal information
 def create_weather_model():
@@ -342,5 +342,5 @@ def analyze_seasonal_features():
 - [Seasonal Patterns in Time Series](https://en.wikipedia.org/wiki/Seasonality) - Seasonality concepts
 - [One-Hot Encoding](https://en.wikipedia.org/wiki/One-hot) - One-hot encoding techniques
 - [Temporal Feature Engineering](https://en.wikipedia.org/wiki/Feature_engineering) - Feature engineering techniques
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Data Preprocessing Tutorial](../tutorials/feature-engineering.md) - Complete guide to data preprocessing

@@ -1,5 +1,5 @@
 ---
-title: BusinessRulesLayer - KMR
+title: BusinessRulesLayer - KerasFactory
 description: Layer that applies configurable business rules to neural network outputs for anomaly detection
 keywords: [business rules, anomaly detection, rule-based validation, domain knowledge, keras, neural networks, data validation]
 ---
@@ -80,7 +80,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import BusinessRulesLayer
+from kerasfactory.layers import BusinessRulesLayer
 
 # Create sample input data
 batch_size, input_dim = 32, 1
@@ -102,7 +102,7 @@ print(f"Anomaly shape: {output['business_anomaly'].shape}")  # (32, 1)
 
 ```python
 import keras
-from kmr.layers import BusinessRulesLayer
+from kerasfactory.layers import BusinessRulesLayer
 
 # Create sample categorical data
 categorical_data = keras.ops.convert_to_tensor([
@@ -124,7 +124,7 @@ print(f"Anomaly detection: {output['business_anomaly']}")
 
 ```python
 import keras
-from kmr.layers import BusinessRulesLayer
+from kerasfactory.layers import BusinessRulesLayer
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -143,7 +143,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import BusinessRulesLayer
+from kerasfactory.layers import BusinessRulesLayer
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -211,7 +211,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.BusinessRulesLayer
+::: kerasfactory.layers.BusinessRulesLayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -254,7 +254,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import BusinessRulesLayer
+from kerasfactory.layers import BusinessRulesLayer
 
 # Create financial data validation model
 def create_financial_validation_model():
@@ -389,5 +389,5 @@ def analyze_rule_violations():
 - [Business Rules](https://en.wikipedia.org/wiki/Business_rule) - Business rule concepts
 - [Anomaly Detection](https://en.wikipedia.org/wiki/Anomaly_detection) - Anomaly detection techniques
 - [Data Validation](https://en.wikipedia.org/wiki/Data_validation) - Data validation concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

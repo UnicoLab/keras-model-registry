@@ -9,7 +9,7 @@ import unittest
 import tensorflow as tf
 
 import keras
-from kmr.layers.TemporalMixing import TemporalMixing
+from kerasfactory.layers.TemporalMixing import TemporalMixing
 
 
 class TestTemporalMixing(unittest.TestCase):

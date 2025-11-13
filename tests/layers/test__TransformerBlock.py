@@ -8,7 +8,7 @@ import unittest
 import numpy as np
 import tensorflow as tf  # Used for testing only
 from keras import Model, layers, ops
-from kmr.layers.TransformerBlock import TransformerBlock
+from kerasfactory.layers.TransformerBlock import TransformerBlock
 
 
 class TestTransformerBlock(unittest.TestCase):

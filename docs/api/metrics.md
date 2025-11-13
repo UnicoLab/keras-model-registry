@@ -1,6 +1,6 @@
 # 📊 Metrics API Reference
 
-Welcome to the KMR Metrics documentation! All metrics are designed to work exclusively with **Keras 3** and provide specialized statistical measurements for model analysis and anomaly detection tasks.
+Welcome to the KerasFactory Metrics documentation! All metrics are designed to work exclusively with **Keras 3** and provide specialized statistical measurements for model analysis and anomaly detection tasks.
 
 !!! tip "What You'll Find Here"
     Each metric includes detailed documentation with:
@@ -21,9 +21,9 @@ Welcome to the KMR Metrics documentation! All metrics are designed to work exclu
 ### 📈 Median
 Calculates the median of predicted values, providing a robust measure of central tendency less sensitive to outliers.
 
-::: kmr.metrics.Median
+::: kerasfactory.metrics.Median
 
 ### 📉 StandardDeviation
 Calculates the standard deviation of predicted values, useful for tracking prediction variability and uncertainty.
 
-::: kmr.metrics.StandardDeviation
+::: kerasfactory.metrics.StandardDeviation

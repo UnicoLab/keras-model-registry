@@ -1,5 +1,5 @@
 ---
-title: TabularMoELayer - KMR
+title: TabularMoELayer - KerasFactory
 description: Mixture-of-Experts layer for tabular data that routes features through multiple expert networks
 keywords: [mixture of experts, MoE, expert networks, gating mechanism, tabular data, keras, neural networks, ensemble learning]
 ---
@@ -83,7 +83,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import TabularMoELayer
+from kerasfactory.layers import TabularMoELayer
 
 # Create sample input data
 batch_size, num_features = 32, 8
@@ -101,7 +101,7 @@ print(f"Output shape: {output.shape}")     # (32, 8)
 
 ```python
 import keras
-from kmr.layers import TabularMoELayer
+from kerasfactory.layers import TabularMoELayer
 
 model = keras.Sequential([
     keras.layers.Dense(32, activation='relu'),
@@ -118,7 +118,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import TabularMoELayer
+from kerasfactory.layers import TabularMoELayer
 
 # Define inputs
 inputs = keras.Input(shape=(20,))  # 20 features
@@ -169,7 +169,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.TabularMoELayer
+::: kerasfactory.layers.TabularMoELayer
 
 ## 🔧 Parameters Deep Dive
 
@@ -199,7 +199,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import TabularMoELayer
+from kerasfactory.layers import TabularMoELayer
 
 # Create a MoE model for feature specialization
 def create_feature_specialized_moe():
@@ -333,5 +333,5 @@ model.compile(
 - [Mixture of Experts](https://en.wikipedia.org/wiki/Mixture_of_experts) - MoE concepts
 - [Gating Networks](https://arxiv.org/abs/1701.06538) - Gating mechanism paper
 - [Ensemble Learning](https://en.wikipedia.org/wiki/Ensemble_learning) - Ensemble learning concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering

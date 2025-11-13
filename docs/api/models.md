@@ -1,6 +1,6 @@
 # 🤖 Models API Reference
 
-Welcome to the KMR Models documentation! All models are designed to work exclusively with **Keras 3** and provide specialized implementations for advanced machine learning tasks including time series forecasting, tabular data processing, and multimodal learning.
+Welcome to the KerasFactory Models documentation! All models are designed to work exclusively with **Keras 3** and provide specialized implementations for advanced machine learning tasks including time series forecasting, tabular data processing, and multimodal learning.
 
 !!! tip "What You'll Find Here"
     Each model includes detailed documentation with:
@@ -23,7 +23,7 @@ TimeMixer: Decomposable Multiscale Mixing for Time Series Forecasting.
 
 A state-of-the-art time series forecasting model that uses decomposable components and multi-scale mixing to capture both seasonal and trend patterns at different temporal scales.
 
-::: kmr.models.TimeMixer
+::: kerasfactory.models.TimeMixer
 
 **Key Features:**
 - Trend-seasonal decomposition (moving average or DFT)
@@ -48,7 +48,7 @@ TSMixer: All-MLP Architecture for Multivariate Time Series Forecasting.
 
 An efficient all-MLP model that jointly learns temporal and cross-sectional representations through alternating temporal and feature mixing layers without attention mechanisms.
 
-::: kmr.models.TSMixer
+::: kerasfactory.models.TSMixer
 
 **Key Features:**
 - Temporal and feature mixing for dual-perspective learning
@@ -79,28 +79,28 @@ An efficient all-MLP model that jointly learns temporal and cross-sectional repr
 ### 🚀 BaseFeedForwardModel
 Flexible feed-forward model architecture for tabular data with customizable layers.
 
-::: kmr.models.feed_forward.BaseFeedForwardModel
+::: kerasfactory.models.feed_forward.BaseFeedForwardModel
 
 ## 🎯 Advanced Models
 
 ### 🧩 SFNEBlock
 Sparse Feature Network Ensemble block for advanced feature processing and ensemble learning.
 
-::: kmr.models.SFNEBlock
+::: kerasfactory.models.SFNEBlock
 
 ### 🎭 TerminatorModel
 Comprehensive tabular model that combines multiple SFNE blocks for complex data tasks.
 
-::: kmr.models.TerminatorModel
+::: kerasfactory.models.TerminatorModel
 
 ### 🔍 Autoencoder
 Advanced autoencoder model for anomaly detection with optional preprocessing integration and automatic threshold configuration.
 
-::: kmr.models.autoencoder.Autoencoder
+::: kerasfactory.models.autoencoder.Autoencoder
 
 ## 🔧 Base Classes
 
 ### 🏛️ BaseModel
-Base class for all KMR models, providing common functionality and Keras 3 compatibility.
+Base class for all KerasFactory models, providing common functionality and Keras 3 compatibility.
 
-::: kmr.models._base.BaseModel
+::: kerasfactory.models._base.BaseModel

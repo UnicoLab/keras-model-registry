@@ -1,5 +1,5 @@
 ---
-title: TransformerBlock - KMR
+title: TransformerBlock - KerasFactory
 description: Transformer block with multi-head attention and feed-forward layers for tabular data processing
 keywords: [transformer block, multi-head attention, self-attention, feed-forward, keras, neural networks, tabular data]
 ---
@@ -78,7 +78,7 @@ graph TD
 
 ```python
 import keras
-from kmr.layers import TransformerBlock
+from kerasfactory.layers import TransformerBlock
 
 # Create sample input data
 batch_size, seq_len, dim_model = 32, 10, 64
@@ -101,7 +101,7 @@ print(f"Output shape: {output.shape}")     # (32, 10, 64)
 
 ```python
 import keras
-from kmr.layers import TransformerBlock
+from kerasfactory.layers import TransformerBlock
 
 model = keras.Sequential([
     keras.layers.Dense(64, activation='relu'),
@@ -118,7 +118,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 
 ```python
 import keras
-from kmr.layers import TransformerBlock
+from kerasfactory.layers import TransformerBlock
 
 # Define inputs
 inputs = keras.Input(shape=(20, 32))  # 20 time steps, 32 features
@@ -196,7 +196,7 @@ model.compile(
 
 ## 📖 API Reference
 
-::: kmr.layers.TransformerBlock
+::: kerasfactory.layers.TransformerBlock
 
 ## 🔧 Parameters Deep Dive
 
@@ -238,7 +238,7 @@ model.compile(
 ```python
 import keras
 import numpy as np
-from kmr.layers import TransformerBlock
+from kerasfactory.layers import TransformerBlock
 
 # Create a transformer for tabular data
 def create_tabular_transformer():
@@ -383,5 +383,5 @@ def analyze_attention_patterns():
 - [Attention Is All You Need](https://arxiv.org/abs/1706.03762) - Original transformer paper
 - [Multi-Head Attention](https://arxiv.org/abs/1706.03762) - Multi-head attention mechanism
 - [Transformer Architecture](https://en.wikipedia.org/wiki/Transformer_(machine_learning_model)) - Transformer concepts
-- [KMR Layer Explorer](../layers_overview.md) - Browse all available layers
+- [KerasFactory Layer Explorer](../layers_overview.md) - Browse all available layers
 - [Feature Engineering Tutorial](../tutorials/feature-engineering.md) - Complete guide to feature engineering
